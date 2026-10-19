@@ -1,0 +1,915 @@
+{
+  "schemaVersion": 1,
+  "buildTime": "2026-10-19T12:51:50.255Z",
+  "expectedYears": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+  ],
+  "availableYears": [
+    2024,
+    2025,
+    2026
+  ],
+  "needsAnswerSourceYears": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+  ],
+  "failedYears": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+  ],
+  "pendingYears": [],
+  "latestReadyVersion": {
+    "2024": "v1",
+    "2025": "v1",
+    "2026": "v1"
+  },
+  "sourceFormats": {
+    "2010": [
+      "md"
+    ],
+    "2011": [
+      "md"
+    ],
+    "2012": [
+      "md"
+    ],
+    "2013": [
+      "md"
+    ],
+    "2014": [
+      "md"
+    ],
+    "2015": [
+      "md"
+    ],
+    "2016": [
+      "md"
+    ],
+    "2017": [
+      "md"
+    ],
+    "2018": [
+      "md"
+    ],
+    "2019": [
+      "md"
+    ],
+    "2020": [
+      "md"
+    ],
+    "2021": [
+      "md"
+    ],
+    "2022": [
+      "md"
+    ],
+    "2023": [
+      "md"
+    ],
+    "2024": [
+      "md"
+    ],
+    "2025": [
+      "md"
+    ],
+    "2026": [
+      "md"
+    ]
+  },
+  "unitTypes": {
+    "2010": [
+      "cloze",
+      "reading",
+      "passage-assembly",
+      "translation",
+      "practical-writing",
+      "visual-writing"
+    ],
+    "2011": [
+      "cloze",
+      "reading",
+      "passage-assembly",
+      "translation",
+      "practical-writing",
+      "visual-writing"
+    ],
+    "2012": [
+      "cloze",
+      "reading",
+      "passage-assembly",
+      "translation",
+      "practical-writing",
+      "visual-writing"
+    ],
+    "2013": [
+      "cloze",
+      "reading",
+      "passage-assembly",
+      "translation",
+      "practical-writing",
+      "visual-writing"
+    ],
+    "2014": [
+      "cloze",
+      "reading",
+      "passage-assembly",
+      "translation",
+      "practical-writing",
+      "visual-writing"
+    ],
+    "2015": [
+      "cloze",
+      "reading",
+      "passage-assembly",
+      "translation",
+      "practical-writing",
+      "visual-writing"
+    ],
+    "2016": [
+      "cloze",
+      "reading",
+      "passage-assembly",
+      "translation",
+      "practical-writing",
+      "visual-writing"
+    ],
+    "2017": [
+      "cloze",
+      "reading",
+      "passage-assembly",
+      "translation",
+      "practical-writing",
+      "visual-writing"
+    ],
+    "2018": [
+      "cloze",
+      "reading",
+      "passage-assembly",
+      "translation",
+      "practical-writing",
+      "visual-writing"
+    ],
+    "2019": [
+      "cloze",
+      "reading",
+      "passage-assembly",
+      "translation",
+      "practical-writing",
+      "visual-writing"
+    ],
+    "2020": [
+      "cloze",
+      "reading",
+      "passage-assembly",
+      "translation",
+      "practical-writing",
+      "visual-writing"
+    ],
+    "2021": [
+      "cloze",
+      "reading",
+      "passage-assembly",
+      "translation",
+      "practical-writing",
+      "visual-writing"
+    ],
+    "2022": [
+      "cloze",
+      "reading",
+      "passage-assembly",
+      "translation",
+      "practical-writing",
+      "visual-writing"
+    ],
+    "2023": [
+      "cloze",
+      "reading",
+      "passage-assembly",
+      "translation",
+      "practical-writing",
+      "visual-writing"
+    ],
+    "2024": [
+      "cloze",
+      "reading",
+      "passage-assembly",
+      "translation",
+      "practical-writing",
+      "visual-writing"
+    ],
+    "2025": [
+      "cloze",
+      "reading",
+      "passage-assembly",
+      "translation",
+      "practical-writing",
+      "visual-writing"
+    ],
+    "2026": [
+      "cloze",
+      "reading",
+      "passage-assembly",
+      "translation",
+      "practical-writing",
+      "visual-writing"
+    ]
+  },
+  "validationStatus": {
+    "2010": "needs-answer-source",
+    "2011": "needs-answer-source",
+    "2012": "needs-answer-source",
+    "2013": "needs-answer-source",
+    "2014": "needs-answer-source",
+    "2015": "needs-answer-source",
+    "2016": "needs-answer-source",
+    "2017": "needs-answer-source",
+    "2018": "needs-answer-source",
+    "2019": "needs-answer-source",
+    "2020": "needs-answer-source",
+    "2021": "needs-answer-source",
+    "2022": "needs-answer-source",
+    "2023": "needs-answer-source",
+    "2024": "ready",
+    "2025": "ready",
+    "2026": "ready"
+  },
+  "totalPapers": 17,
+  "totalVisualAssets": 29,
+  "years": [
+    {
+      "year": 2010,
+      "subject": "考研英语一",
+      "paperTitle": "2010年全国硕士研究生入学统一考试英语（一）试题",
+      "status": "needs-answer-source",
+      "answerSourceStatus": "unavailable",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [
+        "/assets/papers/2010/writing-part-b-01.png"
+      ],
+      "objectiveCount": 0,
+      "subjectiveCount": 7,
+      "latestReadyVersion": null,
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "md"
+      ],
+      "unitTypes": [
+        "cloze",
+        "reading",
+        "passage-assembly",
+        "translation",
+        "practical-writing",
+        "visual-writing"
+      ],
+      "validationStatus": "needs-answer-source",
+      "errorCodes": [
+        "OBJECTIVE_ANSWER_MISSING"
+      ],
+      "missingObjectiveCount": 45,
+      "hasNewerCandidate": true,
+      "updatedAt": "2026-10-19T11:30:00.000Z"
+    },
+    {
+      "year": 2011,
+      "subject": "考研英语一",
+      "paperTitle": "2011年全国硕士研究生入学统一考试英语（一）试题",
+      "status": "needs-answer-source",
+      "answerSourceStatus": "unavailable",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [
+        "/assets/papers/2011/writing-part-b-01.png"
+      ],
+      "objectiveCount": 0,
+      "subjectiveCount": 7,
+      "latestReadyVersion": null,
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "md"
+      ],
+      "unitTypes": [
+        "cloze",
+        "reading",
+        "passage-assembly",
+        "translation",
+        "practical-writing",
+        "visual-writing"
+      ],
+      "validationStatus": "needs-answer-source",
+      "errorCodes": [
+        "OBJECTIVE_ANSWER_MISSING"
+      ],
+      "missingObjectiveCount": 45,
+      "hasNewerCandidate": true,
+      "updatedAt": "2026-10-19T11:30:00.000Z"
+    },
+    {
+      "year": 2012,
+      "subject": "考研英语一",
+      "paperTitle": "2012年全国硕士研究生入学统一考试英语（一）试题",
+      "status": "needs-answer-source",
+      "answerSourceStatus": "unavailable",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [
+        "/assets/papers/2012/writing-part-b-01.png"
+      ],
+      "objectiveCount": 0,
+      "subjectiveCount": 7,
+      "latestReadyVersion": null,
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "md"
+      ],
+      "unitTypes": [
+        "cloze",
+        "reading",
+        "passage-assembly",
+        "translation",
+        "practical-writing",
+        "visual-writing"
+      ],
+      "validationStatus": "needs-answer-source",
+      "errorCodes": [
+        "OBJECTIVE_ANSWER_MISSING"
+      ],
+      "missingObjectiveCount": 45,
+      "hasNewerCandidate": true,
+      "updatedAt": "2026-10-19T11:30:00.000Z"
+    },
+    {
+      "year": 2013,
+      "subject": "考研英语一",
+      "paperTitle": "2013年全国硕士研究生入学统一考试英语（一）试题",
+      "status": "needs-answer-source",
+      "answerSourceStatus": "unavailable",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [
+        "/assets/papers/2013/writing-part-b-01.png"
+      ],
+      "objectiveCount": 0,
+      "subjectiveCount": 7,
+      "latestReadyVersion": null,
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "md"
+      ],
+      "unitTypes": [
+        "cloze",
+        "reading",
+        "passage-assembly",
+        "translation",
+        "practical-writing",
+        "visual-writing"
+      ],
+      "validationStatus": "needs-answer-source",
+      "errorCodes": [
+        "OBJECTIVE_ANSWER_MISSING"
+      ],
+      "missingObjectiveCount": 45,
+      "hasNewerCandidate": true,
+      "updatedAt": "2026-10-19T11:30:00.000Z"
+    },
+    {
+      "year": 2014,
+      "subject": "考研英语一",
+      "paperTitle": "2014年全国硕士研究生入学统一考试英语（一）试题",
+      "status": "needs-answer-source",
+      "answerSourceStatus": "unavailable",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [
+        "/assets/papers/2014/writing-part-b-01.png",
+        "/assets/papers/2014/writing-part-b-02.png",
+        "/assets/papers/2014/writing-part-b-composite.png"
+      ],
+      "objectiveCount": 0,
+      "subjectiveCount": 7,
+      "latestReadyVersion": null,
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "md"
+      ],
+      "unitTypes": [
+        "cloze",
+        "reading",
+        "passage-assembly",
+        "translation",
+        "practical-writing",
+        "visual-writing"
+      ],
+      "validationStatus": "needs-answer-source",
+      "errorCodes": [
+        "OBJECTIVE_ANSWER_MISSING"
+      ],
+      "missingObjectiveCount": 45,
+      "hasNewerCandidate": true,
+      "updatedAt": "2026-10-19T11:30:00.000Z"
+    },
+    {
+      "year": 2015,
+      "subject": "考研英语一",
+      "paperTitle": "2015年全国硕士研究生入学统一考试英语（一）试题",
+      "status": "needs-answer-source",
+      "answerSourceStatus": "unavailable",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [
+        "/assets/papers/2015/writing-part-b-01.png"
+      ],
+      "objectiveCount": 0,
+      "subjectiveCount": 7,
+      "latestReadyVersion": null,
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "md"
+      ],
+      "unitTypes": [
+        "cloze",
+        "reading",
+        "passage-assembly",
+        "translation",
+        "practical-writing",
+        "visual-writing"
+      ],
+      "validationStatus": "needs-answer-source",
+      "errorCodes": [
+        "OBJECTIVE_ANSWER_MISSING"
+      ],
+      "missingObjectiveCount": 45,
+      "hasNewerCandidate": true,
+      "updatedAt": "2026-10-19T11:30:00.000Z"
+    },
+    {
+      "year": 2016,
+      "subject": "考研英语一",
+      "paperTitle": "2016年全国硕士研究生入学统一考试英语（一）试题",
+      "status": "needs-answer-source",
+      "answerSourceStatus": "unavailable",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [
+        "/assets/papers/2016/writing-part-b-01.png",
+        "/assets/papers/2016/writing-part-b-02.png",
+        "/assets/papers/2016/writing-part-b-composite.png"
+      ],
+      "objectiveCount": 0,
+      "subjectiveCount": 7,
+      "latestReadyVersion": null,
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "md"
+      ],
+      "unitTypes": [
+        "cloze",
+        "reading",
+        "passage-assembly",
+        "translation",
+        "practical-writing",
+        "visual-writing"
+      ],
+      "validationStatus": "needs-answer-source",
+      "errorCodes": [
+        "OBJECTIVE_ANSWER_MISSING"
+      ],
+      "missingObjectiveCount": 45,
+      "hasNewerCandidate": true,
+      "updatedAt": "2026-10-19T11:30:00.000Z"
+    },
+    {
+      "year": 2017,
+      "subject": "考研英语一",
+      "paperTitle": "2017年全国硕士研究生入学统一考试英语（一）试题",
+      "status": "needs-answer-source",
+      "answerSourceStatus": "unavailable",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [
+        "/assets/papers/2017/writing-part-b-01.png",
+        "/assets/papers/2017/writing-part-b-02.png",
+        "/assets/papers/2017/writing-part-b-composite.png"
+      ],
+      "objectiveCount": 0,
+      "subjectiveCount": 7,
+      "latestReadyVersion": null,
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "md"
+      ],
+      "unitTypes": [
+        "cloze",
+        "reading",
+        "passage-assembly",
+        "translation",
+        "practical-writing",
+        "visual-writing"
+      ],
+      "validationStatus": "needs-answer-source",
+      "errorCodes": [
+        "OBJECTIVE_ANSWER_MISSING"
+      ],
+      "missingObjectiveCount": 45,
+      "hasNewerCandidate": true,
+      "updatedAt": "2026-10-19T11:30:00.000Z"
+    },
+    {
+      "year": 2018,
+      "subject": "考研英语一",
+      "paperTitle": "2018年全国硕士研究生入学统一考试英语（一）试题",
+      "status": "needs-answer-source",
+      "answerSourceStatus": "unavailable",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [
+        "/assets/papers/2018/writing-part-b-01.png"
+      ],
+      "objectiveCount": 0,
+      "subjectiveCount": 7,
+      "latestReadyVersion": null,
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "md"
+      ],
+      "unitTypes": [
+        "cloze",
+        "reading",
+        "passage-assembly",
+        "translation",
+        "practical-writing",
+        "visual-writing"
+      ],
+      "validationStatus": "needs-answer-source",
+      "errorCodes": [
+        "OBJECTIVE_ANSWER_MISSING"
+      ],
+      "missingObjectiveCount": 45,
+      "hasNewerCandidate": true,
+      "updatedAt": "2026-10-19T11:30:00.000Z"
+    },
+    {
+      "year": 2019,
+      "subject": "考研英语一",
+      "paperTitle": "2019年全国硕士研究生入学统一考试英语（一）试题",
+      "status": "needs-answer-source",
+      "answerSourceStatus": "unavailable",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [
+        "/assets/papers/2019/writing-part-b-01.png"
+      ],
+      "objectiveCount": 0,
+      "subjectiveCount": 7,
+      "latestReadyVersion": null,
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "md"
+      ],
+      "unitTypes": [
+        "cloze",
+        "reading",
+        "passage-assembly",
+        "translation",
+        "practical-writing",
+        "visual-writing"
+      ],
+      "validationStatus": "needs-answer-source",
+      "errorCodes": [
+        "OBJECTIVE_ANSWER_MISSING"
+      ],
+      "missingObjectiveCount": 45,
+      "hasNewerCandidate": true,
+      "updatedAt": "2026-10-19T11:30:00.000Z"
+    },
+    {
+      "year": 2020,
+      "subject": "考研英语一",
+      "paperTitle": "2020年全国硕士研究生入学统一考试英语（一）试题",
+      "status": "needs-answer-source",
+      "answerSourceStatus": "unavailable",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [
+        "/assets/papers/2020/writing-part-b-01.png",
+        "/assets/papers/2020/writing-part-b-02.png",
+        "/assets/papers/2020/writing-part-b-composite.png"
+      ],
+      "objectiveCount": 0,
+      "subjectiveCount": 7,
+      "latestReadyVersion": null,
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "md"
+      ],
+      "unitTypes": [
+        "cloze",
+        "reading",
+        "passage-assembly",
+        "translation",
+        "practical-writing",
+        "visual-writing"
+      ],
+      "validationStatus": "needs-answer-source",
+      "errorCodes": [
+        "OBJECTIVE_ANSWER_MISSING"
+      ],
+      "missingObjectiveCount": 45,
+      "hasNewerCandidate": true,
+      "updatedAt": "2026-10-19T11:30:00.000Z"
+    },
+    {
+      "year": 2021,
+      "subject": "考研英语一",
+      "paperTitle": "2021年全国硕士研究生入学统一考试英语（一）试题",
+      "status": "needs-answer-source",
+      "answerSourceStatus": "unavailable",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [
+        "/assets/papers/2021/writing-part-b-01.png"
+      ],
+      "objectiveCount": 0,
+      "subjectiveCount": 7,
+      "latestReadyVersion": null,
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "md"
+      ],
+      "unitTypes": [
+        "cloze",
+        "reading",
+        "passage-assembly",
+        "translation",
+        "practical-writing",
+        "visual-writing"
+      ],
+      "validationStatus": "needs-answer-source",
+      "errorCodes": [
+        "OBJECTIVE_ANSWER_MISSING"
+      ],
+      "missingObjectiveCount": 45,
+      "hasNewerCandidate": true,
+      "updatedAt": "2026-10-19T11:30:00.000Z"
+    },
+    {
+      "year": 2022,
+      "subject": "考研英语一",
+      "paperTitle": "2022年全国硕士研究生入学统一考试英语（一）试题",
+      "status": "needs-answer-source",
+      "answerSourceStatus": "unavailable",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [
+        "/assets/papers/2022/writing-part-b-01.png"
+      ],
+      "objectiveCount": 0,
+      "subjectiveCount": 7,
+      "latestReadyVersion": null,
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "md"
+      ],
+      "unitTypes": [
+        "cloze",
+        "reading",
+        "passage-assembly",
+        "translation",
+        "practical-writing",
+        "visual-writing"
+      ],
+      "validationStatus": "needs-answer-source",
+      "errorCodes": [
+        "OBJECTIVE_ANSWER_MISSING"
+      ],
+      "missingObjectiveCount": 45,
+      "hasNewerCandidate": true,
+      "updatedAt": "2026-10-19T11:30:00.000Z"
+    },
+    {
+      "year": 2023,
+      "subject": "考研英语一",
+      "paperTitle": "2023年全国硕士研究生入学统一考试英语（一）试题",
+      "status": "needs-answer-source",
+      "answerSourceStatus": "unavailable",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [
+        "/assets/papers/2023/writing-part-b-01.png"
+      ],
+      "objectiveCount": 0,
+      "subjectiveCount": 7,
+      "latestReadyVersion": null,
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "md"
+      ],
+      "unitTypes": [
+        "cloze",
+        "reading",
+        "passage-assembly",
+        "translation",
+        "practical-writing",
+        "visual-writing"
+      ],
+      "validationStatus": "needs-answer-source",
+      "errorCodes": [
+        "OBJECTIVE_ANSWER_MISSING"
+      ],
+      "missingObjectiveCount": 45,
+      "hasNewerCandidate": true,
+      "updatedAt": "2026-10-19T11:30:00.000Z"
+    },
+    {
+      "year": 2024,
+      "subject": "考研英语一",
+      "paperTitle": "2024年全国硕士研究生入学统一考试英语（一）试题",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [
+        "/assets/papers/2024/writing-part-b-01.png",
+        "/assets/papers/2024/writing-part-b-02.png",
+        "/assets/papers/2024/writing-part-b-composite.png"
+      ],
+      "objectiveCount": 45,
+      "subjectiveCount": 7,
+      "latestReadyVersion": "v1",
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "md"
+      ],
+      "unitTypes": [
+        "cloze",
+        "reading",
+        "passage-assembly",
+        "translation",
+        "practical-writing",
+        "visual-writing"
+      ],
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "hasNewerCandidate": false,
+      "updatedAt": "2026-10-19T11:30:00.000Z"
+    },
+    {
+      "year": 2025,
+      "subject": "考研英语一",
+      "paperTitle": "2025年全国硕士研究生入学统一考试英语（一）试题",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [
+        "/assets/papers/2025/writing-part-b-01.png"
+      ],
+      "objectiveCount": 45,
+      "subjectiveCount": 7,
+      "latestReadyVersion": "v1",
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "md"
+      ],
+      "unitTypes": [
+        "cloze",
+        "reading",
+        "passage-assembly",
+        "translation",
+        "practical-writing",
+        "visual-writing"
+      ],
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "hasNewerCandidate": false,
+      "updatedAt": "2026-10-19T11:30:00.000Z"
+    },
+    {
+      "year": 2026,
+      "subject": "考研英语一",
+      "paperTitle": "2026年全国硕士研究生入学统一考试英语（一）试题",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [
+        "/assets/papers/2026/writing-part-b-01.png",
+        "/assets/papers/2026/writing-part-b-02.png",
+        "/assets/papers/2026/writing-part-b-composite.png"
+      ],
+      "objectiveCount": 45,
+      "subjectiveCount": 7,
+      "latestReadyVersion": "v1",
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "md"
+      ],
+      "unitTypes": [
+        "cloze",
+        "reading",
+        "passage-assembly",
+        "translation",
+        "practical-writing",
+        "visual-writing"
+      ],
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "hasNewerCandidate": false,
+      "updatedAt": "2026-10-19T11:30:00.000Z"
+    }
+  ]
+}

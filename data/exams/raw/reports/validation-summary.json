@@ -1,0 +1,392 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-19T11:30:00.000Z",
+  "expectedYears": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+  ],
+  "totalPapers": 17,
+  "passedPapersCount": 17,
+  "failedPapersCount": 0,
+  "totalVisualAssets": 29,
+  "allVisualAssetsAccessible": true,
+  "cross_year_errors": [],
+  "validation_status": "passed",
+  "unresolved_issue_count": 0,
+  "answersBreakdown": {
+    "sourceProvided": [
+      2024,
+      2025,
+      2026
+    ],
+    "unavailable": [
+      2010,
+      2011,
+      2012,
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "inferredOrGuessed": []
+  },
+  "years": [
+    {
+      "year": 2010,
+      "subject": "english-i",
+      "subject_code": 201,
+      "paper_file": "papers/2010.md",
+      "source_pages": 14,
+      "question_count": 52,
+      "question_range": "1-52",
+      "part_b_type": "paragraph-insertion",
+      "answer_status": "unavailable",
+      "answer_file": null,
+      "visual_assets_count": 1,
+      "visual_assets": [
+        "assets/2010/writing-part-b-01.png"
+      ],
+      "cleaning_status": "completed",
+      "validation_status": "passed",
+      "unresolved_issue_count": 0
+    },
+    {
+      "year": 2011,
+      "subject": "english-i",
+      "subject_code": 201,
+      "paper_file": "papers/2011.md",
+      "source_pages": 15,
+      "question_count": 52,
+      "question_range": "1-52",
+      "part_b_type": "paragraph-ordering",
+      "answer_status": "unavailable",
+      "answer_file": null,
+      "visual_assets_count": 1,
+      "visual_assets": [
+        "assets/2011/writing-part-b-01.png"
+      ],
+      "cleaning_status": "completed",
+      "validation_status": "passed",
+      "unresolved_issue_count": 0
+    },
+    {
+      "year": 2012,
+      "subject": "english-i",
+      "subject_code": 201,
+      "paper_file": "papers/2012.md",
+      "source_pages": 15,
+      "question_count": 52,
+      "question_range": "1-52",
+      "part_b_type": "paragraph-insertion",
+      "answer_status": "unavailable",
+      "answer_file": null,
+      "visual_assets_count": 1,
+      "visual_assets": [
+        "assets/2012/writing-part-b-01.png"
+      ],
+      "cleaning_status": "completed",
+      "validation_status": "passed",
+      "unresolved_issue_count": 0
+    },
+    {
+      "year": 2013,
+      "subject": "english-i",
+      "subject_code": 201,
+      "paper_file": "papers/2013.md",
+      "source_pages": 15,
+      "question_count": 52,
+      "question_range": "1-52",
+      "part_b_type": "paragraph-insertion",
+      "answer_status": "unavailable",
+      "answer_file": null,
+      "visual_assets_count": 1,
+      "visual_assets": [
+        "assets/2013/writing-part-b-01.png"
+      ],
+      "cleaning_status": "completed",
+      "validation_status": "passed",
+      "unresolved_issue_count": 0
+    },
+    {
+      "year": 2014,
+      "subject": "english-i",
+      "subject_code": 201,
+      "paper_file": "papers/2014.md",
+      "source_pages": 16,
+      "question_count": 52,
+      "question_range": "1-52",
+      "part_b_type": "paragraph-ordering",
+      "answer_status": "unavailable",
+      "answer_file": null,
+      "visual_assets_count": 3,
+      "visual_assets": [
+        "assets/2014/writing-part-b-01.png",
+        "assets/2014/writing-part-b-02.png",
+        "assets/2014/writing-part-b-composite.png"
+      ],
+      "cleaning_status": "completed",
+      "validation_status": "passed",
+      "unresolved_issue_count": 0
+    },
+    {
+      "year": 2015,
+      "subject": "english-i",
+      "subject_code": 201,
+      "paper_file": "papers/2015.md",
+      "source_pages": 15,
+      "question_count": 52,
+      "question_range": "1-52",
+      "part_b_type": "paragraph-insertion",
+      "answer_status": "unavailable",
+      "answer_file": null,
+      "visual_assets_count": 1,
+      "visual_assets": [
+        "assets/2015/writing-part-b-01.png"
+      ],
+      "cleaning_status": "completed",
+      "validation_status": "passed",
+      "unresolved_issue_count": 0
+    },
+    {
+      "year": 2016,
+      "subject": "english-i",
+      "subject_code": 201,
+      "paper_file": "papers/2016.md",
+      "source_pages": 16,
+      "question_count": 52,
+      "question_range": "1-52",
+      "part_b_type": "heading-matching",
+      "answer_status": "unavailable",
+      "answer_file": null,
+      "visual_assets_count": 3,
+      "visual_assets": [
+        "assets/2016/writing-part-b-01.png",
+        "assets/2016/writing-part-b-02.png",
+        "assets/2016/writing-part-b-composite.png"
+      ],
+      "cleaning_status": "completed",
+      "validation_status": "passed",
+      "unresolved_issue_count": 0
+    },
+    {
+      "year": 2017,
+      "subject": "english-i",
+      "subject_code": 201,
+      "paper_file": "papers/2017.md",
+      "source_pages": 16,
+      "question_count": 52,
+      "question_range": "1-52",
+      "part_b_type": "paragraph-ordering",
+      "answer_status": "unavailable",
+      "answer_file": null,
+      "visual_assets_count": 3,
+      "visual_assets": [
+        "assets/2017/writing-part-b-01.png",
+        "assets/2017/writing-part-b-02.png",
+        "assets/2017/writing-part-b-composite.png"
+      ],
+      "cleaning_status": "completed",
+      "validation_status": "passed",
+      "unresolved_issue_count": 0
+    },
+    {
+      "year": 2018,
+      "subject": "english-i",
+      "subject_code": 201,
+      "paper_file": "papers/2018.md",
+      "source_pages": 15,
+      "question_count": 52,
+      "question_range": "1-52",
+      "part_b_type": "paragraph-ordering",
+      "answer_status": "unavailable",
+      "answer_file": null,
+      "visual_assets_count": 1,
+      "visual_assets": [
+        "assets/2018/writing-part-b-01.png"
+      ],
+      "cleaning_status": "completed",
+      "validation_status": "passed",
+      "unresolved_issue_count": 0
+    },
+    {
+      "year": 2019,
+      "subject": "english-i",
+      "subject_code": 201,
+      "paper_file": "papers/2019.md",
+      "source_pages": 15,
+      "question_count": 52,
+      "question_range": "1-52",
+      "part_b_type": "paragraph-ordering",
+      "answer_status": "unavailable",
+      "answer_file": null,
+      "visual_assets_count": 1,
+      "visual_assets": [
+        "assets/2019/writing-part-b-01.png"
+      ],
+      "cleaning_status": "completed",
+      "validation_status": "passed",
+      "unresolved_issue_count": 0
+    },
+    {
+      "year": 2020,
+      "subject": "english-i",
+      "subject_code": 201,
+      "paper_file": "papers/2020.md",
+      "source_pages": 16,
+      "question_count": 52,
+      "question_range": "1-52",
+      "part_b_type": "heading-matching",
+      "answer_status": "unavailable",
+      "answer_file": null,
+      "visual_assets_count": 3,
+      "visual_assets": [
+        "assets/2020/writing-part-b-01.png",
+        "assets/2020/writing-part-b-02.png",
+        "assets/2020/writing-part-b-composite.png"
+      ],
+      "cleaning_status": "completed",
+      "validation_status": "passed",
+      "unresolved_issue_count": 0
+    },
+    {
+      "year": 2021,
+      "subject": "english-i",
+      "subject_code": 201,
+      "paper_file": "papers/2021.md",
+      "source_pages": 15,
+      "question_count": 52,
+      "question_range": "1-52",
+      "part_b_type": "paragraph-insertion",
+      "answer_status": "unavailable",
+      "answer_file": null,
+      "visual_assets_count": 1,
+      "visual_assets": [
+        "assets/2021/writing-part-b-01.png"
+      ],
+      "cleaning_status": "completed",
+      "validation_status": "passed",
+      "unresolved_issue_count": 0
+    },
+    {
+      "year": 2022,
+      "subject": "english-i",
+      "subject_code": 201,
+      "paper_file": "papers/2022.md",
+      "source_pages": 15,
+      "question_count": 52,
+      "question_range": "1-52",
+      "part_b_type": "paragraph-ordering",
+      "answer_status": "unavailable",
+      "answer_file": null,
+      "visual_assets_count": 1,
+      "visual_assets": [
+        "assets/2022/writing-part-b-01.png"
+      ],
+      "cleaning_status": "completed",
+      "validation_status": "passed",
+      "unresolved_issue_count": 0
+    },
+    {
+      "year": 2023,
+      "subject": "english-i",
+      "subject_code": 201,
+      "paper_file": "papers/2023.md",
+      "source_pages": 15,
+      "question_count": 52,
+      "question_range": "1-52",
+      "part_b_type": "paragraph-ordering",
+      "answer_status": "unavailable",
+      "answer_file": null,
+      "visual_assets_count": 1,
+      "visual_assets": [
+        "assets/2023/writing-part-b-01.png"
+      ],
+      "cleaning_status": "completed",
+      "validation_status": "passed",
+      "unresolved_issue_count": 0
+    },
+    {
+      "year": 2024,
+      "subject": "english-i",
+      "subject_code": 201,
+      "paper_file": "papers/2024.md",
+      "source_pages": 16,
+      "question_count": 52,
+      "question_range": "1-52",
+      "part_b_type": "information-matching",
+      "answer_status": "source-provided",
+      "answer_file": "answers/2024.md",
+      "visual_assets_count": 3,
+      "visual_assets": [
+        "assets/2024/writing-part-b-01.png",
+        "assets/2024/writing-part-b-02.png",
+        "assets/2024/writing-part-b-composite.png"
+      ],
+      "cleaning_status": "completed",
+      "validation_status": "passed",
+      "unresolved_issue_count": 0
+    },
+    {
+      "year": 2025,
+      "subject": "english-i",
+      "subject_code": 201,
+      "paper_file": "papers/2025.md",
+      "source_pages": 14,
+      "question_count": 52,
+      "question_range": "1-52",
+      "part_b_type": "paragraph-insertion",
+      "answer_status": "source-provided",
+      "answer_file": "answers/2025.md",
+      "visual_assets_count": 1,
+      "visual_assets": [
+        "assets/2025/writing-part-b-01.png"
+      ],
+      "cleaning_status": "completed",
+      "validation_status": "passed",
+      "unresolved_issue_count": 0
+    },
+    {
+      "year": 2026,
+      "subject": "english-i",
+      "subject_code": 201,
+      "paper_file": "papers/2026.md",
+      "source_pages": 14,
+      "question_count": 52,
+      "question_range": "1-52",
+      "part_b_type": "paragraph-ordering",
+      "answer_status": "source-provided",
+      "answer_file": "answers/2026.md",
+      "visual_assets_count": 3,
+      "visual_assets": [
+        "assets/2026/writing-part-b-01.png",
+        "assets/2026/writing-part-b-02.png",
+        "assets/2026/writing-part-b-composite.png"
+      ],
+      "cleaning_status": "completed",
+      "validation_status": "passed",
+      "unresolved_issue_count": 0
+    }
+  ]
+}

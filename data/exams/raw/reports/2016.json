@@ -1,0 +1,38 @@
+{
+  "year": 2016,
+  "subject": "english-i",
+  "subject_code": 201,
+  "paper_file": "papers/2016.md",
+  "source_pages": 16,
+  "question_count": 52,
+  "question_range": "1-52",
+  "part_b_type": "heading-matching",
+  "answer_status": "unavailable",
+  "answer_file": null,
+  "visual_assets_count": 3,
+  "visual_assets": [
+    "assets/2016/writing-part-b-01.png",
+    "assets/2016/writing-part-b-02.png",
+    "assets/2016/writing-part-b-composite.png"
+  ],
+  "cleaning_status": "completed",
+  "validation_status": "passed",
+  "unresolved_issue_count": 0,
+  "exam_title": "2016年全国硕士研究生入学统一考试英语（一）试题",
+  "cross_year_errors": [],
+  "checks": {
+    "markdown_exists": true,
+    "report_exists": true,
+    "yaml_year_valid": true,
+    "subject_valid": true,
+    "subject_code_valid": true,
+    "total_score_valid": true,
+    "duration_minutes_valid": true,
+    "question_count_valid": true,
+    "part_b_structure_valid": true,
+    "translation_data_question_valid": true,
+    "all_images_exist": true,
+    "images_readable": true,
+    "no_inferred_answers": true
+  }
+}

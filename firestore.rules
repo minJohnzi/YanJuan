@@ -1,0 +1,236 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidProfile(data, uid) {
+      return data.keys().hasAll(['uid', 'isPrivateDevice', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'displayName', 'isPrivateDevice', 'createdAt', 'updatedAt'])
+        && data.uid == uid
+        && data.isPrivateDevice is bool
+        && data.createdAt is string && data.createdAt.size() <= 64
+        && data.updatedAt is string && data.updatedAt.size() <= 64
+        && (!('displayName' in data) || (data.displayName is string && data.displayName.size() <= 100));
+    }
+
+    function isValidAttempt(data, uid) {
+      return data.keys().hasAll(['id', 'uid', 'year', 'dataVersion', 'mode', 'status', 'clientRevision', 'deviceId', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['id', 'uid', 'year', 'dataVersion', 'mode', 'status', 'elapsedSeconds', 'clientRevision', 'deviceId', 'createdAt', 'updatedAt'])
+        && data.uid == uid
+        && isValidId(data.id)
+        && data.year is int && data.year >= 2010 && data.year <= 2026
+        && data.dataVersion is string && data.dataVersion.size() <= 32
+        && data.mode in ['unit-practice', 'strict-simulation', 'free-simulation']
+        && data.status in ['in-progress', 'submitted']
+        && data.clientRevision is int && data.clientRevision >= 1
+        && data.deviceId is string && data.deviceId.size() <= 128
+        && data.createdAt is string && data.createdAt.size() <= 64
+        && data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    function isValidResponse(data, uid) {
+      return data.keys().hasAll(['id', 'uid', 'attemptId', 'questionNumber', 'selectedAnswer', 'confidence', 'updatedAt'])
+        && data.keys().hasOnly(['id', 'uid', 'attemptId', 'questionNumber', 'selectedAnswer', 'confidence', 'updatedAt'])
+        && data.uid == uid
+        && isValidId(data.id)
+        && isValidId(data.attemptId)
+        && data.questionNumber is int && data.questionNumber >= 1 && data.questionNumber <= 45
+        && data.selectedAnswer is string && data.selectedAnswer.size() <= 8
+        && data.confidence in ['certain', 'hesitant', 'guessed']
+        && data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    function isValidAnswerVersion(data, uid) {
+      return data.keys().hasAll(['id', 'uid', 'year', 'dataVersion', 'questionNumber', 'versionNumber', 'practiceMode', 'content', 'createdAt'])
+        && data.keys().hasOnly(['id', 'uid', 'year', 'dataVersion', 'questionNumber', 'versionNumber', 'practiceMode', 'content', 'createdAt'])
+        && data.uid == uid
+        && isValidId(data.id)
+        && data.year is int && data.year >= 2010 && data.year <= 2026
+        && data.dataVersion is string && data.dataVersion.size() <= 32
+        && data.questionNumber is int && data.questionNumber >= 46 && data.questionNumber <= 52
+        && data.versionNumber is int && data.versionNumber >= 1
+        && data.practiceMode in ['independent', 'guided', 'rewrite']
+        && data.content is string && data.content.size() >= 1 && data.content.size() <= 15000
+        && data.createdAt is string && data.createdAt.size() <= 64;
+    }
+
+    function isValidEvaluation(data, uid) {
+      return data.keys().hasAll(['id', 'uid', 'answerVersionId', 'centralScore', 'maxScore', 'createdAt'])
+        && data.keys().hasOnly(['id', 'uid', 'answerVersionId', 'centralScore', 'maxScore', 'createdAt'])
+        && data.uid == uid
+        && isValidId(data.id)
+        && isValidId(data.answerVersionId)
+        && data.centralScore is number && data.centralScore >= 0 && data.centralScore <= 20
+        && data.maxScore is number && data.maxScore >= 2 && data.maxScore <= 20
+        && data.createdAt is string && data.createdAt.size() <= 64;
+    }
+
+    function isValidEvaluationReview(data, uid) {
+      return data.keys().hasAll(['id', 'uid', 'evaluationId', 'reviewerDecision', 'createdAt'])
+        && data.keys().hasOnly(['id', 'uid', 'evaluationId', 'reviewerDecision', 'createdAt'])
+        && data.uid == uid
+        && isValidId(data.id)
+        && isValidId(data.evaluationId)
+        && data.reviewerDecision is string && data.reviewerDecision.size() <= 64
+        && data.createdAt is string && data.createdAt.size() <= 64;
+    }
+
+    function isValidReviewItem(data, uid) {
+      return data.keys().hasAll(['id', 'uid', 'questionNumber', 'intervalDays', 'mastered', 'nextDueAt', 'updatedAt'])
+        && data.keys().hasOnly(['id', 'uid', 'questionNumber', 'intervalDays', 'mastered', 'nextDueAt', 'updatedAt'])
+        && data.uid == uid
+        && isValidId(data.id)
+        && data.questionNumber is int && data.questionNumber >= 1 && data.questionNumber <= 52
+        && data.intervalDays is int && data.intervalDays >= 1 && data.intervalDays <= 365
+        && data.mastered is bool
+        && data.nextDueAt is string && data.nextDueAt.size() <= 64
+        && data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    function isValidPreferences(data, uid) {
+      return data.keys().hasAll(['uid', 'fontSizePx', 'lineHeight', 'measureCh', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'fontSizePx', 'lineHeight', 'measureCh', 'updatedAt'])
+        && data.uid == uid
+        && data.fontSizePx is int && data.fontSizePx >= 14 && data.fontSizePx <= 26
+        && data.lineHeight is number && data.lineHeight >= 1.2 && data.lineHeight <= 2.4
+        && data.measureCh is int && data.measureCh >= 50 && data.measureCh <= 95
+        && data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    function isValidImportRecord(data, uid) {
+      return data.keys().hasAll(['id', 'uid', 'year', 'dataVersion', 'status', 'createdAt'])
+        && data.keys().hasOnly(['id', 'uid', 'year', 'dataVersion', 'status', 'createdAt'])
+        && data.uid == uid
+        && isValidId(data.id)
+        && data.year is int && data.year >= 2010 && data.year <= 2026
+        && data.dataVersion is string && data.dataVersion.size() <= 32
+        && data.status is string && data.status.size() <= 32
+        && data.createdAt is string && data.createdAt.size() <= 64;
+    }
+
+    function isValidSyncState(data, uid) {
+      return data.keys().hasAll(['uid', 'deviceId', 'clientRevision', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'deviceId', 'clientRevision', 'updatedAt'])
+        && data.uid == uid
+        && data.deviceId is string && data.deviceId.size() <= 128
+        && data.clientRevision is int && data.clientRevision >= 1
+        && data.updatedAt is string && data.updatedAt.size() <= 64;
+    }
+
+    match /users/{uid}/profile/main {
+      allow get: if isOwner(uid) && isValidId(uid);
+      allow create: if isOwner(uid) && isValidId(uid) && isValidProfile(incoming(), uid);
+      allow update: if isOwner(uid) && isValidId(uid) && isValidProfile(incoming(), uid)
+        && incoming().createdAt == existing().createdAt
+        && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'isPrivateDevice', 'updatedAt']);
+      allow delete: if isOwner(uid) && isValidId(uid);
+    }
+
+    match /users/{uid}/attempts/{attemptId} {
+      allow get: if isOwner(uid) && isValidId(uid) && isValidId(attemptId);
+      allow list: if isOwner(uid) && existing().uid == request.auth.uid;
+      allow create: if isOwner(uid) && isValidId(uid) && isValidId(attemptId) && isValidAttempt(incoming(), uid);
+      allow update: if isOwner(uid) && isValidId(uid) && isValidId(attemptId) && isValidAttempt(incoming(), uid)
+        && incoming().createdAt == existing().createdAt
+        && incoming().year == existing().year
+        && incoming().dataVersion == existing().dataVersion
+        && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'elapsedSeconds', 'clientRevision', 'deviceId', 'updatedAt']);
+      allow delete: if isOwner(uid) && isValidId(uid) && isValidId(attemptId);
+    }
+
+    match /users/{uid}/responses/{responseId} {
+      allow get: if isOwner(uid) && isValidId(uid) && isValidId(responseId);
+      allow list: if isOwner(uid) && existing().uid == request.auth.uid;
+      allow create: if isOwner(uid) && isValidId(uid) && isValidId(responseId) && isValidResponse(incoming(), uid);
+      allow update: if isOwner(uid) && isValidId(uid) && isValidId(responseId) && isValidResponse(incoming(), uid)
+        && incoming().diff(existing()).affectedKeys().hasOnly(['selectedAnswer', 'confidence', 'updatedAt']);
+      allow delete: if isOwner(uid) && isValidId(uid) && isValidId(responseId);
+    }
+
+    match /users/{uid}/answer-versions/{versionId} {
+      allow get: if isOwner(uid) && isValidId(uid) && isValidId(versionId);
+      allow list: if isOwner(uid) && existing().uid == request.auth.uid;
+      allow create: if isOwner(uid) && isValidId(uid) && isValidId(versionId) && isValidAnswerVersion(incoming(), uid);
+      // Immutable historical versions: NEVER allow in-place update!
+      allow update: if false;
+      allow delete: if isOwner(uid) && isValidId(uid) && isValidId(versionId);
+    }
+
+    match /users/{uid}/evaluations/{evaluationId} {
+      allow get: if isOwner(uid) && isValidId(uid) && isValidId(evaluationId);
+      allow list: if isOwner(uid) && existing().uid == request.auth.uid;
+      allow create: if isOwner(uid) && isValidId(uid) && isValidId(evaluationId) && isValidEvaluation(incoming(), uid);
+      allow update: if false;
+      allow delete: if isOwner(uid) && isValidId(uid) && isValidId(evaluationId);
+    }
+
+    match /users/{uid}/evaluation-reviews/{reviewId} {
+      allow get: if isOwner(uid) && isValidId(uid) && isValidId(reviewId);
+      allow list: if isOwner(uid) && existing().uid == request.auth.uid;
+      allow create: if isOwner(uid) && isValidId(uid) && isValidId(reviewId) && isValidEvaluationReview(incoming(), uid);
+      allow update: if false;
+      allow delete: if isOwner(uid) && isValidId(uid) && isValidId(reviewId);
+    }
+
+    match /users/{uid}/review-items/{reviewItemId} {
+      allow get: if isOwner(uid) && isValidId(uid) && isValidId(reviewItemId);
+      allow list: if isOwner(uid) && existing().uid == request.auth.uid;
+      allow create: if isOwner(uid) && isValidId(uid) && isValidId(reviewItemId) && isValidReviewItem(incoming(), uid);
+      allow update: if isOwner(uid) && isValidId(uid) && isValidId(reviewItemId) && isValidReviewItem(incoming(), uid)
+        && incoming().diff(existing()).affectedKeys().hasOnly(['intervalDays', 'mastered', 'nextDueAt', 'updatedAt']);
+      allow delete: if isOwner(uid) && isValidId(uid) && isValidId(reviewItemId);
+    }
+
+    match /users/{uid}/preferences/main {
+      allow get: if isOwner(uid) && isValidId(uid);
+      allow create: if isOwner(uid) && isValidId(uid) && isValidPreferences(incoming(), uid);
+      allow update: if isOwner(uid) && isValidId(uid) && isValidPreferences(incoming(), uid)
+        && incoming().diff(existing()).affectedKeys().hasOnly(['fontSizePx', 'lineHeight', 'measureCh', 'updatedAt']);
+      allow delete: if isOwner(uid) && isValidId(uid);
+    }
+
+    match /users/{uid}/imports/{importId} {
+      allow get: if isOwner(uid) && isValidId(uid) && isValidId(importId);
+      allow list: if isOwner(uid) && existing().uid == request.auth.uid;
+      allow create: if isOwner(uid) && isValidId(uid) && isValidId(importId) && isValidImportRecord(incoming(), uid);
+      allow update: if false;
+      allow delete: if isOwner(uid) && isValidId(uid) && isValidId(importId);
+    }
+
+    match /users/{uid}/sync-state/main {
+      allow get: if isOwner(uid) && isValidId(uid);
+      allow create: if isOwner(uid) && isValidId(uid) && isValidSyncState(incoming(), uid);
+      allow update: if isOwner(uid) && isValidId(uid) && isValidSyncState(incoming(), uid)
+        && incoming().diff(existing()).affectedKeys().hasOnly(['deviceId', 'clientRevision', 'updatedAt']);
+      allow delete: if isOwner(uid) && isValidId(uid);
+    }
+
+    // Encrypted credentials collection: strictly server-only via Admin SDK
+    match /private-provider-credentials/{uid}/providers/{providerId} {
+      allow read, write: if false;
+    }
+  }
+}

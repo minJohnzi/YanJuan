@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-10-19T12:51:50.165Z",
+  "files": [
+    {
+      "year": 2010,
+      "containerFile": "2010英一.zip",
+      "entryFile": "2010年考研英语一真题.md",
+      "sha256": "8009328be1f103b936bc9827ecf2008c334fda664911a16696ddf028c14e2588",
+      "sizeBytes": 23429,
+      "mimeType": "text/markdown"
+    },
+    {
+      "year": 2010,
+      "containerFile": "2010英一.zip",
+      "entryFile": "2010年写作PartB.png",
+      "sha256": "34a8956f47c0f565fa722655e1e0493fd1dfc6f33546fb3faeb51a26edca0e3e",
+      "sizeBytes": 3758,
+      "mimeType": "image/png"
+    }
+  ]
+}

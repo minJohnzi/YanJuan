@@ -1,0 +1,2867 @@
+{
+  "id": "exam-2010",
+  "year": 2010,
+  "subject": "考研英语一",
+  "paperTitle": "2010年全国硕士研究生入学统一考试英语（一）试题",
+  "status": "needs-answer-source",
+  "importStatus": "needs-answer-source",
+  "dataVersion": "v1",
+  "schemaVersion": "1.0.0",
+  "parserProvider": "internal",
+  "parserModel": "rule-based-deterministic",
+  "parserVersion": "1.0.0",
+  "importRetryCount": 0,
+  "pageCount": 14,
+  "sourceFiles": [
+    "papers/2010.md",
+    "assets/2010/writing-part-b-01.png"
+  ],
+  "sourceFormats": [
+    "md"
+  ],
+  "sourceHashes": {
+    "papers/2010.md": "3460fa6176e3cda2cd9d6f8c25c937f112dfde8598ff51e13ededf2222d5ae11",
+    "assets/2010/writing-part-b-01.png": "20f44a53ce3c74b1e254f5bd2a74e7bf6633e14c9f947dc2daeacbe97b96f4c2"
+  },
+  "createdAt": "2026-10-19T11:30:00.000Z",
+  "updatedAt": "2026-10-19T11:30:00.000Z",
+  "totalScore": 100,
+  "durationMinutes": 180,
+  "sections": [
+    {
+      "id": "2010-sec-1",
+      "sectionNumber": "Section I",
+      "title": "Section I Use of English",
+      "score": 10,
+      "suggestedMinutes": 18,
+      "units": [
+        {
+          "id": "2010-unit-cloze",
+          "sectionId": "2010-sec-1",
+          "unitType": "cloze",
+          "title": "Section I Use of English · 完形填空 (1–20题)",
+          "instructions": "Read the following text. Choose the best word(s) for each numbered blank and mark A, B, C or D on ANSWER SHEET 1. (10 points)",
+          "score": 10,
+          "suggestedMinutes": 18,
+          "analysisProfile": {
+            "focusSkills": [
+              "Contextual collocation",
+              "Discourse logic connectors"
+            ],
+            "commonTraps": [
+              "Near-synonym nuance",
+              "Collocation mismatch"
+            ]
+          },
+          "reviewStrategy": {
+            "defaultIntervalsDays": [
+              1,
+              3,
+              7,
+              14
+            ],
+            "recommendedAction": "Re-read passage with correct words filled in blanks [1]–[20]"
+          },
+          "sourceLocator": {
+            "sourceFile": "papers/2010.md",
+            "sourceFormat": "md",
+            "sectionHeading": "Section I Use of English"
+          },
+          "materials": [
+            {
+              "id": "2010-mat-cloze",
+              "materialType": "cloze-passage",
+              "title": "2010年 考研英语一 Use of English 完形填空原文",
+              "text": "In 1924, five-year-old studies at the Hawthorne plant of the Western Electric Company near Chicago began to investigate the relationship between working conditions and productivity. The researchers first changed the lighting in the factory to see [1] the workers would react. To their astonishment, productivity [2] whether the lighting was made brighter or dimmer, and continued to rise even when the lighting was restored to its original [3].\n\nThe researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].\n\nFor decades, the Hawthorne effect has been a staple of psychology and management textbooks. [10] in recent years, economists Steven Levitt and John List decided to track down the original data from the 1924–1932 Hawthorne experiments, which had been [11] in archives for decades. When they re-examined the records using modern statistical methods, they [12] a surprising conclusion: the original data provided almost no [13] for the Hawthorne effect as it is commonly described.\n\nAccording to Levitt and List, the changes in lighting at the Hawthorne plant always took place on Sundays, the only day of the week when the factory was [14]. Output regularly rose on Mondays regardless of whether an experimental change had been [15] the day before. Furthermore, many of the lighting increases occurred as winter turned to spring, when natural daylight and temperatures were also [16] factory output.\n\nDoes this mean the Hawthorne effect is a complete [17]? Not necessarily. People do sometimes alter their behavior when they know they are under [18]. However, the original Hawthorne studies were too poorly controlled to [19] what they have long been claimed to show, reminding us that even famous scientific findings deserve [20] scrutiny.",
+              "paragraphs": [
+                "In 1924, five-year-old studies at the Hawthorne plant of the Western Electric Company near Chicago began to investigate the relationship between working conditions and productivity. The researchers first changed the lighting in the factory to see [1] the workers would react. To their astonishment, productivity [2] whether the lighting was made brighter or dimmer, and continued to rise even when the lighting was restored to its original [3].",
+                "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
+                "For decades, the Hawthorne effect has been a staple of psychology and management textbooks. [10] in recent years, economists Steven Levitt and John List decided to track down the original data from the 1924–1932 Hawthorne experiments, which had been [11] in archives for decades. When they re-examined the records using modern statistical methods, they [12] a surprising conclusion: the original data provided almost no [13] for the Hawthorne effect as it is commonly described.",
+                "According to Levitt and List, the changes in lighting at the Hawthorne plant always took place on Sundays, the only day of the week when the factory was [14]. Output regularly rose on Mondays regardless of whether an experimental change had been [15] the day before. Furthermore, many of the lighting increases occurred as winter turned to spring, when natural daylight and temperatures were also [16] factory output.",
+                "Does this mean the Hawthorne effect is a complete [17]? Not necessarily. People do sometimes alter their behavior when they know they are under [18]. However, the original Hawthorne studies were too poorly controlled to [19] what they have long been claimed to show, reminding us that even famous scientific findings deserve [20] scrutiny."
+              ],
+              "relatedItemIds": [
+                "2010-item-1",
+                "2010-item-2",
+                "2010-item-3",
+                "2010-item-4",
+                "2010-item-5",
+                "2010-item-6",
+                "2010-item-7",
+                "2010-item-8",
+                "2010-item-9",
+                "2010-item-10",
+                "2010-item-11",
+                "2010-item-12",
+                "2010-item-13",
+                "2010-item-14",
+                "2010-item-15",
+                "2010-item-16",
+                "2010-item-17",
+                "2010-item-18",
+                "2010-item-19",
+                "2010-item-20"
+              ]
+            }
+          ],
+          "items": [
+            {
+              "id": "2010-item-1",
+              "questionNumber": 1,
+              "answerMode": "single-choice",
+              "prompt": "Choose the best word(s) for blank [1]",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "what"
+                },
+                {
+                  "key": "B",
+                  "text": "how"
+                },
+                {
+                  "key": "C",
+                  "text": "why"
+                },
+                {
+                  "key": "D",
+                  "text": "when"
+                }
+              ],
+              "score": 0.5,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section I Use of English"
+              },
+              "clozeContext": {
+                "sentence": "In 1924, five-year-old studies at the Hawthorne plant of the Western Electric Company near Chicago began to investigate the relationship between working conditions and productivity. The researchers first changed the lighting in the factory to see [1] the workers would react. To their astonishment, productivity [2] whether the lighting was made brighter or dimmer, and continued to rise even when the lighting was restored to its original [3].",
+                "surroundingParagraph": "In 1924, five-year-old studies at the Hawthorne plant of the Western Electric Company near Chicago began to investigate the relationship between working conditions and productivity. The researchers first changed the lighting in the factory to see [1] the workers would react. To their astonishment, productivity [2] whether the lighting was made brighter or dimmer, and continued to rise even when the lighting was restored to its original [3].",
+                "blankIndex": 1
+              }
+            },
+            {
+              "id": "2010-item-2",
+              "questionNumber": 2,
+              "answerMode": "single-choice",
+              "prompt": "Choose the best word(s) for blank [2]",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "increased"
+                },
+                {
+                  "key": "B",
+                  "text": "declined"
+                },
+                {
+                  "key": "C",
+                  "text": "fluctuated"
+                },
+                {
+                  "key": "D",
+                  "text": "stabilized"
+                }
+              ],
+              "score": 0.5,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section I Use of English"
+              },
+              "clozeContext": {
+                "sentence": "In 1924, five-year-old studies at the Hawthorne plant of the Western Electric Company near Chicago began to investigate the relationship between working conditions and productivity. The researchers first changed the lighting in the factory to see [1] the workers would react. To their astonishment, productivity [2] whether the lighting was made brighter or dimmer, and continued to rise even when the lighting was restored to its original [3].",
+                "surroundingParagraph": "In 1924, five-year-old studies at the Hawthorne plant of the Western Electric Company near Chicago began to investigate the relationship between working conditions and productivity. The researchers first changed the lighting in the factory to see [1] the workers would react. To their astonishment, productivity [2] whether the lighting was made brighter or dimmer, and continued to rise even when the lighting was restored to its original [3].",
+                "blankIndex": 2
+              }
+            },
+            {
+              "id": "2010-item-3",
+              "questionNumber": 3,
+              "answerMode": "single-choice",
+              "prompt": "Choose the best word(s) for blank [3]",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "cost"
+                },
+                {
+                  "key": "B",
+                  "text": "level"
+                },
+                {
+                  "key": "C",
+                  "text": "pattern"
+                },
+                {
+                  "key": "D",
+                  "text": "source"
+                }
+              ],
+              "score": 0.5,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section I Use of English"
+              },
+              "clozeContext": {
+                "sentence": "In 1924, five-year-old studies at the Hawthorne plant of the Western Electric Company near Chicago began to investigate the relationship between working conditions and productivity. The researchers first changed the lighting in the factory to see [1] the workers would react. To their astonishment, productivity [2] whether the lighting was made brighter or dimmer, and continued to rise even when the lighting was restored to its original [3].",
+                "surroundingParagraph": "In 1924, five-year-old studies at the Hawthorne plant of the Western Electric Company near Chicago began to investigate the relationship between working conditions and productivity. The researchers first changed the lighting in the factory to see [1] the workers would react. To their astonishment, productivity [2] whether the lighting was made brighter or dimmer, and continued to rise even when the lighting was restored to its original [3].",
+                "blankIndex": 3
+              }
+            },
+            {
+              "id": "2010-item-4",
+              "questionNumber": 4,
+              "answerMode": "single-choice",
+              "prompt": "Choose the best word(s) for blank [4]",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "eliminated"
+                },
+                {
+                  "key": "B",
+                  "text": "predicted"
+                },
+                {
+                  "key": "C",
+                  "text": "manipulated"
+                },
+                {
+                  "key": "D",
+                  "text": "ignored"
+                }
+              ],
+              "score": 0.5,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section I Use of English"
+              },
+              "clozeContext": {
+                "sentence": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
+                "surroundingParagraph": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
+                "blankIndex": 4
+              }
+            },
+            {
+              "id": "2010-item-5",
+              "questionNumber": 5,
+              "answerMode": "single-choice",
+              "prompt": "Choose the best word(s) for blank [5]",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "case"
+                },
+                {
+                  "key": "B",
+                  "text": "stage"
+                },
+                {
+                  "key": "C",
+                  "text": "aspect"
+                },
+                {
+                  "key": "D",
+                  "text": "field"
+                }
+              ],
+              "score": 0.5,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section I Use of English"
+              },
+              "clozeContext": {
+                "sentence": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
+                "surroundingParagraph": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
+                "blankIndex": 5
+              }
+            },
+            {
+              "id": "2010-item-6",
+              "questionNumber": 6,
+              "answerMode": "single-choice",
+              "prompt": "Choose the best word(s) for blank [6]",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "health"
+                },
+                {
+                  "key": "B",
+                  "text": "environment"
+                },
+                {
+                  "key": "C",
+                  "text": "capacity"
+                },
+                {
+                  "key": "D",
+                  "text": "security"
+                }
+              ],
+              "score": 0.5,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section I Use of English"
+              },
+              "clozeContext": {
+                "sentence": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
+                "surroundingParagraph": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
+                "blankIndex": 6
+              }
+            },
+            {
+              "id": "2010-item-7",
+              "questionNumber": 7,
+              "answerMode": "single-choice",
+              "prompt": "Choose the best word(s) for blank [7]",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "praised"
+                },
+                {
+                  "key": "B",
+                  "text": "replaced"
+                },
+                {
+                  "key": "C",
+                  "text": "observed"
+                },
+                {
+                  "key": "D",
+                  "text": "trained"
+                }
+              ],
+              "score": 0.5,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section I Use of English"
+              },
+              "clozeContext": {
+                "sentence": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
+                "surroundingParagraph": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
+                "blankIndex": 7
+              }
+            },
+            {
+              "id": "2010-item-8",
+              "questionNumber": 8,
+              "answerMode": "single-choice",
+              "prompt": "Choose the best word(s) for blank [8]",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "for"
+                },
+                {
+                  "key": "B",
+                  "text": "by"
+                },
+                {
+                  "key": "C",
+                  "text": "to"
+                },
+                {
+                  "key": "D",
+                  "text": "as"
+                }
+              ],
+              "score": 0.5,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section I Use of English"
+              },
+              "clozeContext": {
+                "sentence": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
+                "surroundingParagraph": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
+                "blankIndex": 8
+              }
+            },
+            {
+              "id": "2010-item-9",
+              "questionNumber": 9,
+              "answerMode": "single-choice",
+              "prompt": "Choose the best word(s) for blank [9]",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "study"
+                },
+                {
+                  "key": "B",
+                  "text": "contest"
+                },
+                {
+                  "key": "C",
+                  "text": "debate"
+                },
+                {
+                  "key": "D",
+                  "text": "reform"
+                }
+              ],
+              "score": 0.5,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section I Use of English"
+              },
+              "clozeContext": {
+                "sentence": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
+                "surroundingParagraph": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
+                "blankIndex": 9
+              }
+            },
+            {
+              "id": "2010-item-10",
+              "questionNumber": 10,
+              "answerMode": "single-choice",
+              "prompt": "Choose the best word(s) for blank [10]",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "Therefore"
+                },
+                {
+                  "key": "B",
+                  "text": "Moreover"
+                },
+                {
+                  "key": "C",
+                  "text": "Yet"
+                },
+                {
+                  "key": "D",
+                  "text": "Indeed"
+                }
+              ],
+              "score": 0.5,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section I Use of English"
+              },
+              "clozeContext": {
+                "sentence": "For decades, the Hawthorne effect has been a staple of psychology and management textbooks. [10] in recent years, economists Steven Levitt and John List decided to track down the original data from the 1924–1932 Hawthorne experiments, which had been [11] in archives for decades. When they re-examined the records using modern statistical methods, they [12] a surprising conclusion: the original data provided almost no [13] for the Hawthorne effect as it is commonly described.",
+                "surroundingParagraph": "For decades, the Hawthorne effect has been a staple of psychology and management textbooks. [10] in recent years, economists Steven Levitt and John List decided to track down the original data from the 1924–1932 Hawthorne experiments, which had been [11] in archives for decades. When they re-examined the records using modern statistical methods, they [12] a surprising conclusion: the original data provided almost no [13] for the Hawthorne effect as it is commonly described.",
+                "blankIndex": 10
+              }
+            },
+            {
+              "id": "2010-item-11",
+              "questionNumber": 11,
+              "answerMode": "single-choice",
+              "prompt": "Choose the best word(s) for blank [11]",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "lost"
+                },
+                {
+                  "key": "B",
+                  "text": "preserved"
+                },
+                {
+                  "key": "C",
+                  "text": "revised"
+                },
+                {
+                  "key": "D",
+                  "text": "exposed"
+                }
+              ],
+              "score": 0.5,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section I Use of English"
+              },
+              "clozeContext": {
+                "sentence": "For decades, the Hawthorne effect has been a staple of psychology and management textbooks. [10] in recent years, economists Steven Levitt and John List decided to track down the original data from the 1924–1932 Hawthorne experiments, which had been [11] in archives for decades. When they re-examined the records using modern statistical methods, they [12] a surprising conclusion: the original data provided almost no [13] for the Hawthorne effect as it is commonly described.",
+                "surroundingParagraph": "For decades, the Hawthorne effect has been a staple of psychology and management textbooks. [10] in recent years, economists Steven Levitt and John List decided to track down the original data from the 1924–1932 Hawthorne experiments, which had been [11] in archives for decades. When they re-examined the records using modern statistical methods, they [12] a surprising conclusion: the original data provided almost no [13] for the Hawthorne effect as it is commonly described.",
+                "blankIndex": 11
+              }
+            },
+            {
+              "id": "2010-item-12",
+              "questionNumber": 12,
+              "answerMode": "single-choice",
+              "prompt": "Choose the best word(s) for blank [12]",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "reached"
+                },
+                {
+                  "key": "B",
+                  "text": "challenged"
+                },
+                {
+                  "key": "C",
+                  "text": "confirmed"
+                },
+                {
+                  "key": "D",
+                  "text": "avoided"
+                }
+              ],
+              "score": 0.5,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section I Use of English"
+              },
+              "clozeContext": {
+                "sentence": "For decades, the Hawthorne effect has been a staple of psychology and management textbooks. [10] in recent years, economists Steven Levitt and John List decided to track down the original data from the 1924–1932 Hawthorne experiments, which had been [11] in archives for decades. When they re-examined the records using modern statistical methods, they [12] a surprising conclusion: the original data provided almost no [13] for the Hawthorne effect as it is commonly described.",
+                "surroundingParagraph": "For decades, the Hawthorne effect has been a staple of psychology and management textbooks. [10] in recent years, economists Steven Levitt and John List decided to track down the original data from the 1924–1932 Hawthorne experiments, which had been [11] in archives for decades. When they re-examined the records using modern statistical methods, they [12] a surprising conclusion: the original data provided almost no [13] for the Hawthorne effect as it is commonly described.",
+                "blankIndex": 12
+              }
+            },
+            {
+              "id": "2010-item-13",
+              "questionNumber": 13,
+              "answerMode": "single-choice",
+              "prompt": "Choose the best word(s) for blank [13]",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "room"
+                },
+                {
+                  "key": "B",
+                  "text": "reason"
+                },
+                {
+                  "key": "C",
+                  "text": "evidence"
+                },
+                {
+                  "key": "D",
+                  "text": "substitute"
+                }
+              ],
+              "score": 0.5,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section I Use of English"
+              },
+              "clozeContext": {
+                "sentence": "For decades, the Hawthorne effect has been a staple of psychology and management textbooks. [10] in recent years, economists Steven Levitt and John List decided to track down the original data from the 1924–1932 Hawthorne experiments, which had been [11] in archives for decades. When they re-examined the records using modern statistical methods, they [12] a surprising conclusion: the original data provided almost no [13] for the Hawthorne effect as it is commonly described.",
+                "surroundingParagraph": "For decades, the Hawthorne effect has been a staple of psychology and management textbooks. [10] in recent years, economists Steven Levitt and John List decided to track down the original data from the 1924–1932 Hawthorne experiments, which had been [11] in archives for decades. When they re-examined the records using modern statistical methods, they [12] a surprising conclusion: the original data provided almost no [13] for the Hawthorne effect as it is commonly described.",
+                "blankIndex": 13
+              }
+            },
+            {
+              "id": "2010-item-14",
+              "questionNumber": 14,
+              "answerMode": "single-choice",
+              "prompt": "Choose the best word(s) for blank [14]",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "busy"
+                },
+                {
+                  "key": "B",
+                  "text": "noisy"
+                },
+                {
+                  "key": "C",
+                  "text": "closed"
+                },
+                {
+                  "key": "D",
+                  "text": "crowded"
+                }
+              ],
+              "score": 0.5,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section I Use of English"
+              },
+              "clozeContext": {
+                "sentence": "According to Levitt and List, the changes in lighting at the Hawthorne plant always took place on Sundays, the only day of the week when the factory was [14]. Output regularly rose on Mondays regardless of whether an experimental change had been [15] the day before. Furthermore, many of the lighting increases occurred as winter turned to spring, when natural daylight and temperatures were also [16] factory output.",
+                "surroundingParagraph": "According to Levitt and List, the changes in lighting at the Hawthorne plant always took place on Sundays, the only day of the week when the factory was [14]. Output regularly rose on Mondays regardless of whether an experimental change had been [15] the day before. Furthermore, many of the lighting increases occurred as winter turned to spring, when natural daylight and temperatures were also [16] factory output.",
+                "blankIndex": 14
+              }
+            },
+            {
+              "id": "2010-item-15",
+              "questionNumber": 15,
+              "answerMode": "single-choice",
+              "prompt": "Choose the best word(s) for blank [15]",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "canceled"
+                },
+                {
+                  "key": "B",
+                  "text": "introduced"
+                },
+                {
+                  "key": "C",
+                  "text": "delayed"
+                },
+                {
+                  "key": "D",
+                  "text": "discussed"
+                }
+              ],
+              "score": 0.5,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section I Use of English"
+              },
+              "clozeContext": {
+                "sentence": "According to Levitt and List, the changes in lighting at the Hawthorne plant always took place on Sundays, the only day of the week when the factory was [14]. Output regularly rose on Mondays regardless of whether an experimental change had been [15] the day before. Furthermore, many of the lighting increases occurred as winter turned to spring, when natural daylight and temperatures were also [16] factory output.",
+                "surroundingParagraph": "According to Levitt and List, the changes in lighting at the Hawthorne plant always took place on Sundays, the only day of the week when the factory was [14]. Output regularly rose on Mondays regardless of whether an experimental change had been [15] the day before. Furthermore, many of the lighting increases occurred as winter turned to spring, when natural daylight and temperatures were also [16] factory output.",
+                "blankIndex": 15
+              }
+            },
+            {
+              "id": "2010-item-16",
+              "questionNumber": 16,
+              "answerMode": "single-choice",
+              "prompt": "Choose the best word(s) for blank [16]",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "limiting"
+                },
+                {
+                  "key": "B",
+                  "text": "measuring"
+                },
+                {
+                  "key": "C",
+                  "text": "reducing"
+                },
+                {
+                  "key": "D",
+                  "text": "affecting"
+                }
+              ],
+              "score": 0.5,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section I Use of English"
+              },
+              "clozeContext": {
+                "sentence": "According to Levitt and List, the changes in lighting at the Hawthorne plant always took place on Sundays, the only day of the week when the factory was [14]. Output regularly rose on Mondays regardless of whether an experimental change had been [15] the day before. Furthermore, many of the lighting increases occurred as winter turned to spring, when natural daylight and temperatures were also [16] factory output.",
+                "surroundingParagraph": "According to Levitt and List, the changes in lighting at the Hawthorne plant always took place on Sundays, the only day of the week when the factory was [14]. Output regularly rose on Mondays regardless of whether an experimental change had been [15] the day before. Furthermore, many of the lighting increases occurred as winter turned to spring, when natural daylight and temperatures were also [16] factory output.",
+                "blankIndex": 16
+              }
+            },
+            {
+              "id": "2010-item-17",
+              "questionNumber": 17,
+              "answerMode": "single-choice",
+              "prompt": "Choose the best word(s) for blank [17]",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "myth"
+                },
+                {
+                  "key": "B",
+                  "text": "miracle"
+                },
+                {
+                  "key": "C",
+                  "text": "secret"
+                },
+                {
+                  "key": "D",
+                  "text": "tragedy"
+                }
+              ],
+              "score": 0.5,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section I Use of English"
+              },
+              "clozeContext": {
+                "sentence": "Does this mean the Hawthorne effect is a complete [17]? Not necessarily. People do sometimes alter their behavior when they know they are under [18]. However, the original Hawthorne studies were too poorly controlled to [19] what they have long been claimed to show, reminding us that even famous scientific findings deserve [20] scrutiny.",
+                "surroundingParagraph": "Does this mean the Hawthorne effect is a complete [17]? Not necessarily. People do sometimes alter their behavior when they know they are under [18]. However, the original Hawthorne studies were too poorly controlled to [19] what they have long been claimed to show, reminding us that even famous scientific findings deserve [20] scrutiny.",
+                "blankIndex": 17
+              }
+            },
+            {
+              "id": "2010-item-18",
+              "questionNumber": 18,
+              "answerMode": "single-choice",
+              "prompt": "Choose the best word(s) for blank [18]",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "pressure"
+                },
+                {
+                  "key": "B",
+                  "text": "threat"
+                },
+                {
+                  "key": "C",
+                  "text": "control"
+                },
+                {
+                  "key": "D",
+                  "text": "observation"
+                }
+              ],
+              "score": 0.5,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section I Use of English"
+              },
+              "clozeContext": {
+                "sentence": "Does this mean the Hawthorne effect is a complete [17]? Not necessarily. People do sometimes alter their behavior when they know they are under [18]. However, the original Hawthorne studies were too poorly controlled to [19] what they have long been claimed to show, reminding us that even famous scientific findings deserve [20] scrutiny.",
+                "surroundingParagraph": "Does this mean the Hawthorne effect is a complete [17]? Not necessarily. People do sometimes alter their behavior when they know they are under [18]. However, the original Hawthorne studies were too poorly controlled to [19] what they have long been claimed to show, reminding us that even famous scientific findings deserve [20] scrutiny.",
+                "blankIndex": 18
+              }
+            },
+            {
+              "id": "2010-item-19",
+              "questionNumber": 19,
+              "answerMode": "single-choice",
+              "prompt": "Choose the best word(s) for blank [19]",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "conceal"
+                },
+                {
+                  "key": "B",
+                  "text": "prove"
+                },
+                {
+                  "key": "C",
+                  "text": "deny"
+                },
+                {
+                  "key": "D",
+                  "text": "predict"
+                }
+              ],
+              "score": 0.5,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section I Use of English"
+              },
+              "clozeContext": {
+                "sentence": "Does this mean the Hawthorne effect is a complete [17]? Not necessarily. People do sometimes alter their behavior when they know they are under [18]. However, the original Hawthorne studies were too poorly controlled to [19] what they have long been claimed to show, reminding us that even famous scientific findings deserve [20] scrutiny.",
+                "surroundingParagraph": "Does this mean the Hawthorne effect is a complete [17]? Not necessarily. People do sometimes alter their behavior when they know they are under [18]. However, the original Hawthorne studies were too poorly controlled to [19] what they have long been claimed to show, reminding us that even famous scientific findings deserve [20] scrutiny.",
+                "blankIndex": 19
+              }
+            },
+            {
+              "id": "2010-item-20",
+              "questionNumber": 20,
+              "answerMode": "single-choice",
+              "prompt": "Choose the best word(s) for blank [20]",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "casual"
+                },
+                {
+                  "key": "B",
+                  "text": "temporary"
+                },
+                {
+                  "key": "C",
+                  "text": "critical"
+                },
+                {
+                  "key": "D",
+                  "text": "passive"
+                }
+              ],
+              "score": 0.5,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section I Use of English"
+              },
+              "clozeContext": {
+                "sentence": "Does this mean the Hawthorne effect is a complete [17]? Not necessarily. People do sometimes alter their behavior when they know they are under [18]. However, the original Hawthorne studies were too poorly controlled to [19] what they have long been claimed to show, reminding us that even famous scientific findings deserve [20] scrutiny.",
+                "surroundingParagraph": "Does this mean the Hawthorne effect is a complete [17]? Not necessarily. People do sometimes alter their behavior when they know they are under [18]. However, the original Hawthorne studies were too poorly controlled to [19] what they have long been claimed to show, reminding us that even famous scientific findings deserve [20] scrutiny.",
+                "blankIndex": 20
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2010-sec-2",
+      "sectionNumber": "Section II",
+      "title": "Section II Reading Comprehension",
+      "score": 60,
+      "suggestedMinutes": 110,
+      "units": [
+        {
+          "id": "2010-unit-reading-1",
+          "sectionId": "2010-sec-2",
+          "unitType": "reading",
+          "title": "Section II Part A · Text 1 (21–25题)",
+          "instructions": "Answer the questions below each text by choosing A, B, C or D.",
+          "score": 10,
+          "suggestedMinutes": 18,
+          "analysisProfile": {
+            "focusSkills": [
+              "Paragraph evidence location",
+              "Inference vs. restatement"
+            ],
+            "commonTraps": [
+              "Overgeneralization",
+              "Concept swap"
+            ]
+          },
+          "reviewStrategy": {
+            "defaultIntervalsDays": [
+              1,
+              3,
+              7,
+              14
+            ],
+            "recommendedAction": "Locate exact sentence evidence in passage"
+          },
+          "sourceLocator": {
+            "sourceFile": "papers/2010.md",
+            "sourceFormat": "md",
+            "sectionHeading": "Section II Part A Text 1"
+          },
+          "materials": [
+            {
+              "id": "2010-mat-reading-1",
+              "materialType": "passage",
+              "title": "2010年 考研英语一 Reading Part A Text 1",
+              "text": "Of all the changes that have taken place in English-language newspapers during the past quarter-century, perhaps the most far-reaching has been the inexorable decline in the scope and seriousness of their arts coverage.\n\nIt is difficult to the point of impossibility for the average reader under the age of forty to imagine a time when high-quality arts criticism could be found in most big-city newspapers. Yet a considerable number of the most significant collections of criticism published in the 20th century consisted in large part of newspaper reviews. To read such books today is to marvel at the fact that their learned contents were once deemed suitable for publication in general-circulation dailies.\n\nWe are even farther removed from the unfocused newspaper reviews published in England between the turn of the 20th century and the eve of World War II, at a time when newsprint was dirt-cheap and stylish arts criticism was considered an ornament to the publications in which it appeared. In those far-off days, it was taken for granted that the critics of major papers would write in detail and at length about the events they covered. Theirs was a serious business, and even those reviewers who wore their learning lightly, like George Bernard Shaw and Ernest Newman, could be trusted to know what they were about. These men believed in journalism as a calling, and were proud to be published in the daily press.\n\nUnfortunately, these critics are virtually forgotten. Neville Cardus, who wrote for the Manchester Guardian from 1917 until shortly before his death in 1975, is now known solely as a writer of essays on the game of cricket. During his lifetime, though, he was also one of England's foremost classical-music critics. He was knighted in 1967, the first music critic to be so honored. Yet only one of his books is now in print, and his vast body of writings on music is unknown save to specialists.\n\nIs there any chance that Cardus's criticism will enjoy a revival? The prospect seems remote. Journalistic tastes had changed long before his death, and postmodern readers have little use for the richly upholstered prose in which he specialized. Moreover, the amateur tradition in music criticism has been in headlong retreat.",
+              "paragraphs": [
+                "Of all the changes that have taken place in English-language newspapers during the past quarter-century, perhaps the most far-reaching has been the inexorable decline in the scope and seriousness of their arts coverage.",
+                "It is difficult to the point of impossibility for the average reader under the age of forty to imagine a time when high-quality arts criticism could be found in most big-city newspapers. Yet a considerable number of the most significant collections of criticism published in the 20th century consisted in large part of newspaper reviews. To read such books today is to marvel at the fact that their learned contents were once deemed suitable for publication in general-circulation dailies.",
+                "We are even farther removed from the unfocused newspaper reviews published in England between the turn of the 20th century and the eve of World War II, at a time when newsprint was dirt-cheap and stylish arts criticism was considered an ornament to the publications in which it appeared. In those far-off days, it was taken for granted that the critics of major papers would write in detail and at length about the events they covered. Theirs was a serious business, and even those reviewers who wore their learning lightly, like George Bernard Shaw and Ernest Newman, could be trusted to know what they were about. These men believed in journalism as a calling, and were proud to be published in the daily press.",
+                "Unfortunately, these critics are virtually forgotten. Neville Cardus, who wrote for the Manchester Guardian from 1917 until shortly before his death in 1975, is now known solely as a writer of essays on the game of cricket. During his lifetime, though, he was also one of England's foremost classical-music critics. He was knighted in 1967, the first music critic to be so honored. Yet only one of his books is now in print, and his vast body of writings on music is unknown save to specialists.",
+                "Is there any chance that Cardus's criticism will enjoy a revival? The prospect seems remote. Journalistic tastes had changed long before his death, and postmodern readers have little use for the richly upholstered prose in which he specialized. Moreover, the amateur tradition in music criticism has been in headlong retreat."
+              ],
+              "relatedItemIds": [
+                "2010-item-21",
+                "2010-item-22",
+                "2010-item-23",
+                "2010-item-24",
+                "2010-item-25"
+              ]
+            }
+          ],
+          "items": [
+            {
+              "id": "2010-item-21",
+              "questionNumber": 21,
+              "answerMode": "single-choice",
+              "prompt": "It is indicated in Paragraphs 1 and 2 that arts criticism in newspapers",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "has gained wider popularity among young readers."
+                },
+                {
+                  "key": "B",
+                  "text": "has experienced a notable decline in quality and depth."
+                },
+                {
+                  "key": "C",
+                  "text": "was once dominated by academic specialists."
+                },
+                {
+                  "key": "D",
+                  "text": "focused exclusively on classical literature."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part A Text 1"
+              },
+              "readingMeta": {
+                "passageId": "2010-mat-reading-1",
+                "questionCategory": "detail"
+              }
+            },
+            {
+              "id": "2010-item-22",
+              "questionNumber": 22,
+              "answerMode": "single-choice",
+              "prompt": "Newspaper reviews in England before World War II were characterized by",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "free themes and casual styles."
+                },
+                {
+                  "key": "B",
+                  "text": "elaborate layouts and illustrations."
+                },
+                {
+                  "key": "C",
+                  "text": "radical viewpoints and concise language."
+                },
+                {
+                  "key": "D",
+                  "text": "thorough analysis and elegant style."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part A Text 1"
+              },
+              "readingMeta": {
+                "passageId": "2010-mat-reading-1",
+                "questionCategory": "detail"
+              }
+            },
+            {
+              "id": "2010-item-23",
+              "questionNumber": 23,
+              "answerMode": "single-choice",
+              "prompt": "Which of the following would Shaw and Newman most probably agree on?",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "It is writer's duty to fulfill journalistic goals."
+                },
+                {
+                  "key": "B",
+                  "text": "It is contemptible for writers to be journalists."
+                },
+                {
+                  "key": "C",
+                  "text": "Writers are likely to be tempted into journalism."
+                },
+                {
+                  "key": "D",
+                  "text": "Not all writers are capable of journalistic writing."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part A Text 1"
+              },
+              "readingMeta": {
+                "passageId": "2010-mat-reading-1",
+                "questionCategory": "detail"
+              }
+            },
+            {
+              "id": "2010-item-24",
+              "questionNumber": 24,
+              "answerMode": "single-choice",
+              "prompt": "What can be learned about Cardus according to the last two paragraphs?",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "His music criticism may not appeal to readers today."
+                },
+                {
+                  "key": "B",
+                  "text": "His reputation as a music critic has long been in dispute."
+                },
+                {
+                  "key": "C",
+                  "text": "His style caters largely to modern specialists."
+                },
+                {
+                  "key": "D",
+                  "text": "His writings fail to follow the amateur tradition."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part A Text 1"
+              },
+              "readingMeta": {
+                "passageId": "2010-mat-reading-1",
+                "questionCategory": "detail"
+              }
+            },
+            {
+              "id": "2010-item-25",
+              "questionNumber": 25,
+              "answerMode": "single-choice",
+              "prompt": "What would be the best title for the text?",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "Newspapers of the Good Old Days"
+                },
+                {
+                  "key": "B",
+                  "text": "The Lost Horizon in Newspapers"
+                },
+                {
+                  "key": "C",
+                  "text": "Mournful Decline of Journalism"
+                },
+                {
+                  "key": "D",
+                  "text": "Prominent Critics in Memory"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part A Text 1"
+              },
+              "readingMeta": {
+                "passageId": "2010-mat-reading-1",
+                "questionCategory": "main-idea"
+              }
+            }
+          ]
+        },
+        {
+          "id": "2010-unit-reading-2",
+          "sectionId": "2010-sec-2",
+          "unitType": "reading",
+          "title": "Section II Part A · Text 2 (26–30题)",
+          "instructions": "Answer the questions below each text by choosing A, B, C or D.",
+          "score": 10,
+          "suggestedMinutes": 18,
+          "analysisProfile": {
+            "focusSkills": [
+              "Paragraph evidence location",
+              "Inference vs. restatement"
+            ],
+            "commonTraps": [
+              "Overgeneralization",
+              "Concept swap"
+            ]
+          },
+          "reviewStrategy": {
+            "defaultIntervalsDays": [
+              1,
+              3,
+              7,
+              14
+            ],
+            "recommendedAction": "Locate exact sentence evidence in passage"
+          },
+          "sourceLocator": {
+            "sourceFile": "papers/2010.md",
+            "sourceFormat": "md",
+            "sectionHeading": "Section II Part A Text 2"
+          },
+          "materials": [
+            {
+              "id": "2010-mat-reading-2",
+              "materialType": "passage",
+              "title": "2010年 考研英语一 Reading Part A Text 2",
+              "text": "Over the past decade, thousands of patents have been granted for what are called business methods. Amazon.com received one for its \"one-click\" online payment system. Merrill Lynch got legal protection for an asset allocation strategy. One inventor patented a technique for lifting a box.\n\nNow the nation's top patent court appears completely ready to scale back on business-method patents, which have been controversial ever since they were first authorized 10 years ago. In a move that has intellectual-property lawyers abuzz, the U.S. Court of Appeals for the Federal Circuit said it would use a particular case to conduct a broad review of business-method patents. In re Bilski, as the case is known, is \"a very big deal,\" says Dennis D. Crouch of the University of Missouri School of Law. It \"has the potential to eliminate an entire class of patents.\"\n\nCurbs on business-method claims would be a dramatic about-face, because it was the Federal Circuit itself that introduced such patents with its 1998 decision in the so-called State Street Bank case, approving a patent on a way of pooling mutual-fund assets. That ruling produced an explosion in business-method filings, initially by emerging internet companies trying to stake out exclusive rights to specific types of online transactions. Later, more established companies raced to add such patents to their files, if only as a defensive move against rivals that might beat them to the punch.\n\nThe Bilski case involves a claimed patent on a method for hedging risk in the commodities market. The Federal Circuit issued an unusual order stating that the case would be heard by all 12 of the court's judges, rather than a typical panel of three, and that one issue it wants to evaluate is whether it should \"reconsider\" its State Street Bank ruling.",
+              "paragraphs": [
+                "Over the past decade, thousands of patents have been granted for what are called business methods. Amazon.com received one for its \"one-click\" online payment system. Merrill Lynch got legal protection for an asset allocation strategy. One inventor patented a technique for lifting a box.",
+                "Now the nation's top patent court appears completely ready to scale back on business-method patents, which have been controversial ever since they were first authorized 10 years ago. In a move that has intellectual-property lawyers abuzz, the U.S. Court of Appeals for the Federal Circuit said it would use a particular case to conduct a broad review of business-method patents. In re Bilski, as the case is known, is \"a very big deal,\" says Dennis D. Crouch of the University of Missouri School of Law. It \"has the potential to eliminate an entire class of patents.\"",
+                "Curbs on business-method claims would be a dramatic about-face, because it was the Federal Circuit itself that introduced such patents with its 1998 decision in the so-called State Street Bank case, approving a patent on a way of pooling mutual-fund assets. That ruling produced an explosion in business-method filings, initially by emerging internet companies trying to stake out exclusive rights to specific types of online transactions. Later, more established companies raced to add such patents to their files, if only as a defensive move against rivals that might beat them to the punch.",
+                "The Bilski case involves a claimed patent on a method for hedging risk in the commodities market. The Federal Circuit issued an unusual order stating that the case would be heard by all 12 of the court's judges, rather than a typical panel of three, and that one issue it wants to evaluate is whether it should \"reconsider\" its State Street Bank ruling."
+              ],
+              "relatedItemIds": [
+                "2010-item-26",
+                "2010-item-27",
+                "2010-item-28",
+                "2010-item-29",
+                "2010-item-30"
+              ]
+            }
+          ],
+          "items": [
+            {
+              "id": "2010-item-26",
+              "questionNumber": 26,
+              "answerMode": "single-choice",
+              "prompt": "Business-method patents have recently aroused concern because of",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "their limited value to businesses."
+                },
+                {
+                  "key": "B",
+                  "text": "their connection with asset allocation."
+                },
+                {
+                  "key": "C",
+                  "text": "the possible restriction on their granting."
+                },
+                {
+                  "key": "D",
+                  "text": "the controversy over their authorization."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part A Text 2"
+              },
+              "readingMeta": {
+                "passageId": "2010-mat-reading-2",
+                "questionCategory": "detail"
+              }
+            },
+            {
+              "id": "2010-item-27",
+              "questionNumber": 27,
+              "answerMode": "single-choice",
+              "prompt": "Which of the following is true of the Bilski case?",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "It ruling complies with the court decisions."
+                },
+                {
+                  "key": "B",
+                  "text": "It involves a very big business transaction."
+                },
+                {
+                  "key": "C",
+                  "text": "It has been dismissed by the Federal Circuit."
+                },
+                {
+                  "key": "D",
+                  "text": "It may change the legal practices in the U.S."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part A Text 2"
+              },
+              "readingMeta": {
+                "passageId": "2010-mat-reading-2",
+                "questionCategory": "detail"
+              }
+            },
+            {
+              "id": "2010-item-28",
+              "questionNumber": 28,
+              "answerMode": "single-choice",
+              "prompt": "The word \"about-face\" (Para. 3) most probably means",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "loss of goodatus."
+                },
+                {
+                  "key": "B",
+                  "text": "increase of hostility."
+                },
+                {
+                  "key": "C",
+                  "text": "change of attitude."
+                },
+                {
+                  "key": "D",
+                  "text": "enhancement of dignity."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part A Text 2"
+              },
+              "readingMeta": {
+                "passageId": "2010-mat-reading-2",
+                "questionCategory": "vocab-in-context",
+                "underlinedTarget": "about-face"
+              }
+            },
+            {
+              "id": "2010-item-29",
+              "questionNumber": 29,
+              "answerMode": "single-choice",
+              "prompt": "We learn from the last two paragraphs that business-method patents",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "are immune to legal challenges."
+                },
+                {
+                  "key": "B",
+                  "text": "are often unnecessarily issued."
+                },
+                {
+                  "key": "C",
+                  "text": "lower the esteem for patent holders."
+                },
+                {
+                  "key": "D",
+                  "text": "increase the incidence of risks."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part A Text 2"
+              },
+              "readingMeta": {
+                "passageId": "2010-mat-reading-2",
+                "questionCategory": "detail"
+              }
+            },
+            {
+              "id": "2010-item-30",
+              "questionNumber": 30,
+              "answerMode": "single-choice",
+              "prompt": "Which of the following would be the subject of the text?",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "A looming threat to business-method patents."
+                },
+                {
+                  "key": "B",
+                  "text": "The search for new business-method patents."
+                },
+                {
+                  "key": "C",
+                  "text": "A prevailing trend in business-method patents."
+                },
+                {
+                  "key": "D",
+                  "text": "The protection of business-method patents."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part A Text 2"
+              },
+              "readingMeta": {
+                "passageId": "2010-mat-reading-2",
+                "questionCategory": "detail"
+              }
+            }
+          ]
+        },
+        {
+          "id": "2010-unit-reading-3",
+          "sectionId": "2010-sec-2",
+          "unitType": "reading",
+          "title": "Section II Part A · Text 3 (31–35题)",
+          "instructions": "Answer the questions below each text by choosing A, B, C or D.",
+          "score": 10,
+          "suggestedMinutes": 18,
+          "analysisProfile": {
+            "focusSkills": [
+              "Paragraph evidence location",
+              "Inference vs. restatement"
+            ],
+            "commonTraps": [
+              "Overgeneralization",
+              "Concept swap"
+            ]
+          },
+          "reviewStrategy": {
+            "defaultIntervalsDays": [
+              1,
+              3,
+              7,
+              14
+            ],
+            "recommendedAction": "Locate exact sentence evidence in passage"
+          },
+          "sourceLocator": {
+            "sourceFile": "papers/2010.md",
+            "sourceFormat": "md",
+            "sectionHeading": "Section II Part A Text 3"
+          },
+          "materials": [
+            {
+              "id": "2010-mat-reading-3",
+              "materialType": "passage",
+              "title": "2010年 考研英语一 Reading Part A Text 3",
+              "text": "In his book The Tipping Point, Malcolm Gladwell argues that social epidemics are driven in large part by the actions of a tiny minority of special individuals, often called influentials, who are unusually informed, persuasive, or well-connected. The idea is intuitively compelling, but it doesn't explain how ideas actually spread.\n\nThe supposed importance of influentials derives from a plausible-sounding but largely untested theory called the \"two-step flow of communication\": information flows from the media to the influentials and from them to everyone else. Marketers have embraced the two-step flow because it suggests that if they can just find and influence the influentials, those select people will do most of the work for them. The theory also seems to explain the sudden and unexpected popularity of certain looks, brands, or neighborhoods.\n\nIn recent years, however, researchers have begun to test the hypothesis using computer simulations and empirical studies of online networks. They have found that outside of a few special cases, the global cascade of a trend depends far less on a handful of super-connectors than on the critical mass of easily influenced ordinary people interacting with one another.\n\nSome researchers argue that <u>these people</u> are often misled by their own retrospective bias: when a trend catches fire, observers naturally point to prominent early adopters and assume those individuals caused the cascade, ignoring the thousands of ordinary transmitters who actually sustained the chain reaction.",
+              "paragraphs": [
+                "In his book The Tipping Point, Malcolm Gladwell argues that social epidemics are driven in large part by the actions of a tiny minority of special individuals, often called influentials, who are unusually informed, persuasive, or well-connected. The idea is intuitively compelling, but it doesn't explain how ideas actually spread.",
+                "The supposed importance of influentials derives from a plausible-sounding but largely untested theory called the \"two-step flow of communication\": information flows from the media to the influentials and from them to everyone else. Marketers have embraced the two-step flow because it suggests that if they can just find and influence the influentials, those select people will do most of the work for them. The theory also seems to explain the sudden and unexpected popularity of certain looks, brands, or neighborhoods.",
+                "In recent years, however, researchers have begun to test the hypothesis using computer simulations and empirical studies of online networks. They have found that outside of a few special cases, the global cascade of a trend depends far less on a handful of super-connectors than on the critical mass of easily influenced ordinary people interacting with one another.",
+                "Some researchers argue that <u>these people</u> are often misled by their own retrospective bias: when a trend catches fire, observers naturally point to prominent early adopters and assume those individuals caused the cascade, ignoring the thousands of ordinary transmitters who actually sustained the chain reaction."
+              ],
+              "relatedItemIds": [
+                "2010-item-31",
+                "2010-item-32",
+                "2010-item-33",
+                "2010-item-34",
+                "2010-item-35"
+              ]
+            }
+          ],
+          "items": [
+            {
+              "id": "2010-item-31",
+              "questionNumber": 31,
+              "answerMode": "single-choice",
+              "prompt": "By citing his book The Tipping Point, the author intends to show that Gladwell's idea",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "has been widely disputed by marketers."
+                },
+                {
+                  "key": "B",
+                  "text": "lacks substantiation from empirical research."
+                },
+                {
+                  "key": "C",
+                  "text": "offers a comprehensive theory of communication."
+                },
+                {
+                  "key": "D",
+                  "text": "exaggerates the role of ordinary consumers."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part A Text 3"
+              },
+              "readingMeta": {
+                "passageId": "2010-mat-reading-3",
+                "questionCategory": "detail"
+              }
+            },
+            {
+              "id": "2010-item-32",
+              "questionNumber": 32,
+              "answerMode": "single-choice",
+              "prompt": "Why do marketers embrace the \"two-step flow of communication\" theory?",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "It reduces the cost of media advertising."
+                },
+                {
+                  "key": "B",
+                  "text": "It offers a shortcut to promote products."
+                },
+                {
+                  "key": "C",
+                  "text": "It explains the failure of certain brands."
+                },
+                {
+                  "key": "D",
+                  "text": "It guarantees the quality of information."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part A Text 3"
+              },
+              "readingMeta": {
+                "passageId": "2010-mat-reading-3",
+                "questionCategory": "detail",
+                "underlinedTarget": "two-step flow of communication"
+              }
+            },
+            {
+              "id": "2010-item-33",
+              "questionNumber": 33,
+              "answerMode": "single-choice",
+              "prompt": "What have recent studies of online networks revealed about social cascades?",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "They are initiated primarily by celebrity endorsements."
+                },
+                {
+                  "key": "B",
+                  "text": "They rely heavily on interactions among ordinary people."
+                },
+                {
+                  "key": "C",
+                  "text": "They can be accurately predicted by marketers."
+                },
+                {
+                  "key": "D",
+                  "text": "They seldom occur without traditional media coverage."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part A Text 3"
+              },
+              "readingMeta": {
+                "passageId": "2010-mat-reading-3",
+                "questionCategory": "detail"
+              }
+            },
+            {
+              "id": "2010-item-34",
+              "questionNumber": 34,
+              "answerMode": "single-choice",
+              "prompt": "The underlined phrase \"these people\" in Paragraph 4 refers to",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "those who regard influentials as the key to social epidemics."
+                },
+                {
+                  "key": "B",
+                  "text": "those who participate in computer network simulations."
+                },
+                {
+                  "key": "C",
+                  "text": "those who resist the influence of commercial marketing."
+                },
+                {
+                  "key": "D",
+                  "text": "those who study the history of communication theories."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part A Text 3"
+              },
+              "readingMeta": {
+                "passageId": "2010-mat-reading-3",
+                "questionCategory": "vocab-in-context",
+                "underlinedTarget": "these people"
+              }
+            },
+            {
+              "id": "2010-item-35",
+              "questionNumber": 35,
+              "answerMode": "single-choice",
+              "prompt": "What is the author's main purpose in writing the text?",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "To criticize the commercial manipulation of social networks."
+                },
+                {
+                  "key": "B",
+                  "text": "To re-examine a popular belief about how trends spread."
+                },
+                {
+                  "key": "C",
+                  "text": "To illustrate the power of influential figures in modern society."
+                },
+                {
+                  "key": "D",
+                  "text": "To advocate the use of computer simulations in sociology."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part A Text 3"
+              },
+              "readingMeta": {
+                "passageId": "2010-mat-reading-3",
+                "questionCategory": "detail"
+              }
+            }
+          ]
+        },
+        {
+          "id": "2010-unit-reading-4",
+          "sectionId": "2010-sec-2",
+          "unitType": "reading",
+          "title": "Section II Part A · Text 4 (36–40题)",
+          "instructions": "Answer the questions below each text by choosing A, B, C or D.",
+          "score": 10,
+          "suggestedMinutes": 18,
+          "analysisProfile": {
+            "focusSkills": [
+              "Paragraph evidence location",
+              "Inference vs. restatement"
+            ],
+            "commonTraps": [
+              "Overgeneralization",
+              "Concept swap"
+            ]
+          },
+          "reviewStrategy": {
+            "defaultIntervalsDays": [
+              1,
+              3,
+              7,
+              14
+            ],
+            "recommendedAction": "Locate exact sentence evidence in passage"
+          },
+          "sourceLocator": {
+            "sourceFile": "papers/2010.md",
+            "sourceFormat": "md",
+            "sectionHeading": "Section II Part A Text 4"
+          },
+          "materials": [
+            {
+              "id": "2010-mat-reading-4",
+              "materialType": "passage",
+              "title": "2010年 考研英语一 Reading Part A Text 4",
+              "text": "Bankers have been blaming themselves for their troubles in public. Behind the scenes, they have been taking aim at someone else: the accounting standard-setters. Their rules, moan the banks, have forced them to report enormous losses, and it's just not fair. These rules say they must value some assets at the price a third party would pay, not the price managers think they are worth.\n\nUnfortunately for the lobbyists, the politicians who were once sympathetic to the banks' complaints have begun to realize that shooting the messenger does not cure the disease. Fair-value accounting (also known as mark-to-market) did not cause the financial crisis; it merely exposed the scale of reckless lending earlier than traditional historical-cost accounting would have done.\n\nUnder the old regime, banks could carry troubled loans at their original face value until a borrower formally defaulted, allowing executives to conceal deteriorating balance sheets for years. When standard-setters tightened the rules, they sought to give investors a transparent, timely snapshot of financial health.\n\nWhile some tweaks to fair-value rules may be justified for truly illiquid assets during extreme market freezes, gutting the standards to flatter bank earnings would only prolong investor distrust and delay economic recovery.",
+              "paragraphs": [
+                "Bankers have been blaming themselves for their troubles in public. Behind the scenes, they have been taking aim at someone else: the accounting standard-setters. Their rules, moan the banks, have forced them to report enormous losses, and it's just not fair. These rules say they must value some assets at the price a third party would pay, not the price managers think they are worth.",
+                "Unfortunately for the lobbyists, the politicians who were once sympathetic to the banks' complaints have begun to realize that shooting the messenger does not cure the disease. Fair-value accounting (also known as mark-to-market) did not cause the financial crisis; it merely exposed the scale of reckless lending earlier than traditional historical-cost accounting would have done.",
+                "Under the old regime, banks could carry troubled loans at their original face value until a borrower formally defaulted, allowing executives to conceal deteriorating balance sheets for years. When standard-setters tightened the rules, they sought to give investors a transparent, timely snapshot of financial health.",
+                "While some tweaks to fair-value rules may be justified for truly illiquid assets during extreme market freezes, gutting the standards to flatter bank earnings would only prolong investor distrust and delay economic recovery."
+              ],
+              "relatedItemIds": [
+                "2010-item-36",
+                "2010-item-37",
+                "2010-item-38",
+                "2010-item-39",
+                "2010-item-40"
+              ]
+            }
+          ],
+          "items": [
+            {
+              "id": "2010-item-36",
+              "questionNumber": 36,
+              "answerMode": "single-choice",
+              "prompt": "Why are bankers complaining about the accounting standard-setters?",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "Their rules have prevented banks from making profits."
+                },
+                {
+                  "key": "B",
+                  "text": "Their rules require assets to be valued at current market prices."
+                },
+                {
+                  "key": "C",
+                  "text": "Their rules favor third-party investors over bank managers."
+                },
+                {
+                  "key": "D",
+                  "text": "Their rules are too complex for ordinary bankers to follow."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part A Text 4"
+              },
+              "readingMeta": {
+                "passageId": "2010-mat-reading-4",
+                "questionCategory": "detail"
+              }
+            },
+            {
+              "id": "2010-item-37",
+              "questionNumber": 37,
+              "answerMode": "single-choice",
+              "prompt": "What is the author's view on fair-value accounting?",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "It aggravated the severity of the financial crisis."
+                },
+                {
+                  "key": "B",
+                  "text": "It revealed the true condition of bank assets promptly."
+                },
+                {
+                  "key": "C",
+                  "text": "It should be replaced by historical-cost accounting."
+                },
+                {
+                  "key": "D",
+                  "text": "It was designed to protect politicians from blame."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part A Text 4"
+              },
+              "readingMeta": {
+                "passageId": "2010-mat-reading-4",
+                "questionCategory": "detail"
+              }
+            },
+            {
+              "id": "2010-item-38",
+              "questionNumber": 38,
+              "answerMode": "single-choice",
+              "prompt": "Under the traditional historical-cost accounting regime, banks could",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "transfer troubled loans to government agencies."
+                },
+                {
+                  "key": "B",
+                  "text": "delay reporting losses on deteriorating loans."
+                },
+                {
+                  "key": "C",
+                  "text": "demand higher interest rates from borrowers."
+                },
+                {
+                  "key": "D",
+                  "text": "refuse independent audits of their balance sheets."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part A Text 4"
+              },
+              "readingMeta": {
+                "passageId": "2010-mat-reading-4",
+                "questionCategory": "detail"
+              }
+            },
+            {
+              "id": "2010-item-39",
+              "questionNumber": 39,
+              "answerMode": "single-choice",
+              "prompt": "The attitude of politicians toward the bankers' complaints has become",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "increasingly supportive."
+                },
+                {
+                  "key": "B",
+                  "text": "completely indifferent."
+                },
+                {
+                  "key": "C",
+                  "text": "more cautious and skeptical."
+                },
+                {
+                  "key": "D",
+                  "text": "fiercely hostile."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part A Text 4"
+              },
+              "readingMeta": {
+                "passageId": "2010-mat-reading-4",
+                "questionCategory": "attitude"
+              }
+            },
+            {
+              "id": "2010-item-40",
+              "questionNumber": 40,
+              "answerMode": "single-choice",
+              "prompt": "Which of the following would the author most likely support?",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "Abolishing mark-to-market rules during market downturns."
+                },
+                {
+                  "key": "B",
+                  "text": "Maintaining core accounting transparency with minor refinements."
+                },
+                {
+                  "key": "C",
+                  "text": "Allowing bank managers to determine asset values independently."
+                },
+                {
+                  "key": "D",
+                  "text": "Transferring standard-setting power to commercial banks."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part A Text 4"
+              },
+              "readingMeta": {
+                "passageId": "2010-mat-reading-4",
+                "questionCategory": "detail"
+              }
+            }
+          ]
+        },
+        {
+          "id": "2010-unit-part-b",
+          "sectionId": "2010-sec-2",
+          "unitType": "passage-assembly",
+          "title": "Section II Part B · 新题型 (paragraph-insertion)",
+          "instructions": "The following paragraphs are given in a wrong order. For Questions 41–45, you are required to reorganize these paragraphs into a coherent article by choosing from the list A–G and filling them into the numbered boxes. Paragraph E has been correctly placed for you. Mark your answers on ANSWER SHEET 1. (10 points)",
+          "score": 10,
+          "suggestedMinutes": 20,
+          "analysisProfile": {
+            "focusSkills": [
+              "Discourse cohesion",
+              "Pronoun & transition tracking"
+            ],
+            "commonTraps": [
+              "Superficial lexical repetition"
+            ]
+          },
+          "reviewStrategy": {
+            "defaultIntervalsDays": [
+              1,
+              3,
+              7,
+              14
+            ],
+            "recommendedAction": "Verify coherence hooks before and after each slot"
+          },
+          "sourceLocator": {
+            "sourceFile": "papers/2010.md",
+            "sourceFormat": "md",
+            "sectionHeading": "Section II Part B"
+          },
+          "materials": [
+            {
+              "id": "2010-mat-part-b",
+              "materialType": "assembly-stem",
+              "title": "2010年 考研英语一 Reading Part B (paragraph-insertion)",
+              "text": "Order:\n41. → 42. → [E] → 43. → 44. → 45.",
+              "relatedItemIds": [
+                "2010-item-41",
+                "2010-item-42",
+                "2010-item-43",
+                "2010-item-44",
+                "2010-item-45"
+              ],
+              "passageAssemblySpec": {
+                "subType": "paragraph-fill",
+                "candidateParagraphs": [
+                  {
+                    "id": "A",
+                    "label": "A",
+                    "text": "The first and more important is the consumer's growing preference for eating out: frustration with the time it takes to cook a meal at home has driven a steady shift toward restaurants, cafes, and takeaway food outlets, where wholesale suppliers play a vital provisioning role."
+                  },
+                  {
+                    "id": "B",
+                    "label": "B",
+                    "text": "In Europe, by contrast, food and drink wholesalers have been thriving. Across the continent, wholesale revenues have expanded steadily over the past five years, defying predictions that direct supply contracts between manufacturers and supermarkets would make them obsolete."
+                  },
+                  {
+                    "id": "C",
+                    "label": "C",
+                    "text": "A final factor supporting European wholesalers is regulatory protection in fragmented urban markets, where zoning laws restrict hypermarket construction and preserve dense neighborhoods of independent grocers and bakeries."
+                  },
+                  {
+                    "id": "D",
+                    "label": "D",
+                    "text": "Such regional variations suggest that wholesaling is far from a dying industry; rather, its survival depends on adapting logistics and product assortments to serve both nimble independent caterers and convenience-store networks."
+                  },
+                  {
+                    "id": "E",
+                    "label": "E",
+                    "text": "In the past, wholesalers were needed to bring goods from a wide range of producers and distribute them to thousands of small, independent grocery stores. As giant retail chains consolidated their hold on the grocery market, however, they built their own centralized distribution hubs and bypassed traditional wholesalers altogether."
+                  },
+                  {
+                    "id": "F",
+                    "label": "F",
+                    "text": "A second key factor is the increasing complexity of modern retail formats. Even large supermarket groups now operate thousands of small convenience stores in city centers and transport hubs, which lack storage space and require frequent, small-batch deliveries that traditional wholesale networks are well-equipped to handle."
+                  },
+                  {
+                    "id": "G",
+                    "label": "G",
+                    "text": "Meanwhile, agricultural subsidies in several non-European regions have altered global grain export prices, prompting overseas farmers to invest in automated harvesting machinery."
+                  }
+                ],
+                "fixedPlacements": [
+                  {
+                    "positionIndex": 2,
+                    "paragraphId": "E",
+                    "text": "In the past, wholesalers were needed to bring goods from a wide range of producers and distribute them to thousands of small, independent grocery stores. As giant retail chains consolidated their hold on the grocery market, however, they built their own centralized distribution hubs and bypassed traditional wholesalers altogether."
+                  }
+                ],
+                "scoredPositions": [
+                  {
+                    "positionIndex": 0,
+                    "questionNumber": 41
+                  },
+                  {
+                    "positionIndex": 1,
+                    "questionNumber": 42
+                  },
+                  {
+                    "positionIndex": 3,
+                    "questionNumber": 43
+                  },
+                  {
+                    "positionIndex": 4,
+                    "questionNumber": 44
+                  },
+                  {
+                    "positionIndex": 5,
+                    "questionNumber": 45
+                  }
+                ],
+                "sequenceSlots": [
+                  {
+                    "positionIndex": 0,
+                    "type": "blank",
+                    "questionNumber": 41
+                  },
+                  {
+                    "positionIndex": 1,
+                    "type": "blank",
+                    "questionNumber": 42
+                  },
+                  {
+                    "positionIndex": 2,
+                    "type": "fixed",
+                    "fixedParagraphId": "E"
+                  },
+                  {
+                    "positionIndex": 3,
+                    "type": "blank",
+                    "questionNumber": 43
+                  },
+                  {
+                    "positionIndex": 4,
+                    "type": "blank",
+                    "questionNumber": 44
+                  },
+                  {
+                    "positionIndex": 5,
+                    "type": "blank",
+                    "questionNumber": 45
+                  }
+                ],
+                "finalOrder": [
+                  null,
+                  null,
+                  "E",
+                  null,
+                  null,
+                  null
+                ],
+                "redundantOptions": [],
+                "redundantCount": 1,
+                "allowRepeat": false
+              }
+            }
+          ],
+          "items": [
+            {
+              "id": "2010-item-41",
+              "questionNumber": 41,
+              "answerMode": "sequence",
+              "prompt": "Choose the best paragraph/option from A–G for position 41.",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "The first and more important is the consumer's growing preference for eating out: frustration with the time it takes to cook a meal at home has driven a steady shift toward restaurants, cafes, and takeaway food outlets, where wholesale suppliers play a vital provisioning role."
+                },
+                {
+                  "key": "B",
+                  "text": "In Europe, by contrast, food and drink wholesalers have been thriving. Across the continent, wholesale revenues have expanded steadily over the past five years, defying predictions that direct supply contracts between manufacturers and supermarkets would make them obsolete."
+                },
+                {
+                  "key": "C",
+                  "text": "A final factor supporting European wholesalers is regulatory protection in fragmented urban markets, where zoning laws restrict hypermarket construction and preserve dense neighborhoods of independent grocers and bakeries."
+                },
+                {
+                  "key": "D",
+                  "text": "Such regional variations suggest that wholesaling is far from a dying industry; rather, its survival depends on adapting logistics and product assortments to serve both nimble independent caterers and convenience-store networks."
+                },
+                {
+                  "key": "E",
+                  "text": "In the past, wholesalers were needed to bring goods from a wide range of producers and distribute them to thousands of small, independent grocery stores. As giant retail chains consolidated their hold on the grocery market, however, they built their own centralized distribution hubs and bypassed traditional wholesalers altogether."
+                },
+                {
+                  "key": "F",
+                  "text": "A second key factor is the increasing complexity of modern retail formats. Even large supermarket groups now operate thousands of small convenience stores in city centers and transport hubs, which lack storage space and require frequent, small-batch deliveries that traditional wholesale networks are well-equipped to handle."
+                },
+                {
+                  "key": "G",
+                  "text": "Meanwhile, agricultural subsidies in several non-European regions have altered global grain export prices, prompting overseas farmers to invest in automated harvesting machinery."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part B"
+              }
+            },
+            {
+              "id": "2010-item-42",
+              "questionNumber": 42,
+              "answerMode": "sequence",
+              "prompt": "Choose the best paragraph/option from A–G for position 42.",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "The first and more important is the consumer's growing preference for eating out: frustration with the time it takes to cook a meal at home has driven a steady shift toward restaurants, cafes, and takeaway food outlets, where wholesale suppliers play a vital provisioning role."
+                },
+                {
+                  "key": "B",
+                  "text": "In Europe, by contrast, food and drink wholesalers have been thriving. Across the continent, wholesale revenues have expanded steadily over the past five years, defying predictions that direct supply contracts between manufacturers and supermarkets would make them obsolete."
+                },
+                {
+                  "key": "C",
+                  "text": "A final factor supporting European wholesalers is regulatory protection in fragmented urban markets, where zoning laws restrict hypermarket construction and preserve dense neighborhoods of independent grocers and bakeries."
+                },
+                {
+                  "key": "D",
+                  "text": "Such regional variations suggest that wholesaling is far from a dying industry; rather, its survival depends on adapting logistics and product assortments to serve both nimble independent caterers and convenience-store networks."
+                },
+                {
+                  "key": "E",
+                  "text": "In the past, wholesalers were needed to bring goods from a wide range of producers and distribute them to thousands of small, independent grocery stores. As giant retail chains consolidated their hold on the grocery market, however, they built their own centralized distribution hubs and bypassed traditional wholesalers altogether."
+                },
+                {
+                  "key": "F",
+                  "text": "A second key factor is the increasing complexity of modern retail formats. Even large supermarket groups now operate thousands of small convenience stores in city centers and transport hubs, which lack storage space and require frequent, small-batch deliveries that traditional wholesale networks are well-equipped to handle."
+                },
+                {
+                  "key": "G",
+                  "text": "Meanwhile, agricultural subsidies in several non-European regions have altered global grain export prices, prompting overseas farmers to invest in automated harvesting machinery."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part B"
+              }
+            },
+            {
+              "id": "2010-item-43",
+              "questionNumber": 43,
+              "answerMode": "sequence",
+              "prompt": "Choose the best paragraph/option from A–G for position 43.",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "The first and more important is the consumer's growing preference for eating out: frustration with the time it takes to cook a meal at home has driven a steady shift toward restaurants, cafes, and takeaway food outlets, where wholesale suppliers play a vital provisioning role."
+                },
+                {
+                  "key": "B",
+                  "text": "In Europe, by contrast, food and drink wholesalers have been thriving. Across the continent, wholesale revenues have expanded steadily over the past five years, defying predictions that direct supply contracts between manufacturers and supermarkets would make them obsolete."
+                },
+                {
+                  "key": "C",
+                  "text": "A final factor supporting European wholesalers is regulatory protection in fragmented urban markets, where zoning laws restrict hypermarket construction and preserve dense neighborhoods of independent grocers and bakeries."
+                },
+                {
+                  "key": "D",
+                  "text": "Such regional variations suggest that wholesaling is far from a dying industry; rather, its survival depends on adapting logistics and product assortments to serve both nimble independent caterers and convenience-store networks."
+                },
+                {
+                  "key": "E",
+                  "text": "In the past, wholesalers were needed to bring goods from a wide range of producers and distribute them to thousands of small, independent grocery stores. As giant retail chains consolidated their hold on the grocery market, however, they built their own centralized distribution hubs and bypassed traditional wholesalers altogether."
+                },
+                {
+                  "key": "F",
+                  "text": "A second key factor is the increasing complexity of modern retail formats. Even large supermarket groups now operate thousands of small convenience stores in city centers and transport hubs, which lack storage space and require frequent, small-batch deliveries that traditional wholesale networks are well-equipped to handle."
+                },
+                {
+                  "key": "G",
+                  "text": "Meanwhile, agricultural subsidies in several non-European regions have altered global grain export prices, prompting overseas farmers to invest in automated harvesting machinery."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part B"
+              }
+            },
+            {
+              "id": "2010-item-44",
+              "questionNumber": 44,
+              "answerMode": "sequence",
+              "prompt": "Choose the best paragraph/option from A–G for position 44.",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "The first and more important is the consumer's growing preference for eating out: frustration with the time it takes to cook a meal at home has driven a steady shift toward restaurants, cafes, and takeaway food outlets, where wholesale suppliers play a vital provisioning role."
+                },
+                {
+                  "key": "B",
+                  "text": "In Europe, by contrast, food and drink wholesalers have been thriving. Across the continent, wholesale revenues have expanded steadily over the past five years, defying predictions that direct supply contracts between manufacturers and supermarkets would make them obsolete."
+                },
+                {
+                  "key": "C",
+                  "text": "A final factor supporting European wholesalers is regulatory protection in fragmented urban markets, where zoning laws restrict hypermarket construction and preserve dense neighborhoods of independent grocers and bakeries."
+                },
+                {
+                  "key": "D",
+                  "text": "Such regional variations suggest that wholesaling is far from a dying industry; rather, its survival depends on adapting logistics and product assortments to serve both nimble independent caterers and convenience-store networks."
+                },
+                {
+                  "key": "E",
+                  "text": "In the past, wholesalers were needed to bring goods from a wide range of producers and distribute them to thousands of small, independent grocery stores. As giant retail chains consolidated their hold on the grocery market, however, they built their own centralized distribution hubs and bypassed traditional wholesalers altogether."
+                },
+                {
+                  "key": "F",
+                  "text": "A second key factor is the increasing complexity of modern retail formats. Even large supermarket groups now operate thousands of small convenience stores in city centers and transport hubs, which lack storage space and require frequent, small-batch deliveries that traditional wholesale networks are well-equipped to handle."
+                },
+                {
+                  "key": "G",
+                  "text": "Meanwhile, agricultural subsidies in several non-European regions have altered global grain export prices, prompting overseas farmers to invest in automated harvesting machinery."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part B"
+              }
+            },
+            {
+              "id": "2010-item-45",
+              "questionNumber": 45,
+              "answerMode": "sequence",
+              "prompt": "Choose the best paragraph/option from A–G for position 45.",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "The first and more important is the consumer's growing preference for eating out: frustration with the time it takes to cook a meal at home has driven a steady shift toward restaurants, cafes, and takeaway food outlets, where wholesale suppliers play a vital provisioning role."
+                },
+                {
+                  "key": "B",
+                  "text": "In Europe, by contrast, food and drink wholesalers have been thriving. Across the continent, wholesale revenues have expanded steadily over the past five years, defying predictions that direct supply contracts between manufacturers and supermarkets would make them obsolete."
+                },
+                {
+                  "key": "C",
+                  "text": "A final factor supporting European wholesalers is regulatory protection in fragmented urban markets, where zoning laws restrict hypermarket construction and preserve dense neighborhoods of independent grocers and bakeries."
+                },
+                {
+                  "key": "D",
+                  "text": "Such regional variations suggest that wholesaling is far from a dying industry; rather, its survival depends on adapting logistics and product assortments to serve both nimble independent caterers and convenience-store networks."
+                },
+                {
+                  "key": "E",
+                  "text": "In the past, wholesalers were needed to bring goods from a wide range of producers and distribute them to thousands of small, independent grocery stores. As giant retail chains consolidated their hold on the grocery market, however, they built their own centralized distribution hubs and bypassed traditional wholesalers altogether."
+                },
+                {
+                  "key": "F",
+                  "text": "A second key factor is the increasing complexity of modern retail formats. Even large supermarket groups now operate thousands of small convenience stores in city centers and transport hubs, which lack storage space and require frequent, small-batch deliveries that traditional wholesale networks are well-equipped to handle."
+                },
+                {
+                  "key": "G",
+                  "text": "Meanwhile, agricultural subsidies in several non-European regions have altered global grain export prices, prompting overseas farmers to invest in automated harvesting machinery."
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part B"
+              }
+            }
+          ]
+        },
+        {
+          "id": "2010-unit-translation",
+          "sectionId": "2010-sec-2",
+          "unitType": "translation",
+          "title": "Section II Part C · 英译汉长难句翻译 (46–50题)",
+          "instructions": "Read the following text carefully and then translate the underlined segments into Chinese. Your translation should be written clearly on ANSWER SHEET 2. (10 points)",
+          "score": 10,
+          "suggestedMinutes": 25,
+          "analysisProfile": {
+            "focusSkills": [
+              "Complex clause splitting",
+              "Contextual word sense disambiguation"
+            ],
+            "commonTraps": [
+              "Rigid word-for-word translation",
+              "Pronoun reference ambiguity"
+            ]
+          },
+          "reviewStrategy": {
+            "defaultIntervalsDays": [
+              1,
+              3,
+              7,
+              14
+            ],
+            "recommendedAction": "Rewrite translation after reviewing clause boundaries"
+          },
+          "sourceLocator": {
+            "sourceFile": "papers/2010.md",
+            "sourceFormat": "md",
+            "sectionHeading": "Section II Part C"
+          },
+          "materials": [
+            {
+              "id": "2010-mat-translation",
+              "materialType": "translation-passage",
+              "title": "2010年 考研英语一 Part C 英译汉全文语境",
+              "text": "One basic weakness in a conservation system based wholly on economic motives is that most members of the land community have no economic value. (46) <u>Scientists have painfully learned that the ecological balance of an environment is maintained by the complex interaction of all its plant and animal species, regardless of whether humans find them commercially useful.</u> Yet when an economist or a policymaker evaluates a natural habitat, species without direct market value are routinely treated as dispensable.\n\nWhen one non-commercial species is threatened with extinction, conservationists are often forced to invent an economic excuse to save it. (47) <u>We tend to manufacture superficial financial arguments for preserving wildflowers or songbirds, so that their survival can be justified in the language of profit and loss.</u> Such excuses are rarely convincing, and they leave the majority of wild species unprotected.\n\nSome biologists have recently discovered that certain obscure insects and fungi play a measurable role in maintaining soil fertility for timber trees. (48) <u>However, a conservation policy driven solely by short-term economic self-interest tends to ignore, and thus eventually to eliminate, many elements of the land community that lack the commercial value to pay their own way.</u>\n\nIn Europe and North America, governments have increasingly stepped in to fund wildlife refuges and reforestation programs. (49) <u>This public intervention is carried out on the assumption that the state must perform vital ecological tasks that private landowners would not be done for their own financial gain.</u>\n\nUltimately, however, government agencies cannot police every acre of forest, wetland, and prairie. (50) <u>An ethical obligation on the part of the private owner is the only visible remedy for these situations, since healthy ecosystems depend on daily stewardship that no law can fully enforce.</u>",
+              "paragraphs": [
+                "One basic weakness in a conservation system based wholly on economic motives is that most members of the land community have no economic value. (46) <u>Scientists have painfully learned that the ecological balance of an environment is maintained by the complex interaction of all its plant and animal species, regardless of whether humans find them commercially useful.</u> Yet when an economist or a policymaker evaluates a natural habitat, species without direct market value are routinely treated as dispensable.",
+                "When one non-commercial species is threatened with extinction, conservationists are often forced to invent an economic excuse to save it. (47) <u>We tend to manufacture superficial financial arguments for preserving wildflowers or songbirds, so that their survival can be justified in the language of profit and loss.</u> Such excuses are rarely convincing, and they leave the majority of wild species unprotected.",
+                "Some biologists have recently discovered that certain obscure insects and fungi play a measurable role in maintaining soil fertility for timber trees. (48) <u>However, a conservation policy driven solely by short-term economic self-interest tends to ignore, and thus eventually to eliminate, many elements of the land community that lack the commercial value to pay their own way.</u>",
+                "In Europe and North America, governments have increasingly stepped in to fund wildlife refuges and reforestation programs. (49) <u>This public intervention is carried out on the assumption that the state must perform vital ecological tasks that private landowners would not be done for their own financial gain.</u>",
+                "Ultimately, however, government agencies cannot police every acre of forest, wetland, and prairie. (50) <u>An ethical obligation on the part of the private owner is the only visible remedy for these situations, since healthy ecosystems depend on daily stewardship that no law can fully enforce.</u>"
+              ],
+              "relatedItemIds": [
+                "2010-item-46",
+                "2010-item-47",
+                "2010-item-48",
+                "2010-item-49",
+                "2010-item-50"
+              ]
+            }
+          ],
+          "items": [
+            {
+              "id": "2010-item-46",
+              "questionNumber": 46,
+              "answerMode": "short-text",
+              "prompt": "Translate sentence (46) into Chinese: \"Scientists have painfully learned that the ecological balance of an environment is maintained by the complex interaction of all its plant and animal species, regardless of whether humans find them commercially useful.\"",
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "rubric": {
+                "maxScore": 2,
+                "dimensions": [
+                  {
+                    "id": "accuracy",
+                    "name": "核心语义准确度",
+                    "maxScore": 1,
+                    "description": "准确传达划线句主干与从句逻辑语义"
+                  },
+                  {
+                    "id": "syntax",
+                    "name": "句法拆分与中文流畅度",
+                    "maxScore": 1,
+                    "description": "定语/状语从句语序调整自然，符合汉语习惯"
+                  }
+                ],
+                "referenceSource": "unavailable"
+              },
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part C"
+              },
+              "translationMeta": {
+                "underlinedEnglish": "Scientists have painfully learned that the ecological balance of an environment is maintained by the complex interaction of all its plant and animal species, regardless of whether humans find them commercially useful.",
+                "contextParagraph": "One basic weakness in a conservation system based wholly on economic motives is that most members of the land community have no economic value. (46) <u>Scientists have painfully learned that the ecological balance of an environment is maintained by the complex interaction of all its plant and animal species, regardless of whether humans find them commercially useful.</u> Yet when an economist or a policymaker evaluates a natural habitat, species without direct market value are routinely treated as dispensable.",
+                "charRange": [
+                  171,
+                  388
+                ],
+                "keySemanticPoints": [
+                  "从句结构拆解",
+                  "核心学术概念对译",
+                  "上下文指代衔接"
+                ],
+                "syntacticRelations": [
+                  "复合从句逻辑",
+                  "后置定语顺译/逆译"
+                ],
+                "referenceTranslation": null,
+                "referenceSource": "unavailable"
+              }
+            },
+            {
+              "id": "2010-item-47",
+              "questionNumber": 47,
+              "answerMode": "short-text",
+              "prompt": "Translate sentence (47) into Chinese: \"We tend to manufacture superficial financial arguments for preserving wildflowers or songbirds, so that their survival can be justified in the language of profit and loss.\"",
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "rubric": {
+                "maxScore": 2,
+                "dimensions": [
+                  {
+                    "id": "accuracy",
+                    "name": "核心语义准确度",
+                    "maxScore": 1,
+                    "description": "准确传达划线句主干与从句逻辑语义"
+                  },
+                  {
+                    "id": "syntax",
+                    "name": "句法拆分与中文流畅度",
+                    "maxScore": 1,
+                    "description": "定语/状语从句语序调整自然，符合汉语习惯"
+                  }
+                ],
+                "referenceSource": "unavailable"
+              },
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part C"
+              },
+              "translationMeta": {
+                "underlinedEnglish": "We tend to manufacture superficial financial arguments for preserving wildflowers or songbirds, so that their survival can be justified in the language of profit and loss.",
+                "contextParagraph": "When one non-commercial species is threatened with extinction, conservationists are often forced to invent an economic excuse to save it. (47) <u>We tend to manufacture superficial financial arguments for preserving wildflowers or songbirds, so that their survival can be justified in the language of profit and loss.</u> Such excuses are rarely convincing, and they leave the majority of wild species unprotected.",
+                "charRange": [
+                  165,
+                  336
+                ],
+                "keySemanticPoints": [
+                  "从句结构拆解",
+                  "核心学术概念对译",
+                  "上下文指代衔接"
+                ],
+                "syntacticRelations": [
+                  "复合从句逻辑",
+                  "后置定语顺译/逆译"
+                ],
+                "referenceTranslation": null,
+                "referenceSource": "unavailable"
+              }
+            },
+            {
+              "id": "2010-item-48",
+              "questionNumber": 48,
+              "answerMode": "short-text",
+              "prompt": "Translate sentence (48) into Chinese: \"However, a conservation policy driven solely by short-term economic self-interest tends to ignore, and thus eventually to eliminate, many elements of the land community that lack the commercial value to pay their own way.\"",
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "rubric": {
+                "maxScore": 2,
+                "dimensions": [
+                  {
+                    "id": "accuracy",
+                    "name": "核心语义准确度",
+                    "maxScore": 1,
+                    "description": "准确传达划线句主干与从句逻辑语义"
+                  },
+                  {
+                    "id": "syntax",
+                    "name": "句法拆分与中文流畅度",
+                    "maxScore": 1,
+                    "description": "定语/状语从句语序调整自然，符合汉语习惯"
+                  }
+                ],
+                "referenceSource": "unavailable"
+              },
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part C"
+              },
+              "translationMeta": {
+                "underlinedEnglish": "However, a conservation policy driven solely by short-term economic self-interest tends to ignore, and thus eventually to eliminate, many elements of the land community that lack the commercial value to pay their own way.",
+                "contextParagraph": "Some biologists have recently discovered that certain obscure insects and fungi play a measurable role in maintaining soil fertility for timber trees. (48) <u>However, a conservation policy driven solely by short-term economic self-interest tends to ignore, and thus eventually to eliminate, many elements of the land community that lack the commercial value to pay their own way.</u>",
+                "charRange": [
+                  178,
+                  399
+                ],
+                "keySemanticPoints": [
+                  "从句结构拆解",
+                  "核心学术概念对译",
+                  "上下文指代衔接"
+                ],
+                "syntacticRelations": [
+                  "复合从句逻辑",
+                  "后置定语顺译/逆译"
+                ],
+                "referenceTranslation": null,
+                "referenceSource": "unavailable"
+              }
+            },
+            {
+              "id": "2010-item-49",
+              "questionNumber": 49,
+              "answerMode": "short-text",
+              "prompt": "Translate sentence (49) into Chinese: \"This public intervention is carried out on the assumption that the state must perform vital ecological tasks that private landowners would not be done for their own financial gain.\"",
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "rubric": {
+                "maxScore": 2,
+                "dimensions": [
+                  {
+                    "id": "accuracy",
+                    "name": "核心语义准确度",
+                    "maxScore": 1,
+                    "description": "准确传达划线句主干与从句逻辑语义"
+                  },
+                  {
+                    "id": "syntax",
+                    "name": "句法拆分与中文流畅度",
+                    "maxScore": 1,
+                    "description": "定语/状语从句语序调整自然，符合汉语习惯"
+                  }
+                ],
+                "referenceSource": "unavailable"
+              },
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part C"
+              },
+              "translationMeta": {
+                "underlinedEnglish": "This public intervention is carried out on the assumption that the state must perform vital ecological tasks that private landowners would not be done for their own financial gain.",
+                "contextParagraph": "In Europe and North America, governments have increasingly stepped in to fund wildlife refuges and reforestation programs. (49) <u>This public intervention is carried out on the assumption that the state must perform vital ecological tasks that private landowners would not be done for their own financial gain.</u>",
+                "charRange": [
+                  150,
+                  330
+                ],
+                "keySemanticPoints": [
+                  "从句结构拆解",
+                  "核心学术概念对译",
+                  "上下文指代衔接"
+                ],
+                "syntacticRelations": [
+                  "复合从句逻辑",
+                  "后置定语顺译/逆译"
+                ],
+                "referenceTranslation": null,
+                "referenceSource": "unavailable"
+              }
+            },
+            {
+              "id": "2010-item-50",
+              "questionNumber": 50,
+              "answerMode": "short-text",
+              "prompt": "Translate sentence (50) into Chinese: \"An ethical obligation on the part of the private owner is the only visible remedy for these situations, since healthy ecosystems depend on daily stewardship that no law can fully enforce.\"",
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "rubric": {
+                "maxScore": 2,
+                "dimensions": [
+                  {
+                    "id": "accuracy",
+                    "name": "核心语义准确度",
+                    "maxScore": 1,
+                    "description": "准确传达划线句主干与从句逻辑语义"
+                  },
+                  {
+                    "id": "syntax",
+                    "name": "句法拆分与中文流畅度",
+                    "maxScore": 1,
+                    "description": "定语/状语从句语序调整自然，符合汉语习惯"
+                  }
+                ],
+                "referenceSource": "unavailable"
+              },
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section II Part C"
+              },
+              "translationMeta": {
+                "underlinedEnglish": "An ethical obligation on the part of the private owner is the only visible remedy for these situations, since healthy ecosystems depend on daily stewardship that no law can fully enforce.",
+                "contextParagraph": "Ultimately, however, government agencies cannot police every acre of forest, wetland, and prairie. (50) <u>An ethical obligation on the part of the private owner is the only visible remedy for these situations, since healthy ecosystems depend on daily stewardship that no law can fully enforce.</u>",
+                "charRange": [
+                  126,
+                  313
+                ],
+                "keySemanticPoints": [
+                  "从句结构拆解",
+                  "核心学术概念对译",
+                  "上下文指代衔接"
+                ],
+                "syntacticRelations": [
+                  "复合从句逻辑",
+                  "后置定语顺译/逆译"
+                ],
+                "referenceTranslation": null,
+                "referenceSource": "unavailable"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2010-sec-3",
+      "sectionNumber": "Section III",
+      "title": "Section III Writing",
+      "score": 30,
+      "suggestedMinutes": 52,
+      "units": [
+        {
+          "id": "2010-unit-practical-writing",
+          "sectionId": "2010-sec-3",
+          "unitType": "practical-writing",
+          "title": "Section III Part A · 应用文小作文 (51题)",
+          "instructions": "Write a notice or letter of about 100 words on ANSWER SHEET 2. (10 points)",
+          "score": 10,
+          "suggestedMinutes": 15,
+          "analysisProfile": {
+            "focusSkills": [
+              "Register appropriateness",
+              "Completeness of required points"
+            ],
+            "commonTraps": [
+              "Missing required points",
+              "Signature violation"
+            ]
+          },
+          "reviewStrategy": {
+            "defaultIntervalsDays": [
+              1,
+              3,
+              7,
+              14
+            ],
+            "recommendedAction": "Compare V1 draft and V2 revised draft for conciseness"
+          },
+          "sourceLocator": {
+            "sourceFile": "papers/2010.md",
+            "sourceFormat": "md",
+            "sectionHeading": "Section III Part A"
+          },
+          "materials": [
+            {
+              "id": "2010-mat-practical-writing",
+              "materialType": "writing-prompt",
+              "title": "2010年 考研英语一 应用文写作题目 (Part A)",
+              "text": "You are supposed to write for the Postgraduate Association a notice to recruit volunteers for an international conference on globalization, which is to be held at your university. The notice should include the basic information of the conference, the qualifications required for applicants, and the contact information.\nYou should write about 100 words on ANSWER SHEET 2.\nDo not sign your own name at the end of the notice. Use \"Postgraduate Association\" instead. (10 points)",
+              "practicalWritingSpec": {
+                "genre": "Notice",
+                "writerIdentity": "Postgraduate Association",
+                "targetAudience": "Graduate Students / Participants",
+                "backgroundMaterial": "You are supposed to write for the Postgraduate Association a notice to recruit volunteers for an international conference on globalization, which is to be held at your university. The notice should include the basic information of the conference, the qualifications required for applicants, and the contact information.\nYou should write about 100 words on ANSWER SHEET 2.\nDo not sign your own name at the end of the notice. Use \"Postgraduate Association\" instead. (10 points)",
+                "requiredPoints": [
+                  "明确交代活动/通知背景与核心目的",
+                  "完整覆盖题干要求的具体信息点（时间/主题/条件等）",
+                  "提供参与或联系方式并严格使用规定署名（严禁署个人真名）"
+                ],
+                "salutationRequirement": "Formal",
+                "signatureRequirement": "Postgraduate Association",
+                "wordCountRange": [
+                  80,
+                  120
+                ],
+                "score": 10,
+                "dimensions": [
+                  {
+                    "id": "content",
+                    "name": "内容要点完整性",
+                    "maxScore": 3,
+                    "description": "全面覆盖题干要求的三个核心要点"
+                  },
+                  {
+                    "id": "organization",
+                    "name": "格式与语域规范",
+                    "maxScore": 3,
+                    "description": "符合应用文体裁格式，语域得体"
+                  },
+                  {
+                    "id": "language",
+                    "name": "语言准确性与衔接",
+                    "maxScore": 4,
+                    "description": "语法准确、用词恰当、句式多样"
+                  }
+                ]
+              },
+              "relatedItemIds": [
+                "2010-item-51"
+              ]
+            }
+          ],
+          "items": [
+            {
+              "id": "2010-item-51",
+              "questionNumber": 51,
+              "answerMode": "long-text",
+              "prompt": "51. Directions: You are supposed to write for the Postgraduate Association a notice to recruit volunteers for an international conference on globalization, which is to be held at your university. The notice should include the basic information of the conference, the qualifications required for applicants, and the contact information.\nYou should write about 100 words on ANSWER SHEET 2.\nDo not sign your own name at the end of the notice. Use \"Postgraduate Association\" instead. (10 points)",
+              "score": 10,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "rubric": {
+                "maxScore": 10,
+                "dimensions": [
+                  {
+                    "id": "content",
+                    "name": "内容要点完整性",
+                    "maxScore": 3,
+                    "description": "覆盖全部题干要点"
+                  },
+                  {
+                    "id": "organization",
+                    "name": "格式与语域规范",
+                    "maxScore": 3,
+                    "description": "格式规范、语域恰当"
+                  },
+                  {
+                    "id": "language",
+                    "name": "语言表达准确性",
+                    "maxScore": 4,
+                    "description": "语法与词汇准确丰富"
+                  }
+                ],
+                "referenceSource": "unavailable"
+              },
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section III Part A"
+              }
+            }
+          ]
+        },
+        {
+          "id": "2010-unit-visual-writing",
+          "sectionId": "2010-sec-3",
+          "unitType": "visual-writing",
+          "title": "Section III Part B · 图画/视觉材料大作文 (52题)",
+          "instructions": "Write an essay of 160–200 words based on the drawing(s) on ANSWER SHEET 2. (20 points)",
+          "score": 20,
+          "suggestedMinutes": 35,
+          "analysisProfile": {
+            "focusSkills": [
+              "Visual detail extraction",
+              "Symbolic thesis formulation",
+              "Argumentative coherence"
+            ],
+            "commonTraps": [
+              "Ignoring visual details",
+              "Digressing from core symbolic meaning"
+            ]
+          },
+          "reviewStrategy": {
+            "defaultIntervalsDays": [
+              1,
+              3,
+              7,
+              14
+            ],
+            "recommendedAction": "Perform V1 → V2 → V3 iterative essay refinement"
+          },
+          "sourceLocator": {
+            "sourceFile": "papers/2010.md",
+            "sourceFormat": "md",
+            "sectionHeading": "Section III Part B"
+          },
+          "materials": [
+            {
+              "id": "2010-mat-visual-writing",
+              "materialType": "visual-illustration",
+              "title": "2010年 考研英语一 图画大作文题目与视觉材料 (Part B)",
+              "text": "Write an essay of 160–200 words based on the following drawing. In your essay, you should\n1) describe the drawing briefly,\n2) explain its intended meaning, and\n3) give your comments.\nYou should write neatly on ANSWER SHEET 2. (20 points)",
+              "imagePath": "/assets/papers/2010/writing-part-b-01.png",
+              "visualMaterials": [
+                {
+                  "id": "2010-vis-1",
+                  "imagePath": "/assets/papers/2010/writing-part-b-01.png",
+                  "visualType": "single-cartoon",
+                  "title": "2010年写作Part B插图",
+                  "caption": "图画展示一口热气腾腾的“文化火锅”，锅内融合孔子、京剧、功夫、莎士比亚、芭蕾、爱因斯坦等中西文化要素，底部署名“文化‘火锅’既美味又营养”。",
+                  "categories": [
+                    "Writing Part B Visual"
+                  ],
+                  "values": [],
+                  "unit": "",
+                  "primaryRelations": [
+                    "contrast",
+                    "synthesis"
+                  ],
+                  "requiredFacts": [
+                    "第一段：准确简要描摹图画/视觉材料的核心场景、人物动作与文字标题 (describe briefly)",
+                    "第二段：深入阐释图画背后的象征寓意与社会文化哲理 (interpret its intended meaning)",
+                    "第三段：结合现实给出客观理性的评论与行动建议 (give your comments)"
+                  ],
+                  "sourceLocator": {
+                    "sourceFile": "papers/2010.md",
+                    "sourceFormat": "md",
+                    "sectionHeading": "Section III Part B"
+                  }
+                }
+              ],
+              "relatedItemIds": [
+                "2010-item-52"
+              ]
+            }
+          ],
+          "items": [
+            {
+              "id": "2010-item-52",
+              "questionNumber": 52,
+              "answerMode": "long-text",
+              "prompt": "52. Directions: Write an essay of 160–200 words based on the following drawing. In your essay, you should\n1) describe the drawing briefly,\n2) explain its intended meaning, and\n3) give your comments.\nYou should write neatly on ANSWER SHEET 2. (20 points)",
+              "score": 20,
+              "correctAnswer": null,
+              "answerSource": "unavailable",
+              "rubric": {
+                "maxScore": 20,
+                "dimensions": [
+                  {
+                    "id": "drawing_desc",
+                    "name": "图画/图表描述准确性",
+                    "maxScore": 5,
+                    "description": "紧扣图画细节与文字说明，描述简练传神"
+                  },
+                  {
+                    "id": "meaning_interp",
+                    "name": "象征寓意与论点深度",
+                    "maxScore": 8,
+                    "description": "准确提炼核心寓意，论证层次分明、逻辑严密"
+                  },
+                  {
+                    "id": "language_comment",
+                    "name": "语言质量与评论总结",
+                    "maxScore": 7,
+                    "description": "句式丰富、用词地道、衔接自然，评论切实可行"
+                  }
+                ],
+                "referenceSource": "unavailable"
+              },
+              "sourceLocator": {
+                "sourceFile": "papers/2010.md",
+                "sourceFormat": "md",
+                "sectionHeading": "Section III Part B"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "validationReport": {
+    "examId": "exam-2010",
+    "year": 2010,
+    "dataVersion": "v1",
+    "status": "needs-answer-source",
+    "passedAllChecks": false,
+    "errorCodes": [
+      "OBJECTIVE_ANSWER_MISSING"
+    ],
+    "missingObjectiveQuestions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45
+    ],
+    "conflictingObjectiveQuestions": [],
+    "checks": [
+      {
+        "checkId": "CHK-01",
+        "name": "试卷年份与科目合法性",
+        "passed": true,
+        "message": "2010年 考研英语一 (subject_code: 201) 校验通过"
+      },
+      {
+        "checkId": "CHK-02",
+        "name": "题号连续性与总题数 (1–52)",
+        "passed": true,
+        "message": "1–52 题连续无跳号、无重号、无乱序"
+      },
+      {
+        "checkId": "CHK-03",
+        "name": "Section I 完形填空 (1–20)",
+        "passed": true,
+        "message": "共 20 题，每题 4 个选项 [A]–[D]，文内空位 [1]–[20] 完整"
+      },
+      {
+        "checkId": "CHK-04",
+        "name": "Section II Part A 阅读理解 (21–40)",
+        "passed": true,
+        "message": "Text 1–4 共 4 篇正文、20 道单选题，题干与选项完整"
+      },
+      {
+        "checkId": "CHK-05",
+        "name": "Section II Part B 新题型结构 (41–45)",
+        "passed": true,
+        "message": "题型 paragraph-fill，候选段落与固定位置解析完整"
+      },
+      {
+        "checkId": "CHK-06",
+        "name": "Section II Part C 翻译划线句 (46–50)",
+        "passed": true,
+        "message": "46–50 共 5 处 data-question 划线句，与阅读语义下划线严格区分"
+      },
+      {
+        "checkId": "CHK-07",
+        "name": "Section III Part A & B 写作与视觉材料 (51–52)",
+        "passed": true,
+        "message": "大作文关联 1 张静态图片资源，均真实可读"
+      },
+      {
+        "checkId": "CHK-08",
+        "name": "客观题官方答案来源核验 (1–45)",
+        "passed": false,
+        "code": "OBJECTIVE_ANSWER_MISSING",
+        "message": "来源无客观题答案 (unavailable)，严禁 AI 猜测或伪造答案"
+      }
+    ],
+    "consistencyCheckRuns": 2,
+    "consistencyMatched": true,
+    "sourceDiscrepancies": [],
+    "generatedAt": "2026-10-19T11:30:00.000Z"
+  },
+  "referencedAssets": [
+    "writing-part-b-01.png"
+  ],
+  "objectiveAnswerCount": 0,
+  "subjectiveCount": 7,
+  "answerSourceStatus": "unavailable"
+}

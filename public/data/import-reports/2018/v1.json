@@ -1,0 +1,113 @@
+{
+  "examId": "exam-2018",
+  "year": 2018,
+  "dataVersion": "v1",
+  "status": "needs-answer-source",
+  "passedAllChecks": false,
+  "errorCodes": [
+    "OBJECTIVE_ANSWER_MISSING"
+  ],
+  "missingObjectiveQuestions": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45
+  ],
+  "conflictingObjectiveQuestions": [],
+  "checks": [
+    {
+      "checkId": "CHK-01",
+      "name": "试卷年份与科目合法性",
+      "passed": true,
+      "message": "2018年 考研英语一 (subject_code: 201) 校验通过"
+    },
+    {
+      "checkId": "CHK-02",
+      "name": "题号连续性与总题数 (1–52)",
+      "passed": true,
+      "message": "1–52 题连续无跳号、无重号、无乱序"
+    },
+    {
+      "checkId": "CHK-03",
+      "name": "Section I 完形填空 (1–20)",
+      "passed": true,
+      "message": "共 20 题，每题 4 个选项 [A]–[D]，文内空位 [1]–[20] 完整"
+    },
+    {
+      "checkId": "CHK-04",
+      "name": "Section II Part A 阅读理解 (21–40)",
+      "passed": true,
+      "message": "Text 1–4 共 4 篇正文、20 道单选题，题干与选项完整"
+    },
+    {
+      "checkId": "CHK-05",
+      "name": "Section II Part B 新题型结构 (41–45)",
+      "passed": true,
+      "message": "题型 paragraph-order，候选段落与固定位置解析完整"
+    },
+    {
+      "checkId": "CHK-06",
+      "name": "Section II Part C 翻译划线句 (46–50)",
+      "passed": true,
+      "message": "46–50 共 5 处 data-question 划线句，与阅读语义下划线严格区分"
+    },
+    {
+      "checkId": "CHK-07",
+      "name": "Section III Part A & B 写作与视觉材料 (51–52)",
+      "passed": true,
+      "message": "大作文关联 1 张静态图片资源，均真实可读"
+    },
+    {
+      "checkId": "CHK-08",
+      "name": "客观题官方答案来源核验 (1–45)",
+      "passed": false,
+      "code": "OBJECTIVE_ANSWER_MISSING",
+      "message": "来源无客观题答案 (unavailable)，严禁 AI 猜测或伪造答案"
+    }
+  ],
+  "consistencyCheckRuns": 2,
+  "consistencyMatched": true,
+  "sourceDiscrepancies": [],
+  "generatedAt": "2026-10-19T11:30:00.000Z"
+}

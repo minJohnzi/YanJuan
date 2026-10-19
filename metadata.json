@@ -1,0 +1,6 @@
+{
+  "name": "研卷台｜考研英语一真题学习系统",
+  "description": "以考研英语一历年真题为核心的结构化精读、整卷模拟、两阶段主观题批改与间隔复习系统（Yanjuan Desk）。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

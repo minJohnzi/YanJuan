@@ -1,0 +1,414 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile metadata stored under /users/{uid}/profile/main",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "isPrivateDevice": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "maxLength": 64
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "maxLength": 64
+        }
+      },
+      "required": ["uid", "isPrivateDevice", "createdAt", "updatedAt"]
+    },
+    "ExamAttempt": {
+      "title": "ExamAttempt",
+      "description": "User exam or unit practice attempt record",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "uid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "year": {
+          "type": "integer"
+        },
+        "dataVersion": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["unit-practice", "strict-simulation", "free-simulation"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["in-progress", "submitted"]
+        },
+        "elapsedSeconds": {
+          "type": "integer"
+        },
+        "clientRevision": {
+          "type": "integer"
+        },
+        "deviceId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "maxLength": 64
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "maxLength": 64
+        }
+      },
+      "required": ["id", "uid", "year", "dataVersion", "mode", "status", "clientRevision", "deviceId", "createdAt", "updatedAt"]
+    },
+    "ObjectiveResponse": {
+      "title": "ObjectiveResponse",
+      "description": "User response and confidence state for an objective item",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "uid": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "attemptId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "questionNumber": {
+          "type": "integer"
+        },
+        "selectedAnswer": {
+          "type": "string",
+          "maxLength": 8
+        },
+        "confidence": {
+          "type": "string",
+          "enum": ["certain", "hesitant", "guessed"]
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "maxLength": 64
+        }
+      },
+      "required": ["id", "uid", "attemptId", "questionNumber", "selectedAnswer", "confidence", "updatedAt"]
+    },
+    "SubjectiveAnswerVersion": {
+      "title": "SubjectiveAnswerVersion",
+      "description": "Immutable subjective answer version (V1, V2, V3...)",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "uid": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "year": {
+          "type": "integer"
+        },
+        "dataVersion": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "questionNumber": {
+          "type": "integer"
+        },
+        "versionNumber": {
+          "type": "integer"
+        },
+        "practiceMode": {
+          "type": "string",
+          "enum": ["independent", "guided", "rewrite"]
+        },
+        "content": {
+          "type": "string",
+          "maxLength": 15000
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "maxLength": 64
+        }
+      },
+      "required": ["id", "uid", "year", "dataVersion", "questionNumber", "versionNumber", "practiceMode", "content", "createdAt"]
+    },
+    "SubjectiveEvaluation": {
+      "title": "SubjectiveEvaluation",
+      "description": "Two-stage AI evaluation record for a subjective answer version",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "uid": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "answerVersionId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "centralScore": {
+          "type": "number"
+        },
+        "maxScore": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "maxLength": 64
+        }
+      },
+      "required": ["id", "uid", "answerVersionId", "centralScore", "maxScore", "createdAt"]
+    },
+    "EvaluationReview": {
+      "title": "EvaluationReview",
+      "description": "Stage 2 reviewer audit record",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "uid": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "evaluationId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "reviewerDecision": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "maxLength": 64
+        }
+      },
+      "required": ["id", "uid", "evaluationId", "reviewerDecision", "createdAt"]
+    },
+    "ReviewItem": {
+      "title": "ReviewItem",
+      "description": "Spaced repetition review item",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "uid": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "questionNumber": {
+          "type": "integer"
+        },
+        "intervalDays": {
+          "type": "integer"
+        },
+        "mastered": {
+          "type": "boolean"
+        },
+        "nextDueAt": {
+          "type": "string",
+          "format": "date-time",
+          "maxLength": 64
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "maxLength": 64
+        }
+      },
+      "required": ["id", "uid", "questionNumber", "intervalDays", "mastered", "nextDueAt", "updatedAt"]
+    },
+    "UserPreferences": {
+      "title": "UserPreferences",
+      "description": "Reading typography and spaced repetition preferences",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "fontSizePx": {
+          "type": "integer"
+        },
+        "lineHeight": {
+          "type": "number"
+        },
+        "measureCh": {
+          "type": "integer"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "maxLength": 64
+        }
+      },
+      "required": ["uid", "fontSizePx", "lineHeight", "measureCh", "updatedAt"]
+    },
+    "ImportRecord": {
+      "title": "ImportRecord",
+      "description": "User exam import audit record",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "uid": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "year": {
+          "type": "integer"
+        },
+        "dataVersion": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "maxLength": 64
+        }
+      },
+      "required": ["id", "uid", "year", "dataVersion", "status", "createdAt"]
+    },
+    "SyncState": {
+      "title": "SyncState",
+      "description": "Multi-device synchronization cursor and conflict metadata",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "deviceId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "clientRevision": {
+          "type": "integer"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "maxLength": 64
+        }
+      },
+      "required": ["uid", "deviceId", "clientRevision", "updatedAt"]
+    },
+    "EncryptedProviderCredential": {
+      "title": "EncryptedProviderCredential",
+      "description": "Server-only AES-256-GCM encrypted model API key record",
+      "type": "object",
+      "properties": {
+        "provider": {
+          "type": "string",
+          "enum": ["gemini", "deepseek", "openai-compatible"]
+        },
+        "ciphertext": {
+          "type": "string",
+          "maxLength": 2048
+        },
+        "iv": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "authTag": {
+          "type": "string",
+          "maxLength": 128
+        }
+      },
+      "required": ["provider", "ciphertext", "iv", "authTag"]
+    }
+  },
+  "firestore": {
+    "/users/{uid}/profile/main": {
+      "schema": "UserProfile",
+      "description": "User profile document"
+    },
+    "/users/{uid}/attempts/{attemptId}": {
+      "schema": "ExamAttempt",
+      "description": "User exam attempts"
+    },
+    "/users/{uid}/responses/{responseId}": {
+      "schema": "ObjectiveResponse",
+      "description": "User objective question responses"
+    },
+    "/users/{uid}/answer-versions/{versionId}": {
+      "schema": "SubjectiveAnswerVersion",
+      "description": "Immutable subjective answer versions"
+    },
+    "/users/{uid}/evaluations/{evaluationId}": {
+      "schema": "SubjectiveEvaluation",
+      "description": "AI evaluations for subjective versions"
+    },
+    "/users/{uid}/evaluation-reviews/{reviewId}": {
+      "schema": "EvaluationReview",
+      "description": "Stage 2 evaluation review audits"
+    },
+    "/users/{uid}/review-items/{reviewItemId}": {
+      "schema": "ReviewItem",
+      "description": "Spaced repetition review items"
+    },
+    "/users/{uid}/preferences/main": {
+      "schema": "UserPreferences",
+      "description": "Reading and review preferences"
+    },
+    "/users/{uid}/imports/{importId}": {
+      "schema": "ImportRecord",
+      "description": "Import audit logs"
+    },
+    "/users/{uid}/sync-state/main": {
+      "schema": "SyncState",
+      "description": "Device sync state"
+    },
+    "/private-provider-credentials/{uid}/providers/{providerId}": {
+      "schema": "EncryptedProviderCredential",
+      "description": "Server-only encrypted provider API keys (client access strictly forbidden)"
+    }
+  }
+}
