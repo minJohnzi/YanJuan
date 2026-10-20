@@ -1,0 +1,115 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+.yarn/
+.bun/
+
+# Build outputs
+dist/
+build/
+out/
+.vite/
+.cache/
+.esbuild/
+*.tsbuildinfo
+
+# Test outputs
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+blob-report/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+bun-debug.log*
+
+# Google AI Studio temporary artifacts
+.aistudio/artifacts/
+.aistudio/**/.tempmediaStorage/
+.aistudio/**/*.tmp
+.aistudio/**/*.temp
+.aistudio/**/*.log
+
+# Firebase local files
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*
+firebase-export-*/
+firebase-emulator-data/
+
+# Original import packages
+inputs/*.zip
+inputs/*.7z
+inputs/*.rar
+inputs/*.tar
+inputs/*.tar.gz
+inputs/*.pdf
+inputs/*.doc
+inputs/*.docx
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+.temp/
+scratch/
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+
+# IDE files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.example.json
+.idea/
+*.code-workspace
+
+# Operating system files
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.Spotlight-V100/
+.Trashes/
+
+# Credentials
+*.pem
+*.key
+*.p12
+*.pfx
+service-account*.json
+firebase-adminsdk*.json
+credentials*.json
+secrets*.json
+
+# Local databases
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
+# Generated archives and local reports
+*.backup.zip
+*.export.zip
+*.tgz
+reports/local/
+reports/tmp/
