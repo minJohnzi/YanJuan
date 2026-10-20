@@ -1053,7 +1053,7 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
                           type="button"
                           disabled={isSubmitted}
                           onClick={() => handleSelectOption(qNum, opt.key)}
-                          className={`w-full text-left px-4 py-3 rounded-xl text-sm border flex items-start gap-3 transition-all ${
+                          className={`w-full text-left px-4 py-3 rounded-xl text-sm border flex items-start gap-3 transition-all min-h-[48px] ${
                             isOfficialCorrect
                               ? 'bg-emerald-50 dark:bg-[#172E27] border-emerald-500 dark:border-[#4EA387] text-[#202B2F] dark:text-[#E2E8E6] font-medium'
                               : isSelectedWrong
@@ -1079,7 +1079,7 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
                   {/* Confidence Selector */}
                   <div className="pt-3 border-t border-[#E8ECEA] dark:border-[#223036] flex flex-wrap items-center justify-between gap-2 text-xs">
                     <span className="text-[#68777C] dark:text-[#9CAEB3]">做题把握度：</span>
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex flex-wrap items-center gap-1.5">
                       {(
                         [
                           { key: 'certain', label: '确定 (Certain)' },
@@ -2085,6 +2085,69 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
                         )}
                       </div>
                     )}
+
+                    {/* Source-Provided Reference Translations (46-50) or Model Essays (51-52) */}
+                    {currentUnit.unitType === 'translation' &&
+                      currentUnit.items.some(
+                        (it) =>
+                          it.translationMeta?.referenceTranslation ||
+                          it.rubric?.referenceText
+                      ) && (
+                        <div className="p-4 bg-emerald-50/50 dark:bg-[#172E27]/60 rounded-xl border border-emerald-200 dark:border-[#2B5446] space-y-2.5 text-xs">
+                          <div className="font-bold text-emerald-800 dark:text-[#4EA387] flex items-center justify-between">
+                            <span>
+                              来源参考译文（46–50题 · 题库收录标准参考答案）
+                            </span>
+                            <span className="font-tabular-mono text-[11px]">
+                              Source: answers/{exam.year}.md
+                            </span>
+                          </div>
+                          <div className="space-y-2">
+                            {currentUnit.items.map((it) => {
+                              const refT =
+                                it.translationMeta?.referenceTranslation ||
+                                it.rubric?.referenceText;
+                              if (!refT) return null;
+                              return (
+                                <div
+                                  key={it.id}
+                                  className="p-2.5 bg-white dark:bg-[#1A2529] rounded-lg border border-[#DCE4E1] dark:border-[#2C3E46] space-y-1"
+                                >
+                                  <div className="font-tabular-mono font-semibold text-[#174A5B] dark:text-[#75B6CE]">
+                                    ({it.questionNumber}){' '}
+                                    <span className="font-english-serif font-normal text-[#68777C] dark:text-[#9CAEB3]">
+                                      {it.translationMeta?.underlinedEnglish}
+                                    </span>
+                                  </div>
+                                  <div className="text-[#202B2F] dark:text-[#E2E8E6] leading-relaxed font-medium">
+                                    参考译文：{refT}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+
+                    {(currentUnit.unitType === 'practical-writing' ||
+                      currentUnit.unitType === 'visual-writing') &&
+                      currentUnit.items[0]?.rubric?.referenceText && (
+                        <div className="p-4 bg-emerald-50/50 dark:bg-[#172E27]/60 rounded-xl border border-emerald-200 dark:border-[#2B5446] space-y-2 text-xs">
+                          <div className="font-bold text-emerald-800 dark:text-[#4EA387] flex items-center justify-between">
+                            <span>
+                              来源参考范文（第{' '}
+                              {currentUnit.items[0].questionNumber} 题 ·
+                              题库收录标准参考范文）
+                            </span>
+                            <span className="font-tabular-mono text-[11px]">
+                              Source: answers/{exam.year}.md
+                            </span>
+                          </div>
+                          <pre className="p-3 bg-white dark:bg-[#1A2529] rounded-lg border border-[#DCE4E1] dark:border-[#2C3E46] font-english-serif text-xs text-[#202B2F] dark:text-[#E2E8E6] whitespace-pre-wrap leading-relaxed">
+                            {currentUnit.items[0].rubric.referenceText}
+                          </pre>
+                        </div>
+                      )}
                   </div>
                 )}
               </div>

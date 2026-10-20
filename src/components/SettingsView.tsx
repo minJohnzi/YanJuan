@@ -204,7 +204,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               延续“学术期刊 × 纸质试卷 × 数字阅卷台”沉稳设计，支持浅色、深色与跟随系统，无缝即时切换。
             </p>
           </div>
-          <span className="text-xs font-tabular-mono text-[#68777C] dark:text-[#9CAEB3] bg-stone-50 dark:bg-[#162226] px-2.5 py-1 rounded-md self-start sm:self-auto border border-[#E8ECEA] dark:border-[#2C3E46]">
+          <span className="text-xs font-tabular-mono text-[#68777C] dark:text-[#9CAEB3] bg-stone-50 dark:bg-[#162226] px-2.5 py-1 rounded-md self-start sm:self-auto border border-[#E8ECEA] dark:border-[#2C3E46] whitespace-nowrap shrink-0">
             当前设置：{currentThemeMode === 'system' ? '跟随系统' : currentThemeMode === 'dark' ? '深色模式' : '浅色模式'}
           </span>
         </div>
@@ -365,7 +365,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               历年真题内置于本地；个人作答进度、错题卡与主观题版本同步于云端或本地 IndexedDB。
             </p>
           </div>
-          <span className="text-xs font-tabular-mono text-[#68777C] dark:text-[#9CAEB3] bg-stone-50 dark:bg-[#162226] px-2.5 py-1 rounded-md self-start sm:self-auto border border-[#E8ECEA] dark:border-[#2C3E46]">
+          <span className="text-xs font-tabular-mono text-[#68777C] dark:text-[#9CAEB3] bg-stone-50 dark:bg-[#162226] px-2.5 py-1 rounded-md self-start sm:self-auto border border-[#E8ECEA] dark:border-[#2C3E46] whitespace-nowrap shrink-0">
             {syncStatus === 'synced' ? '已连接云端' : '本地存储模式'}
           </span>
         </div>
@@ -445,13 +445,13 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               支持 Gemini、DeepSeek 或兼容 OpenAI 协议的模型。仅用于阅读证据句拆解与作文双阶段批改。API Key 经服务端 AES-256 加密保存。
             </p>
           </div>
-          <span className="text-xs font-tabular-mono self-start sm:self-auto">
+          <span className="text-xs font-tabular-mono self-start sm:self-auto whitespace-nowrap shrink-0">
             {anyModelAvailable ? (
-              <span className="text-emerald-800 dark:text-[#4EA387] font-semibold bg-emerald-50 dark:bg-[#172E27] px-2.5 py-1 rounded border border-emerald-200 dark:border-emerald-800">
+              <span className="text-emerald-800 dark:text-[#4EA387] font-semibold bg-emerald-50 dark:bg-[#172E27] px-2.5 py-1 rounded border border-emerald-200 dark:border-emerald-800 whitespace-nowrap">
                 已配置 ({activeProviderName})
               </span>
             ) : (
-              <span className="text-[#68777C] dark:text-[#9CAEB3] bg-stone-100 dark:bg-[#162226] px-2.5 py-1 rounded border border-[#DCE4E1] dark:border-[#2C3E46]">
+              <span className="text-[#68777C] dark:text-[#9CAEB3] bg-stone-100 dark:bg-[#162226] px-2.5 py-1 rounded border border-[#DCE4E1] dark:border-[#2C3E46] whitespace-nowrap">
                 未配置模型
               </span>
             )}

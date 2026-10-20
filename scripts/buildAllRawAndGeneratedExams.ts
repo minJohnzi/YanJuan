@@ -80,36 +80,220 @@ function parseYamlFrontmatter(mdText: string): { frontmatter: RawFrontmatter; bo
 }
 
 /**
+ * Synchronizes the 2010–2026 full answer supplement markdown (`public/assets/aistudio/kaoyan_english_1_answers_2010_2026_1f1b46f3.md`)
+ * into `data/exams/raw/answers/{year}.md`, updates `data/exams/raw/papers/{year}.md` frontmatter,
+ * and updates `data/exams/raw/reports/*.json` and `data/exams/raw/manifest.json`.
+ */
+export function syncSupplementAnswersFromMarkdown(): void {
+  const supplementPath = path.join(
+    rootDir,
+    'public',
+    'assets',
+    'aistudio',
+    'kaoyan_english_1_answers_2010_2026_1f1b46f3.md'
+  );
+  if (!fs.existsSync(supplementPath)) return;
+
+  const content = fs.readFileSync(supplementPath, 'utf8').replace(/\r\n/g, '\n');
+
+  // 1. Parse summary table for 1-45 objective answers across 2010-2026
+  const summaryAnswersByYear: Record<number, Record<number, string>> = {};
+  const tableRegex =
+    /\|\s*\*\*(20\d\d)年\*\*\s*\|\s*`([A-D\s]+)`\s*\|\s*`([A-D]{5})`\s*\|\s*`([A-D]{5})`\s*\|\s*`([A-D]{5})`\s*\|\s*`([A-D]{5})`\s*\|\s*`([A-G]{5})`\s*\|/g;
+  let m: RegExpExecArray | null;
+  while ((m = tableRegex.exec(content)) !== null) {
+    const year = Number(m[1]);
+    const cloze = m[2].replace(/\s+/g, '');
+    const all45 = cloze + m[3] + m[4] + m[5] + m[6] + m[7];
+    if (all45.length === 45) {
+      const qMap: Record<number, string> = {};
+      for (let i = 0; i < 45; i++) {
+        qMap[i + 1] = all45[i];
+      }
+      summaryAnswersByYear[year] = qMap;
+    }
+  }
+
+  // 2. Parse each year block for Part C translations (46-50) and Writing sample essays (51, 52)
+  fs.mkdirSync(rawAnswersDir, { recursive: true });
+  const yearBlocks = content.split(/^##\s+(20\d\d)年/m);
+
+  for (let i = 1; i < yearBlocks.length; i += 2) {
+    const year = Number(yearBlocks[i]);
+    const body = yearBlocks[i + 1] || '';
+    const qMap = summaryAnswersByYear[year];
+    if (!qMap) continue;
+
+    const translations: Record<number, string> = {};
+    for (let q = 46; q <= 50; q++) {
+      const tm = body.match(new RegExp(`-\\s*\\*\\*\\(${q}\\)\\*\\*\\s*(.+)`));
+      if (tm) {
+        translations[q] = tm[1].trim();
+      }
+    }
+
+    const p51Match = body.match(/####\s*51\.[^\n]+\n+((?:>[^\n]*\n?)+)/);
+    const p52Match = body.match(/####\s*52\.[^\n]+\n+((?:>[^\n]*\n?)+)/);
+    const partAEssay = p51Match ? p51Match[1].replace(/^>\s?/gm, '').trim() : '';
+    const partBEssay = p52Match ? p52Match[1].replace(/^>\s?/gm, '').trim() : '';
+
+    const lines: string[] = [
+      '---',
+      `year: ${year}`,
+      'subject: english-i',
+      'answer_source: source-provided',
+      'objective_range: 1-45',
+      'subjective_range: 46-52',
+      '---',
+      '',
+      `# ${year}年全国硕士研究生入学统一考试英语（一）来源参考答案`,
+      '',
+      '## Section I Use of English (1–20)',
+    ];
+    for (let q = 1; q <= 20; q++) {
+      lines.push(`${q}. ${qMap[q]}`);
+    }
+    lines.push('', '## Section II Reading Comprehension', '### Part A (21–40)');
+    for (let q = 21; q <= 40; q++) {
+      lines.push(`${q}. ${qMap[q]}`);
+    }
+    lines.push('', '### Part B (41–45)');
+    for (let q = 41; q <= 45; q++) {
+      lines.push(`${q}. ${qMap[q]}`);
+    }
+    lines.push('', '## Section II Part C Translation (46–50)');
+    for (let q = 46; q <= 50; q++) {
+      lines.push(`${q}. ${translations[q] || '见分析'}`);
+    }
+    lines.push('', '## Section III Writing', '### Part A (51)');
+    lines.push(partAEssay || '见分析（略）');
+    lines.push('', '### Part B (52)');
+    lines.push(partBEssay || '见分析（略）', '');
+
+    fs.writeFileSync(path.join(rawAnswersDir, `${year}.md`), lines.join('\n'), 'utf8');
+
+    // Ensure raw paper frontmatter has answer_status: source-provided
+    const paperPath = path.join(rawPapersDir, `${year}.md`);
+    if (fs.existsSync(paperPath)) {
+      const paperTxt = fs.readFileSync(paperPath, 'utf8');
+      if (paperTxt.includes('answer_status: unavailable')) {
+        const updatedPaper = paperTxt.replace(
+          'answer_status: unavailable',
+          'answer_status: source-provided'
+        );
+        fs.writeFileSync(paperPath, updatedPaper, 'utf8');
+      }
+    }
+
+    // Update raw report JSON for year
+    const reportPath = path.join(rawReportsDir, `${year}.json`);
+    if (fs.existsSync(reportPath)) {
+      const rep = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+      rep.answer_status = 'source-provided';
+      rep.answer_file = `answers/${year}.md`;
+      fs.writeFileSync(reportPath, JSON.stringify(rep, null, 2), 'utf8');
+    }
+  }
+
+  // Update raw manifest.json
+  const rawManifestPath = path.join(rawDir, 'manifest.json');
+  if (fs.existsSync(rawManifestPath)) {
+    const rawManifest = JSON.parse(fs.readFileSync(rawManifestPath, 'utf8'));
+    rawManifest.sourceAnswerYears = ALL_YEARS;
+    rawManifest.unavailableAnswerYears = [];
+    if (Array.isArray(rawManifest.years)) {
+      for (const yEntry of rawManifest.years) {
+        yEntry.answer_status = 'source-provided';
+        yEntry.answer_file = `answers/${yEntry.year}.md`;
+      }
+    }
+    fs.writeFileSync(rawManifestPath, JSON.stringify(rawManifest, null, 2), 'utf8');
+  }
+
+  // Update raw reports/validation-summary.json
+  const valSummaryPath = path.join(rawReportsDir, 'validation-summary.json');
+  if (fs.existsSync(valSummaryPath)) {
+    const valSummary = JSON.parse(fs.readFileSync(valSummaryPath, 'utf8'));
+    valSummary.answersBreakdown = {
+      sourceProvided: ALL_YEARS,
+      unavailable: [],
+      inferredOrGuessed: [],
+    };
+    if (Array.isArray(valSummary.years)) {
+      for (const yEntry of valSummary.years) {
+        yEntry.answer_status = 'source-provided';
+        yEntry.answer_file = `answers/${yEntry.year}.md`;
+      }
+    }
+    fs.writeFileSync(valSummaryPath, JSON.stringify(valSummary, null, 2), 'utf8');
+  }
+}
+
+/**
  * Parses data/exams/raw/answers/{year}.md
- * Ensures "见分析" and "略" are NOT treated as model essays or reference translations.
+ * Ensures "见分析" and "略" are NOT treated as model essays or reference translations,
+ * while genuine reference translations and model essays from the answer supplement are preserved.
  */
 function parseRawAnswerMarkdown(year: number): {
   objectiveAnswers: Record<number, string>;
+  referenceTranslations: Record<number, string>;
+  partAEssay?: string;
+  partBEssay?: string;
   hasTranslationRef: boolean;
   hasWritingRef: boolean;
 } {
   const ansPath = path.join(rawAnswersDir, `${year}.md`);
   if (!fs.existsSync(ansPath)) {
-    return { objectiveAnswers: {}, hasTranslationRef: false, hasWritingRef: false };
+    return {
+      objectiveAnswers: {},
+      referenceTranslations: {},
+      hasTranslationRef: false,
+      hasWritingRef: false,
+    };
   }
   const raw = fs.readFileSync(ansPath, 'utf8').replace(/\r\n/g, '\n');
   const objectiveAnswers: Record<number, string> = {};
+  const referenceTranslations: Record<number, string> = {};
 
   for (const line of raw.split('\n')) {
-    const m = line.trim().match(/^(\d{1,2})\.\s*([A-G])\b/);
+    const trimmed = line.trim();
+    const m = trimmed.match(/^(\d{1,2})\.\s*([A-G])\b/);
     if (m) {
       const q = Number(m[1]);
       const ans = m[2];
       if (q >= 1 && q <= 45) {
         objectiveAnswers[q] = ans;
       }
+      continue;
+    }
+    const tm = trimmed.match(/^(4[6-9]|50)\.\s*(.+)$/);
+    if (tm) {
+      const q = Number(tm[1]);
+      const tText = tm[2].trim();
+      if (tText && tText !== '见分析' && tText !== '略' && !tText.startsWith('见分析')) {
+        referenceTranslations[q] = tText;
+      }
     }
   }
 
+  const partAMatch = raw.match(/### Part A \(51\)\s*\n([\s\S]*?)(?=\n### Part B \(52\))/);
+  const partBMatch = raw.match(/### Part B \(52\)\s*\n([\s\S]*)$/);
+  const rawPartA = partAMatch ? partAMatch[1].trim() : '';
+  const rawPartB = partBMatch ? partBMatch[1].trim() : '';
+
+  const isPlaceholder = (txt: string) =>
+    !txt || txt === '略' || txt === '见分析' || txt.startsWith('见分析');
+
+  const partAEssay = !isPlaceholder(rawPartA) ? rawPartA : undefined;
+  const partBEssay = !isPlaceholder(rawPartB) ? rawPartB : undefined;
+
   return {
     objectiveAnswers,
-    hasTranslationRef: false, // "见分析" is an analysis pointer, not a full translation
-    hasWritingRef: false, // "见分析（略）" / "略" is never treated as a model essay
+    referenceTranslations,
+    partAEssay,
+    partBEssay,
+    hasTranslationRef: Object.keys(referenceTranslations).length === 5,
+    hasWritingRef: Boolean(partAEssay && partBEssay),
   };
 }
 
@@ -422,7 +606,8 @@ function parsePartBUnit(
 
 function parsePartCTranslationUnit(
   year: number,
-  partCText: string
+  partCText: string,
+  referenceTranslations: Record<number, string> = {}
 ): ExamUnit {
   const lines = partCText.trim().split('\n').filter((l) => !l.trim().startsWith('### Part C'));
   const dirLineIdx = lines.findIndex((l) => l.trim().startsWith('Directions:'));
@@ -450,6 +635,8 @@ function parsePartCTranslationUnit(
     const contextParagraph =
       paragraphs.find((p) => p.includes(`(${q})`)) || passageBody;
     const startIdx = contextParagraph.indexOf(underlinedEnglish);
+    const refTrans = referenceTranslations[q] || null;
+    const refSource: AnswerSource = refTrans ? 'source-provided' : 'unavailable';
 
     items.push({
       id: `${year}-item-${q}`,
@@ -458,15 +645,15 @@ function parsePartCTranslationUnit(
       prompt: `Translate sentence (${q}) into Chinese: "${underlinedEnglish}"`,
       score: 2,
       correctAnswer: null,
-      answerSource: 'unavailable',
+      answerSource: refSource,
       rubric: {
         maxScore: 2,
         dimensions: [
           { id: 'accuracy', name: '核心语义准确度', maxScore: 1.0, description: '准确传达划线句主干与从句逻辑语义' },
           { id: 'syntax', name: '句法拆分与中文流畅度', maxScore: 1.0, description: '定语/状语从句语序调整自然，符合汉语习惯' },
         ],
-        referenceText: undefined, // "见分析" is never treated as a literal reference translation
-        referenceSource: 'unavailable',
+        referenceText: refTrans || undefined,
+        referenceSource: refSource,
       },
       sourceLocator: {
         sourceFile: `papers/${year}.md`,
@@ -479,8 +666,8 @@ function parsePartCTranslationUnit(
         charRange: [Math.max(0, startIdx), Math.max(0, startIdx) + underlinedEnglish.length],
         keySemanticPoints: ['从句结构拆解', '核心学术概念对译', '上下文指代衔接'],
         syntacticRelations: ['复合从句逻辑', '后置定语顺译/逆译'],
-        referenceTranslation: null,
-        referenceSource: 'unavailable',
+        referenceTranslation: refTrans,
+        referenceSource: refSource,
       },
     });
   }
@@ -522,7 +709,9 @@ function parsePartCTranslationUnit(
 
 function parseWritingUnits(
   year: number,
-  sec3Text: string
+  sec3Text: string,
+  partAEssay?: string,
+  partBEssay?: string
 ): { practicalUnit: ExamUnit; visualUnit: ExamUnit; referencedAssets: string[] } {
   const partAMatch = sec3Text.match(/### Part A\s*\n([\s\S]*?)(?=\n### Part B)/);
   const partBMatch = sec3Text.match(/### Part B\s*\n([\s\S]*)$/);
@@ -532,6 +721,7 @@ function parseWritingUnits(
 
   const partARaw = partAMatch[1].trim();
   const partAPrompt = partARaw.replace(/^51\.\s*Directions:\s*/i, '').trim();
+  const partASource: AnswerSource = partAEssay ? 'source-provided' : 'unavailable';
 
   const practicalUnit: ExamUnit = {
     id: `${year}-unit-practical-writing`,
@@ -595,7 +785,7 @@ function parseWritingUnits(
         prompt: `51. Directions: ${partAPrompt}`,
         score: 10,
         correctAnswer: null,
-        answerSource: 'unavailable',
+        answerSource: partASource,
         rubric: {
           maxScore: 10,
           dimensions: [
@@ -603,8 +793,8 @@ function parseWritingUnits(
             { id: 'organization', name: '格式与语域规范', maxScore: 3, description: '格式规范、语域恰当' },
             { id: 'language', name: '语言表达准确性', maxScore: 4, description: '语法与词汇准确丰富' },
           ],
-          referenceText: undefined, // 不把“见分析”或“略”识别为作文范文
-          referenceSource: 'unavailable',
+          referenceText: partAEssay || undefined,
+          referenceSource: partASource,
         },
         sourceLocator: {
           sourceFile: `papers/${year}.md`,
@@ -702,7 +892,7 @@ function parseWritingUnits(
         prompt: `52. Directions: ${partBPromptOnly}`,
         score: 20,
         correctAnswer: null,
-        answerSource: 'unavailable',
+        answerSource: partBEssay ? 'source-provided' : 'unavailable',
         rubric: {
           maxScore: 20,
           dimensions: [
@@ -710,8 +900,8 @@ function parseWritingUnits(
             { id: 'meaning_interp', name: '象征寓意与论点深度', maxScore: 8, description: '准确提炼核心寓意，论证层次分明、逻辑严密' },
             { id: 'language_comment', name: '语言质量与评论总结', maxScore: 7, description: '句式丰富、用词地道、衔接自然，评论切实可行' },
           ],
-          referenceText: undefined, // 不把“见分析”或“略”识别为作文范文
-          referenceSource: 'unavailable',
+          referenceText: partBEssay || undefined,
+          referenceSource: partBEssay ? 'source-provided' : 'unavailable',
         },
         sourceLocator: {
           sourceFile: `papers/${year}.md`,
@@ -745,7 +935,12 @@ export function buildRuntimeExamFromRawFiles(year: number): Exam {
   const answerSource: AnswerSource = isAnswerAvailable ? 'source-provided' : 'unavailable';
   const parsedAnswers = isAnswerAvailable
     ? parseRawAnswerMarkdown(year)
-    : { objectiveAnswers: {}, hasTranslationRef: false, hasWritingRef: false };
+    : {
+        objectiveAnswers: {},
+        referenceTranslations: {},
+        hasTranslationRef: false,
+        hasWritingRef: false,
+      };
 
   // Extract paper title
   const titleMatch = body.match(/^#\s+(.+)$/m);
@@ -874,10 +1069,19 @@ export function buildRuntimeExamFromRawFiles(year: number): Exam {
   }
 
   const partBUnit = parsePartBUnit(year, partBMatch[1], answerSource, parsedAnswers.objectiveAnswers);
-  const translationUnit = parsePartCTranslationUnit(year, partCMatch[1]);
+  const translationUnit = parsePartCTranslationUnit(
+    year,
+    partCMatch[1],
+    parsedAnswers.referenceTranslations
+  );
 
   // --- Section III: Writing (Part A 51, Part B 52) ---
-  const { practicalUnit, visualUnit, referencedAssets } = parseWritingUnits(year, sec3Match[1]);
+  const { practicalUnit, visualUnit, referencedAssets } = parseWritingUnits(
+    year,
+    sec3Match[1],
+    parsedAnswers.partAEssay,
+    parsedAnswers.partBEssay
+  );
 
   const sections: ExamSection[] = [
     {
@@ -1039,7 +1243,9 @@ export function buildRuntimeExamFromRawFiles(year: number): Exam {
  *    and `data/exams/generated/papers-manifest.json` (plus `data/papers-manifest.json` and `public/data/...`).
  */
 export function executeBuild() {
-  console.log('[buildAllRawAndGeneratedExams] 从 data/exams/raw/ 构建 2010–2026 运行时题库...');
+  console.log('[buildAllRawAndGeneratedExams] 同步 2010–2026 补充答案并从 data/exams/raw/ 构建运行时题库...');
+
+  syncSupplementAnswersFromMarkdown();
 
   fs.mkdirSync(genPapersDir, { recursive: true });
   fs.mkdirSync(publicAssetsDir, { recursive: true });
@@ -1140,8 +1346,12 @@ export function executeBuild() {
     });
   }
 
-  const availableYears = [2024, 2025, 2026];
-  const needsAnswerSourceYears = Array.from({ length: 14 }, (_, i) => 2010 + i);
+  const availableYears = generatedYearsSummary
+    .filter((y) => y.status === 'ready')
+    .map((y) => y.year as number);
+  const needsAnswerSourceYears = generatedYearsSummary
+    .filter((y) => y.status === 'needs-answer-source')
+    .map((y) => y.year as number);
 
   const generatedManifest = {
     schemaVersion: 1,

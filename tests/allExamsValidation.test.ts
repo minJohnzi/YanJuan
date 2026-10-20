@@ -18,15 +18,14 @@ test('Full-Spectrum Verification 1: Raw directory structure, YAML frontmatter, a
     assert.ok(fs.existsSync(path.join(rawDir, 'papers', `${y}.md`)), `${y}.md 必须存在`);
   }
 
-  // 2. Raw answers (3 markdown files: 2024, 2025, 2026; 2010-2023 must NOT exist)
+  // 2. Raw answers (17 markdown files: 2010–2026 from full answer supplement)
   const answerFiles = fs.readdirSync(path.join(rawDir, 'answers')).filter((f) => f.endsWith('.md'));
-  assert.equal(answerFiles.length, 3, '必须只有3份来源答案文件');
-  assert.deepEqual(answerFiles.sort(), ['2024.md', '2025.md', '2026.md']);
-  for (let y = 2010; y <= 2023; y++) {
+  assert.equal(answerFiles.length, 17, '必须有17份来源答案文件 (2010–2026)');
+  for (const y of ALL_YEARS) {
     assert.equal(
       fs.existsSync(path.join(rawDir, 'answers', `${y}.md`)),
-      false,
-      `${y} 年严禁伪造答案文件`
+      true,
+      `${y} 年来源答案文件必须存在`
     );
   }
 
@@ -43,7 +42,7 @@ test('Full-Spectrum Verification 1: Raw directory structure, YAML frontmatter, a
     assert.equal(rep.validation_status, 'passed');
     assert.equal(rep.unresolved_issue_count, 0);
     assert.deepEqual(rep.cross_year_errors, []);
-    assert.equal(rep.answer_status, y >= 2024 ? 'source-provided' : 'unavailable');
+    assert.equal(rep.answer_status, 'source-provided');
   }
   assert.ok(fs.existsSync(path.join(rawDir, 'reports', 'validation-summary.json')));
   assert.ok(fs.existsSync(path.join(rawDir, 'reports', 'change-log.md')));
@@ -75,7 +74,7 @@ test('Full-Spectrum Verification 1: Raw directory structure, YAML frontmatter, a
   assert.equal(manifest.totalVisualAssets, 29);
   assert.equal(manifest.totalSourcePages, 257);
   assert.deepEqual(manifest.expectedYears, ALL_YEARS);
-  assert.deepEqual(manifest.sourceAnswerYears, [2024, 2025, 2026]);
+  assert.deepEqual(manifest.sourceAnswerYears, ALL_YEARS);
   assert.deepEqual(manifest.cross_year_errors, []);
 
   const importState = JSON.parse(
@@ -84,7 +83,7 @@ test('Full-Spectrum Verification 1: Raw directory structure, YAML frontmatter, a
   assert.deepEqual(importState.expectedYears, ALL_YEARS);
   assert.deepEqual(importState.importedYears, ALL_YEARS);
   assert.deepEqual(importState.pendingYears, []);
-  assert.deepEqual(importState.answerAvailableYears, [2024, 2025, 2026]);
+  assert.deepEqual(importState.answerAvailableYears, ALL_YEARS);
   assert.deepEqual(importState.failedYears, []);
 });
 
@@ -180,8 +179,8 @@ test('Full-Spectrum Verification 4: Generated runtime exams (17 JSONs, authentic
   const genManifest = JSON.parse(fs.readFileSync(genManifestPath, 'utf8'));
   assert.equal(genManifest.totalPapers, 17);
   assert.equal(genManifest.totalVisualAssets, 29);
-  assert.deepEqual(genManifest.availableYears, [2024, 2025, 2026]);
-  assert.deepEqual(genManifest.failedYears, Array.from({ length: 14 }, (_, i) => 2010 + i));
+  assert.deepEqual(genManifest.availableYears, ALL_YEARS);
+  assert.deepEqual(genManifest.failedYears, []);
   assert.deepEqual(genManifest.pendingYears, []);
 
   for (const y of ALL_YEARS) {
@@ -242,42 +241,42 @@ test('Full-Spectrum Verification 4: Generated runtime exams (17 JSONs, authentic
       assert.deepEqual(spec.fixedPlacements.map((f) => f.paragraphId), ['D', 'E']);
     }
 
-    // 46-50 Translation: real underlined sentences from Part C, and no fabricated referenceTranslation
+    // 46-50 Translation: real underlined sentences from Part C and source-provided reference translations
     const transUnit = allUnits.find((u) => u.unitType === 'translation')!;
     assert.ok(transUnit);
     assert.equal(transUnit.items.length, 5);
     for (const item of transUnit.items) {
       assert.ok((item.translationMeta?.underlinedEnglish.length || 0) > 40);
-      assert.equal(item.translationMeta?.referenceTranslation, null, '不得将“见分析”误作为参考译文正文');
-      assert.equal(item.rubric?.referenceText, undefined);
+      assert.ok(
+        (item.translationMeta?.referenceTranslation?.length || 0) > 10,
+        `${y} 年第 ${item.questionNumber} 题必须包含来源参考译文`
+      );
+      assert.equal(item.translationMeta?.referenceSource, 'source-provided');
     }
 
-    // 51 & 52 Writing: verify "见分析（略）" is NOT parsed as model essay
+    // 51 & 52 Writing: verify source-provided model essays are populated
     const pwUnit = allUnits.find((u) => u.unitType === 'practical-writing')!;
     const vwUnit = allUnits.find((u) => u.unitType === 'visual-writing')!;
     assert.equal(pwUnit.items[0].questionNumber, 51);
-    assert.equal(pwUnit.items[0].rubric?.referenceText, undefined, '严禁把“略”识别为小作文范文');
+    assert.ok(
+      (pwUnit.items[0].rubric?.referenceText?.length || 0) > 100,
+      `${y} 年小作文 51 题必须包含来源参考范文`
+    );
     assert.equal(vwUnit.items[0].questionNumber, 52);
-    assert.equal(vwUnit.items[0].rubric?.referenceText, undefined, '严禁把“略”识别为大作文范文');
+    assert.ok(
+      (vwUnit.items[0].rubric?.referenceText?.length || 0) > 200,
+      `${y} 年大作文 52 题必须包含来源参考范文`
+    );
 
-    // Answer source isolation: 2010-2023 must have NO fabricated answers; 2024-2026 must match raw answers
-    if (y < 2024) {
-      assert.equal(exam.answerSourceStatus, 'unavailable');
-      assert.equal(exam.objectiveAnswerCount, 0);
-      for (let i = 0; i < 45; i++) {
-        assert.equal(allItems[i].correctAnswer, null, `${y} 年第 ${i + 1} 题绝不能生成推测的客观题答案`);
-        assert.equal(allItems[i].answerSource, 'unavailable');
-      }
-    } else {
-      assert.equal(exam.answerSourceStatus, 'source-provided');
-      assert.equal(exam.objectiveAnswerCount, 45);
-      for (let i = 0; i < 45; i++) {
-        assert.ok(
-          /^[A-G]$/.test(allItems[i].correctAnswer || ''),
-          `${y} 年第 ${i + 1} 题必须关联来源官方答案`
-        );
-        assert.equal(allItems[i].answerSource, 'source-provided');
-      }
+    // All 17 years (2010–2026) must have complete source-provided objective answers (1–45)
+    assert.equal(exam.answerSourceStatus, 'source-provided');
+    assert.equal(exam.objectiveAnswerCount, 45);
+    for (let i = 0; i < 45; i++) {
+      assert.ok(
+        /^[A-G]$/.test(allItems[i].correctAnswer || ''),
+        `${y} 年第 ${i + 1} 题必须关联来源官方答案`
+      );
+      assert.equal(allItems[i].answerSource, 'source-provided');
     }
 
     // Visual materials in public/assets/papers/{y}

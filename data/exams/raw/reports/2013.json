@@ -7,8 +7,8 @@
   "question_count": 52,
   "question_range": "1-52",
   "part_b_type": "paragraph-insertion",
-  "answer_status": "unavailable",
-  "answer_file": null,
+  "answer_status": "source-provided",
+  "answer_file": "answers/2013.md",
   "visual_assets_count": 1,
   "visual_assets": [
     "assets/2013/writing-part-b-01.png"

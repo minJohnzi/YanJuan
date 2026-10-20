@@ -24,7 +24,7 @@
   ],
   "sourceHashes": {
     "papers/2024.md": "e2558010e8f438e71555290a56c8d49c3034275965e0693edb5a133f00c9d350",
-    "answers/2024.md": "d79d0fe8b29f6ccbfce374306ff277c7cb5b9b5f0de0c192942d998e8c618d38",
+    "answers/2024.md": "4b3c76bd052c45d987f96dad56fe918ad71822aae6d1fc2b44aa25405d5541f0",
     "assets/2024/writing-part-b-01.png": "89bc2aa905d127299312491dd831cf869b05fd865d33b30a7d11a405af4efe07",
     "assets/2024/writing-part-b-02.png": "ae1a3f2d4f28636e1ea28804e49bbbf87d072b9f402fa0290975704fc3494955",
     "assets/2024/writing-part-b-composite.png": "9ed41e8969f3fca040bad8762261b329a77f0e64ff4a64a91d85e6a2ae39dc21"
@@ -133,7 +133,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "B",
+              "correctAnswer": "D",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -170,7 +170,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "A",
+              "correctAnswer": "C",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -207,7 +207,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "D",
+              "correctAnswer": "B",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -244,7 +244,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "C",
+              "correctAnswer": "A",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -281,7 +281,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "A",
+              "correctAnswer": "B",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -318,7 +318,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "B",
+              "correctAnswer": "C",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -355,7 +355,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "C",
+              "correctAnswer": "A",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -466,7 +466,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "C",
+              "correctAnswer": "D",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -503,7 +503,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "B",
+              "correctAnswer": "A",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -540,7 +540,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "D",
+              "correctAnswer": "C",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -577,7 +577,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "A",
+              "correctAnswer": "C",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -614,7 +614,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "C",
+              "correctAnswer": "D",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -651,7 +651,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "B",
+              "correctAnswer": "C",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -688,7 +688,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "D",
+              "correctAnswer": "B",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -725,7 +725,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "A",
+              "correctAnswer": "D",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -762,7 +762,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "B",
+              "correctAnswer": "C",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -799,7 +799,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "C",
+              "correctAnswer": "B",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -836,7 +836,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "D",
+              "correctAnswer": "A",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -936,7 +936,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "A",
+              "correctAnswer": "D",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -972,7 +972,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "C",
+              "correctAnswer": "D",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -1008,7 +1008,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "D",
+              "correctAnswer": "A",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -1170,7 +1170,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "C",
+              "correctAnswer": "A",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -1278,7 +1278,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "A",
+              "correctAnswer": "C",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -1314,7 +1314,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "C",
+              "correctAnswer": "B",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -1440,7 +1440,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "D",
+              "correctAnswer": "C",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -1476,7 +1476,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "A",
+              "correctAnswer": "C",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -1512,7 +1512,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "C",
+              "correctAnswer": "D",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -1549,7 +1549,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "B",
+              "correctAnswer": "A",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -1639,7 +1639,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "D",
+              "correctAnswer": "A",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -1675,7 +1675,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "A",
+              "correctAnswer": "B",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -1711,7 +1711,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "C",
+              "correctAnswer": "A",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -1747,7 +1747,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "B",
+              "correctAnswer": "D",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -1783,7 +1783,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "D",
+              "correctAnswer": "B",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -1931,15 +1931,15 @@
                   }
                 ],
                 "finalOrder": [
-                  "C",
                   "E",
-                  "A",
+                  "C",
+                  "F",
                   "G",
                   "B"
                 ],
                 "redundantOptions": [
-                  "D",
-                  "F"
+                  "A",
+                  "D"
                 ],
                 "redundantCount": 2,
                 "allowRepeat": false
@@ -1983,7 +1983,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "C",
+              "correctAnswer": "E",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -2027,7 +2027,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "E",
+              "correctAnswer": "C",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -2071,7 +2071,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "A",
+              "correctAnswer": "F",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -2231,7 +2231,7 @@
               "prompt": "Translate sentence (46) into Chinese: \"Scholars have long recognized that theoretical breakthroughs in natural philosophy frequently originate from attempts to resolve concrete engineering dilemmas in everyday commerce.\"",
               "score": 2,
               "correctAnswer": null,
-              "answerSource": "unavailable",
+              "answerSource": "source-provided",
               "rubric": {
                 "maxScore": 2,
                 "dimensions": [
@@ -2248,7 +2248,8 @@
                     "description": "定语/状语从句语序调整自然，符合汉语习惯"
                   }
                 ],
-                "referenceSource": "unavailable"
+                "referenceText": "它们有时会跋涉六十多英里去寻找食物或水源，并且非常善于判断其他大象的位置——即使那些大象不在视线范围内。",
+                "referenceSource": "source-provided"
               },
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -2271,8 +2272,8 @@
                   "复合从句逻辑",
                   "后置定语顺译/逆译"
                 ],
-                "referenceTranslation": null,
-                "referenceSource": "unavailable"
+                "referenceTranslation": "它们有时会跋涉六十多英里去寻找食物或水源，并且非常善于判断其他大象的位置——即使那些大象不在视线范围内。",
+                "referenceSource": "source-provided"
               }
             },
             {
@@ -2282,7 +2283,7 @@
               "prompt": "Translate sentence (47) into Chinese: \"Early modern academies established systematic protocols for recording experimental observations, ensuring that claims could be independently scrutinized by international contemporaries.\"",
               "score": 2,
               "correctAnswer": null,
-              "answerSource": "unavailable",
+              "answerSource": "source-provided",
               "rubric": {
                 "maxScore": 2,
                 "dimensions": [
@@ -2299,7 +2300,8 @@
                     "description": "定语/状语从句语序调整自然，符合汉语习惯"
                   }
                 ],
-                "referenceSource": "unavailable"
+                "referenceText": "研究人员确信，大象总能精确地知道自己相对于所需全部资源的位置，因此既能走捷径，也能沿熟悉的路线行进。",
+                "referenceSource": "source-provided"
               },
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -2322,8 +2324,8 @@
                   "复合从句逻辑",
                   "后置定语顺译/逆译"
                 ],
-                "referenceTranslation": null,
-                "referenceSource": "unavailable"
+                "referenceTranslation": "研究人员确信，大象总能精确地知道自己相对于所需全部资源的位置，因此既能走捷径，也能沿熟悉的路线行进。",
+                "referenceSource": "source-provided"
               }
             },
             {
@@ -2333,7 +2335,7 @@
               "prompt": "Translate sentence (48) into Chinese: \"Technological advancement accelerated when mathematical analysis was applied directly to mechanical design, replacing craft intuition with quantifiable engineering principles.\"",
               "score": 2,
               "correctAnswer": null,
-              "answerSource": "unavailable",
+              "answerSource": "source-provided",
               "rubric": {
                 "maxScore": 2,
                 "dimensions": [
@@ -2350,7 +2352,8 @@
                     "description": "定语/状语从句语序调整自然，符合汉语习惯"
                   }
                 ],
-                "referenceSource": "unavailable"
+                "referenceText": "一种可能是它们仅仅依靠眼睛观察并试吃所发现的植物，但这很可能造成大量时间和精力的浪费，尤其是因为它们的视力其实并不好。",
+                "referenceSource": "source-provided"
               },
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -2373,8 +2376,8 @@
                   "复合从句逻辑",
                   "后置定语顺译/逆译"
                 ],
-                "referenceTranslation": null,
-                "referenceSource": "unavailable"
+                "referenceTranslation": "一种可能是它们仅仅依靠眼睛观察并试吃所发现的植物，但这很可能造成大量时间和精力的浪费，尤其是因为它们的视力其实并不好。",
+                "referenceSource": "source-provided"
               }
             },
             {
@@ -2384,7 +2387,7 @@
               "prompt": "Translate sentence (49) into Chinese: \"Governments recognized that sustaining national prosperity required continuous public investment in foundational scientific research that private enterprises could not profitably underwrite.\"",
               "score": 2,
               "correctAnswer": null,
-              "answerSource": "unavailable",
+              "answerSource": "source-provided",
               "rubric": {
                 "maxScore": 2,
                 "dimensions": [
@@ -2401,7 +2404,8 @@
                     "description": "定语/状语从句语序调整自然，符合汉语习惯"
                   }
                 ],
-                "referenceSource": "unavailable"
+                "referenceText": "植物产生的挥发性化学物质可以传播很远，而且极具特征性：每一种植物或树木都有其独特的气味“签名”。",
+                "referenceSource": "source-provided"
               },
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -2424,8 +2428,8 @@
                   "复合从句逻辑",
                   "后置定语顺译/逆译"
                 ],
-                "referenceTranslation": null,
-                "referenceSource": "unavailable"
+                "referenceTranslation": "植物产生的挥发性化学物质可以传播很远，而且极具特征性：每一种植物或树木都有其独特的气味“签名”。",
+                "referenceSource": "source-provided"
               }
             },
             {
@@ -2435,7 +2439,7 @@
               "prompt": "Translate sentence (50) into Chinese: \"In the contemporary era, the boundary between pure scientific inquiry and applied technological development has become increasingly permeable and collaborative.\"",
               "score": 2,
               "correctAnswer": null,
-              "answerSource": "unavailable",
+              "answerSource": "source-provided",
               "rubric": {
                 "maxScore": 2,
                 "dimensions": [
@@ -2452,7 +2456,8 @@
                     "description": "定语/状语从句语序调整自然，符合汉语习惯"
                   }
                 ],
-                "referenceSource": "unavailable"
+                "referenceText": "实验表明，大象很可能利用嗅觉来识别适合食用的树木区域，其次再评估每个区域内树木的品质。",
+                "referenceSource": "source-provided"
               },
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -2475,8 +2480,8 @@
                   "复合从句逻辑",
                   "后置定语顺译/逆译"
                 ],
-                "referenceTranslation": null,
-                "referenceSource": "unavailable"
+                "referenceTranslation": "实验表明，大象很可能利用嗅觉来识别适合食用的树木区域，其次再评估每个区域内树木的品质。",
+                "referenceSource": "source-provided"
               }
             }
           ]
@@ -2579,7 +2584,7 @@
               "prompt": "51. Directions: Write an announcement or letter of about 100 words based on the following situation:\nYou are organizing an academic symposium on intercultural communication for graduate students. Write a notice to inform participants about the symposium schedule, keynote themes, and registration requirements.\nYou should write about 100 words on ANSWER SHEET 2.\nDo not sign your own name at the end of the notice. Use \"Symposium Organizing Committee\" instead. (10 points)",
               "score": 10,
               "correctAnswer": null,
-              "answerSource": "unavailable",
+              "answerSource": "source-provided",
               "rubric": {
                 "maxScore": 10,
                 "dimensions": [
@@ -2602,7 +2607,8 @@
                     "description": "语法与词汇准确丰富"
                   }
                 ],
-                "referenceSource": "unavailable"
+                "referenceText": "Dear Paul,\nIt's really a pleasure for me to hear from you. Hearing that you are struggling with how to prepare for an oral report on an ancient Chinese scientist, I am writing this email to offer you some helpful suggestions.\nFirstly, you need to select a prominent ancient Chinese scientist, such as Zhang Heng or Shen Kuo, and then conduct in-depth research on their lives, contributions, and impact on science and technology. Secondly, you should utilize reliable sources such as books, academic articles, and journals to gather accurate and detailed information. Lastly, it is advisable to organize your research findings into an outline, highlighting key aspects of the scientist's life and work, including their significant discoveries, inventions, and theories.\nI hope you will find the information above practical. Feel free to contact me if you have any further questions.\nYours truly,\nLi Ming",
+                "referenceSource": "source-provided"
               },
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",
@@ -2745,7 +2751,7 @@
               "prompt": "52. Directions: Write an essay of 160–200 words based on the following drawing(s). In your essay, you should\n1) describe the drawing(s) briefly,\n2) interpret its intended meaning, and\n3) give your comments.\nYou should write neatly on ANSWER SHEET 2. (20 points)",
               "score": 20,
               "correctAnswer": null,
-              "answerSource": "unavailable",
+              "answerSource": "source-provided",
               "rubric": {
                 "maxScore": 20,
                 "dimensions": [
@@ -2768,7 +2774,8 @@
                     "description": "句式丰富、用词地道、衔接自然，评论切实可行"
                   }
                 ],
-                "referenceSource": "unavailable"
+                "referenceText": "As is vividly depicted in the drawing on the left side, several people are doing exercise in the sports zone reserved for citizens while a man praises that the newly built park is fantastic. Meanwhile, emerging from the bar chart on the right side is the fact that the number of parks in a certain city has constantly increased from 406 in 2020 to 670 in 2022. The drawing and the chart above are intended to imply that great accomplishments have been made in the construction of public sports facilities.\nWhy should this phenomenon take place? Generally, several factors may account for it. One of the contributing factors is that over the past four decades, the economy has been advancing at an unprecedented speed. With the tremendous improvement of living standards, people attach great importance to physical well-being and a healthy lifestyle, which produces greater demand for public sports facilities. Another potential cause is that many favorable policies have been implemented with the government's support, such as increasing investment in constructing sports facilities and parks.\nTo sum up, from the analysis above, we can draw a conclusion that residents' living environment has tremendously improved. It may be predicted that such a tendency will continue in the foreseeable future.",
+                "referenceSource": "source-provided"
               },
               "sourceLocator": {
                 "sourceFile": "papers/2024.md",

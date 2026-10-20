@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "buildTime": "2026-10-19T12:51:50.255Z",
+  "buildTime": "2026-10-20T11:15:37.144Z",
   "expectedYears": [
     2010,
     2011,
@@ -21,44 +21,42 @@
     2026
   ],
   "availableYears": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
     2024,
     2025,
     2026
   ],
-  "needsAnswerSourceYears": [
-    2010,
-    2011,
-    2012,
-    2013,
-    2014,
-    2015,
-    2016,
-    2017,
-    2018,
-    2019,
-    2020,
-    2021,
-    2022,
-    2023
-  ],
-  "failedYears": [
-    2010,
-    2011,
-    2012,
-    2013,
-    2014,
-    2015,
-    2016,
-    2017,
-    2018,
-    2019,
-    2020,
-    2021,
-    2022,
-    2023
-  ],
+  "needsAnswerSourceYears": [],
+  "failedYears": [],
   "pendingYears": [],
   "latestReadyVersion": {
+    "2010": "v1",
+    "2011": "v1",
+    "2012": "v1",
+    "2013": "v1",
+    "2014": "v1",
+    "2015": "v1",
+    "2016": "v1",
+    "2017": "v1",
+    "2018": "v1",
+    "2019": "v1",
+    "2020": "v1",
+    "2021": "v1",
+    "2022": "v1",
+    "2023": "v1",
     "2024": "v1",
     "2025": "v1",
     "2026": "v1"
@@ -255,20 +253,20 @@
     ]
   },
   "validationStatus": {
-    "2010": "needs-answer-source",
-    "2011": "needs-answer-source",
-    "2012": "needs-answer-source",
-    "2013": "needs-answer-source",
-    "2014": "needs-answer-source",
-    "2015": "needs-answer-source",
-    "2016": "needs-answer-source",
-    "2017": "needs-answer-source",
-    "2018": "needs-answer-source",
-    "2019": "needs-answer-source",
-    "2020": "needs-answer-source",
-    "2021": "needs-answer-source",
-    "2022": "needs-answer-source",
-    "2023": "needs-answer-source",
+    "2010": "ready",
+    "2011": "ready",
+    "2012": "ready",
+    "2013": "ready",
+    "2014": "ready",
+    "2015": "ready",
+    "2016": "ready",
+    "2017": "ready",
+    "2018": "ready",
+    "2019": "ready",
+    "2020": "ready",
+    "2021": "ready",
+    "2022": "ready",
+    "2023": "ready",
     "2024": "ready",
     "2025": "ready",
     "2026": "ready"
@@ -280,16 +278,16 @@
       "year": 2010,
       "subject": "考研英语一",
       "paperTitle": "2010年全国硕士研究生入学统一考试英语（一）试题",
-      "status": "needs-answer-source",
-      "answerSourceStatus": "unavailable",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
       "totalScore": 100,
       "durationMinutes": 180,
       "visualAssets": [
         "/assets/papers/2010/writing-part-b-01.png"
       ],
-      "objectiveCount": 0,
+      "objectiveCount": 45,
       "subjectiveCount": 7,
-      "latestReadyVersion": null,
+      "latestReadyVersion": "v1",
       "latestCandidateVersion": "v1",
       "availableVersions": [
         "v1"
@@ -305,28 +303,26 @@
         "practical-writing",
         "visual-writing"
       ],
-      "validationStatus": "needs-answer-source",
-      "errorCodes": [
-        "OBJECTIVE_ANSWER_MISSING"
-      ],
-      "missingObjectiveCount": 45,
-      "hasNewerCandidate": true,
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2011,
       "subject": "考研英语一",
       "paperTitle": "2011年全国硕士研究生入学统一考试英语（一）试题",
-      "status": "needs-answer-source",
-      "answerSourceStatus": "unavailable",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
       "totalScore": 100,
       "durationMinutes": 180,
       "visualAssets": [
         "/assets/papers/2011/writing-part-b-01.png"
       ],
-      "objectiveCount": 0,
+      "objectiveCount": 45,
       "subjectiveCount": 7,
-      "latestReadyVersion": null,
+      "latestReadyVersion": "v1",
       "latestCandidateVersion": "v1",
       "availableVersions": [
         "v1"
@@ -342,28 +338,26 @@
         "practical-writing",
         "visual-writing"
       ],
-      "validationStatus": "needs-answer-source",
-      "errorCodes": [
-        "OBJECTIVE_ANSWER_MISSING"
-      ],
-      "missingObjectiveCount": 45,
-      "hasNewerCandidate": true,
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2012,
       "subject": "考研英语一",
       "paperTitle": "2012年全国硕士研究生入学统一考试英语（一）试题",
-      "status": "needs-answer-source",
-      "answerSourceStatus": "unavailable",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
       "totalScore": 100,
       "durationMinutes": 180,
       "visualAssets": [
         "/assets/papers/2012/writing-part-b-01.png"
       ],
-      "objectiveCount": 0,
+      "objectiveCount": 45,
       "subjectiveCount": 7,
-      "latestReadyVersion": null,
+      "latestReadyVersion": "v1",
       "latestCandidateVersion": "v1",
       "availableVersions": [
         "v1"
@@ -379,28 +373,26 @@
         "practical-writing",
         "visual-writing"
       ],
-      "validationStatus": "needs-answer-source",
-      "errorCodes": [
-        "OBJECTIVE_ANSWER_MISSING"
-      ],
-      "missingObjectiveCount": 45,
-      "hasNewerCandidate": true,
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2013,
       "subject": "考研英语一",
       "paperTitle": "2013年全国硕士研究生入学统一考试英语（一）试题",
-      "status": "needs-answer-source",
-      "answerSourceStatus": "unavailable",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
       "totalScore": 100,
       "durationMinutes": 180,
       "visualAssets": [
         "/assets/papers/2013/writing-part-b-01.png"
       ],
-      "objectiveCount": 0,
+      "objectiveCount": 45,
       "subjectiveCount": 7,
-      "latestReadyVersion": null,
+      "latestReadyVersion": "v1",
       "latestCandidateVersion": "v1",
       "availableVersions": [
         "v1"
@@ -416,20 +408,18 @@
         "practical-writing",
         "visual-writing"
       ],
-      "validationStatus": "needs-answer-source",
-      "errorCodes": [
-        "OBJECTIVE_ANSWER_MISSING"
-      ],
-      "missingObjectiveCount": 45,
-      "hasNewerCandidate": true,
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2014,
       "subject": "考研英语一",
       "paperTitle": "2014年全国硕士研究生入学统一考试英语（一）试题",
-      "status": "needs-answer-source",
-      "answerSourceStatus": "unavailable",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
       "totalScore": 100,
       "durationMinutes": 180,
       "visualAssets": [
@@ -437,9 +427,9 @@
         "/assets/papers/2014/writing-part-b-02.png",
         "/assets/papers/2014/writing-part-b-composite.png"
       ],
-      "objectiveCount": 0,
+      "objectiveCount": 45,
       "subjectiveCount": 7,
-      "latestReadyVersion": null,
+      "latestReadyVersion": "v1",
       "latestCandidateVersion": "v1",
       "availableVersions": [
         "v1"
@@ -455,28 +445,26 @@
         "practical-writing",
         "visual-writing"
       ],
-      "validationStatus": "needs-answer-source",
-      "errorCodes": [
-        "OBJECTIVE_ANSWER_MISSING"
-      ],
-      "missingObjectiveCount": 45,
-      "hasNewerCandidate": true,
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2015,
       "subject": "考研英语一",
       "paperTitle": "2015年全国硕士研究生入学统一考试英语（一）试题",
-      "status": "needs-answer-source",
-      "answerSourceStatus": "unavailable",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
       "totalScore": 100,
       "durationMinutes": 180,
       "visualAssets": [
         "/assets/papers/2015/writing-part-b-01.png"
       ],
-      "objectiveCount": 0,
+      "objectiveCount": 45,
       "subjectiveCount": 7,
-      "latestReadyVersion": null,
+      "latestReadyVersion": "v1",
       "latestCandidateVersion": "v1",
       "availableVersions": [
         "v1"
@@ -492,20 +480,18 @@
         "practical-writing",
         "visual-writing"
       ],
-      "validationStatus": "needs-answer-source",
-      "errorCodes": [
-        "OBJECTIVE_ANSWER_MISSING"
-      ],
-      "missingObjectiveCount": 45,
-      "hasNewerCandidate": true,
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2016,
       "subject": "考研英语一",
       "paperTitle": "2016年全国硕士研究生入学统一考试英语（一）试题",
-      "status": "needs-answer-source",
-      "answerSourceStatus": "unavailable",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
       "totalScore": 100,
       "durationMinutes": 180,
       "visualAssets": [
@@ -513,9 +499,9 @@
         "/assets/papers/2016/writing-part-b-02.png",
         "/assets/papers/2016/writing-part-b-composite.png"
       ],
-      "objectiveCount": 0,
+      "objectiveCount": 45,
       "subjectiveCount": 7,
-      "latestReadyVersion": null,
+      "latestReadyVersion": "v1",
       "latestCandidateVersion": "v1",
       "availableVersions": [
         "v1"
@@ -531,20 +517,18 @@
         "practical-writing",
         "visual-writing"
       ],
-      "validationStatus": "needs-answer-source",
-      "errorCodes": [
-        "OBJECTIVE_ANSWER_MISSING"
-      ],
-      "missingObjectiveCount": 45,
-      "hasNewerCandidate": true,
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2017,
       "subject": "考研英语一",
       "paperTitle": "2017年全国硕士研究生入学统一考试英语（一）试题",
-      "status": "needs-answer-source",
-      "answerSourceStatus": "unavailable",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
       "totalScore": 100,
       "durationMinutes": 180,
       "visualAssets": [
@@ -552,9 +536,9 @@
         "/assets/papers/2017/writing-part-b-02.png",
         "/assets/papers/2017/writing-part-b-composite.png"
       ],
-      "objectiveCount": 0,
+      "objectiveCount": 45,
       "subjectiveCount": 7,
-      "latestReadyVersion": null,
+      "latestReadyVersion": "v1",
       "latestCandidateVersion": "v1",
       "availableVersions": [
         "v1"
@@ -570,28 +554,26 @@
         "practical-writing",
         "visual-writing"
       ],
-      "validationStatus": "needs-answer-source",
-      "errorCodes": [
-        "OBJECTIVE_ANSWER_MISSING"
-      ],
-      "missingObjectiveCount": 45,
-      "hasNewerCandidate": true,
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2018,
       "subject": "考研英语一",
       "paperTitle": "2018年全国硕士研究生入学统一考试英语（一）试题",
-      "status": "needs-answer-source",
-      "answerSourceStatus": "unavailable",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
       "totalScore": 100,
       "durationMinutes": 180,
       "visualAssets": [
         "/assets/papers/2018/writing-part-b-01.png"
       ],
-      "objectiveCount": 0,
+      "objectiveCount": 45,
       "subjectiveCount": 7,
-      "latestReadyVersion": null,
+      "latestReadyVersion": "v1",
       "latestCandidateVersion": "v1",
       "availableVersions": [
         "v1"
@@ -607,28 +589,26 @@
         "practical-writing",
         "visual-writing"
       ],
-      "validationStatus": "needs-answer-source",
-      "errorCodes": [
-        "OBJECTIVE_ANSWER_MISSING"
-      ],
-      "missingObjectiveCount": 45,
-      "hasNewerCandidate": true,
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2019,
       "subject": "考研英语一",
       "paperTitle": "2019年全国硕士研究生入学统一考试英语（一）试题",
-      "status": "needs-answer-source",
-      "answerSourceStatus": "unavailable",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
       "totalScore": 100,
       "durationMinutes": 180,
       "visualAssets": [
         "/assets/papers/2019/writing-part-b-01.png"
       ],
-      "objectiveCount": 0,
+      "objectiveCount": 45,
       "subjectiveCount": 7,
-      "latestReadyVersion": null,
+      "latestReadyVersion": "v1",
       "latestCandidateVersion": "v1",
       "availableVersions": [
         "v1"
@@ -644,20 +624,18 @@
         "practical-writing",
         "visual-writing"
       ],
-      "validationStatus": "needs-answer-source",
-      "errorCodes": [
-        "OBJECTIVE_ANSWER_MISSING"
-      ],
-      "missingObjectiveCount": 45,
-      "hasNewerCandidate": true,
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2020,
       "subject": "考研英语一",
       "paperTitle": "2020年全国硕士研究生入学统一考试英语（一）试题",
-      "status": "needs-answer-source",
-      "answerSourceStatus": "unavailable",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
       "totalScore": 100,
       "durationMinutes": 180,
       "visualAssets": [
@@ -665,9 +643,9 @@
         "/assets/papers/2020/writing-part-b-02.png",
         "/assets/papers/2020/writing-part-b-composite.png"
       ],
-      "objectiveCount": 0,
+      "objectiveCount": 45,
       "subjectiveCount": 7,
-      "latestReadyVersion": null,
+      "latestReadyVersion": "v1",
       "latestCandidateVersion": "v1",
       "availableVersions": [
         "v1"
@@ -683,28 +661,26 @@
         "practical-writing",
         "visual-writing"
       ],
-      "validationStatus": "needs-answer-source",
-      "errorCodes": [
-        "OBJECTIVE_ANSWER_MISSING"
-      ],
-      "missingObjectiveCount": 45,
-      "hasNewerCandidate": true,
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2021,
       "subject": "考研英语一",
       "paperTitle": "2021年全国硕士研究生入学统一考试英语（一）试题",
-      "status": "needs-answer-source",
-      "answerSourceStatus": "unavailable",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
       "totalScore": 100,
       "durationMinutes": 180,
       "visualAssets": [
         "/assets/papers/2021/writing-part-b-01.png"
       ],
-      "objectiveCount": 0,
+      "objectiveCount": 45,
       "subjectiveCount": 7,
-      "latestReadyVersion": null,
+      "latestReadyVersion": "v1",
       "latestCandidateVersion": "v1",
       "availableVersions": [
         "v1"
@@ -720,28 +696,26 @@
         "practical-writing",
         "visual-writing"
       ],
-      "validationStatus": "needs-answer-source",
-      "errorCodes": [
-        "OBJECTIVE_ANSWER_MISSING"
-      ],
-      "missingObjectiveCount": 45,
-      "hasNewerCandidate": true,
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2022,
       "subject": "考研英语一",
       "paperTitle": "2022年全国硕士研究生入学统一考试英语（一）试题",
-      "status": "needs-answer-source",
-      "answerSourceStatus": "unavailable",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
       "totalScore": 100,
       "durationMinutes": 180,
       "visualAssets": [
         "/assets/papers/2022/writing-part-b-01.png"
       ],
-      "objectiveCount": 0,
+      "objectiveCount": 45,
       "subjectiveCount": 7,
-      "latestReadyVersion": null,
+      "latestReadyVersion": "v1",
       "latestCandidateVersion": "v1",
       "availableVersions": [
         "v1"
@@ -757,28 +731,26 @@
         "practical-writing",
         "visual-writing"
       ],
-      "validationStatus": "needs-answer-source",
-      "errorCodes": [
-        "OBJECTIVE_ANSWER_MISSING"
-      ],
-      "missingObjectiveCount": 45,
-      "hasNewerCandidate": true,
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2023,
       "subject": "考研英语一",
       "paperTitle": "2023年全国硕士研究生入学统一考试英语（一）试题",
-      "status": "needs-answer-source",
-      "answerSourceStatus": "unavailable",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
       "totalScore": 100,
       "durationMinutes": 180,
       "visualAssets": [
         "/assets/papers/2023/writing-part-b-01.png"
       ],
-      "objectiveCount": 0,
+      "objectiveCount": 45,
       "subjectiveCount": 7,
-      "latestReadyVersion": null,
+      "latestReadyVersion": "v1",
       "latestCandidateVersion": "v1",
       "availableVersions": [
         "v1"
@@ -794,12 +766,10 @@
         "practical-writing",
         "visual-writing"
       ],
-      "validationStatus": "needs-answer-source",
-      "errorCodes": [
-        "OBJECTIVE_ANSWER_MISSING"
-      ],
-      "missingObjectiveCount": 45,
-      "hasNewerCandidate": true,
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {

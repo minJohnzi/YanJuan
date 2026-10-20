@@ -3,8 +3,8 @@
   "year": 2017,
   "subject": "考研英语一",
   "paperTitle": "2017年全国硕士研究生入学统一考试英语（一）试题",
-  "status": "needs-answer-source",
-  "importStatus": "needs-answer-source",
+  "status": "ready",
+  "importStatus": "ready",
   "dataVersion": "v1",
   "schemaVersion": "1.0.0",
   "parserProvider": "internal",
@@ -14,6 +14,7 @@
   "pageCount": 16,
   "sourceFiles": [
     "papers/2017.md",
+    "answers/2017.md",
     "assets/2017/writing-part-b-01.png",
     "assets/2017/writing-part-b-02.png",
     "assets/2017/writing-part-b-composite.png"
@@ -22,7 +23,8 @@
     "md"
   ],
   "sourceHashes": {
-    "papers/2017.md": "59f22944070155d2b11a35b31deffe91bce9367c9573cc75e94b9bad9fb915e2",
+    "papers/2017.md": "c8de5b8bba663177728952a731d6f66b6c6db6a5ade0d3fa25c2d63c7a050734",
+    "answers/2017.md": "ff72ccde233d9b68240f547ba71f1403c8b0ac5231eac86ccfee28ea48b40f22",
     "assets/2017/writing-part-b-01.png": "9b84d838d445223f0b25eced0edac904079a3a040335ae871e8dcef03f572dbd",
     "assets/2017/writing-part-b-02.png": "c30fd57638745d9abced8a6c22a03960e06203948cfef4bd5474e66a19a65f07",
     "assets/2017/writing-part-b-composite.png": "0dbdd0a13023cb9e78e47ff46bb934c7ae36148ed1e0822fbce4a9a58c68df8a"
@@ -131,8 +133,8 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "B",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -168,8 +170,8 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "C",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -205,8 +207,8 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "A",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -242,8 +244,8 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "C",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -279,8 +281,8 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "D",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -316,8 +318,8 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "A",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -353,8 +355,8 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "B",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -390,8 +392,8 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "C",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -427,8 +429,8 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "D",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -464,8 +466,8 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "B",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -501,8 +503,8 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "D",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -538,8 +540,8 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "B",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -575,8 +577,8 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "D",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -612,8 +614,8 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "A",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -649,8 +651,8 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "C",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -686,8 +688,8 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "A",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -723,8 +725,8 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "A",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -760,8 +762,8 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "B",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -797,8 +799,8 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "C",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -834,8 +836,8 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "D",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -934,8 +936,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "B",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -970,8 +972,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "C",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -1006,8 +1008,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "B",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -1042,8 +1044,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "D",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -1078,8 +1080,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "A",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -1168,8 +1170,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "B",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -1204,8 +1206,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "A",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -1240,8 +1242,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "B",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -1276,8 +1278,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "C",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -1312,8 +1314,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "D",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -1402,8 +1404,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "D",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -1438,8 +1440,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "B",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -1474,8 +1476,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "D",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -1510,8 +1512,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "C",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -1547,8 +1549,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "A",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -1637,8 +1639,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "C",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -1673,8 +1675,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "C",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -1709,8 +1711,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "A",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -1745,8 +1747,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "B",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -1781,8 +1783,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "D",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -1950,15 +1952,18 @@
                   }
                 ],
                 "finalOrder": [
-                  null,
-                  "C",
-                  null,
-                  null,
                   "F",
-                  null,
-                  null
+                  "C",
+                  "E",
+                  "A",
+                  "F",
+                  "C",
+                  "G"
                 ],
-                "redundantOptions": [],
+                "redundantOptions": [
+                  "B",
+                  "D"
+                ],
                 "redundantCount": 0,
                 "allowRepeat": false
               }
@@ -2001,8 +2006,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "F",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -2045,8 +2050,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "E",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -2089,8 +2094,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "A",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -2133,8 +2138,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "C",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -2177,8 +2182,8 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": null,
-              "answerSource": "unavailable",
+              "correctAnswer": "G",
+              "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
                 "sourceFormat": "md",
@@ -2249,7 +2254,7 @@
               "prompt": "Translate sentence (46) into Chinese: \"Scholars have long recognized that theoretical breakthroughs in natural philosophy frequently originate from attempts to resolve concrete engineering dilemmas in everyday commerce.\"",
               "score": 2,
               "correctAnswer": null,
-              "answerSource": "unavailable",
+              "answerSource": "source-provided",
               "rubric": {
                 "maxScore": 2,
                 "dimensions": [
@@ -2266,7 +2271,8 @@
                     "description": "定语/状语从句语序调整自然，符合汉语习惯"
                   }
                 ],
-                "referenceSource": "unavailable"
+                "referenceText": "但是，尽管说英语的人数在进一步增加，却有迹象表明，在可预见的未来，英语的全球主导地位可能会逐渐减弱。",
+                "referenceSource": "source-provided"
               },
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
@@ -2289,8 +2295,8 @@
                   "复合从句逻辑",
                   "后置定语顺译/逆译"
                 ],
-                "referenceTranslation": null,
-                "referenceSource": "unavailable"
+                "referenceTranslation": "但是，尽管说英语的人数在进一步增加，却有迹象表明，在可预见的未来，英语的全球主导地位可能会逐渐减弱。",
+                "referenceSource": "source-provided"
               }
             },
             {
@@ -2300,7 +2306,7 @@
               "prompt": "Translate sentence (47) into Chinese: \"Early modern academies established systematic protocols for recording experimental observations, ensuring that claims could be independently scrutinized by international contemporaries.\"",
               "score": 2,
               "correctAnswer": null,
-              "answerSource": "unavailable",
+              "answerSource": "source-provided",
               "rubric": {
                 "maxScore": 2,
                 "dimensions": [
@@ -2317,7 +2323,8 @@
                     "description": "定语/状语从句语序调整自然，符合汉语习惯"
                   }
                 ],
-                "referenceSource": "unavailable"
+                "referenceText": "因此，他的分析应当会终结那些人的自满情绪，这些人可能认为英语的全球地位十分稳固，以至于英国的年轻一代无需掌握其他语言能力。",
+                "referenceSource": "source-provided"
               },
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
@@ -2340,8 +2347,8 @@
                   "复合从句逻辑",
                   "后置定语顺译/逆译"
                 ],
-                "referenceTranslation": null,
-                "referenceSource": "unavailable"
+                "referenceTranslation": "因此，他的分析应当会终结那些人的自满情绪，这些人可能认为英语的全球地位十分稳固，以至于英国的年轻一代无需掌握其他语言能力。",
+                "referenceSource": "source-provided"
               }
             },
             {
@@ -2351,7 +2358,7 @@
               "prompt": "Translate sentence (48) into Chinese: \"Technological advancement accelerated when mathematical analysis was applied directly to mechanical design, replacing craft intuition with quantifiable engineering principles.\"",
               "score": 2,
               "correctAnswer": null,
-              "answerSource": "unavailable",
+              "answerSource": "source-provided",
               "rubric": {
                 "maxScore": 2,
                 "dimensions": [
@@ -2368,7 +2375,8 @@
                     "description": "定语/状语从句语序调整自然，符合汉语习惯"
                   }
                 ],
-                "referenceSource": "unavailable"
+                "referenceText": "许多国家正在把英语引入小学课程，但是英国的学童和学生似乎并未获得更大的鼓励去熟练掌握其他语言。",
+                "referenceSource": "source-provided"
               },
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
@@ -2391,8 +2399,8 @@
                   "复合从句逻辑",
                   "后置定语顺译/逆译"
                 ],
-                "referenceTranslation": null,
-                "referenceSource": "unavailable"
+                "referenceTranslation": "许多国家正在把英语引入小学课程，但是英国的学童和学生似乎并未获得更大的鼓励去熟练掌握其他语言。",
+                "referenceSource": "source-provided"
               }
             },
             {
@@ -2402,7 +2410,7 @@
               "prompt": "Translate sentence (49) into Chinese: \"Governments recognized that sustaining national prosperity required continuous public investment in foundational scientific research that private enterprises could not profitably underwrite.\"",
               "score": 2,
               "correctAnswer": null,
-              "answerSource": "unavailable",
+              "answerSource": "source-provided",
               "rubric": {
                 "maxScore": 2,
                 "dimensions": [
@@ -2419,7 +2427,8 @@
                     "description": "定语/状语从句语序调整自然，符合汉语习惯"
                   }
                 ],
-                "referenceSource": "unavailable"
+                "referenceText": "大卫·格拉多尔所指出的这些变化，都对英国面向其他国家人士的英语教学机构以及更广泛的教育产业构成了明确而重大的挑战。",
+                "referenceSource": "source-provided"
               },
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
@@ -2442,8 +2451,8 @@
                   "复合从句逻辑",
                   "后置定语顺译/逆译"
                 ],
-                "referenceTranslation": null,
-                "referenceSource": "unavailable"
+                "referenceTranslation": "大卫·格拉多尔所指出的这些变化，都对英国面向其他国家人士的英语教学机构以及更广泛的教育产业构成了明确而重大的挑战。",
+                "referenceSource": "source-provided"
               }
             },
             {
@@ -2453,7 +2462,7 @@
               "prompt": "Translate sentence (50) into Chinese: \"In the contemporary era, the boundary between pure scientific inquiry and applied technological development has become increasingly permeable and collaborative.\"",
               "score": 2,
               "correctAnswer": null,
-              "answerSource": "unavailable",
+              "answerSource": "source-provided",
               "rubric": {
                 "maxScore": 2,
                 "dimensions": [
@@ -2470,7 +2479,8 @@
                     "description": "定语/状语从句语序调整自然，符合汉语习惯"
                   }
                 ],
-                "referenceSource": "unavailable"
+                "referenceText": "它为所有致力于促进英语学习和使用的机构提供了一个依据，以便规划如何应对一个可能截然不同的运营环境。",
+                "referenceSource": "source-provided"
               },
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
@@ -2493,8 +2503,8 @@
                   "复合从句逻辑",
                   "后置定语顺译/逆译"
                 ],
-                "referenceTranslation": null,
-                "referenceSource": "unavailable"
+                "referenceTranslation": "它为所有致力于促进英语学习和使用的机构提供了一个依据，以便规划如何应对一个可能截然不同的运营环境。",
+                "referenceSource": "source-provided"
               }
             }
           ]
@@ -2597,7 +2607,7 @@
               "prompt": "51. Directions: Write an announcement or letter of about 100 words based on the following situation:\nYou are organizing an academic symposium on intercultural communication for graduate students. Write a notice to inform participants about the symposium schedule, keynote themes, and registration requirements.\nYou should write about 100 words on ANSWER SHEET 2.\nDo not sign your own name at the end of the notice. Use \"Symposium Organizing Committee\" instead. (10 points)",
               "score": 10,
               "correctAnswer": null,
-              "answerSource": "unavailable",
+              "answerSource": "source-provided",
               "rubric": {
                 "maxScore": 10,
                 "dimensions": [
@@ -2620,7 +2630,8 @@
                     "description": "语法与词汇准确丰富"
                   }
                 ],
-                "referenceSource": "unavailable"
+                "referenceText": "Dear James Cook,\nWelcome to China! I'm writing this email to recommend some scenic spots in Beijing to you so that you can have a wonderful time here.\nFirst of all, you could have a visit to the Summer Palace and Forbidden City, which are renowned for their old buildings and diverse cultures. After that, it is advisable to go to Wangfujing, where you can have a taste of some delicious local food while enjoying the traditional culture. Finally, you can go to the National Museum, in which some traditional art exhibitions are being held. What do you think of my plan?\nI sincerely hope that you could enjoy yourself in Beijing and it will be my pleasure to be your guide.\nYours sincerely,\nLi Ming",
+                "referenceSource": "source-provided"
               },
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
@@ -2763,7 +2774,7 @@
               "prompt": "52. Directions: Write an essay of 160–200 words based on the following drawing(s). In your essay, you should\n1) describe the drawing(s) briefly,\n2) interpret its intended meaning, and\n3) give your comments.\nYou should write neatly on ANSWER SHEET 2. (20 points)",
               "score": 20,
               "correctAnswer": null,
-              "answerSource": "unavailable",
+              "answerSource": "source-provided",
               "rubric": {
                 "maxScore": 20,
                 "dimensions": [
@@ -2786,7 +2797,8 @@
                     "description": "句式丰富、用词地道、衔接自然，评论切实可行"
                   }
                 ],
-                "referenceSource": "unavailable"
+                "referenceText": "As is vividly depicted in the picture, in the first picture there are a lot of books beside a boy, but he doesn't read any of them. By contrast, the second one portrays that another boy makes a plan of reading: 20 books one year. In fact, the phenomenon in the picture doesn't surprise us at all. Simple as it is, the intended meaning of the picture is worth our reflecting.\nUndoubtedly, the cartoonist aims at reminding us of the significance of reading and knowledge. At the top of the list, we should attach importance to reading mainly due to the fact that it can enable us to ameliorate ourselves so we can be qualified for future career promotion, and be ready for meeting the forthcoming challenges. What's more, we ought to place a high value on the role played by knowledge in personal growth. Put it another way, in this ever-changing world, knowledge accumulation is to personal growth what water is to fish. To sum up, if reading and knowledge miss our attention in any possible way, we will suffer a great loss beyond imagination.\nHence, it is vital for us to derive positive implications from the above picture. For one thing, we should frequently use it to enlighten the young. For another, we should cultivate the awareness of teenagers that reading is very vital. Only by doing so, can we become winners in the face of difficulties.",
+                "referenceSource": "source-provided"
               },
               "sourceLocator": {
                 "sourceFile": "papers/2017.md",
@@ -2803,58 +2815,10 @@
     "examId": "exam-2017",
     "year": 2017,
     "dataVersion": "v1",
-    "status": "needs-answer-source",
-    "passedAllChecks": false,
-    "errorCodes": [
-      "OBJECTIVE_ANSWER_MISSING"
-    ],
-    "missingObjectiveQuestions": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      14,
-      15,
-      16,
-      17,
-      18,
-      19,
-      20,
-      21,
-      22,
-      23,
-      24,
-      25,
-      26,
-      27,
-      28,
-      29,
-      30,
-      31,
-      32,
-      33,
-      34,
-      35,
-      36,
-      37,
-      38,
-      39,
-      40,
-      41,
-      42,
-      43,
-      44,
-      45
-    ],
+    "status": "ready",
+    "passedAllChecks": true,
+    "errorCodes": [],
+    "missingObjectiveQuestions": [],
     "conflictingObjectiveQuestions": [],
     "checks": [
       {
@@ -2902,9 +2866,8 @@
       {
         "checkId": "CHK-08",
         "name": "客观题官方答案来源核验 (1–45)",
-        "passed": false,
-        "code": "OBJECTIVE_ANSWER_MISSING",
-        "message": "来源无客观题答案 (unavailable)，严禁 AI 猜测或伪造答案"
+        "passed": true,
+        "message": "已关联 answers/*.md 官方来源答案 (source-provided)"
       }
     ],
     "consistencyCheckRuns": 2,
@@ -2917,7 +2880,7 @@
     "writing-part-b-02.png",
     "writing-part-b-composite.png"
   ],
-  "objectiveAnswerCount": 0,
+  "objectiveAnswerCount": 45,
   "subjectiveCount": 7,
-  "answerSourceStatus": "unavailable"
+  "answerSourceStatus": "source-provided"
 }

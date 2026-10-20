@@ -838,8 +838,8 @@ export default function App() {
             className="flex items-center gap-2 text-left shrink-0 group py-1"
           >
             {/* Minimalist square seal / stamp icon */}
-            <div className="w-7 h-7 rounded-sm bg-[#174A5B] dark:bg-[#245D72] flex items-center justify-center text-[#FBFAF6] shadow-2xs shrink-0">
-              <span className="font-serif font-bold text-xs tracking-tighter">研</span>
+            <div className="w-7 h-7 rounded-sm bg-[#174A5B] dark:bg-[#245D72] flex items-center justify-center text-[#FBFAF6] shadow-2xs shrink-0 select-none">
+              <span className="font-bold font-sans text-xs">研</span>
             </div>
             <div className="flex items-baseline gap-1.5 min-w-0">
               <span className="text-base font-bold tracking-tight text-[#202B2F] dark:text-[#E2E8E6] group-hover:text-[#174A5B] dark:group-hover:text-[#56AEC8] transition-colors truncate">

@@ -1,56 +1,87 @@
-# Dependencies
+# ============================================================================
+# 1. Dependencies & Package Managers
+# ============================================================================
 node_modules/
 .pnpm-store/
 .yarn/
 .bun/
+.npm/
+.pnp.*
 
-# Build outputs
+# ============================================================================
+# 2. Build & Compiler Outputs
+# ============================================================================
 dist/
+dist-ssr/
 build/
 out/
+server.js
 .vite/
 .cache/
 .esbuild/
+.parcel-cache/
+.turbo/
 *.tsbuildinfo
 
-# Test outputs
+# ============================================================================
+# 3. Test, Coverage & Browser Automation Artifacts
+# ============================================================================
 coverage/
 .nyc_output/
 playwright-report/
 test-results/
 blob-report/
+playwright/.cache/
+screenshots/
+audit-screenshots/
+*.har
+*.webm
 
-# Environment variables and secrets
+# ============================================================================
+# 4. Environment Variables & Local Secrets
+# ============================================================================
 .env
 .env.*
 !.env.example
 *.local
 
-# Logs
-logs/
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-bun-debug.log*
+# ============================================================================
+# 5. Credentials, Private Keys & Cloud Service Accounts
+# ============================================================================
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.csr
+service-account*.json
+firebase-adminsdk*.json
+credentials*.json
+secrets*.json
+google-services.json
+GoogleService-Info.plist
+firebase-applet-config.json
+firebase_applet_config.xml
 
-# Google AI Studio temporary artifacts
-.aistudio/artifacts/
-.aistudio/**/.tempmediaStorage/
-.aistudio/**/*.tmp
-.aistudio/**/*.temp
-.aistudio/**/*.log
+# ============================================================================
+# 6. Platform & Workspace Temporary Artifacts
+# ============================================================================
+.aistudio/
 
-# Firebase local files
+# ============================================================================
+# 7. Firebase CLI & Local Emulators
+# ============================================================================
 .firebase/
 firebase-debug.log*
 firestore-debug.log*
 ui-debug.log*
+pubsub-debug.log*
 firebase-export-*/
 firebase-emulator-data/
 
-# Original import packages
+# ============================================================================
+# 8. Raw Import Archives (Keep parsed data/ and public/data/ tracked)
+# ============================================================================
 inputs/*.zip
 inputs/*.7z
 inputs/*.rar
@@ -60,7 +91,22 @@ inputs/*.pdf
 inputs/*.doc
 inputs/*.docx
 
-# Temporary files
+# ============================================================================
+# 9. Logs & Diagnostic Reports
+# ============================================================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+bun-debug.log*
+lerna-debug.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# ============================================================================
+# 10. Temporary, Scratch & Backup Files
+# ============================================================================
 tmp/
 temp/
 .tmp/
@@ -71,35 +117,16 @@ scratch/
 *.bak
 *.swp
 *.swo
+*~
+*.backup.zip
+*.export.zip
+*.tgz
+reports/local/
+reports/tmp/
 
-# IDE files
-.vscode/*
-!.vscode/extensions.json
-!.vscode/settings.example.json
-.idea/
-*.code-workspace
-
-# Operating system files
-.DS_Store
-.AppleDouble
-.LSOverride
-Thumbs.db
-Desktop.ini
-$RECYCLE.BIN/
-.Spotlight-V100/
-.Trashes/
-
-# Credentials
-*.pem
-*.key
-*.p12
-*.pfx
-service-account*.json
-firebase-adminsdk*.json
-credentials*.json
-secrets*.json
-
-# Local databases
+# ============================================================================
+# 11. Local Databases
+# ============================================================================
 *.sqlite
 *.sqlite3
 *.db
@@ -107,9 +134,34 @@ secrets*.json
 *.db-shm
 *.db-wal
 
-# Generated archives and local reports
-*.backup.zip
-*.export.zip
-*.tgz
-reports/local/
-reports/tmp/
+# ============================================================================
+# 12. IDE & Editor Configurations
+# ============================================================================
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.example.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.code-workspace
+.fleet/
+.cursor/
+.windsurf/
+
+# ============================================================================
+# 13. Operating System Files
+# ============================================================================
+.DS_Store
+.DS_Store?
+._*
+.AppleDouble
+.LSOverride
+.Spotlight-V100/
+.Trashes/
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/

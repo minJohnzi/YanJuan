@@ -30,11 +30,6 @@
   "unresolved_issue_count": 0,
   "answersBreakdown": {
     "sourceProvided": [
-      2024,
-      2025,
-      2026
-    ],
-    "unavailable": [
       2010,
       2011,
       2012,
@@ -48,8 +43,12 @@
       2020,
       2021,
       2022,
-      2023
+      2023,
+      2024,
+      2025,
+      2026
     ],
+    "unavailable": [],
     "inferredOrGuessed": []
   },
   "years": [
@@ -62,8 +61,8 @@
       "question_count": 52,
       "question_range": "1-52",
       "part_b_type": "paragraph-insertion",
-      "answer_status": "unavailable",
-      "answer_file": null,
+      "answer_status": "source-provided",
+      "answer_file": "answers/2010.md",
       "visual_assets_count": 1,
       "visual_assets": [
         "assets/2010/writing-part-b-01.png"
@@ -81,8 +80,8 @@
       "question_count": 52,
       "question_range": "1-52",
       "part_b_type": "paragraph-ordering",
-      "answer_status": "unavailable",
-      "answer_file": null,
+      "answer_status": "source-provided",
+      "answer_file": "answers/2011.md",
       "visual_assets_count": 1,
       "visual_assets": [
         "assets/2011/writing-part-b-01.png"
@@ -100,8 +99,8 @@
       "question_count": 52,
       "question_range": "1-52",
       "part_b_type": "paragraph-insertion",
-      "answer_status": "unavailable",
-      "answer_file": null,
+      "answer_status": "source-provided",
+      "answer_file": "answers/2012.md",
       "visual_assets_count": 1,
       "visual_assets": [
         "assets/2012/writing-part-b-01.png"
@@ -119,8 +118,8 @@
       "question_count": 52,
       "question_range": "1-52",
       "part_b_type": "paragraph-insertion",
-      "answer_status": "unavailable",
-      "answer_file": null,
+      "answer_status": "source-provided",
+      "answer_file": "answers/2013.md",
       "visual_assets_count": 1,
       "visual_assets": [
         "assets/2013/writing-part-b-01.png"
@@ -138,8 +137,8 @@
       "question_count": 52,
       "question_range": "1-52",
       "part_b_type": "paragraph-ordering",
-      "answer_status": "unavailable",
-      "answer_file": null,
+      "answer_status": "source-provided",
+      "answer_file": "answers/2014.md",
       "visual_assets_count": 3,
       "visual_assets": [
         "assets/2014/writing-part-b-01.png",
@@ -159,8 +158,8 @@
       "question_count": 52,
       "question_range": "1-52",
       "part_b_type": "paragraph-insertion",
-      "answer_status": "unavailable",
-      "answer_file": null,
+      "answer_status": "source-provided",
+      "answer_file": "answers/2015.md",
       "visual_assets_count": 1,
       "visual_assets": [
         "assets/2015/writing-part-b-01.png"
@@ -178,8 +177,8 @@
       "question_count": 52,
       "question_range": "1-52",
       "part_b_type": "heading-matching",
-      "answer_status": "unavailable",
-      "answer_file": null,
+      "answer_status": "source-provided",
+      "answer_file": "answers/2016.md",
       "visual_assets_count": 3,
       "visual_assets": [
         "assets/2016/writing-part-b-01.png",
@@ -199,8 +198,8 @@
       "question_count": 52,
       "question_range": "1-52",
       "part_b_type": "paragraph-ordering",
-      "answer_status": "unavailable",
-      "answer_file": null,
+      "answer_status": "source-provided",
+      "answer_file": "answers/2017.md",
       "visual_assets_count": 3,
       "visual_assets": [
         "assets/2017/writing-part-b-01.png",
@@ -220,8 +219,8 @@
       "question_count": 52,
       "question_range": "1-52",
       "part_b_type": "paragraph-ordering",
-      "answer_status": "unavailable",
-      "answer_file": null,
+      "answer_status": "source-provided",
+      "answer_file": "answers/2018.md",
       "visual_assets_count": 1,
       "visual_assets": [
         "assets/2018/writing-part-b-01.png"
@@ -239,8 +238,8 @@
       "question_count": 52,
       "question_range": "1-52",
       "part_b_type": "paragraph-ordering",
-      "answer_status": "unavailable",
-      "answer_file": null,
+      "answer_status": "source-provided",
+      "answer_file": "answers/2019.md",
       "visual_assets_count": 1,
       "visual_assets": [
         "assets/2019/writing-part-b-01.png"
@@ -258,8 +257,8 @@
       "question_count": 52,
       "question_range": "1-52",
       "part_b_type": "heading-matching",
-      "answer_status": "unavailable",
-      "answer_file": null,
+      "answer_status": "source-provided",
+      "answer_file": "answers/2020.md",
       "visual_assets_count": 3,
       "visual_assets": [
         "assets/2020/writing-part-b-01.png",
@@ -279,8 +278,8 @@
       "question_count": 52,
       "question_range": "1-52",
       "part_b_type": "paragraph-insertion",
-      "answer_status": "unavailable",
-      "answer_file": null,
+      "answer_status": "source-provided",
+      "answer_file": "answers/2021.md",
       "visual_assets_count": 1,
       "visual_assets": [
         "assets/2021/writing-part-b-01.png"
@@ -298,8 +297,8 @@
       "question_count": 52,
       "question_range": "1-52",
       "part_b_type": "paragraph-ordering",
-      "answer_status": "unavailable",
-      "answer_file": null,
+      "answer_status": "source-provided",
+      "answer_file": "answers/2022.md",
       "visual_assets_count": 1,
       "visual_assets": [
         "assets/2022/writing-part-b-01.png"
@@ -317,8 +316,8 @@
       "question_count": 52,
       "question_range": "1-52",
       "part_b_type": "paragraph-ordering",
-      "answer_status": "unavailable",
-      "answer_file": null,
+      "answer_status": "source-provided",
+      "answer_file": "answers/2023.md",
       "visual_assets_count": 1,
       "visual_assets": [
         "assets/2023/writing-part-b-01.png"

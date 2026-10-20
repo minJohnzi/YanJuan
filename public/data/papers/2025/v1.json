@@ -22,7 +22,7 @@
   ],
   "sourceHashes": {
     "papers/2025.md": "d2316443d9c8ec391e019e3b2a7dd2dfa790ea19d7914c837cdd01e3dc45744d",
-    "answers/2025.md": "c18aa05256e3502a05a692a2c771e6d5e509bd5c4f94ef42ad3f2d8cd243e40d",
+    "answers/2025.md": "efc7445a744aeee3a38274f6487d9debec4a22e6af207d448a0f3babe73cd221",
     "assets/2025/writing-part-b-01.png": "2da3fea9874e953e0b3be7c66d168b51bb5fa4e2b3881df027cdb1f264cab4d4"
   },
   "createdAt": "2026-10-19T11:30:00.000Z",
@@ -129,7 +129,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "C",
+              "correctAnswer": "B",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -166,7 +166,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "A",
+              "correctAnswer": "C",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -240,7 +240,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "D",
+              "correctAnswer": "C",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -314,7 +314,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "C",
+              "correctAnswer": "A",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -351,7 +351,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "A",
+              "correctAnswer": "D",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -388,7 +388,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "D",
+              "correctAnswer": "A",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -425,7 +425,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "C",
+              "correctAnswer": "A",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -462,7 +462,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "A",
+              "correctAnswer": "D",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -536,7 +536,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "B",
+              "correctAnswer": "A",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -573,7 +573,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "C",
+              "correctAnswer": "D",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -610,7 +610,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "A",
+              "correctAnswer": "C",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -684,7 +684,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "B",
+              "correctAnswer": "C",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -721,7 +721,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "C",
+              "correctAnswer": "B",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -758,7 +758,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "A",
+              "correctAnswer": "B",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -795,7 +795,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "D",
+              "correctAnswer": "B",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -832,7 +832,7 @@
                 }
               ],
               "score": 0.5,
-              "correctAnswer": "B",
+              "correctAnswer": "A",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -932,7 +932,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "B",
+              "correctAnswer": "C",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -968,7 +968,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "D",
+              "correctAnswer": "A",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -1040,7 +1040,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "C",
+              "correctAnswer": "B",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -1076,7 +1076,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "B",
+              "correctAnswer": "A",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -1166,7 +1166,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "D",
+              "correctAnswer": "B",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -1202,7 +1202,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "A",
+              "correctAnswer": "D",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -1274,7 +1274,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "B",
+              "correctAnswer": "A",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -1310,7 +1310,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "D",
+              "correctAnswer": "C",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -1400,7 +1400,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "A",
+              "correctAnswer": "D",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -1436,7 +1436,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "C",
+              "correctAnswer": "A",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -1472,7 +1472,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "B",
+              "correctAnswer": "A",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -1508,7 +1508,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "D",
+              "correctAnswer": "C",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -1545,7 +1545,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "A",
+              "correctAnswer": "D",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -1707,7 +1707,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "D",
+              "correctAnswer": "B",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -1743,7 +1743,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "A",
+              "correctAnswer": "C",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -1779,7 +1779,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "C",
+              "correctAnswer": "D",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -1927,15 +1927,15 @@
                   }
                 ],
                 "finalOrder": [
-                  "B",
                   "D",
-                  "F",
-                  "A",
-                  "E"
+                  "G",
+                  "B",
+                  "E",
+                  "F"
                 ],
                 "redundantOptions": [
-                  "C",
-                  "G"
+                  "A",
+                  "C"
                 ],
                 "redundantCount": 2,
                 "allowRepeat": false
@@ -1979,7 +1979,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "B",
+              "correctAnswer": "D",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -2023,7 +2023,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "D",
+              "correctAnswer": "G",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -2067,7 +2067,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "F",
+              "correctAnswer": "B",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -2111,7 +2111,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "A",
+              "correctAnswer": "E",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -2155,7 +2155,7 @@
                 }
               ],
               "score": 2,
-              "correctAnswer": "E",
+              "correctAnswer": "F",
               "answerSource": "source-provided",
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -2227,7 +2227,7 @@
               "prompt": "Translate sentence (46) into Chinese: \"Scholars have long recognized that theoretical breakthroughs in natural philosophy frequently originate from attempts to resolve concrete engineering dilemmas in everyday commerce.\"",
               "score": 2,
               "correctAnswer": null,
-              "answerSource": "unavailable",
+              "answerSource": "source-provided",
               "rubric": {
                 "maxScore": 2,
                 "dimensions": [
@@ -2244,7 +2244,8 @@
                     "description": "定语/状语从句语序调整自然，符合汉语习惯"
                   }
                 ],
-                "referenceSource": "unavailable"
+                "referenceText": "近几十年来，科学已进入一种惯例：人们只能通过大学等机构参与这一学科。",
+                "referenceSource": "source-provided"
               },
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -2267,8 +2268,8 @@
                   "复合从句逻辑",
                   "后置定语顺译/逆译"
                 ],
-                "referenceTranslation": null,
-                "referenceSource": "unavailable"
+                "referenceTranslation": "近几十年来，科学已进入一种惯例：人们只能通过大学等机构参与这一学科。",
+                "referenceSource": "source-provided"
               }
             },
             {
@@ -2278,7 +2279,7 @@
               "prompt": "Translate sentence (47) into Chinese: \"Early modern academies established systematic protocols for recording experimental observations, ensuring that claims could be independently scrutinized by international contemporaries.\"",
               "score": 2,
               "correctAnswer": null,
-              "answerSource": "unavailable",
+              "answerSource": "source-provided",
               "rubric": {
                 "maxScore": 2,
                 "dimensions": [
@@ -2295,7 +2296,8 @@
                     "description": "定语/状语从句语序调整自然，符合汉语习惯"
                   }
                 ],
-                "referenceSource": "unavailable"
+                "referenceText": "但通过利用公众与生俱来的好奇心，让非科学家直接参与研究过程，就有可能克服其中许多挑战。",
+                "referenceSource": "source-provided"
               },
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -2318,8 +2320,8 @@
                   "复合从句逻辑",
                   "后置定语顺译/逆译"
                 ],
-                "referenceTranslation": null,
-                "referenceSource": "unavailable"
+                "referenceTranslation": "但通过利用公众与生俱来的好奇心，让非科学家直接参与研究过程，就有可能克服其中许多挑战。",
+                "referenceSource": "source-provided"
               }
             },
             {
@@ -2329,7 +2331,7 @@
               "prompt": "Translate sentence (48) into Chinese: \"Technological advancement accelerated when mathematical analysis was applied directly to mechanical design, replacing craft intuition with quantifiable engineering principles.\"",
               "score": 2,
               "correctAnswer": null,
-              "answerSource": "unavailable",
+              "answerSource": "source-provided",
               "rubric": {
                 "maxScore": 2,
                 "dimensions": [
@@ -2346,7 +2348,8 @@
                     "description": "定语/状语从句语序调整自然，符合汉语习惯"
                   }
                 ],
-                "referenceSource": "unavailable"
+                "referenceText": "科学家们采用了多种方式让公众参与他们的研究，例如把数据分析做成在线游戏，或把样本采集做成智能手机应用程序。",
+                "referenceSource": "source-provided"
               },
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -2369,8 +2372,8 @@
                   "复合从句逻辑",
                   "后置定语顺译/逆译"
                 ],
-                "referenceTranslation": null,
-                "referenceSource": "unavailable"
+                "referenceTranslation": "科学家们采用了多种方式让公众参与他们的研究，例如把数据分析做成在线游戏，或把样本采集做成智能手机应用程序。",
+                "referenceSource": "source-provided"
               }
             },
             {
@@ -2380,7 +2383,7 @@
               "prompt": "Translate sentence (49) into Chinese: \"Governments recognized that sustaining national prosperity required continuous public investment in foundational scientific research that private enterprises could not profitably underwrite.\"",
               "score": 2,
               "correctAnswer": null,
-              "answerSource": "unavailable",
+              "answerSource": "source-provided",
               "rubric": {
                 "maxScore": 2,
                 "dimensions": [
@@ -2397,7 +2400,8 @@
                     "description": "定语/状语从句语序调整自然，符合汉语习惯"
                   }
                 ],
-                "referenceSource": "unavailable"
+                "referenceText": "这些群体是一场迅速发展的生物技术社会运动的一部分，该运动由公民科学家和职业科学家组成，他们力图将发现从机构中解放出来，交到任何有热情的人手中。",
+                "referenceSource": "source-provided"
               },
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -2420,8 +2424,8 @@
                   "复合从句逻辑",
                   "后置定语顺译/逆译"
                 ],
-                "referenceTranslation": null,
-                "referenceSource": "unavailable"
+                "referenceTranslation": "这些群体是一场迅速发展的生物技术社会运动的一部分，该运动由公民科学家和职业科学家组成，他们力图将发现从机构中解放出来，交到任何有热情的人手中。",
+                "referenceSource": "source-provided"
               }
             },
             {
@@ -2431,7 +2435,7 @@
               "prompt": "Translate sentence (50) into Chinese: \"In the contemporary era, the boundary between pure scientific inquiry and applied technological development has become increasingly permeable and collaborative.\"",
               "score": 2,
               "correctAnswer": null,
-              "answerSource": "unavailable",
+              "answerSource": "source-provided",
               "rubric": {
                 "maxScore": 2,
                 "dimensions": [
@@ -2448,7 +2452,8 @@
                     "description": "定语/状语从句语序调整自然，符合汉语习惯"
                   }
                 ],
-                "referenceSource": "unavailable"
+                "referenceText": "他们汇集资源、开展合作、跳出思维定势，并寻找解决方案和绕过障碍的方法，以便纯粹为了科学而探索科学，不受在正规环境中工作的传统界限的束缚。",
+                "referenceSource": "source-provided"
               },
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -2471,8 +2476,8 @@
                   "复合从句逻辑",
                   "后置定语顺译/逆译"
                 ],
-                "referenceTranslation": null,
-                "referenceSource": "unavailable"
+                "referenceTranslation": "他们汇集资源、开展合作、跳出思维定势，并寻找解决方案和绕过障碍的方法，以便纯粹为了科学而探索科学，不受在正规环境中工作的传统界限的束缚。",
+                "referenceSource": "source-provided"
               }
             }
           ]
@@ -2575,7 +2580,7 @@
               "prompt": "51. Directions: Write an announcement or letter of about 100 words based on the following situation:\nYou are organizing an academic symposium on intercultural communication for graduate students. Write a notice to inform participants about the symposium schedule, keynote themes, and registration requirements.\nYou should write about 100 words on ANSWER SHEET 2.\nDo not sign your own name at the end of the notice. Use \"Symposium Organizing Committee\" instead. (10 points)",
               "score": 10,
               "correctAnswer": null,
-              "answerSource": "unavailable",
+              "answerSource": "source-provided",
               "rubric": {
                 "maxScore": 10,
                 "dimensions": [
@@ -2598,7 +2603,8 @@
                     "description": "语法与词汇准确丰富"
                   }
                 ],
-                "referenceSource": "unavailable"
+                "referenceText": "Dear Paul,\nI'm glad you're interested in the craft-making event! The young craftsmen will demonstrate innovative techniques like 3D-printed pottery and traditional bamboo weaving. It's going to be a fantastic showcase of creativity.\nI'd really appreciate your help with the preparation. Could you please design a poster to promote the event on campus? Also, helping me arrange the exhibition tables on Friday afternoon would be a huge help.\nThanks so much for your support!\nYours,\nLi Ming",
+                "referenceSource": "source-provided"
               },
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
@@ -2689,7 +2695,7 @@
               "prompt": "52. Directions: Write an essay of 160–200 words based on the following drawing(s). In your essay, you should\n1) describe the drawing(s) briefly,\n2) interpret its intended meaning, and\n3) give your comments.\nYou should write neatly on ANSWER SHEET 2. (20 points)",
               "score": 20,
               "correctAnswer": null,
-              "answerSource": "unavailable",
+              "answerSource": "source-provided",
               "rubric": {
                 "maxScore": 20,
                 "dimensions": [
@@ -2712,7 +2718,8 @@
                     "description": "句式丰富、用词地道、衔接自然，评论切实可行"
                   }
                 ],
-                "referenceSource": "unavailable"
+                "referenceText": "As shown in the table, the number of air-conditioners per 100 households grew rapidly from 2014 to 2023, representing the fastest-growing appliance compared to the other two categories. The ownership of washing machines steadily increased over these years, from 83.7 to 98.2. Meanwhile, the growth pace and ownership of refrigerators lay between the former two appliances, rising from 85.5 to 103.4.\nEvidently, this table illustrates the remarkable improvement of Chinese residents' living standards. On the one hand, it is the advancement of technologies in the manufacturing industries that enables prices to decrease while quality improves, so more and more families can afford to equip their homes with multiple appliances. On the other hand, with steady urbanization and rising disposable incomes, modern households attach greater importance to comfort and convenience in daily life.\nWhat about the future trends? I am confident that the above statistical figures accurately reflect the upgrading of household consumption in China, and smart, energy-efficient appliances will become increasingly popular in the following decades.",
+                "referenceSource": "source-provided"
               },
               "sourceLocator": {
                 "sourceFile": "papers/2025.md",
