@@ -125,8 +125,10 @@ reports/local/
 reports/tmp/
 
 # ============================================================================
-# 11. Local Databases
+# 11. Local Databases & Runtime Persistent State
 # ============================================================================
+data/runtime/
+.playwright-cli/
 *.sqlite
 *.sqlite3
 *.db

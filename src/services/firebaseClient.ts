@@ -1,160 +1,121 @@
-import { FirebaseApp, initializeApp } from 'firebase/app';
+import { type FirebaseApp, getApps, initializeApp } from 'firebase/app';
 import {
-  Auth,
+  type Auth,
   GoogleAuthProvider,
-  User,
+  type User,
   getAuth,
   onAuthStateChanged,
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
 import {
-  Firestore,
+  type Firestore,
   doc,
-  getDocFromServer,
   getFirestore,
   setDoc,
 } from 'firebase/firestore';
 
-export enum OperationType {
-  CREATE = 'create',
-  UPDATE = 'update',
-  DELETE = 'delete',
-  LIST = 'list',
-  GET = 'get',
-  WRITE = 'write',
-}
+const apiKey = import.meta.env.VITE_FIREBASE_API_KEY?.trim();
+const authDomain = import.meta.env.VITE_FIREBASE_AUTH_DOMAIN?.trim();
+const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID?.trim();
+const appId = import.meta.env.VITE_FIREBASE_APP_ID?.trim();
 
-export interface FirestoreErrorInfo {
-  error: string;
-  operationType: OperationType;
-  path: string | null;
-  authInfo: {
-    userId?: string | null;
-    email?: string | null;
-    emailVerified?: boolean | null;
-    isAnonymous?: boolean | null;
-    tenantId?: string | null;
-    providerInfo?: {
-      providerId?: string | null;
-      email?: string | null;
-    }[];
-  };
-}
+export const isFirebaseConfigured = Boolean(apiKey && authDomain && projectId);
 
-const env = (import.meta as any).env || {};
-
-const firebaseConfig = {
-  apiKey: env.VITE_FIREBASE_API_KEY || '',
-  authDomain: env.VITE_FIREBASE_AUTH_DOMAIN || '',
-  projectId: env.VITE_FIREBASE_PROJECT_ID || '',
-  storageBucket: env.VITE_FIREBASE_STORAGE_BUCKET || '',
-  messagingSenderId: env.VITE_FIREBASE_MESSAGING_SENDER_ID || '',
-  appId: env.VITE_FIREBASE_APP_ID || '',
-  firestoreDatabaseId: env.VITE_FIREBASE_DATABASE_ID || '(default)',
-};
-
-export const isFirebaseConfigured: boolean = Boolean(
-  firebaseConfig.apiKey &&
-    firebaseConfig.projectId &&
-    firebaseConfig.appId &&
-    !firebaseConfig.apiKey.includes('PLACEHOLDER')
-);
-
-let app: FirebaseApp | null = null;
-export let auth: Auth | null = null;
-export let db: Firestore | null = null;
+let firebaseApp: FirebaseApp | null = null;
+let firebaseAuth: Auth | null = null;
+let firestoreDb: Firestore | null = null;
 
 if (isFirebaseConfigured) {
   try {
-    app = initializeApp(firebaseConfig);
-    auth = getAuth(app);
-    db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
-    // Test connection on boot when configured
-    void testFirestoreConnection();
+    const existing = getApps();
+    firebaseApp =
+      existing.length > 0
+        ? existing[0]
+        : initializeApp({
+            apiKey,
+            authDomain,
+            projectId,
+            appId: appId || undefined,
+          });
+    firebaseAuth = getAuth(firebaseApp);
+    firestoreDb = getFirestore(firebaseApp);
   } catch (err) {
-    console.warn('Firebase initialization skipped:', err);
+    console.warn('[Firebase Optional Init] Falling back to local mode:', err);
   }
 }
 
-export async function testFirestoreConnection(): Promise<boolean> {
-  if (!db) return false;
-  try {
-    await getDocFromServer(doc(db, 'test', 'connection'));
-    return true;
-  } catch (error) {
-    if (error instanceof Error && error.message.includes('the client is offline')) {
-      console.error('Please check your Firebase configuration.');
-    }
-    return false;
-  }
-}
-
-export function handleFirestoreError(
-  error: unknown,
-  operationType: OperationType,
-  path: string | null
-): never {
-  const currentUser = auth?.currentUser;
-  const errInfo: FirestoreErrorInfo = {
-    error: error instanceof Error ? error.message : String(error),
-    authInfo: {
-      userId: currentUser?.uid ?? null,
-      email: currentUser?.email ?? null,
-      emailVerified: currentUser?.emailVerified ?? null,
-      isAnonymous: currentUser?.isAnonymous ?? null,
-      tenantId: currentUser?.tenantId ?? null,
-      providerInfo:
-        currentUser?.providerData?.map((provider) => ({
-          providerId: provider.providerId,
-          email: provider.email,
-        })) || [],
-    },
-    operationType,
-    path,
-  };
-  console.error('Firestore Error: ', JSON.stringify(errInfo));
-  throw new Error(JSON.stringify(errInfo));
-}
-
-export async function signInWithGooglePopup(): Promise<User> {
-  if (!isFirebaseConfigured || !auth) {
-    throw new Error('FIREBASE_UNCONFIGURED: 当前未配置 Firebase，系统运行在访客本地模式');
+export async function signInWithGooglePopup(): Promise<User | null> {
+  if (!isFirebaseConfigured || !firebaseAuth) {
+    throw new Error('当前环境未配置 Firebase 认证参数，系统已自动启用本地存储模式。');
   }
   const provider = new GoogleAuthProvider();
-  const cred = await signInWithPopup(auth, provider);
-  return cred.user;
+  const result = await signInWithPopup(firebaseAuth, provider);
+  return result.user;
 }
 
 export async function signOutFirebaseUser(): Promise<void> {
-  if (auth) {
-    await signOut(auth);
+  if (firebaseAuth) {
+    await signOut(firebaseAuth);
   }
 }
 
 export function subscribeAuthState(callback: (user: User | null) => void): () => void {
-  if (!isFirebaseConfigured || !auth) {
+  if (!isFirebaseConfigured || !firebaseAuth) {
     callback(null);
     return () => {};
   }
-  return onAuthStateChanged(auth, callback);
+  return onAuthStateChanged(firebaseAuth, callback);
 }
 
 export async function syncRecordToFirestore(
   uid: string,
-  subcollectionPath: string,
+  subcollection: 'attempts' | 'subjectiveVersions' | 'reviewItems' | 'profile',
   docId: string,
-  payload: Record<string, unknown>
+  data: Record<string, unknown>
 ): Promise<void> {
-  if (!isFirebaseConfigured || !db) {
-    throw new Error('FIREBASE_UNCONFIGURED');
-  }
-  const fullPath = `users/${uid}/${subcollectionPath}/${docId}`;
+  if (!isFirebaseConfigured || !firestoreDb || !uid) return;
   try {
-    await setDoc(doc(db, 'users', uid, subcollectionPath, docId), payload, {
-      merge: subcollectionPath !== 'answer-versions',
-    });
-  } catch (error) {
-    handleFirestoreError(error, OperationType.WRITE, fullPath);
+    const ref = doc(firestoreDb, 'users', uid, subcollection, docId);
+    await setDoc(
+      ref,
+      {
+        ...data,
+        uid,
+        updatedAt: new Date().toISOString(),
+      },
+      { merge: true }
+    );
+  } catch (err) {
+    console.warn('[Firestore Sync Warning]', err);
   }
+}
+
+export async function getCurrentFirebaseIdToken(): Promise<string | null> {
+  if (!isFirebaseConfigured || !firebaseAuth || !firebaseAuth.currentUser) {
+    return null;
+  }
+  try {
+    return await firebaseAuth.currentUser.getIdToken();
+  } catch {
+    return null;
+  }
+}
+
+export async function buildApiAuthHeaders(
+  extraHeaders: Record<string, string> = {}
+): Promise<Record<string, string>> {
+  const idToken = await getCurrentFirebaseIdToken();
+  if (idToken) {
+    return {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${idToken}`,
+      ...extraHeaders,
+    };
+  }
+  return {
+    'Content-Type': 'application/json',
+    Authorization: 'Bearer local-guest-token',
+    ...extraHeaders,
+  };
 }

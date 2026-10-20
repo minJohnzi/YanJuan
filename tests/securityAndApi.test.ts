@@ -1,15 +1,27 @@
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import test from 'node:test';
-import { validateSubjectiveEvaluationSchema } from '../src/shared/schemaValidator.ts';
-import { runTwoStageSubjectiveEvaluation } from '../src/server/aiEvaluators.ts';
+import {
+  auditExamItemDataQuality,
+  computeVersionScoreDelta,
+  validateSubjectiveEvaluationSchema,
+} from '../src/shared/schemaValidator.ts';
+import {
+  reconcileDimensionScores,
+  runTwoStageSubjectiveEvaluation,
+} from '../src/server/aiEvaluators.ts';
 import { createApiV1Router } from '../src/server/apiRouter.ts';
 import type { ModelProvider } from '../src/server/modelProviders.ts';
+import { computeCompositeIdempotencyKey } from '../src/server/persistentStore.ts';
 import {
   SecurityError,
   createRedactedLogEntry,
   decryptProviderApiKey,
   encryptProviderApiKey,
   isUserInOwnerUids,
+  normalizeProviderBaseUrl,
   validateSafeCustomBaseUrl,
 } from '../src/server/securityAndCrypto.ts';
 
@@ -237,27 +249,148 @@ test('Annotation quote verifier rejects hallucinated quotes and Two-Stage evalua
   );
 });
 
-test('REST API security: rate limiting, credential masking, and blocking ordinary users from owner keys', async () => {
-  const express = (await import('express')).default;
-  const app = express();
-  const { router } = createApiV1Router({
-    rateLimitMaxPerMinute: 3,
-    verifyIdTokenFn: async (token) => {
-      if (token === 'valid-user-token') {
-        return { uid: 'ordinary-user-1', email: 'u1@example.com', email_verified: true };
-      }
-      throw new Error('invalid token');
-    },
-  });
-  app.use('/api/v1', router);
+test('Base URL normalization prevents /v1/v1/models and composite idempotency + Stage 2 score reconciliation + 2024 Q21 data quality work deterministically', () => {
+  // 1. Base URL normalization
+  assert.equal(normalizeProviderBaseUrl('deepseek', 'https://api.deepseek.com/'), 'https://api.deepseek.com/v1');
+  assert.equal(normalizeProviderBaseUrl('deepseek', 'https://api.deepseek.com/v1/'), 'https://api.deepseek.com/v1');
+  assert.equal(normalizeProviderBaseUrl('openai-compatible', 'https://gateway.example.com/v1/models'), 'https://gateway.example.com/v1');
+  assert.equal(normalizeProviderBaseUrl('openai-compatible', 'https://gateway.example.com/v1/chat/completions'), 'https://gateway.example.com/v1');
 
-  const server = app.listen(0);
-  const addr = server.address() as { port: number };
-  const baseUrl = `http://127.0.0.1:${addr.port}/api/v1`;
+  // 2. Composite idempotency key changes when model, rubric, or user answer changes
+  const k1 = computeCompositeIdempotencyKey({
+    ownerUid: 'user-1',
+    taskType: 'visual_writing',
+    answerVersionId: 'v1',
+    inputHash: 'hash-a',
+    rubricHash: 'rubric-1',
+    promptVersion: 'v2.0',
+    taskBindingVersion: 't1',
+    modelProfileId: 'prof-deepseek-chat',
+    actualModelId: 'deepseek-chat',
+    stage2ModelProfileId: 'prof-deepseek-reasoner',
+    stage2ActualModelId: 'deepseek-reasoner',
+    criticalParametersHash: 'deep-two-stage',
+  });
+  const k2 = computeCompositeIdempotencyKey({
+    ownerUid: 'user-1',
+    taskType: 'visual_writing',
+    answerVersionId: 'v1',
+    inputHash: 'hash-a',
+    rubricHash: 'rubric-1',
+    promptVersion: 'v2.0',
+    taskBindingVersion: 't1',
+    modelProfileId: 'prof-gemini-flash',
+    actualModelId: 'gemini-2.5-flash',
+    stage2ModelProfileId: 'prof-deepseek-reasoner',
+    stage2ActualModelId: 'deepseek-reasoner',
+    criticalParametersHash: 'deep-two-stage',
+  });
+  assert.notEqual(k1, k2, 'Switching Stage 1 model must invalidate previous idempotency key');
+
+  // 3. Stage 2 score reconciliation keeps dimensionScores sum consistent with centralScore
+  const reconciled = reconcileDimensionScores(
+    [
+      { dimensionId: 'd1', name: '内容完整性', score: 6, maxScore: 8, rationale: '要点齐全' },
+      { dimensionId: 'd2', name: '语言准确性', score: 6, maxScore: 8, rationale: '少量语法瑕疵' },
+      { dimensionId: 'd3', name: '篇章衔接', score: 3, maxScore: 4, rationale: '过渡自然' },
+    ],
+    13.5,
+    20
+  );
+  const sumAfter = reconciled.reduce((acc: number, d: { score: number }) => acc + d.score, 0);
+  assert.equal(Math.round(sumAfter * 10) / 10, 13.5);
+
+  // 4. V1->V2->V3 version score delta & revision verification
+  const v1Eval = {
+    taskId: 'q51',
+    maxScore: 10,
+    centralScore: 6.5,
+    modelName: 'deepseek-chat',
+    promptVersion: 'v2.0',
+    revisionTasks: [{ id: 'rev-1', priority: 1 as const, instruction: '补充具体报名邮箱' }],
+  };
+  const v2Eval = {
+    taskId: 'q51',
+    maxScore: 10,
+    centralScore: 8.5,
+    modelName: 'deepseek-chat',
+    promptVersion: 'v2.0',
+  };
+  const delta = computeVersionScoreDelta({
+    previousVersionId: 'v1',
+    previousVersionLabel: 'V1',
+    previousEvaluation: v1Eval,
+    currentEvaluation: v2Eval,
+    revisionVerification: [
+      {
+        revisionTaskId: 'rev-1',
+        instruction: '补充具体报名邮箱',
+        status: 'resolved',
+        evidence: 'volunteer@uni.edu.cn',
+        explanation: '已在正文中明确添加报名邮箱',
+      },
+    ],
+  });
+  assert.equal(delta.delta, 2);
+  assert.equal(delta.resolvedCount, 1);
+
+  // 5. 2024 Q21 data quality conflict detection separates exam key dispute from AI evaluation error
+  const q21Conflict = auditExamItemDataQuality(
+    2024,
+    {
+      id: '2024-q21',
+      questionNumber: 21,
+      answerMode: 'single-choice',
+      prompt: 'According to Paragraph 1, mature industries often...',
+      options: [
+        { key: 'A', text: 'underestimate the disruptive speed of new entrants' },
+        { key: 'B', text: 'Option B' },
+        { key: 'C', text: 'Option C' },
+        { key: 'D', text: 'Option D' },
+      ],
+      score: 2,
+      correctAnswer: 'C',
+      answerSource: 'source-provided',
+      sourceLocator: { sourceFile: 'data/exams/raw/papers/2024.md', sourceFormat: 'md' },
+    },
+    'In recent decades, mature industries have repeatedly underestimated the disruptive velocity of emerging digital platforms.',
+    'data/exams/raw/papers/2024.md',
+    'data/exams/raw/answers/2024.md'
+  );
+  assert.equal(q21Conflict.status, 'disputed');
+  assert.equal(q21Conflict.markedAnswer, 'C');
+  assert.equal(q21Conflict.semanticCandidateAnswer, 'A');
+});
+
+test('REST API security, 4-layer AI workspace persistence across restarts, rate limiting, and owner key protection', async () => {
+  const express = (await import('express')).default;
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'yanjuan-test-'));
+  const storePath = path.join(tmpDir, 'ai-workspace-store.json');
+
+  const verifyFn = async (token: string) => {
+    if (token === 'valid-user-token') {
+      return { uid: 'ordinary-user-1', email: 'u1@example.com', email_verified: true };
+    }
+    throw new Error('invalid token');
+  };
+
+  const app1 = express();
+  const { router: router1 } = createApiV1Router({
+    rootDir: process.cwd(),
+    storeFilePath: storePath,
+    rateLimitMaxPerMinute: 15,
+    verifyIdTokenFn: verifyFn,
+    dnsLookupFn: async () => [{ address: '104.18.7.192' }],
+  });
+  app1.use('/api/v1', router1);
+
+  const server1 = app1.listen(0);
+  const addr1 = server1.address() as { port: number };
+  const baseUrl1 = `http://127.0.0.1:${addr1.port}/api/v1`;
 
   try {
     // 1. Ordinary user trying to use owner global key is blocked with 403 OWNER_KEY_FORBIDDEN
-    const resOwnerBlock = await fetch(`${baseUrl}/model-tests`, {
+    const resOwnerBlock = await fetch(`${baseUrl1}/model-tests`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -269,43 +402,98 @@ test('REST API security: rate limiting, credential masking, and blocking ordinar
     const errBody = await resOwnerBlock.json();
     assert.equal(errBody.error.code, 'OWNER_KEY_FORBIDDEN');
 
-    // 2. Saving a personal key returns maskedKey and never returns plaintext key
+    // 2. Saving a personal key with manual model ID creates encrypted persistence and syncs 4-layer workspace
     const rawSecret = 'sk-personal-key-999988887777';
-    const resSaveKey = await fetch(`${baseUrl}/provider-credentials`, {
+    const resSaveKey = await fetch(`${baseUrl1}/provider-credentials`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer valid-user-token',
       },
       body: JSON.stringify({
-        provider: 'gemini',
+        provider: 'deepseek',
         apiKey: rawSecret,
-        model: 'gemini-3.8-flash',
+        model: 'deepseek-reasoner-custom-v2',
+        modelSource: 'manual',
+        baseUrl: 'https://api.deepseek.com/',
         storageMode: 'encrypted-firestore',
+        setAsDefault: true,
       }),
     });
     assert.equal(resSaveKey.status, 201);
     const saveText = await resSaveKey.text();
     assert.equal(saveText.includes(rawSecret), false, '响应中绝不能包含明文 API Key');
 
-    // 3. Cross-user spoofing in request body returns 403 FORBIDDEN_USER_MISMATCH
-    const resSpoof = await fetch(`${baseUrl}/provider-credentials?userId=another-user-99`, {
+    const saveJson = JSON.parse(saveText);
+    const createdProfile = saveJson.data.workspace.modelProfiles.find(
+      (m: any) => m.modelId === 'deepseek-reasoner-custom-v2'
+    );
+    assert.ok(createdProfile);
+    assert.equal(createdProfile.source, 'manual');
+    assert.equal(createdProfile.capabilities.vision, false);
+    assert.equal(createdProfile.capabilitySource.vision, 'unknown');
+    assert.equal(saveJson.data.workspace.defaultModelProfileId, createdProfile.id);
+  } finally {
+    server1.close();
+  }
+
+  // 3. Simulate server restart with same storeFilePath: credentials and workspace must survive!
+  const app2 = express();
+  const { router: router2 } = createApiV1Router({
+    rootDir: process.cwd(),
+    storeFilePath: storePath,
+    rateLimitMaxPerMinute: 3,
+    verifyIdTokenFn: verifyFn,
+    dnsLookupFn: async () => [{ address: '104.18.7.192' }],
+  });
+  app2.use('/api/v1', router2);
+  const server2 = app2.listen(0);
+  const addr2 = server2.address() as { port: number };
+  const baseUrl2 = `http://127.0.0.1:${addr2.port}/api/v1`;
+
+  try {
+    const resWorkspaceAfterRestart = await fetch(`${baseUrl2}/ai-workspace`, {
+      headers: { Authorization: 'Bearer valid-user-token' },
+    });
+    assert.equal(resWorkspaceAfterRestart.status, 200);
+    const wsData = await resWorkspaceAfterRestart.json();
+    assert.ok(
+      wsData.data.workspace.connections.some(
+        (c: any) => c.providerType === 'deepseek' && c.enabled && Boolean(c.maskedKey)
+      )
+    );
+    assert.ok(
+      wsData.data.workspace.modelProfiles.some(
+        (m: any) => m.modelId === 'deepseek-reasoner-custom-v2' && m.source === 'manual'
+      )
+    );
+
+    // 4. Cross-user spoofing in request query returns 403 FORBIDDEN_USER_MISMATCH
+    const resSpoof = await fetch(`${baseUrl2}/provider-credentials?userId=another-user-99`, {
       headers: {
         Authorization: 'Bearer valid-user-token',
       },
     });
     assert.equal(resSpoof.status, 403);
 
-    // 4. Rate limit triggers 429 on 4th request within 1 minute
-    await fetch(`${baseUrl}/provider-credentials`, {
+    // 5. Rate limit triggers 429 on 4th request to rate-limited endpoint within 1 minute
+    await fetch(`${baseUrl2}/provider-credentials`, {
       headers: { Authorization: 'Bearer valid-user-token' },
     });
-    const resRateLimited = await fetch(`${baseUrl}/provider-credentials`, {
+    await fetch(`${baseUrl2}/provider-credentials`, {
+      headers: { Authorization: 'Bearer valid-user-token' },
+    });
+    await fetch(`${baseUrl2}/provider-credentials`, {
+      headers: { Authorization: 'Bearer valid-user-token' },
+    });
+    const resRateLimited = await fetch(`${baseUrl2}/provider-credentials`, {
       headers: { Authorization: 'Bearer valid-user-token' },
     });
     assert.equal(resRateLimited.status, 429);
     assert.ok(resRateLimited.headers.get('retry-after'));
   } finally {
-    server.close();
+    server2.close();
+    fs.rmSync(tmpDir, { recursive: true, force: true });
   }
 });
+

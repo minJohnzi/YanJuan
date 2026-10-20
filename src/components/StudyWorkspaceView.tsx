@@ -32,6 +32,7 @@ import type {
   SubjectiveAnswerVersion,
   SubjectiveEvaluationResult,
   SubjectivePracticeMode,
+  WritingScaffoldResult,
 } from '../shared/types';
 import { computeVersionDiff } from '../shared/schemaValidator';
 import { ReadingTypographyPrefs } from '../services/storageAndSync';
@@ -80,7 +81,18 @@ interface StudyWorkspaceViewProps {
     questionContext: string;
     userQuestion: string;
     previousAnalysisSummary?: string;
+    unitId?: string;
+    unitTitle?: string;
+    passageText?: string;
+    promptText?: string;
+    userAnswer?: string;
+    isSubmitted?: boolean;
   }) => Promise<string>;
+  onRequestWritingScaffold?: (params: {
+    unitType: 'translation' | 'practical-writing' | 'visual-writing';
+    promptText: string;
+    requiredFacts?: string[];
+  }) => Promise<WritingScaffoldResult>;
   onExitWorkspace: () => void;
   onNavigateSettings: () => void;
 }
@@ -113,6 +125,7 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
   onRequestSubjectiveEvaluation,
   onRequestObjectiveAnalysis,
   onAskFollowUp,
+  onRequestWritingScaffold,
   onExitWorkspace,
   onNavigateSettings,
 }) => {
@@ -181,6 +194,10 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
     Record<number, { q: string; a: string }[]>
   >({});
   const [askingFollowUpQ, setAskingFollowUpQ] = useState<number | null>(null);
+  const [aiScaffolds, setAiScaffolds] = useState<
+    Record<string, WritingScaffoldResult>
+  >({});
+  const [loadingScaffold, setLoadingScaffold] = useState<boolean>(false);
 
   const isStrictSimulation = attempt.mode === 'strict-simulation';
   const isSubmitted = attempt.status === 'submitted';
@@ -1236,6 +1253,16 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
                               {aiAnalysis.modelProvider} ({aiAnalysis.modelName})
                             </span>
                           </div>
+                          {aiAnalysis.dataQualityWarning && (
+                            <div className="p-2.5 bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-800 rounded-md text-[11px] space-y-1 text-amber-900 dark:text-amber-200">
+                              <div className="font-bold">
+                                ⚠ 数据源与原文语义争议提示（已与 AI 模型错误隔离）
+                              </div>
+                              <div className="leading-relaxed">
+                                {aiAnalysis.dataQualityWarning}
+                              </div>
+                            </div>
+                          )}
                           <div>
                             <span className="font-semibold text-[#202B2F] dark:text-[#E2E8E6]">
                               原文证据句定位：
@@ -1569,11 +1596,86 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
                 </div>
               </div>
               {practiceMode === 'guided' && (
-                <div className="p-3 bg-white dark:bg-[#1A2529] rounded-lg border border-[#DCE4E1] dark:border-[#2C3E46] text-xs space-y-1.5 text-[#202B2F] dark:text-[#E2E8E6]">
-                  <div className="font-semibold text-[#174A5B] dark:text-[#75B6CE]">
-                    引导练习结构提示（作答提交前严禁泄露参考译文或完整范文）：
+                <div className="p-3 bg-white dark:bg-[#1A2529] rounded-lg border border-[#DCE4E1] dark:border-[#2C3E46] text-xs space-y-2 text-[#202B2F] dark:text-[#E2E8E6]">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="font-semibold text-[#174A5B] dark:text-[#75B6CE]">
+                      引导练习结构提示（作答提交前严禁泄露参考译文或完整范文 · 启用支架将记录独立度系数）：
+                    </div>
+                    {anyModelAvailable && onRequestWritingScaffold && (
+                      <button
+                        type="button"
+                        disabled={loadingScaffold}
+                        onClick={async () => {
+                          try {
+                            setLoadingScaffold(true);
+                            const scaffold = await onRequestWritingScaffold({
+                              unitType: currentUnit.unitType as
+                                | 'translation'
+                                | 'practical-writing'
+                                | 'visual-writing',
+                              promptText:
+                                currentUnit.items
+                                  .map(
+                                    (i) =>
+                                      i.translationMeta?.underlinedEnglish ||
+                                      i.prompt
+                                  )
+                                  .join('\n') || currentUnit.instructions,
+                              requiredFacts:
+                                visualMat?.requiredFacts ||
+                                practicalSpec?.requiredPoints,
+                            });
+                            setAiScaffolds((prev) => ({
+                              ...prev,
+                              [currentUnit.id]: scaffold,
+                            }));
+                          } catch (err: any) {
+                            setAiErrorBanner(
+                              err?.message || '生成 AI 结构支架失败'
+                            );
+                          } finally {
+                            setLoadingScaffold(false);
+                          }
+                        }}
+                        className="px-2.5 py-1 text-[11px] font-medium rounded border border-[#174A5B] dark:border-[#38849E] text-[#174A5B] dark:text-[#75B6CE] hover:bg-[#174A5B] hover:text-white dark:hover:bg-[#38849E] dark:hover:text-white disabled:opacity-50 transition-colors"
+                      >
+                        {loadingScaffold
+                          ? '生成 AI 支架中...'
+                          : aiScaffolds[currentUnit.id]
+                          ? '重新生成 AI 定制结构支架'
+                          : '生成 AI 定制三段式支架与词块'}
+                      </button>
+                    )}
                   </div>
-                  {currentUnit.unitType === 'translation' ? (
+                  {aiScaffolds[currentUnit.id] ? (
+                    <div className="space-y-2 pt-1 border-t border-[#E8ECEA] dark:border-[#26373E]">
+                      <div className="grid grid-cols-1 gap-1.5">
+                        {aiScaffolds[currentUnit.id].paragraphPurposes.map(
+                          (p) => (
+                            <div
+                              key={p.paragraphIndex}
+                              className="p-2 bg-stone-50 dark:bg-[#162226] rounded border border-[#DCE4E1] dark:border-[#2C3E46]"
+                            >
+                              <div className="font-semibold text-[#174A5B] dark:text-[#75B6CE]">
+                                第 {p.paragraphIndex} 段（{p.title} · {p.recommendedWordCount}）：
+                              </div>
+                              <div className="text-[#68777C] dark:text-[#9CAEB3]">
+                                写作目标：{p.purpose}
+                              </div>
+                            </div>
+                          )
+                        )}
+                      </div>
+                      <div className="text-[11px] text-[#68777C] dark:text-[#9CAEB3]">
+                        推荐核心表达词块：
+                        <span className="font-english-serif text-[#202B2F] dark:text-[#E2E8E6] ml-1">
+                          {aiScaffolds[currentUnit.id].corePhraseBank
+                            .map((cp) => `${cp.phrase} (${cp.usageNote})`)
+                            .join(' · ')}
+                        </span>
+                      </div>
+                    </div>
+                  ) : currentUnit.unitType === 'translation' ? (
                     <ul className="list-disc pl-4 space-y-1 text-[#68777C] dark:text-[#9CAEB3]">
                       <li>
                         (46) 句法重点：找到主干 scientists have a duty...，处理好以 because 引导的原因状语从句。
@@ -2046,6 +2148,74 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
                           </div>
                         )}
 
+                        {selectedEvaluation.visionDegradedToText && (
+                          <div className="p-2.5 bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-800 rounded-lg text-[11px] text-amber-900 dark:text-amber-200">
+                            <span className="font-bold">
+                              视觉回退模式说明：
+                            </span>
+                            <span>
+                              当前模型未启用原图视觉直传，已降级为结构化图画要素描述核查，评分置信度相应下调。
+                            </span>
+                          </div>
+                        )}
+
+                        {selectedEvaluation.reviewerAdjustments?.notes?.length > 0 && (
+                          <div className="p-2.5 bg-white dark:bg-[#1A2529] border border-[#DCE4E1] dark:border-[#2C3E46] rounded-lg text-[11px] text-[#68777C] dark:text-[#9CAEB3]">
+                            <span className="font-semibold text-[#174A5B] dark:text-[#75B6CE]">
+                              Stage 2 审校结论：
+                            </span>{' '}
+                            {selectedEvaluation.reviewerAdjustments.notes.join('；')}
+                          </div>
+                        )}
+
+                        {/* V1 -> V2 -> V3 Revision Verification Table */}
+                        {selectedEvaluation.revisionVerification &&
+                          selectedEvaluation.revisionVerification.length > 0 && (
+                            <div className="space-y-1.5">
+                              <div className="font-semibold text-[#202B2F] dark:text-[#E2E8E6]">
+                                上一版本改进项落实核验（V
+                                {Math.max(1, selectedVersion.versionNumber - 1)}{' '}
+                                → V{selectedVersion.versionNumber}）：
+                              </div>
+                              <div className="grid grid-cols-1 gap-1.5">
+                                {selectedEvaluation.revisionVerification.map(
+                                  (rv, idx) => (
+                                    <div
+                                      key={idx}
+                                      className="p-2.5 bg-white dark:bg-[#1A2529] rounded-lg border border-[#DCE4E1] dark:border-[#2C3E46] flex flex-wrap items-start justify-between gap-2"
+                                    >
+                                      <div className="space-y-0.5">
+                                        <div className="font-medium text-[#202B2F] dark:text-[#E2E8E6]">
+                                          {rv.instruction}
+                                        </div>
+                                        <div className="text-[11px] text-[#68777C] dark:text-[#9CAEB3]">
+                                          核验依据：{rv.evidence}（{rv.explanation}）
+                                        </div>
+                                      </div>
+                                      <span
+                                        className={`px-2 py-0.5 rounded text-[11px] font-semibold font-tabular-mono ${
+                                          rv.status === 'resolved'
+                                            ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-[#4EA387]'
+                                            : rv.status === 'partially-resolved'
+                                            ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300'
+                                            : 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-[#CF695E]'
+                                        }`}
+                                      >
+                                        {rv.status === 'resolved'
+                                          ? '✓ 已完成'
+                                          : rv.status === 'partially-resolved'
+                                          ? '△ 部分落实'
+                                          : rv.status === 'regressed'
+                                          ? '↓ 发生回退'
+                                          : '✗ 未落实'}
+                                      </span>
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                            </div>
+                          )}
+
                         {/* Executable Revision Tasks */}
                         {selectedEvaluation.revisionTasks.length > 0 && (
                           <div className="space-y-1.5">
@@ -2081,6 +2251,24 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
                             <p className="font-english-serif text-xs text-[#202B2F] dark:text-[#E2E8E6] whitespace-pre-wrap leading-relaxed">
                               {selectedEvaluation.referenceContent}
                             </p>
+                          </div>
+                        )}
+
+                        {/* EvaluationRun Telemetry Footer */}
+                        {selectedEvaluation.runId && (
+                          <div className="pt-2 border-t border-[#DCE4E1] dark:border-[#2C3E46] flex flex-wrap items-center justify-between gap-2 text-[10px] font-tabular-mono text-[#68777C] dark:text-[#9CAEB3]">
+                            <span>
+                              Run ID: {selectedEvaluation.runId} · Stage1:{' '}
+                              {selectedEvaluation.modelName}
+                              {selectedEvaluation.stage2ModelName
+                                ? ` · Stage2: ${selectedEvaluation.stage2ModelName}`
+                                : ''}
+                            </span>
+                            <span>
+                              耗时: {selectedEvaluation.latencyMs || 0}ms · 缓存:{' '}
+                              {selectedEvaluation.cacheStatus || 'miss'} · 重试:{' '}
+                              {selectedEvaluation.retryCount || 0}次
+                            </span>
                           </div>
                         )}
                       </div>
@@ -2187,10 +2375,38 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
                     setFollowUpInput('');
                     try {
                       setAskingFollowUpQ(qNum);
+                      const passageText = currentUnit.materials
+                        .map((m) => m.text)
+                        .join('\n\n');
+                      const promptText =
+                        currentUnit.items
+                          .map(
+                            (i) =>
+                              i.translationMeta?.underlinedEnglish || i.prompt
+                          )
+                          .join('\n') || currentUnit.instructions;
+                      const userAnswerText =
+                        selectedVersion?.content ||
+                        writingDraft ||
+                        Object.values(translationInputs)
+                          .filter(Boolean)
+                          .join('\n');
+                      const prevSummary = selectedEvaluation
+                        ? `得分 ${selectedEvaluation.centralScore}/${selectedEvaluation.maxScore}；改进建议：${selectedEvaluation.revisionTasks
+                            .map((r) => r.instruction)
+                            .join('；')}`
+                        : undefined;
                       const reply = await onAskFollowUp({
                         questionNumber: qNum,
                         questionContext: currentUnit.title,
+                        unitId: currentUnit.id,
+                        unitTitle: currentUnit.title,
+                        passageText,
+                        promptText,
+                        userAnswer: userAnswerText,
+                        isSubmitted: Boolean(selectedVersion) || isSubmitted,
                         userQuestion: qText,
+                        previousAnalysisSummary: prevSummary,
                       });
                       setFollowUpHistory((prev) => ({
                         ...prev,

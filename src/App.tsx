@@ -28,7 +28,9 @@ import type {
   SubjectivePracticeMode,
   SyncStatus,
   UnitType,
+  UserAIWorkspaceConfig,
   ValidationReport,
+  WritingScaffoldResult,
 } from './shared/types';
 import {
   DEFAULT_REVIEW_INTERVALS_DAYS,
@@ -49,6 +51,7 @@ import {
   saveDatabaseToBrowser,
 } from './services/storageAndSync';
 import {
+  buildApiAuthHeaders,
   isFirebaseConfigured,
   signInWithGooglePopup,
   signOutFirebaseUser,
@@ -142,15 +145,37 @@ export default function App() {
     isFirebaseConfigured ? 'saved-local' : 'cloud-unconfigured'
   );
 
-  // Server Model Credentials
+  // Server Model Credentials & 4-Layer AI Workspace
   const [credentialStatuses, setCredentialStatuses] = useState<
     ProviderCredentialStatus[]
   >([]);
+  const [aiWorkspace, setAiWorkspace] = useState<UserAIWorkspaceConfig | null>(
+    null
+  );
   const [isImportingAnswers, setIsImportingAnswers] = useState(false);
 
+  const activeDefaultProfile =
+    aiWorkspace?.modelProfiles.find(
+      (p) => p.id === aiWorkspace.defaultModelProfileId
+    ) ||
+    aiWorkspace?.modelProfiles[0] ||
+    null;
+  const activeConnection = activeDefaultProfile
+    ? aiWorkspace?.connections.find(
+        (c) => c.id === activeDefaultProfile.connectionId
+      )
+    : null;
   const configuredProvider = credentialStatuses.find((c) => c.configured);
-  const anyModelAvailable = Boolean(configuredProvider);
-  const activeProviderName = configuredProvider?.provider || null;
+  const anyModelAvailable =
+    Boolean(activeDefaultProfile && activeConnection?.enabled) ||
+    Boolean(configuredProvider);
+  const activeProviderName =
+    activeConnection?.providerType || configuredProvider?.provider || null;
+  const activeModelSummary = activeDefaultProfile
+    ? `${activeConnection?.providerType || 'provider'} / ${activeDefaultProfile.modelId}`
+    : configuredProvider?.model
+    ? `${configuredProvider.provider} / ${configuredProvider.model}`
+    : activeProviderName;
 
   // Normalize URL path to / and strip auth token query param
   useEffect(() => {
@@ -240,12 +265,13 @@ export default function App() {
     });
   }, []);
 
-  // Fetch Manifest & Provider Credential Statuses
+  // Fetch Manifest, Provider Credential Statuses & 4-Layer AI Workspace
   const refreshManifestAndCapabilities = useCallback(async () => {
     try {
+      const authHeaders = await buildApiAuthHeaders();
       const [manifestRes, credRes] = await Promise.all([
         fetch('/api/v1/papers-manifest'),
-        fetch('/api/v1/provider-credentials'),
+        fetch('/api/v1/provider-credentials', { headers: authHeaders }),
       ]);
       if (manifestRes.ok) {
         const body = await manifestRes.json();
@@ -265,6 +291,10 @@ export default function App() {
         if (Array.isArray(creds)) {
           setCredentialStatuses(creds);
         }
+        const ws = cBody.data?.workspace || cBody.workspace;
+        if (ws && Array.isArray(ws.connections)) {
+          setAiWorkspace(ws as UserAIWorkspaceConfig);
+        }
       }
     } catch {
       try {
@@ -280,7 +310,7 @@ export default function App() {
 
   useEffect(() => {
     void refreshManifestAndCapabilities();
-  }, [refreshManifestAndCapabilities]);
+  }, [refreshManifestAndCapabilities, currentUserUid]);
 
   // Open Import Validation Report & Candidate Structure Inspector
   const handleOpenImportReport = async (year: number, version: string) => {
@@ -595,6 +625,21 @@ export default function App() {
         );
       }
 
+      void (async () => {
+        try {
+          const headers = await buildApiAuthHeaders({
+            'Content-Type': 'application/json',
+          });
+          await fetch(`/api/v1/exams/${exam.year}/submit-attempt`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ attemptId: submittedAtt.id }),
+          });
+        } catch {
+          // non-blocking server attempt registration
+        }
+      })();
+
       return {
         ...prev,
         attempts: {
@@ -675,21 +720,53 @@ export default function App() {
     version: SubjectiveAnswerVersion,
     unit: ExamUnit
   ) => {
-    const visualMat = unit.materials.find(
-      (m) => m.visualMaterials && m.visualMaterials.length > 0
-    )?.visualMaterials?.[0];
+    const visualMats = unit.materials.flatMap(
+      (m) => m.visualMaterials || []
+    );
+    const visualMat = visualMats[0];
     const practicalSpec = unit.materials.find(
       (m) => m.practicalWritingSpec
     )?.practicalWritingSpec;
+    const imagePaths = visualMats
+      .map((vm) => vm.imagePath)
+      .filter((u): u is string => Boolean(u));
+    const rubric = unit.items[0]?.rubric;
+
+    // Look up immediately preceding version and its evaluation for V1 -> V2 -> V3 revision verification
+    let previousVersionContent: string | undefined;
+    let previousRevisionItems: string[] | undefined;
+    if (version.versionNumber > 1) {
+      const prevVer = Object.values(dbState.subjectiveVersions).find(
+        (v) =>
+          v.year === version.year &&
+          v.unitId === version.unitId &&
+          v.versionNumber === version.versionNumber - 1
+      );
+      if (prevVer) {
+        previousVersionContent = prevVer.content;
+        const prevEval = prevVer.evaluationId
+          ? dbState.subjectiveEvaluations[prevVer.evaluationId]
+          : Object.values(dbState.subjectiveEvaluations).find(
+              (ev) => ev.answerVersionId === prevVer.id
+            );
+        if (prevEval && prevEval.revisionTasks.length > 0) {
+          previousRevisionItems = prevEval.revisionTasks.map(
+            (rt) => rt.instruction
+          );
+        }
+      }
+    }
+
+    const headers = await buildApiAuthHeaders({
+      'Content-Type': 'application/json',
+    });
 
     const res = await fetch('/api/v1/evaluations', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Idempotency-Key': `eval-${version.id}`,
-      },
+      headers,
       body: JSON.stringify({
         provider: activeProviderName || 'gemini',
+        year: version.year,
         taskType: version.unitType,
         taskId: unit.id,
         answerVersionId: version.id,
@@ -703,6 +780,10 @@ export default function App() {
         requiredFacts:
           visualMat?.requiredFacts || practicalSpec?.requiredPoints,
         hasVisualMaterial: Boolean(visualMat),
+        imagePaths,
+        rubric,
+        previousVersionContent,
+        previousRevisionItems,
       }),
     });
 
@@ -757,14 +838,16 @@ export default function App() {
     _confidence: ConfidenceLevel
   ) => {
     const passageText = unit.materials.map((m) => m.text).join('\n\n');
+    const headers = await buildApiAuthHeaders({
+      'Content-Type': 'application/json',
+    });
 
     const res = await fetch('/api/v1/objective-analyses', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers,
       body: JSON.stringify({
         provider: activeProviderName || 'gemini',
+        year: workspaceState?.exam.year,
         questionNumber: item.questionNumber,
         passageText,
         questionPrompt: item.prompt,
@@ -796,14 +879,30 @@ export default function App() {
     questionContext: string;
     userQuestion: string;
     previousAnalysisSummary?: string;
+    unitId?: string;
+    unitTitle?: string;
+    passageText?: string;
+    promptText?: string;
+    userAnswer?: string;
+    isSubmitted?: boolean;
   }): Promise<string> => {
+    const headers = await buildApiAuthHeaders({
+      'Content-Type': 'application/json',
+    });
     const res = await fetch('/api/v1/follow-up-analyses', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify({
         provider: activeProviderName || 'gemini',
+        year: workspaceState?.exam.year,
+        unitId: params.unitId,
+        unitTitle: params.unitTitle || params.questionContext,
         questionNumber: params.questionNumber,
         questionContext: params.questionContext,
+        passageText: params.passageText,
+        promptText: params.promptText,
+        userAnswer: params.userAnswer,
+        isSubmitted: params.isSubmitted,
         userQuestion: params.userQuestion,
         existingAnalysisSummary: params.previousAnalysisSummary,
       }),
@@ -813,6 +912,33 @@ export default function App() {
       throw new Error(body.error?.message || 'AI 追问请求失败');
     }
     return (body.data?.answer || body.answer || '') as string;
+  };
+
+  // Request AI Writing Scaffold
+  const handleRequestWritingScaffold = async (params: {
+    unitType: 'translation' | 'practical-writing' | 'visual-writing';
+    promptText: string;
+    requiredFacts?: string[];
+  }): Promise<WritingScaffoldResult> => {
+    const headers = await buildApiAuthHeaders({
+      'Content-Type': 'application/json',
+    });
+    const res = await fetch('/api/v1/writing-scaffolds', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        provider: activeProviderName || 'gemini',
+        unitId: workspaceState?.activeUnitId || 'unit-writing',
+        questionNumber: params.unitType === 'practical-writing' ? 51 : 52,
+        questionPrompt: params.promptText,
+        requiredFacts: params.requiredFacts,
+      }),
+    });
+    const body = await res.json();
+    if (!res.ok) {
+      throw new Error(body.error?.message || '生成结构支架失败');
+    }
+    return (body.data?.scaffold || body.scaffold) as WritingScaffoldResult;
   };
 
   const attemptsList = Object.values(dbState.attempts);
@@ -970,7 +1096,7 @@ export default function App() {
             subjectiveEvaluations={dbState.subjectiveEvaluations}
             objectiveAnalyses={dbState.objectiveAnalyses}
             anyModelAvailable={anyModelAvailable}
-            activeProviderName={activeProviderName}
+            activeProviderName={activeModelSummary || activeProviderName}
             typographyPrefs={dbState.preferences}
             onUpdateTypographyPrefs={(prefs: ReadingTypographyPrefs) =>
               updateDb((prev) => ({ ...prev, preferences: prefs }))
@@ -987,6 +1113,7 @@ export default function App() {
             onRequestSubjectiveEvaluation={handleRequestSubjectiveEvaluation}
             onRequestObjectiveAnalysis={handleRequestObjectiveAnalysis}
             onAskFollowUp={handleAskFollowUp}
+            onRequestWritingScaffold={handleRequestWritingScaffold}
             onExitWorkspace={() => setWorkspaceState(null)}
             onNavigateSettings={() => {
               setWorkspaceState(null);
@@ -1134,12 +1261,17 @@ export default function App() {
               }
             }}
             anyModelAvailable={anyModelAvailable}
-            activeProviderName={activeProviderName}
+            activeProviderName={activeModelSummary || activeProviderName}
             credentialStatuses={credentialStatuses}
+            aiWorkspace={aiWorkspace}
+            onRefreshWorkspace={refreshManifestAndCapabilities}
             onSaveProviderCredential={async (params) => {
+              const headers = await buildApiAuthHeaders({
+                'Content-Type': 'application/json',
+              });
               const res = await fetch('/api/v1/provider-credentials', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers,
                 body: JSON.stringify(params),
               });
               const body = await res.json();
@@ -1149,9 +1281,12 @@ export default function App() {
               await refreshManifestAndCapabilities();
             }}
             onTestProviderCredential={async (params) => {
+              const headers = await buildApiAuthHeaders({
+                'Content-Type': 'application/json',
+              });
               const res = await fetch('/api/v1/model-tests', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers,
                 body: JSON.stringify(params),
               });
               const body = await res.json();
@@ -1161,9 +1296,15 @@ export default function App() {
               return body.data || body;
             }}
             onDeleteProviderCredential={async (provider) => {
-              await fetch(`/api/v1/provider-credentials/${provider}`, {
+              const headers = await buildApiAuthHeaders();
+              const res = await fetch(`/api/v1/provider-credentials/${provider}`, {
                 method: 'DELETE',
+                headers,
               });
+              if (!res.ok) {
+                const body = await res.json().catch(() => ({}));
+                throw new Error(body.error?.message || '删除失败');
+              }
               await refreshManifestAndCapabilities();
             }}
             typographyPrefs={dbState.preferences}

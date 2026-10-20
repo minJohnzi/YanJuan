@@ -1,45 +1,73 @@
-import 'dotenv/config';
-import fs from 'node:fs';
 import path from 'node:path';
 import express from 'express';
-import { runPaperBuildPipeline } from './src/pipeline/buildPipeline.ts';
+import { cert, getApps, initializeApp } from 'firebase-admin/app';
+import { getAuth } from 'firebase-admin/auth';
+import { createServer as createViteServer } from 'vite';
 import { createApiV1Router } from './src/server/apiRouter.ts';
+import { assertProductionMasterKeyConfigured } from './src/server/securityAndCrypto.ts';
+
+function buildFirebaseVerifyIdTokenFn():
+  | ((token: string) => Promise<{ uid: string; email?: string }>)
+  | undefined {
+  const rawServiceAccount = process.env.FIREBASE_SERVICE_ACCOUNT;
+  if (!rawServiceAccount) {
+    return undefined;
+  }
+  try {
+    const parsed = JSON.parse(rawServiceAccount);
+    if (getApps().length === 0) {
+      initializeApp({
+        credential: cert(parsed),
+      });
+    }
+    return async (token: string) => {
+      const decoded = await getAuth().verifyIdToken(token);
+      return {
+        uid: decoded.uid,
+        email: decoded.email,
+      };
+    };
+  } catch (err) {
+    console.error('[server] Failed to initialize Firebase Admin SDK:', err);
+    return undefined;
+  }
+}
 
 async function startServer() {
-  const rootDir = process.cwd();
-
-  // Ensure initial paper build has run so /data and /public/data are populated
-  if (!fs.existsSync(path.join(rootDir, 'data', 'papers-manifest.json'))) {
-    runPaperBuildPipeline(rootDir);
-  }
+  assertProductionMasterKeyConfigured();
 
   const app = express();
-  const port = Number(process.env.PORT) || 3000;
+  const PORT = Number(process.env.PORT || 3000);
+  const rootDir = process.cwd();
 
-  // Mount /api/v1 REST endpoints (and /YANJUAN/api/v1 alias)
-  const { router: apiV1Router } = createApiV1Router({ rootDir });
-  app.use('/api/v1', apiV1Router);
-  app.use('/YANJUAN/api/v1', apiV1Router);
+  const verifyIdTokenFn = buildFirebaseVerifyIdTokenFn();
+  const { router: apiRouter } = createApiV1Router({
+    rootDir,
+    verifyIdTokenFn,
+  });
 
-  const isProd = process.env.NODE_ENV === 'production';
+  app.use('/api/v1', apiRouter);
+  app.use('/api', apiRouter);
 
-  if (!isProd) {
-    const { createServer: createViteServer } = await import('vite');
+  // Serve static generated data & extracted images
+  app.use('/data', express.static(path.join(rootDir, 'data')));
+
+  if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',
     });
     app.use(vite.middlewares);
   } else {
-    const distDir = path.join(rootDir, 'dist');
-    app.use(express.static(distDir));
+    const distPath = path.join(rootDir, 'dist');
+    app.use(express.static(distPath));
     app.get('*', (_req, res) => {
-      res.sendFile(path.join(distDir, 'index.html'));
+      res.sendFile(path.join(distPath, 'index.html'));
     });
   }
 
-  app.listen(port, '0.0.0.0', () => {
-    console.log(`[Yanjuan Desk] Server listening on http://0.0.0.0:${port}`);
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on http://localhost:${PORT}`);
   });
 }
 
