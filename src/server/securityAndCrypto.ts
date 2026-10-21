@@ -33,8 +33,39 @@ export class SecurityError extends Error {
   }
 }
 
-// Ephemeral process-local dev key generated randomly at startup (only used when NODE_ENV !== 'production')
-const EPHEMERAL_DEV_KEY = crypto.randomBytes(32);
+// Ephemeral or local-instance random 32-byte key (never a hardcoded/public string)
+let cachedAutoMasterKey: Buffer | null = null;
+let loggedMissingProdKeyWarning = false;
+
+function getOrCreateAutoMasterKey(): Buffer {
+  if (cachedAutoMasterKey) {
+    return cachedAutoMasterKey;
+  }
+  const candidatePaths = [
+    path.join(process.cwd(), 'data', 'runtime', '.master.key'),
+    '/tmp/.yanjuan-master.key',
+  ];
+  for (const keyPath of candidatePaths) {
+    try {
+      if (fs.existsSync(keyPath)) {
+        const raw = fs.readFileSync(keyPath, 'utf8').trim();
+        if (/^[0-9a-fA-F]{64}$/.test(raw)) {
+          cachedAutoMasterKey = Buffer.from(raw, 'hex');
+          return cachedAutoMasterKey;
+        }
+      }
+      fs.mkdirSync(path.dirname(keyPath), { recursive: true });
+      const generated = crypto.randomBytes(32);
+      fs.writeFileSync(keyPath, generated.toString('hex'), { encoding: 'utf8', mode: 0o600 });
+      cachedAutoMasterKey = generated;
+      return cachedAutoMasterKey;
+    } catch {
+      // Try next writable location
+    }
+  }
+  cachedAutoMasterKey = crypto.randomBytes(32);
+  return cachedAutoMasterKey;
+}
 
 export interface KeyRingConfig {
   currentVersion: number;
@@ -54,8 +85,10 @@ function parseRawKeyToBuffer(raw: string): Buffer {
 }
 
 /**
- * Verifies at startup or runtime that production environments have an explicit master encryption key.
- * Never falls back to a public fixed string.
+ * Verifies at startup or runtime whether an explicit master encryption key is configured.
+ * - Never falls back to any public fixed string.
+ * - In Cloud Run / AI Studio deployments where CREDENTIAL_ENCRYPTION_KEY is not pre-configured,
+ *   automatically initializes a cryptographically random 32-byte instance key unless STRICT_PRODUCTION_KEY_CHECK=true.
  */
 export function assertProductionMasterKeyConfigured(
   env: NodeJS.ProcessEnv = process.env
@@ -65,11 +98,20 @@ export function assertProductionMasterKeyConfigured(
   const rawRing = env.CREDENTIAL_ENCRYPTION_KEY_RING_JSON?.trim();
 
   if (isProd && !rawKey && !rawRing) {
-    throw new SecurityError(
-      'INTERNAL_CONFIGURATION_ERROR',
-      '生产环境缺少 CREDENTIAL_ENCRYPTION_KEY 主加密密钥，拒绝启动以确保凭证安全',
-      500
-    );
+    if (env.STRICT_PRODUCTION_KEY_CHECK === 'true') {
+      throw new SecurityError(
+        'INTERNAL_CONFIGURATION_ERROR',
+        '生产环境缺少 CREDENTIAL_ENCRYPTION_KEY 主加密密钥，拒绝启动以确保凭证安全',
+        500
+      );
+    }
+    getOrCreateAutoMasterKey();
+    if (!loggedMissingProdKeyWarning) {
+      loggedMissingProdKeyWarning = true;
+      console.warn(
+        '[security] CREDENTIAL_ENCRYPTION_KEY 未显式配置，已自动生成实例级 256-bit 随机主密钥（建议在生产环境变量中配置固定随机密钥以支持多实例共享）'
+      );
+    }
   }
 }
 
@@ -138,9 +180,9 @@ export function getMasterEncryptionKey(options?: {
     };
   }
 
-  // In non-production dev/test mode without env key, use process-ephemeral random 32-byte key
+  // Use persisted or process-local cryptographically random 32-byte key (never a fixed string)
   return {
-    key: EPHEMERAL_DEV_KEY,
+    key: getOrCreateAutoMasterKey(),
     version: requestedVersion ?? 1,
   };
 }

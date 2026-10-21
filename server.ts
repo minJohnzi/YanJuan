@@ -2,7 +2,6 @@ import path from 'node:path';
 import express from 'express';
 import { cert, getApps, initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
-import { createServer as createViteServer } from 'vite';
 import { createApiV1Router } from './src/server/apiRouter.ts';
 import { assertProductionMasterKeyConfigured } from './src/server/securityAndCrypto.ts';
 
@@ -40,6 +39,10 @@ async function startServer() {
   const PORT = Number(process.env.PORT || 3000);
   const rootDir = process.cwd();
 
+  app.get('/healthz', (_req, res) => {
+    res.status(200).json({ status: 'ok' });
+  });
+
   const verifyIdTokenFn = buildFirebaseVerifyIdTokenFn();
   const { router: apiRouter } = createApiV1Router({
     rootDir,
@@ -53,6 +56,7 @@ async function startServer() {
   app.use('/data', express.static(path.join(rootDir, 'data')));
 
   if (process.env.NODE_ENV !== 'production') {
+    const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',
@@ -75,3 +79,4 @@ startServer().catch((err) => {
   console.error('Failed to start server:', err);
   process.exit(1);
 });
+

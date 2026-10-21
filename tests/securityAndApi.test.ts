@@ -17,15 +17,34 @@ import type { ModelProvider } from '../src/server/modelProviders.ts';
 import { computeCompositeIdempotencyKey } from '../src/server/persistentStore.ts';
 import {
   SecurityError,
+  assertProductionMasterKeyConfigured,
   createRedactedLogEntry,
   decryptProviderApiKey,
   encryptProviderApiKey,
+  getMasterEncryptionKey,
   isUserInOwnerUids,
   normalizeProviderBaseUrl,
   validateSafeCustomBaseUrl,
 } from '../src/server/securityAndCrypto.ts';
 
 test('AES-256-GCM encryption and decryption binds UID and provider as AAD and never leaks plaintext', () => {
+  // Cloud Run / AI Studio production startup without CREDENTIAL_ENCRYPTION_KEY auto-generates random instance key
+  assert.doesNotThrow(() => {
+    assertProductionMasterKeyConfigured({ NODE_ENV: 'production' });
+  });
+  const autoKey = getMasterEncryptionKey({ env: { NODE_ENV: 'production' } });
+  assert.equal(autoKey.key.byteLength, 32);
+
+  // Explicit STRICT_PRODUCTION_KEY_CHECK=true still enforces mandatory env var
+  assert.throws(
+    () =>
+      assertProductionMasterKeyConfigured({
+        NODE_ENV: 'production',
+        STRICT_PRODUCTION_KEY_CHECK: 'true',
+      }),
+    (err: any) => err instanceof SecurityError && err.code === 'INTERNAL_CONFIGURATION_ERROR'
+  );
+
   const rawKey = 'sk-proj-1234567890abcdefSECRETKEY9876';
   const enc = encryptProviderApiKey('user-123', 'gemini', rawKey, {
     model: 'gemini-3.8-flash',
