@@ -291,5 +291,67 @@ test('Full-Spectrum Verification 4: Generated runtime exams (17 JSONs, authentic
       const diskPath = path.join(rootDir, 'public', vm.imagePath.slice(1));
       assert.ok(fs.existsSync(diskPath), `公开图片资源在磁盘中不存在: ${diskPath}`);
     }
+
+    // Verify canonical paperId split outputs (.exam.json stripped of answers, .key.json holds answers)
+    const paperId = `en1-${y}`;
+    const splitExamPath = path.join(genDir, 'papers', `${paperId}.exam.json`);
+    const splitKeyPath = path.join(genDir, 'papers', `${paperId}.key.json`);
+    assert.ok(fs.existsSync(splitExamPath), `${paperId}.exam.json 必须生成`);
+    assert.ok(fs.existsSync(splitKeyPath), `${paperId}.key.json 必须生成`);
+
+    const splitExam: Exam = JSON.parse(fs.readFileSync(splitExamPath, 'utf8'));
+    assert.equal(splitExam.paperId, paperId);
+    assert.equal(splitExam.subjectId, 'english-i');
+    for (const item of splitExam.sections.flatMap((s) => s.units).flatMap((u) => u.items)) {
+      assert.equal(item.correctAnswer, null, `${paperId}.exam.json 严禁泄露 correctAnswer`);
+    }
+
+    const splitKey = JSON.parse(fs.readFileSync(splitKeyPath, 'utf8'));
+    assert.equal(splitKey.paperId, paperId);
+    assert.ok(splitKey.items[1]?.correctAnswer, `${paperId}.key.json 必须包含第1题答案`);
+  }
+});
+
+test('Full-Spectrum Verification 5: Politics 8 sprint papers (2101-2108 / pol-2027-xiao8-01..08), split exam/key artifacts & zero public/data duplication', () => {
+  assert.equal(
+    fs.existsSync(path.join(rootDir, 'public', 'data')),
+    false,
+    '重构后禁止再复制冗余题库到 public/data/'
+  );
+
+  const genManifest = JSON.parse(
+    fs.readFileSync(path.join(genDir, 'papers-manifest.json'), 'utf8')
+  );
+  assert.ok(Array.isArray(genManifest.availablePaperIds));
+  assert.ok(genManifest.availablePaperIds.length >= 25, '清单必须包含 17 套英语一 + 8 套政治冲刺卷');
+
+  for (let i = 1; i <= 8; i++) {
+    const legacyYear = 2100 + i;
+    const paperId = `pol-2027-xiao8-0${i}`;
+    const fullPath = path.join(genDir, 'papers', `${legacyYear}.json`);
+    const sheetPath = path.join(genDir, 'papers', `${paperId}.exam.json`);
+    const keyPath = path.join(genDir, 'papers', `${paperId}.key.json`);
+
+    assert.ok(fs.existsSync(fullPath), `${legacyYear}.json 必须存在`);
+    assert.ok(fs.existsSync(sheetPath), `${paperId}.exam.json 必须存在`);
+    assert.ok(fs.existsSync(keyPath), `${paperId}.key.json 必须存在`);
+
+    const fullExam: Exam = JSON.parse(fs.readFileSync(fullPath, 'utf8'));
+    assert.equal(fullExam.paperId, paperId);
+    assert.equal(fullExam.subjectId, 'politics');
+    const items = fullExam.sections.flatMap((s) => s.units).flatMap((u) => u.items);
+    assert.equal(items.length, 38, `${paperId} 必须包含完整 38 题 (1-33 客观 + 34-38 分析)`);
+
+    const analysisUnit = fullExam.sections
+      .flatMap((s) => s.units)
+      .find((u) => u.unitType === 'politics-analysis');
+    assert.ok(analysisUnit, `${paperId} 必须包含 politics-analysis 单元`);
+    assert.equal(analysisUnit.items.length, 5);
+
+    const sheetExam: Exam = JSON.parse(fs.readFileSync(sheetPath, 'utf8'));
+    for (const sItem of sheetExam.sections.flatMap((s) => s.units).flatMap((u) => u.items)) {
+      assert.equal(sItem.correctAnswer, null, `${paperId}.exam.json 严禁包含答案`);
+      assert.equal(sItem.answerKeyPoints, undefined, `${paperId}.exam.json 严禁包含分析题参考要点`);
+    }
   }
 });

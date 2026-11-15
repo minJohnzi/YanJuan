@@ -1,0 +1,1899 @@
+{
+  "id": "exam-2102",
+  "year": 2102,
+  "subject": "考研政治",
+  "setNumber": 2,
+  "paperTitle": "2027 考研政治冲刺 8 套卷（二）",
+  "status": "ready",
+  "importStatus": "ready",
+  "dataVersion": "v1",
+  "schemaVersion": "1.0.0",
+  "parserProvider": "internal",
+  "parserModel": "xiao8-verified-pipeline",
+  "parserVersion": "1.0.0",
+  "importRetryCount": 0,
+  "pageCount": 20,
+  "sourceFiles": [
+    "data/politics/xiao8-2027/set-2.json"
+  ],
+  "sourceFormats": [
+    "pdf"
+  ],
+  "sourceHashes": {
+    "data/politics/xiao8-2027/set-2.json": "d953ad5a182272356e487db9fbf09acbad3ff7e92001ff7d44562397749b44f3"
+  },
+  "createdAt": "2026-11-12T00:00:00.000Z",
+  "updatedAt": "2026-11-12T00:00:00.000Z",
+  "totalScore": 100,
+  "durationMinutes": 180,
+  "sections": [
+    {
+      "id": "2102-sec-1",
+      "sectionNumber": "Section I",
+      "title": "一、单项选择题",
+      "score": 16,
+      "suggestedMinutes": 18,
+      "units": [
+        {
+          "id": "2102-unit-politics-single",
+          "sectionId": "Section I",
+          "unitType": "politics-single",
+          "title": "一、单项选择题（第 1～16 题）",
+          "instructions": "每小题 1 分，共 16 分。下列每题给出的四个选项中，只有一个选项是最符合题目要求的。",
+          "score": 16,
+          "suggestedMinutes": 18,
+          "materials": [],
+          "items": [
+            {
+              "id": "2102-q-1",
+              "questionNumber": 1,
+              "answerMode": "single-choice",
+              "prompt": "餐饮消费、网购体验、旅游出行……如今，避雷帖在社交平台俯拾皆是，甚至有人说，不管你在网上搜什么东西，不管这个东西总体好评率是高是低，总能碰到避雷帖。在价值评价活动中，评价的差异性是无法避免的，这是因为",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "客体能否满足主体需要，是由人的主观愿望决定的"
+                },
+                {
+                  "key": "B",
+                  "text": "价值评价有科学与非科学之别，但评价结果没有正确与错误之分"
+                },
+                {
+                  "key": "C",
+                  "text": "主体以自身的需要作为内在尺度运用于所评价的客体"
+                },
+                {
+                  "key": "D",
+                  "text": "价值始终以主体为中心，无法独立于人们对它的认识和评价"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "马原",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.810Z"
+              }
+            },
+            {
+              "id": "2102-q-2",
+              "questionNumber": 2,
+              "answerMode": "single-choice",
+              "prompt": "马克思主义正确阐释了社会形态的演进过程及其历史必然性问题，正确评价了历史和现实中的事件、人物以及各种社会集团的理论、主张等，为正确认识社会和历史提供了基本观点和方法。被列宁称为“社会进步的最高标准”的是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "生产力发展"
+                },
+                {
+                  "key": "B",
+                  "text": "科学技术进步"
+                },
+                {
+                  "key": "C",
+                  "text": "人的普遍觉醒"
+                },
+                {
+                  "key": "D",
+                  "text": "共同富裕"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "马原",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.810Z"
+              }
+            },
+            {
+              "id": "2102-q-3",
+              "questionNumber": 3,
+              "answerMode": "single-choice",
+              "prompt": "商品是劳动产品，生产商品的劳动具有二重性，即具体劳动和抽象劳动。具体劳动和抽象劳动是对立统一的关系，二者的区别体现在",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "具体劳动和抽象劳动必须在空间上并存、时间上继起"
+                },
+                {
+                  "key": "B",
+                  "text": "具体劳动反映人与自然的关系，抽象劳动反映商品生产者的社会关系"
+                },
+                {
+                  "key": "C",
+                  "text": "具体劳动和抽象劳动是各自独立存在的两种劳动"
+                },
+                {
+                  "key": "D",
+                  "text": "具体劳动创造商品的质，抽象劳动形成商品的量"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "马原",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.810Z"
+              }
+            },
+            {
+              "id": "2102-q-4",
+              "questionNumber": 4,
+              "answerMode": "single-choice",
+              "prompt": "进入21世纪以来，随着经济全球化的深入发展，新一轮科技革命和产业变革进入空前密集活跃期，社会化大生产在世界范围内更大规模、更广范围、更深层次展开，世界格局深度调整，资本主义呈现出一些新变化、新特征。当代资本主义最突出、最鲜明、最主要的特征是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "产业结构的调整和新经济形态的出现"
+                },
+                {
+                  "key": "B",
+                  "text": "社会阶级层级结构呈现复杂性、多样化"
+                },
+                {
+                  "key": "C",
+                  "text": "发达资本主义国家在世界范围内推行霸权主义和强权政治"
+                },
+                {
+                  "key": "D",
+                  "text": "国际金融资本的垄断"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "马原",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.810Z"
+              }
+            },
+            {
+              "id": "2102-q-5",
+              "questionNumber": 5,
+              "answerMode": "single-choice",
+              "prompt": "中国民主主义革命经历了旧民主主义革命和新民主主义革命两个阶段，由“旧”阶段转变到“新”阶段的根本标志是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "中国革命基本性质的变化"
+                },
+                {
+                  "key": "B",
+                  "text": "中国革命主要对象的变化"
+                },
+                {
+                  "key": "C",
+                  "text": "中国革命领导阶级的变化"
+                },
+                {
+                  "key": "D",
+                  "text": "中国社会主要矛盾的变化"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "毛中特与新思想",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.810Z"
+              }
+            },
+            {
+              "id": "2102-q-6",
+              "questionNumber": 6,
+              "answerMode": "single-choice",
+              "prompt": "1937年，毛泽东在《实践论》和《矛盾论》等著作中，深刻阐述了理论对于实践的依赖关系，以及矛盾的普遍性和特殊性的关系，对党的思想路线作了系统的哲学论证。毛泽东这样做的目的主要是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "揭示教条主义错误的思想根源"
+                },
+                {
+                  "key": "B",
+                  "text": "把党的正确主张变为群众的自觉行动"
+                },
+                {
+                  "key": "C",
+                  "text": "为党的七大胜利召开创造充分条件"
+                },
+                {
+                  "key": "D",
+                  "text": "系统地说明党的政治策略上的诸问题"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "毛中特与新思想",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-7",
+              "questionNumber": 7,
+              "answerMode": "single-choice",
+              "prompt": "“六个必须坚持”，即必须坚持人民至上、必须坚持自信自立、必须坚持守正创新、必须坚持问题导向、必须坚持系统观念、必须坚持胸怀天下，是习近平新时代中国特色社会主义思想的世界观、方法论和贯穿其中的立场观点方法的重要体现。其中，坚持守正创新是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "根本价值立场"
+                },
+                {
+                  "key": "B",
+                  "text": "内在精神特质"
+                },
+                {
+                  "key": "C",
+                  "text": "鲜明理论品格"
+                },
+                {
+                  "key": "D",
+                  "text": "重要实践要求"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "毛中特与新思想",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-8",
+              "questionNumber": 8,
+              "answerMode": "single-choice",
+              "prompt": "强国必须强军，军强才能国安。建设同我国国际地位相称、同国家安全和发展利益相适应的巩固国防和强大人民军队，是新时代党和国家事业发展的必然要求。高质量推进国防和军队现代化，根本指向和检验标准始终是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "科技"
+                },
+                {
+                  "key": "B",
+                  "text": "人才"
+                },
+                {
+                  "key": "C",
+                  "text": "威慑力"
+                },
+                {
+                  "key": "D",
+                  "text": "战斗力"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "毛中特与新思想",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-9",
+              "questionNumber": 9,
+              "answerMode": "single-choice",
+              "prompt": "2026年3月12日，第十四届全国人民代表大会第四次会议表决通过《中华人民共和国民族团结进步促进法》，自2026年7月1日起施行。民族团结进步促进法体系完整、内容全面、内涵丰富，体现了鲜明的价值导向、突出的时代特征、深刻的制度逻辑。民族团结进步促进法贯穿全篇的主线要求是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "铸牢中华民族共同体意识"
+                },
+                {
+                  "key": "B",
+                  "text": "增进共同性、尊重和包容差异性"
+                },
+                {
+                  "key": "C",
+                  "text": "完善各族群众共居共学、共建共享、共事共乐的社会条件"
+                },
+                {
+                  "key": "D",
+                  "text": "构筑共有精神家园"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "毛中特与新思想",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-10",
+              "questionNumber": 10,
+              "answerMode": "single-choice",
+              "prompt": "《海国图志》和《资政新篇》的相似之处在于都主张",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "进行政治、经济、文化制度的改革"
+                },
+                {
+                  "key": "B",
+                  "text": "向西方学习"
+                },
+                {
+                  "key": "C",
+                  "text": "进行资产阶级思想启蒙运动"
+                },
+                {
+                  "key": "D",
+                  "text": "在中国发展资本主义"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "史纲",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-11",
+              "questionNumber": 11,
+              "answerMode": "single-choice",
+              "prompt": "1940年，毛泽东在《新民主主义论》中指出，“孙中山先生之所以伟大，不但因为他领导了伟大的辛亥革命（虽然是旧时期的民主革命），而且因为他能够‘适乎世界之潮流，合乎人群之需要’”。毛泽东这里所说的“适乎世界之潮流，合乎人群之需要”，是指孙中山",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "喊出了“振兴中华”这个时代的最强音"
+                },
+                {
+                  "key": "B",
+                  "text": "以鲜明的中国革命民主派立场同中国改良派作了尖锐的斗争"
+                },
+                {
+                  "key": "C",
+                  "text": "在辛亥革命时期，领导人民推翻帝制、建立共和国"
+                },
+                {
+                  "key": "D",
+                  "text": "提出了联俄、联共、扶助农工三大革命政策，对三民主义作了新的解释"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "史纲",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-12",
+              "questionNumber": 12,
+              "answerMode": "single-choice",
+              "prompt": "青年的命运，从来都同时代紧密相连。1840年鸦片战争以后，中国逐步成为半殖民地半封建社会，中华民族遭受了前所未有的劫难。一批又一批仁人志士为救国救民而苦苦追寻，一大批先进青年在“觉醒年代”纷纷觉醒。标志着中国青年成为推动中国社会变革急先锋的是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "辛亥革命"
+                },
+                {
+                  "key": "B",
+                  "text": "五四运动"
+                },
+                {
+                  "key": "C",
+                  "text": "一二·九运动"
+                },
+                {
+                  "key": "D",
+                  "text": "新文化运动"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "史纲",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-13",
+              "questionNumber": 13,
+              "answerMode": "single-choice",
+              "prompt": "1950年至1953年春，土地改革在新解放区进行。《中华人民共和国土地改革法》规定了这次土改的目的，是废除地主阶级封建剥削的土地所有制，实行农民的土地所有制，解放农村生产力，发展农业生产，为新中国的工业化开辟道路。与解放战争时期的土改相比，这次土改在政策上的一个大的变化是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "由实行减租减息政策改变为实现“耕者有其田”的政策"
+                },
+                {
+                  "key": "B",
+                  "text": "由“没收一切土地”改为“没收一切公共土地及地主阶级的土地”"
+                },
+                {
+                  "key": "C",
+                  "text": "由对富农征收多余的土地财产改变为保存富农经济"
+                },
+                {
+                  "key": "D",
+                  "text": "由削弱封建剥削向变革封建土地关系、废除封建剥削制度过渡"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "史纲",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-14",
+              "questionNumber": 14,
+              "answerMode": "single-choice",
+              "prompt": "法治宣传教育是全面依法治国的长期基础性工作。2026年7月，中共中央、国务院转发了《中央宣传部、司法部关于开展法治宣传教育的第九个五年规划（2026—2030年）》，对法治宣传教育作出新的全面部署。《规划》指出，“九五”普法的首要任务是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "推动习近平法治思想深入人心"
+                },
+                {
+                  "key": "B",
+                  "text": "贯彻实施法治宣传教育法"
+                },
+                {
+                  "key": "C",
+                  "text": "繁荣发展社会主义法治文化"
+                },
+                {
+                  "key": "D",
+                  "text": "健全法治宣传教育工作体系"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "思修法基",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-15",
+              "questionNumber": 15,
+              "answerMode": "single-choice",
+              "prompt": "2026年3月12日，第十四届全国人民代表大会第四次会议批准了《中华人民共和国国民经济和社会发展第十五个五年规划纲要》（“十五五”规划）。“十五五”规划编制最鲜明的特点是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "坚持问题导向"
+                },
+                {
+                  "key": "B",
+                  "text": "坚持从实际出发"
+                },
+                {
+                  "key": "C",
+                  "text": "把加强顶层设计和坚持问计于民统一起来"
+                },
+                {
+                  "key": "D",
+                  "text": "坚持党的领导、人民当家作主、依法治国有机统一"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "当代与时政",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-16",
+              "questionNumber": 16,
+              "answerMode": "single-choice",
+              "prompt": "2026年9月12日，国家主席习近平在金砖国家领导人第十八次会晤第一阶段会议上发表的题为《共担时代责任 勇做先锋力量》的讲话中指出，2026年是金砖国家合作20周年。20年来，金砖合作机制不断发展壮大，展现出蓬勃生机活力，成为当今世界最具影响力的新兴市场和发展中国家合作平台。二十年风雨兼程，始终是金砖事业发展力量之源的是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "尊重彼此核心关切"
+                },
+                {
+                  "key": "B",
+                  "text": "团结合作"
+                },
+                {
+                  "key": "C",
+                  "text": "坦诚相待"
+                },
+                {
+                  "key": "D",
+                  "text": "求同存异"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "当代与时政",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            }
+          ],
+          "analysisProfile": {
+            "focusSkills": [
+              "基础概念精准识记",
+              "时政与帽子题定位",
+              "哲学名言与原理对应"
+            ],
+            "commonTraps": [
+              "张冠李戴",
+              "偷换时间节点或会议文献表述"
+            ]
+          },
+          "reviewStrategy": {
+            "defaultIntervalsDays": [
+              1,
+              3,
+              7,
+              14,
+              30
+            ],
+            "recommendedAction": "对照《肖八解析》背诵核心帽子题表述"
+          },
+          "sourceLocator": {
+            "sourceFile": "data/politics/xiao8-2027/set-2.json",
+            "sourceFormat": "pdf"
+          }
+        }
+      ]
+    },
+    {
+      "id": "2102-sec-2",
+      "sectionNumber": "Section II",
+      "title": "二、多项选择题",
+      "score": 34,
+      "suggestedMinutes": 32,
+      "units": [
+        {
+          "id": "2102-unit-politics-multi",
+          "sectionId": "Section II",
+          "unitType": "politics-multi",
+          "title": "二、多项选择题（第 17～33 题）",
+          "instructions": "每小题 2 分，共 34 分。下列每题给出的四个选项中，至少有两个选项是符合题目要求的。多选、少选或错选均不得分。",
+          "score": 34,
+          "suggestedMinutes": 32,
+          "materials": [],
+          "items": [
+            {
+              "id": "2102-q-17",
+              "questionNumber": 17,
+              "answerMode": "multi-choice",
+              "prompt": "科技装备强是农业强国的重要特征。田间一线，农民有新烦恼：“‘大家伙’有劲儿，但开不上丘陵田”“种特色瓜果蔬菜，没有好机子，还得靠人工”。缺趁手的“微农机”、特色农机，折射出农机装备的供需错配。2026年中央一号文件提出，“加快高端智能、丘陵山区适用农机装备研发应用”。面向未来，只有坚持问题导向、创新驱动，方能把握机遇，实现“有机可用”“有好机用”，为保障粮食安全和促进农业生产提质增效提供坚实支撑。用新技术、新场景锻造新农具，说明实践",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "能够满足人们生产劳动资料的需要"
+                },
+                {
+                  "key": "B",
+                  "text": "本质上是由认识决定并支配的客观过程"
+                },
+                {
+                  "key": "C",
+                  "text": "可以把人脑中观念的存在变为现实的存在"
+                },
+                {
+                  "key": "D",
+                  "text": "仅限于生产活动这一种具体形式"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "马原",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "AC",
+                "semanticCandidateAnswer": "AC",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-18",
+              "questionNumber": 18,
+              "answerMode": "multi-choice",
+              "prompt": "在重庆南川区，面对“一刀切”难以解决流动摊贩管理问题且易造成居民、商贩与管理部门三方情绪对立的情况，当地推出了限定区域与时间的“潮汐摊区”。执法人员化身摊区管家，城市发展的“面子”与民生需求的“里子”得到兼顾。这一做法表明",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "认识具有反复性和无限性，治理理念需要在实践中不断完善"
+                },
+                {
+                  "key": "B",
+                  "text": "系统思维要求我们从整体上把握事物，并实现事物结构与功能的优化"
+                },
+                {
+                  "key": "C",
+                  "text": "事物的性质由人的主观意志决定，发挥主观能动性是解决矛盾的关键"
+                },
+                {
+                  "key": "D",
+                  "text": "矛盾的斗争性是相对的，可以采用矛盾双方融合成一个新事物的方法解决矛盾"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "马原",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "AB",
+                "semanticCandidateAnswer": "AB",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-19",
+              "questionNumber": 19,
+              "answerMode": "multi-choice",
+              "prompt": "生产商品所需要的社会必要劳动时间随着劳动生产率的变化而变化。劳动生产率的高低可以用",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "单位劳动时间内生产的商品数量来测量"
+                },
+                {
+                  "key": "B",
+                  "text": "单位劳动时间内生产的价值总量来测量"
+                },
+                {
+                  "key": "C",
+                  "text": "单位劳动时间内劳动者所耗费的劳动量来测量"
+                },
+                {
+                  "key": "D",
+                  "text": "单位商品中所耗费的劳动时间来测量"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "马原",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "AD",
+                "semanticCandidateAnswer": "AD",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-20",
+              "questionNumber": 20,
+              "answerMode": "multi-choice",
+              "prompt": "19世纪末20世纪初，垄断代替自由竞争并占据统治地位，垄断资本主义得以形成。垄断资本的实质在于获取垄断利润，垄断利润",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "主要是通过垄断组织制定的垄断价格来实现的"
+                },
+                {
+                  "key": "B",
+                  "text": "归根到底来自其他企业特别是非垄断企业的利润"
+                },
+                {
+                  "key": "C",
+                  "text": "可以通过加强对其他国家劳动人民的剥削和掠夺来获取"
+                },
+                {
+                  "key": "D",
+                  "text": "是垄断资本家凭借其垄断地位而获得的超过平均利润的高额利润"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "马原",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "ACD",
+                "semanticCandidateAnswer": "ACD",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-21",
+              "questionNumber": 21,
+              "answerMode": "multi-choice",
+              "prompt": "1848年欧洲革命后，资本主义在各国得到了迅速发展，无产阶级力量不断壮大。到19世纪50年代末60年代初，各国工人运动重新活跃起来并表现出加强国际联系的愿望。1864年，国际工人协会（第一国际）应运而生。马克思是第一国际的灵魂。在马克思指导下，第一国际",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "发动并领导了巴黎公社革命"
+                },
+                {
+                  "key": "B",
+                  "text": "大力支援各国的工人运动，支持反封建的民主运动和民族解放运动"
+                },
+                {
+                  "key": "C",
+                  "text": "促进了马克思主义的传播及其与国际工人运动的结合"
+                },
+                {
+                  "key": "D",
+                  "text": "初步确立了马克思主义在工人运动中的指导地位"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "马原",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "BCD",
+                "semanticCandidateAnswer": "BCD",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-22",
+              "questionNumber": 22,
+              "answerMode": "multi-choice",
+              "prompt": "马克思主义是我们立党立国、兴党兴国的根本指导思想。实践告诉我们，中国共产党为什么能，中国特色社会主义为什么好，归根到底是因为马克思主义行，是中国化时代化的马克思主义行。马克思主义中国化时代化，用毛泽东当年的话说，就是“解决中国问题”和“创造些新的东西”。马克思主义中国化时代化，具体说来，就是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "运用马克思主义的立场、观点和方法，解决中国革命、建设、改革中的实际问题"
+                },
+                {
+                  "key": "B",
+                  "text": "总结和提炼中国革命、建设、改革的实践经验并将其上升为理论，赋予马克思主义以新的时代内涵"
+                },
+                {
+                  "key": "C",
+                  "text": "运用中国人民喜闻乐见的民族语言来阐述马克思主义，使其植根于中华优秀传统文化的土壤之中，具有中国特色、中国风格、中国气派"
+                },
+                {
+                  "key": "D",
+                  "text": "从马克思主义经典著作中寻找解决中国之问、世界之问、人民之问、时代之问的具体方案"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "毛中特与新思想",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "ABC",
+                "semanticCandidateAnswer": "ABC",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-23",
+              "questionNumber": 23,
+              "answerMode": "multi-choice",
+              "prompt": "2026年1月20日，习近平总书记在省部级主要领导干部学习贯彻党的二十届四中全会精神专题研讨班上的讲话中指出：“强调把发展经济的着力点放在实体经济上，指向就是要保持制造业合理比重、大力发展先进制造业”。之所以强调保持制造业合理比重，是因为",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "制造业是立国之本、强国之基"
+                },
+                {
+                  "key": "B",
+                  "text": "制造业是国民经济第一大产业"
+                },
+                {
+                  "key": "C",
+                  "text": "制造业是实体经济的基础"
+                },
+                {
+                  "key": "D",
+                  "text": "先进制造业是现代化产业体系的骨干"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "毛中特与新思想",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "ACD",
+                "semanticCandidateAnswer": "ACD",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-24",
+              "questionNumber": 24,
+              "answerMode": "multi-choice",
+              "prompt": "党的二十届四中全会提出，“发展具有强大思想引领力、精神凝聚力、价值感召力、国际影响力的新时代中国特色社会主义文化，扎实推进文化强国建设”。这一表述也被列入“十五五”规划纲要，成为统领各领域文化工作、检验各项建设成效的共同实践标尺。“四力”要求是相互贯通的有机整体，其中",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "思想引领力是灵魂，锚定的是旗帜与方向"
+                },
+                {
+                  "key": "B",
+                  "text": "精神凝聚力是根基，锚定的是将14亿多中国人民铸牢为一个精神共同体"
+                },
+                {
+                  "key": "C",
+                  "text": "价值感召力是内核，锚定的是文化如何润泽心灵、化育人格"
+                },
+                {
+                  "key": "D",
+                  "text": "国际影响力是延展，锚定的是中国文化怎样同世界平等对话、互鉴共进"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "毛中特与新思想",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "ABCD",
+                "semanticCandidateAnswer": "ABCD",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-25",
+              "questionNumber": 25,
+              "answerMode": "multi-choice",
+              "prompt": "自1996年党中央安排东部沿海发达省市帮扶西部贫困地区以来，东西部协作已走过30年。东部8个省（直辖市），西部10个省（自治区、直辖市），山海相依，携手共赢，在中国式现代化道路上，书写着“山海情”的动人篇章。开展东西部协作和定点帮扶",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "是党中央着眼推动区域协调发展、促进共同富裕作出的重大决策"
+                },
+                {
+                  "key": "B",
+                  "text": "是实现先富帮后富、最终实现共同富裕目标的大举措"
+                },
+                {
+                  "key": "C",
+                  "text": "实现了不同地区以同一速度发展的要求"
+                },
+                {
+                  "key": "D",
+                  "text": "彰显了我们党的政治优势和我国社会主义制度的优越性"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "毛中特与新思想",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "ABD",
+                "semanticCandidateAnswer": "ABD",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-26",
+              "questionNumber": 26,
+              "answerMode": "multi-choice",
+              "prompt": "《中华人民共和国国民经济和社会发展第十五个五年规划纲要》设置的20项主要指标中，民生指标占比超过1/3，覆盖就业、收入、教育、健康、养老、托育等人民群众急难愁盼的关键领域。这说明",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "经济发展和社会发展要相辅相成"
+                },
+                {
+                  "key": "B",
+                  "text": "制定经济发展政策要同步嵌入改善民生的要求"
+                },
+                {
+                  "key": "C",
+                  "text": "制定民生政策要同步考虑促进经济发展的效应"
+                },
+                {
+                  "key": "D",
+                  "text": "“十五五”时期的工作重心已从经济发展全面转向民生保障"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "毛中特与新思想",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "ABC",
+                "semanticCandidateAnswer": "ABC",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-27",
+              "questionNumber": 27,
+              "answerMode": "multi-choice",
+              "prompt": "中国共产党人是孙中山先生革命事业最坚定的支持者、最忠诚的合作者、最忠实的继承者。中国共产党",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "在成立之初就提出反帝反封建的民主革命纲领"
+                },
+                {
+                  "key": "B",
+                  "text": "同孙中山先生领导的中国国民党携手合作，帮助国民党完成改组"
+                },
+                {
+                  "key": "C",
+                  "text": "建立最广泛的革命统一战线，掀起轰轰烈烈的大革命，给北洋军阀反动统治以沉重打击"
+                },
+                {
+                  "key": "D",
+                  "text": "不断实现和发展了孙中山先生和辛亥革命先驱的伟大抱负"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "史纲",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "ABCD",
+                "semanticCandidateAnswer": "ABCD",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-28",
+              "questionNumber": 28,
+              "answerMode": "multi-choice",
+              "prompt": "从1934年10月至1936年10月，我们党领导红军第一、第二、第四方面军和第二十五军，进行了震撼世界、彪炳史册的伟大长征。红军长征纵横十余省，长驱二万五千里，跨越近百条江河，翻越皑皑雪山，穿过茫茫草地，进行600余次战役战斗，粉碎上百万敌军围追堵截。红军长征",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "宣告国民党反动派消灭中国共产党和红军的图谋彻底失败"
+                },
+                {
+                  "key": "B",
+                  "text": "胜利实现北上抗日的战略转移"
+                },
+                {
+                  "key": "C",
+                  "text": "成功开创了中国革命新局面"
+                },
+                {
+                  "key": "D",
+                  "text": "标志着党在政治上思想上组织上走向成熟"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "史纲",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "ABC",
+                "semanticCandidateAnswer": "ABC",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-29",
+              "questionNumber": 29,
+              "answerMode": "multi-choice",
+              "prompt": "1971年10月25日，第26届联合国大会以压倒性多数通过第2758号决议，决定恢复中华人民共和国在联合国的一切权利，承认中华人民共和国政府代表是中国在联合国的唯一合法代表。这一历史性时刻，对中国、对联合国、对整个世界都具有重大而深远的意义。联合国大会第2758号决议",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "是发展中国家崛起的第一个里程碑和重要标志"
+                },
+                {
+                  "key": "B",
+                  "text": "从政治上、法律上和程序上彻底解决了中国在联合国的代表权问题"
+                },
+                {
+                  "key": "C",
+                  "text": "是国际组织合法性的一次重要完善，巩固联合国在全球治理体系的中心地位"
+                },
+                {
+                  "key": "D",
+                  "text": "是全球公道正义力量的一次空前集结"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "史纲",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "BCD",
+                "semanticCandidateAnswer": "BCD",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-30",
+              "questionNumber": 30,
+              "answerMode": "multi-choice",
+              "prompt": "曾有人问《长征组歌》的词作者肖华将军：“《长征组歌》那么长，您最喜欢哪一句？”他脱口而出：“革命理想高于天。”长征的胜利，是中国共产党人理想的胜利，是中国共产党人信念的胜利。理想信念是精神之“钙”，是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "人的思想和行为的定向器"
+                },
+                {
+                  "key": "B",
+                  "text": "人生发展的内在动力"
+                },
+                {
+                  "key": "C",
+                  "text": "一个人在精神生活领域“安身立命”的根本"
+                },
+                {
+                  "key": "D",
+                  "text": "人的精神世界的核心"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "思修法基",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "ABCD",
+                "semanticCandidateAnswer": "ABCD",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-31",
+              "questionNumber": 31,
+              "answerMode": "multi-choice",
+              "prompt": "《中华人民共和国生态环境法典》于2026年3月12日第十四届全国人民代表大会第四次会议通过，自2026年8月15日起施行。习近平总书记指出：“我国颁布生态环境法典，进一步筑牢了美丽中国建设的法治基石。”生态环境法典是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "世界上第一部以“生态环境”命名的法典"
+                },
+                {
+                  "key": "B",
+                  "text": "继民法典之后我国第二部以“法典”命名的法律"
+                },
+                {
+                  "key": "C",
+                  "text": "中华民族对现代法治文明的独特贡献"
+                },
+                {
+                  "key": "D",
+                  "text": "生态治理重心从全生命周期管理向末端治理转变的重大标志"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "思修法基",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "ABC",
+                "semanticCandidateAnswer": "ABC",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-32",
+              "questionNumber": 32,
+              "answerMode": "multi-choice",
+              "prompt": "党的建设事关党的前途命运、党和国家事业兴衰成败。党的二十届五中全会重点研究持之以恒推进全面从严治党问题。这是党中央把握党和国家事业发展历史方位、着眼中国式现代化全局，审时度势、通盘考虑作出的重大决策。持之以恒推进全面从严治党，这是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "保持党的先进性和纯洁性、巩固党的长期执政地位的必然要求"
+                },
+                {
+                  "key": "B",
+                  "text": "巩固和发展全党高度团结统一、党心军心民心高度凝聚良好政治局面的必然要求"
+                },
+                {
+                  "key": "C",
+                  "text": "实现党的历史使命、推动党和国家事业行稳致远的必然要求"
+                },
+                {
+                  "key": "D",
+                  "text": "构建人类命运共同体、推动建设一个更加美好世界的必然要求"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "当代与时政",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "ABC",
+                "semanticCandidateAnswer": "ABC",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-33",
+              "questionNumber": 33,
+              "answerMode": "multi-choice",
+              "prompt": "2026年5月，国家主席习近平同美国总统特朗普在北京举行历史性会晤，共同确立了构建中美建设性战略稳定关系的两国关系新定位，明确了两国携手努力的方向是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "合作为主"
+                },
+                {
+                  "key": "B",
+                  "text": "竞争有度"
+                },
+                {
+                  "key": "C",
+                  "text": "分歧可控"
+                },
+                {
+                  "key": "D",
+                  "text": "和平可期"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "knowledgeModule": "当代与时政",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": "ABCD",
+                "semanticCandidateAnswer": "ABCD",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            }
+          ],
+          "analysisProfile": {
+            "focusSkills": [
+              "多项组合判断",
+              "干扰项绝对化表述排除",
+              "结合材料语境筛选"
+            ],
+            "commonTraps": [
+              "少选漏选（保守失分）",
+              "误选说法正确但与题干无关项"
+            ]
+          },
+          "reviewStrategy": {
+            "defaultIntervalsDays": [
+              1,
+              3,
+              7,
+              14,
+              30
+            ],
+            "recommendedAction": "逐项复盘每个干扰项错在哪里，消除知识盲区"
+          },
+          "sourceLocator": {
+            "sourceFile": "data/politics/xiao8-2027/set-2.json",
+            "sourceFormat": "pdf"
+          }
+        }
+      ]
+    },
+    {
+      "id": "2102-sec-3",
+      "sectionNumber": "Section III",
+      "title": "三、材料分析题",
+      "score": 50,
+      "suggestedMinutes": 130,
+      "units": [
+        {
+          "id": "2102-unit-politics-analysis",
+          "sectionId": "Section III",
+          "unitType": "politics-analysis",
+          "title": "三、材料分析题（第 34～38 题）",
+          "instructions": "每小题 10 分，共 50 分。要求结合所学知识分析材料回答问题。",
+          "score": 50,
+          "suggestedMinutes": 130,
+          "materials": [
+            {
+              "id": "2102-mat-q-34",
+              "materialType": "analysis-material",
+              "title": "第 34 题材料（马原）",
+              "text": "经验是有用的好东西，对我们的工作、学习和生活都是宝贵的财富。但经验有时也是包袱，会让人产生一种“经验自信”，自以为是。久而久之，不学习，不去了解新事物，安于以既有经验看问题，以习惯性思维想当然。\n这种现象在现实生活中并不鲜见。比如，一些地方在特色果木种植上跟风，听说其他地方种果木取得了成功，便不看具体地理环境的差异，照搬经验，动员大家都来种植这种果木，结果长势、收成不如人意，产品卖不出去，最后甚至出现砍树的情况。\n经验，特别是具体的经验，一般带有情境依赖性，在甲地管用的经验，在乙地未必适用。\n一直记得几年前的一次调研。当地是“猕猴桃之乡”，种植面积达几十万亩，还有农林专业院校在当地建有试验站。初次看到那里的猕猴桃示范园时，调研人员甚是诧异——树下野草丛生。在农村老家，父亲那辈人评判人勤与懒的标尺，通常就是拿草说事。说某人勤快，就说那人地锄得净，一根草都没有；反之，如果说某人地里的草长得比庄稼还高，那必定是一村人看不起的懒汉。这里的示范园任草生长，而且是他们自己种的三叶草，这不能不让人感到奇怪。于是调研人员请教试验站站长，答曰：这是果园生草，也叫生草覆盖，是一项先进、实用、高效的土壤管理措施。其应用能够改善果园小气候和土壤环境，降低夏季土壤温度，稳定果园空气湿度，提高土壤的有机质含量，从而实现果品的优质高产。原来如此。站长的专业讲解，刷新了调研人员既有的经验和认知，让调研人员知道了草与农作物之间，除了人所共知的竞争关系，还存在着特定条件下的共生关系。\n摘编自《人民日报》（2026年2月4日）",
+              "paragraphs": [
+                "经验是有用的好东西，对我们的工作、学习和生活都是宝贵的财富。但经验有时也是包袱，会让人产生一种“经验自信”，自以为是。久而久之，不学习，不去了解新事物，安于以既有经验看问题，以习惯性思维想当然。\n这种现象在现实生活中并不鲜见。比如，一些地方在特色果木种植上跟风，听说其他地方种果木取得了成功，便不看具体地理环境的差异，照搬经验，动员大家都来种植这种果木，结果长势、收成不如人意，产品卖不出去，最后甚至出现砍树的情况。\n经验，特别是具体的经验，一般带有情境依赖性，在甲地管用的经验，在乙地未必适用。\n一直记得几年前的一次调研。当地是“猕猴桃之乡”，种植面积达几十万亩，还有农林专业院校在当地建有试验站。初次看到那里的猕猴桃示范园时，调研人员甚是诧异——树下野草丛生。在农村老家，父亲那辈人评判人勤与懒的标尺，通常就是拿草说事。说某人勤快，就说那人地锄得净，一根草都没有；反之，如果说某人地里的草长得比庄稼还高，那必定是一村人看不起的懒汉。这里的示范园任草生长，而且是他们自己种的三叶草，这不能不让人感到奇怪。于是调研人员请教试验站站长，答曰：这是果园生草，也叫生草覆盖，是一项先进、实用、高效的土壤管理措施。其应用能够改善果园小气候和土壤环境，降低夏季土壤温度，稳定果园空气湿度，提高土壤的有机质含量，从而实现果品的优质高产。原来如此。站长的专业讲解，刷新了调研人员既有的经验和认知，让调研人员知道了草与农作物之间，除了人所共知的竞争关系，还存在着特定条件下的共生关系。\n摘编自《人民日报》（2026年2月4日）"
+              ],
+              "relatedItemIds": [
+                "2102-q-34"
+              ]
+            },
+            {
+              "id": "2102-mat-q-35",
+              "materialType": "analysis-material",
+              "title": "第 35 题材料（毛中特与新思想）",
+              "text": "材料 1\n习近平强调，新征程上，要以习近平新时代中国特色社会主义思想为指导，完整准确全面贯彻新发展理念，统筹高质量发展和高水平安全，坚持智能化、绿色化、融合化方向，持续做大做强先进制造业，提升产业链自主可控水平，加快构建以先进制造业为骨干的现代化产业体系，巩固壮大实体经济根基，为推进中国式现代化提供有力支撑。\n摘编自《人民日报》（2026年9月18日）\n\n材料 2\n当前，新一轮科技革命和产业变革加速演进，前沿技术不断涌现，引领和支撑未来产业快速崛起。\n新征程上，我们要站在推进强国建设、民族复兴伟业的战略高度，立足客观条件，发挥比较优势，坚持稳中求进、梯度培育，推动我国未来产业发展不断取得新突破。\n摘自习近平《前瞻布局和发展未来产业》（《求是》2026年第11期）",
+              "paragraphs": [
+                "材料 1\n习近平强调，新征程上，要以习近平新时代中国特色社会主义思想为指导，完整准确全面贯彻新发展理念，统筹高质量发展和高水平安全，坚持智能化、绿色化、融合化方向，持续做大做强先进制造业，提升产业链自主可控水平，加快构建以先进制造业为骨干的现代化产业体系，巩固壮大实体经济根基，为推进中国式现代化提供有力支撑。\n摘编自《人民日报》（2026年9月18日）",
+                "材料 2\n当前，新一轮科技革命和产业变革加速演进，前沿技术不断涌现，引领和支撑未来产业快速崛起。\n新征程上，我们要站在推进强国建设、民族复兴伟业的战略高度，立足客观条件，发挥比较优势，坚持稳中求进、梯度培育，推动我国未来产业发展不断取得新突破。\n摘自习近平《前瞻布局和发展未来产业》（《求是》2026年第11期）"
+              ],
+              "relatedItemIds": [
+                "2102-q-35"
+              ]
+            },
+            {
+              "id": "2102-mat-q-36",
+              "materialType": "analysis-material",
+              "title": "第 36 题材料（史纲）",
+              "text": "材料 1\n中国共产党之所以能够在105年奋斗中不断铸就辉煌，历史和人民之所以选择中国共产党，根本在于我们党具有其他政党和政治力量无可比拟的优秀特质。\n——矢志追求真理，始终把准前进方向。我们党把马克思主义作为改造主观世界和客观世界的强大思想武器，坚持解放思想、实事求是、与时俱进、求真务实，注重在社会矛盾运动中揭示和运用真理，善于在实践中检验和发展真理，不断以新的理论指导新的实践，确保党和人民事业沿着正确方向前进。\n摘自习近平《在庆祝中国共产党成立105周年大会上的讲话》（《求是》2026年第14期）\n\n材料 2\n“中国产生了共产党，这是开天辟地的大事变”。从此，中国人民和中华民族有了最可靠的主心骨，中国人民开始从精神上由被动转为主动，内忧外患、积贫积弱的中国开启了翻天覆地的历史巨变，中华民族开始艰难地但不可逆转地走向伟大复兴。\n105年栉风沐雨、披荆斩棘，党和人民事业不断从胜利走向新的胜利。“从根本上改变了中国人民的前途命运”“开辟了实现中华民族伟大复兴的正确道路”“展示了马克思主义的强大生命力”“深刻影响了世界历史进程”“锻造了强大的中国共产党”，习近平总书记以宏阔的历史视角，从五个方面深刻总结了我们党105年不懈奋斗创造的伟大成就。\n今天，中国人民已经把命运牢牢掌握在自己手中，中华民族伟大复兴势不可挡，中国特色社会主义事业展现出蓬勃生机和旺盛活力，中国式现代化拓展了发展中国家走向现代化的途径，我们党已经发展成为具有重大全球影响力的世界第一大执政党。\n中国共产党的成就和贡献，不仅是历史性的，也是世界性的。有外国学者认为：“中国式现代化的探索与成就，正在世界现代化的史册上留下鲜活的东方注脚，为全球发展注入持久的正向动力。”\n摘编自《人民日报》（2026年7月3日）",
+              "paragraphs": [
+                "材料 1\n中国共产党之所以能够在105年奋斗中不断铸就辉煌，历史和人民之所以选择中国共产党，根本在于我们党具有其他政党和政治力量无可比拟的优秀特质。\n——矢志追求真理，始终把准前进方向。我们党把马克思主义作为改造主观世界和客观世界的强大思想武器，坚持解放思想、实事求是、与时俱进、求真务实，注重在社会矛盾运动中揭示和运用真理，善于在实践中检验和发展真理，不断以新的理论指导新的实践，确保党和人民事业沿着正确方向前进。\n摘自习近平《在庆祝中国共产党成立105周年大会上的讲话》（《求是》2026年第14期）",
+                "材料 2\n“中国产生了共产党，这是开天辟地的大事变”。从此，中国人民和中华民族有了最可靠的主心骨，中国人民开始从精神上由被动转为主动，内忧外患、积贫积弱的中国开启了翻天覆地的历史巨变，中华民族开始艰难地但不可逆转地走向伟大复兴。\n105年栉风沐雨、披荆斩棘，党和人民事业不断从胜利走向新的胜利。“从根本上改变了中国人民的前途命运”“开辟了实现中华民族伟大复兴的正确道路”“展示了马克思主义的强大生命力”“深刻影响了世界历史进程”“锻造了强大的中国共产党”，习近平总书记以宏阔的历史视角，从五个方面深刻总结了我们党105年不懈奋斗创造的伟大成就。\n今天，中国人民已经把命运牢牢掌握在自己手中，中华民族伟大复兴势不可挡，中国特色社会主义事业展现出蓬勃生机和旺盛活力，中国式现代化拓展了发展中国家走向现代化的途径，我们党已经发展成为具有重大全球影响力的世界第一大执政党。\n中国共产党的成就和贡献，不仅是历史性的，也是世界性的。有外国学者认为：“中国式现代化的探索与成就，正在世界现代化的史册上留下鲜活的东方注脚，为全球发展注入持久的正向动力。”\n摘编自《人民日报》（2026年7月3日）"
+              ],
+              "relatedItemIds": [
+                "2102-q-36"
+              ]
+            },
+            {
+              "id": "2102-mat-q-37",
+              "materialType": "analysis-material",
+              "title": "第 37 题材料（思修法基）",
+              "text": "材料 1\n青年的样子就是中国的样子。从“忍看山河碎？愿将赤血流”到新时代“请党放心、强国有我”的青春强音，广大青年在披荆斩棘中开辟天地，共同定义了中国的模样。\n作为“十五五”的亲历者、见证者，更是参与者、建设者，新时代中国青年正紧握历史的接力棒奋力奔跑，跨越时空的回响历久弥新：\n“你是中国人吗？”“是！”\n“你爱中国吗？”“爱！”\n“你愿意中国好吗？”“愿意！愿祖国繁荣富强！”\n“怀爱国之心、立报国之志、增强国之能”，这是习近平总书记给出的行动指南，也是当代青年发出的铿锵誓言。\n这声音在祖国的广袤土地上生根发芽，跨越历史、连接当下、开启未来。\n摘编自《人民日报》（2026年5月3日）\n\n材料 2\n电影《给阿嬷的情书》在泰国持续收获好评。片尾，一封封泛黄的侨批在大银幕上缓缓展开，纸页上写给家人的家常话语娓娓道来。散场灯亮起，不少观众仍静坐回味，许多当地华人观众走出影院时眼角泛红。一段时间以来，在中国港澳地区及新加坡、马来西亚、文莱、泰国，这封写在银幕上的“家书”，沿着百年前先辈下南洋的足迹，走进越来越多东南亚观众心坎里。\n一封侨批承载的远不止个体乡愁。近代以来，一批批中国人在战乱与贫困中背井离乡，在南洋的码头、矿场、橡胶园辛苦谋生。他们攒下血汗钱赡养家人、捐资乡梓，民族危亡之际更倾囊支援祖国。薄薄信纸背后，是中国人在艰难处境中的坚韧品格，是个人命运、家庭责任与家国情怀交织的厚重历史。\n摘编自《人民日报》（2026年10月8日）\n\n材料 3\n习近平对侨务工作作出重要指示强调，新征程上，要以习近平新时代中国特色社会主义思想为指导，全面贯彻党的侨务政策，紧紧围绕党和国家工作大局，更好凝聚侨心侨力，引导广大海外侨胞和归侨侨眷秉承优良传统、厚植家国情怀，发挥独特优势、展现更大作为，积极服务祖国统一大业，促进海内外中华儿女团结奋斗，为以中国式现代化全面推进强国建设、民族复兴伟业汇聚磅礴力量。\n摘编自《人民日报》（2026年7月29日）",
+              "paragraphs": [
+                "材料 1\n青年的样子就是中国的样子。从“忍看山河碎？愿将赤血流”到新时代“请党放心、强国有我”的青春强音，广大青年在披荆斩棘中开辟天地，共同定义了中国的模样。\n作为“十五五”的亲历者、见证者，更是参与者、建设者，新时代中国青年正紧握历史的接力棒奋力奔跑，跨越时空的回响历久弥新：\n“你是中国人吗？”“是！”\n“你爱中国吗？”“爱！”\n“你愿意中国好吗？”“愿意！愿祖国繁荣富强！”\n“怀爱国之心、立报国之志、增强国之能”，这是习近平总书记给出的行动指南，也是当代青年发出的铿锵誓言。\n这声音在祖国的广袤土地上生根发芽，跨越历史、连接当下、开启未来。\n摘编自《人民日报》（2026年5月3日）",
+                "材料 2\n电影《给阿嬷的情书》在泰国持续收获好评。片尾，一封封泛黄的侨批在大银幕上缓缓展开，纸页上写给家人的家常话语娓娓道来。散场灯亮起，不少观众仍静坐回味，许多当地华人观众走出影院时眼角泛红。一段时间以来，在中国港澳地区及新加坡、马来西亚、文莱、泰国，这封写在银幕上的“家书”，沿着百年前先辈下南洋的足迹，走进越来越多东南亚观众心坎里。\n一封侨批承载的远不止个体乡愁。近代以来，一批批中国人在战乱与贫困中背井离乡，在南洋的码头、矿场、橡胶园辛苦谋生。他们攒下血汗钱赡养家人、捐资乡梓，民族危亡之际更倾囊支援祖国。薄薄信纸背后，是中国人在艰难处境中的坚韧品格，是个人命运、家庭责任与家国情怀交织的厚重历史。\n摘编自《人民日报》（2026年10月8日）",
+                "材料 3\n习近平对侨务工作作出重要指示强调，新征程上，要以习近平新时代中国特色社会主义思想为指导，全面贯彻党的侨务政策，紧紧围绕党和国家工作大局，更好凝聚侨心侨力，引导广大海外侨胞和归侨侨眷秉承优良传统、厚植家国情怀，发挥独特优势、展现更大作为，积极服务祖国统一大业，促进海内外中华儿女团结奋斗，为以中国式现代化全面推进强国建设、民族复兴伟业汇聚磅礴力量。\n摘编自《人民日报》（2026年7月29日）"
+              ],
+              "relatedItemIds": [
+                "2102-q-37"
+              ]
+            },
+            {
+              "id": "2102-mat-q-38",
+              "materialType": "analysis-material",
+              "title": "第 38 题材料（当代与时政）",
+              "text": "当前，世界百年变局加速演进，霸权主义、单边主义、保护主义逆流而动，但绝大多数国家并不认同强权政治、不希望冲突对抗、不愿意封闭落后，而是期待通过自身发展和国际合作，在世界舞台上平等拥有一席之地。近年来，全球南方卓然壮大，推动国际力量对比深刻调整，世界多极化大势不可逆转。\n世界需要怎样的多极化？各国如何参与和推动多极化？国际社会应当凝聚共识，作出经得起实践和历史检验的正确抉择。中国作为负责任大国，积极倡导平等有序的世界多极化。\n上海合作组织经过25年发展，成功树立起大国之间、邻国之间、大小国家之间关系的典范，成功汇聚起全球近半数人口和四分之一经济体量的发展合力。一个更加团结、更有活力的上海合作组织完全能够为推进平等有序的世界多极化贡献更大力量。\n摘自习近平《共同倡导平等有序的世界多极化 实现更加公正合理的全球治理——在“上海合作组织+”会议上的讲话》",
+              "paragraphs": [
+                "当前，世界百年变局加速演进，霸权主义、单边主义、保护主义逆流而动，但绝大多数国家并不认同强权政治、不希望冲突对抗、不愿意封闭落后，而是期待通过自身发展和国际合作，在世界舞台上平等拥有一席之地。近年来，全球南方卓然壮大，推动国际力量对比深刻调整，世界多极化大势不可逆转。\n世界需要怎样的多极化？各国如何参与和推动多极化？国际社会应当凝聚共识，作出经得起实践和历史检验的正确抉择。中国作为负责任大国，积极倡导平等有序的世界多极化。\n上海合作组织经过25年发展，成功树立起大国之间、邻国之间、大小国家之间关系的典范，成功汇聚起全球近半数人口和四分之一经济体量的发展合力。一个更加团结、更有活力的上海合作组织完全能够为推进平等有序的世界多极化贡献更大力量。\n摘自习近平《共同倡导平等有序的世界多极化 实现更加公正合理的全球治理——在“上海合作组织+”会议上的讲话》"
+              ],
+              "relatedItemIds": [
+                "2102-q-38"
+              ]
+            }
+          ],
+          "items": [
+            {
+              "id": "2102-q-34",
+              "questionNumber": 34,
+              "answerMode": "long-text",
+              "prompt": "（1）运用矛盾分析方法，说明为什么“在甲地管用的经验，在乙地未必适用”。\n（2）从实践与认识的关系角度，分析应如何看待“经验”。",
+              "subQuestions": [
+                "（1）运用矛盾分析方法，说明为什么“在甲地管用的经验，在乙地未必适用”。",
+                "（2）从实践与认识的关系角度，分析应如何看待“经验”。"
+              ],
+              "knowledgeModule": "马原",
+              "score": 10,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "rubric": {
+                "maxScore": 10,
+                "dimensions": [
+                  {
+                    "id": "kp",
+                    "name": "核心原理与采分点覆盖",
+                    "maxScore": 6,
+                    "description": "准确调用对应学科核心原理与关键术语"
+                  },
+                  {
+                    "id": "mat",
+                    "name": "结合材料分析与逻辑结构",
+                    "maxScore": 4,
+                    "description": "紧扣材料层次分点作答，逻辑清晰"
+                  }
+                ],
+                "keyPoints": [
+                  "（1）运用矛盾分析方法，说明为什么“在甲地管用的经验，在乙地未必适用”。",
+                  "（2）从实践与认识的关系角度，分析应如何看待“经验”。"
+                ],
+                "referenceSource": "unavailable"
+              },
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "三、材料分析题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-35",
+              "questionNumber": 35,
+              "answerMode": "long-text",
+              "prompt": "（1）为什么要“持续做大做强先进制造业”，“加快构建以先进制造业为骨干的现代化产业体系”？\n（2）“推动我国未来产业发展不断取得新突破”有何重大意义？",
+              "subQuestions": [
+                "（1）为什么要“持续做大做强先进制造业”，“加快构建以先进制造业为骨干的现代化产业体系”？",
+                "（2）“推动我国未来产业发展不断取得新突破”有何重大意义？"
+              ],
+              "knowledgeModule": "毛中特与新思想",
+              "score": 10,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "rubric": {
+                "maxScore": 10,
+                "dimensions": [
+                  {
+                    "id": "kp",
+                    "name": "核心原理与采分点覆盖",
+                    "maxScore": 6,
+                    "description": "准确调用对应学科核心原理与关键术语"
+                  },
+                  {
+                    "id": "mat",
+                    "name": "结合材料分析与逻辑结构",
+                    "maxScore": 4,
+                    "description": "紧扣材料层次分点作答，逻辑清晰"
+                  }
+                ],
+                "keyPoints": [
+                  "（1）为什么要“持续做大做强先进制造业”，“加快构建以先进制造业为骨干的现代化产业体系”？",
+                  "（2）“推动我国未来产业发展不断取得新突破”有何重大意义？"
+                ],
+                "referenceSource": "unavailable"
+              },
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "三、材料分析题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-36",
+              "questionNumber": 36,
+              "answerMode": "long-text",
+              "prompt": "（1）“矢志追求真理，始终把准前进方向”是中国共产党的优秀特质之一。结合新民主主义革命和社会主义建设道路的探索历程，说明中国共产党如何“不断以新的理论指导新的实践，确保党和人民事业沿着正确方向前进”。\n（2）如何理解“中国共产党的成就和贡献，不仅是历史性的，也是世界性的”？",
+              "subQuestions": [
+                "（1）“矢志追求真理，始终把准前进方向”是中国共产党的优秀特质之一。结合新民主主义革命和社会主义建设道路的探索历程，说明中国共产党如何“不断以新的理论指导新的实践，确保党和人民事业沿着正确方向前进”。",
+                "（2）如何理解“中国共产党的成就和贡献，不仅是历史性的，也是世界性的”？"
+              ],
+              "knowledgeModule": "史纲",
+              "score": 10,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "rubric": {
+                "maxScore": 10,
+                "dimensions": [
+                  {
+                    "id": "kp",
+                    "name": "核心原理与采分点覆盖",
+                    "maxScore": 6,
+                    "description": "准确调用对应学科核心原理与关键术语"
+                  },
+                  {
+                    "id": "mat",
+                    "name": "结合材料分析与逻辑结构",
+                    "maxScore": 4,
+                    "description": "紧扣材料层次分点作答，逻辑清晰"
+                  }
+                ],
+                "keyPoints": [
+                  "（1）“矢志追求真理，始终把准前进方向”是中国共产党的优秀特质之一。结合新民主主义革命和社会主义建设道路的探索历程，说明中国共产党如何“不断以新的理论指导新的实践，确保党和人民事业沿着正确方向前进”。",
+                  "（2）如何理解“中国共产党的成就和贡献，不仅是历史性的，也是世界性的”？"
+                ],
+                "referenceSource": "unavailable"
+              },
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "三、材料分析题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-37",
+              "questionNumber": 37,
+              "answerMode": "long-text",
+              "prompt": "（1）为什么要“厚植家国情怀”？\n（2）新时代青年应怎样以实际行动回答“爱国三问”？",
+              "subQuestions": [
+                "（1）为什么要“厚植家国情怀”？",
+                "（2）新时代青年应怎样以实际行动回答“爱国三问”？"
+              ],
+              "knowledgeModule": "思修法基",
+              "score": 10,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "rubric": {
+                "maxScore": 10,
+                "dimensions": [
+                  {
+                    "id": "kp",
+                    "name": "核心原理与采分点覆盖",
+                    "maxScore": 6,
+                    "description": "准确调用对应学科核心原理与关键术语"
+                  },
+                  {
+                    "id": "mat",
+                    "name": "结合材料分析与逻辑结构",
+                    "maxScore": 4,
+                    "description": "紧扣材料层次分点作答，逻辑清晰"
+                  }
+                ],
+                "keyPoints": [
+                  "（1）为什么要“厚植家国情怀”？",
+                  "（2）新时代青年应怎样以实际行动回答“爱国三问”？"
+                ],
+                "referenceSource": "unavailable"
+              },
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "三、材料分析题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            },
+            {
+              "id": "2102-q-38",
+              "questionNumber": 38,
+              "answerMode": "long-text",
+              "prompt": "（1）世界多极化大势不可逆转。结合中国的主张，说明“世界需要怎样的多极化”。\n（2）上海合作组织应如何“为推进平等有序的世界多极化贡献更大力量”？",
+              "subQuestions": [
+                "（1）世界多极化大势不可逆转。结合中国的主张，说明“世界需要怎样的多极化”。",
+                "（2）上海合作组织应如何“为推进平等有序的世界多极化贡献更大力量”？"
+              ],
+              "knowledgeModule": "当代与时政",
+              "score": 10,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "rubric": {
+                "maxScore": 10,
+                "dimensions": [
+                  {
+                    "id": "kp",
+                    "name": "核心原理与采分点覆盖",
+                    "maxScore": 6,
+                    "description": "准确调用对应学科核心原理与关键术语"
+                  },
+                  {
+                    "id": "mat",
+                    "name": "结合材料分析与逻辑结构",
+                    "maxScore": 4,
+                    "description": "紧扣材料层次分点作答，逻辑清晰"
+                  }
+                ],
+                "keyPoints": [
+                  "（1）世界多极化大势不可逆转。结合中国的主张，说明“世界需要怎样的多极化”。",
+                  "（2）上海合作组织应如何“为推进平等有序的世界多极化贡献更大力量”？"
+                ],
+                "referenceSource": "unavailable"
+              },
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-2.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "三、材料分析题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-2.json",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.811Z"
+              }
+            }
+          ],
+          "analysisProfile": {
+            "focusSkills": [
+              "马原原理拆解",
+              "新思想与史纲主线串联",
+              "按采分点规范分条作答"
+            ],
+            "commonTraps": [
+              "只抄材料不写原理",
+              "原理堆砌未结合材料"
+            ]
+          },
+          "reviewStrategy": {
+            "defaultIntervalsDays": [
+              1,
+              3,
+              7,
+              14,
+              30
+            ],
+            "recommendedAction": "对照【答案要点】提炼核心采分句框架"
+          },
+          "sourceLocator": {
+            "sourceFile": "data/politics/xiao8-2027/set-2.json",
+            "sourceFormat": "pdf"
+          }
+        }
+      ]
+    }
+  ],
+  "validationReport": {
+    "examId": "exam-2102",
+    "year": 2102,
+    "dataVersion": "v1",
+    "status": "ready",
+    "passedAllChecks": true,
+    "errorCodes": [],
+    "missingObjectiveQuestions": [],
+    "conflictingObjectiveQuestions": [],
+    "checks": [
+      {
+        "checkId": "POL-CHK-01",
+        "name": "考研政治（27肖秀荣冲刺8套卷）科目与套卷校验",
+        "passed": true,
+        "message": "2027 考研政治冲刺 8 套卷（二） (卷号: 2) 校验通过"
+      },
+      {
+        "checkId": "POL-CHK-02",
+        "name": "题号连续性与总题数 (1–38)",
+        "passed": true,
+        "message": "单选 16 题 + 多选 17 题 + 分析 5 题 = 38 题"
+      },
+      {
+        "checkId": "POL-CHK-03",
+        "name": "单项选择题 (1–16 题，每题 1 分) 与官方解析核验",
+        "passed": true,
+        "message": "1–16 题四选一答案与《肖八答案解析》完全对齐"
+      },
+      {
+        "checkId": "POL-CHK-04",
+        "name": "多项选择题 (17–33 题，每题 2 分) 与官方解析核验",
+        "passed": true,
+        "message": "17–33 题多选答案（2～4项）与《肖八答案解析》速查表完全一致"
+      },
+      {
+        "checkId": "POL-CHK-05",
+        "name": "材料分析题 (34–38 题，每题 10 分) 材料与答案要点核验",
+        "passed": true,
+        "message": "34–38 题五大模块材料、小问与【答案要点】完整收录"
+      }
+    ],
+    "consistencyCheckRuns": 2,
+    "consistencyMatched": true,
+    "sourceDiscrepancies": [],
+    "generatedAt": "2026-11-12T00:00:00.000Z",
+    "paperId": "pol-2027-xiao8-02"
+  },
+  "referencedAssets": [],
+  "objectiveAnswerCount": 33,
+  "subjectiveCount": 5,
+  "answerSourceStatus": "source-provided",
+  "paperId": "pol-2027-xiao8-02",
+  "subjectId": "politics",
+  "examYear": 2027,
+  "seriesCode": "xiao8",
+  "badgeLabel": "2027 肖八第2套",
+  "identity": {
+    "paperId": "pol-2027-xiao8-02",
+    "legacyYear": 2102,
+    "subjectId": "politics",
+    "examYear": 2027,
+    "seriesCode": "xiao8",
+    "setNumber": 2,
+    "title": "2027 考研政治冲刺 8 套卷（二）",
+    "shortTitle": "27肖八·卷二",
+    "badgeLabel": "2027 肖八第2套"
+  }
+}

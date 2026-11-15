@@ -1,21 +1,18 @@
 import assert from 'node:assert/strict';
-import path from 'node:path';
 import test from 'node:test';
-import type { Exam } from '../src/shared/types.ts';
+import type { Exam, SubjectiveEvaluationResult } from '../src/shared/types.ts';
 import {
   appendSubjectiveAnswerVersion,
   createDefaultLearningDatabase,
   exportLearningDataJson,
   importLearningDataJson,
   mergeLearningDatabasesWithConflictDetection,
+  migrateDatabasePaperIds,
 } from '../src/services/storageAndSync.ts';
-import {
-  evaluateFirestoreRuleRequest,
-  loadFirestoreRulesFromDisk,
-} from '../src/shared/firestoreRulesEvaluator.ts';
 import { computeVersionDiff } from '../src/shared/schemaValidator.ts';
 import {
   buildObjectiveReviewItems,
+  buildSubjectiveReviewItems,
   calculateNextReviewSchedule,
   gradeObjectiveResponses,
 } from '../src/shared/scoringAndReview.ts';
@@ -209,6 +206,24 @@ test('Deterministic objective scoring, confidence distribution, and spaced repet
   assert.ok(reviewItems.some((r) => r.questionNumber === 1 && r.reviewType === 'objective-guessed-right'));
   assert.ok(reviewItems.some((r) => r.questionNumber === 21 && r.reviewType === 'objective-confident-error'));
 
+  // Regression guard: passing non-ISO attemptId as 3rd string or options object never throws RangeError: Invalid time value
+  const legacyStringArgItems = buildObjectiveReviewItems(
+    syntheticExam,
+    summary.itemResults,
+    'attempt-2099-v1-paper-check-1700000000'
+  );
+  assert.equal(legacyStringArgItems.length, 2);
+  assert.ok(!Number.isNaN(new Date(legacyStringArgItems[0].nextDueAt).getTime()));
+
+  const optionsArgItems = buildObjectiveReviewItems(
+    syntheticExam,
+    summary.itemResults,
+    { attemptId: 'att-quick-check-1', nowIso: '2026-11-14T10:00:00.000Z' }
+  );
+  assert.equal(optionsArgItems.length, 2);
+  assert.equal(optionsArgItems[0].paperId, 'en1-2099');
+  assert.ok(optionsArgItems[0].id.includes('att-quick-check-1'));
+
   // Spaced repetition schedule progression: 1d -> 3d -> 7d -> reset on failure
   let rev = reviewItems[0];
   assert.equal(rev.intervalDays, 1);
@@ -344,88 +359,126 @@ test('Immutable subjective answer versions (V1, V2, V3), version diff, multi-dev
   assert.equal(Object.keys(restoredDb.subjectiveVersions).length, 2);
 });
 
-test('Firestore Security Rules pass all Dirty Dozen adversarial checks and enforce user isolation', () => {
-  const rulesText = loadFirestoreRulesFromDisk(path.join(process.cwd(), 'firestore.rules'));
+test('Politics analysis immutable versions, review items, and legacy paperId database migration', () => {
+  let db = createDefaultLearningDatabase('device-pol');
 
-  // 1. Unauthenticated read -> PERMISSION_DENIED
-  assert.equal(
-    evaluateFirestoreRuleRequest(rulesText, {
-      auth: null,
-      operation: 'get',
-      path: '/users/user_a/attempts/att_1',
-    }).allowed,
-    false
-  );
+  // Legacy record lacking paperId / subjectId
+  db.attempts['att-legacy-2018'] = {
+    id: 'att-legacy-2018',
+    year: 2018,
+    dataVersion: 'v1',
+    mode: 'free-simulation',
+    unitIds: ['unit-cloze'],
+    status: 'in-progress',
+    startedAt: '2026-11-01T00:00:00.000Z',
+    submittedAt: null,
+    elapsedSeconds: 45,
+    objectiveResponses: {},
+    subjectiveVersionIds: [],
+    updatedAt: '2026-11-01T00:00:45.000Z',
+    clientRevision: 1,
+    deviceId: 'device-pol',
+  };
 
-  // 2. Cross-user read (IDOR) -> PERMISSION_DENIED
-  assert.equal(
-    evaluateFirestoreRuleRequest(rulesText, {
-      auth: { uid: 'user_b', email_verified: true },
-      operation: 'get',
-      path: '/users/user_a/attempts/att_1',
-    }).allowed,
-    false
-  );
+  const migrated = migrateDatabasePaperIds(db);
+  assert.equal(migrated.schemaVersion, '2.0.0');
+  assert.equal(migrated.attempts['att-legacy-2018'].paperId, 'en1-2018');
+  assert.equal(migrated.attempts['att-legacy-2018'].subjectId, 'english-i');
 
-  // 3. Unverified email write -> PERMISSION_DENIED
-  assert.equal(
-    evaluateFirestoreRuleRequest(rulesText, {
-      auth: { uid: 'user_a', email_verified: false },
-      operation: 'create',
-      path: '/users/user_a/attempts/att_1',
-      incomingData: { id: 'att_1', uid: 'user_a' },
-    }).allowed,
-    false
-  );
+  const polV1 = appendSubjectiveAnswerVersion(migrated, {
+    attemptId: 'att-pol-1',
+    year: 2101,
+    dataVersion: 'v1',
+    unitId: 'unit-politics-analysis',
+    unitType: 'politics-analysis',
+    questionNumber: 34,
+    practiceMode: 'independent',
+    content: '矛盾的普遍性与特殊性辩证关系原理表明，共性寓于个性之中，应坚持具体问题具体分析。',
+    durationSeconds: 320,
+    usedHints: [],
+  });
 
-  // 4. Subjective answer version in-place update -> PERMISSION_DENIED
-  assert.equal(
-    evaluateFirestoreRuleRequest(rulesText, {
-      auth: { uid: 'user_a', email_verified: true },
-      operation: 'update',
-      path: '/users/user_a/answer-versions/ver_1',
-      incomingData: { id: 'ver_1', uid: 'user_a', content: 'modified' },
-    }).allowed,
-    false
-  );
+  assert.equal(polV1.createdVersion.paperId, 'pol-2027-xiao8-01');
+  assert.equal(polV1.createdVersion.subjectId, 'politics');
+  assert.equal(polV1.createdVersion.unitType, 'politics-analysis');
+  assert.ok(polV1.createdVersion.wordCount >= 30);
 
-  // 5. Client read/write on /private-provider-credentials -> PERMISSION_DENIED
-  assert.equal(
-    evaluateFirestoreRuleRequest(rulesText, {
-      auth: { uid: 'user_a', email_verified: true },
-      operation: 'get',
-      path: '/private-provider-credentials/user_a/providers/gemini',
-    }).allowed,
-    false
-  );
-  assert.equal(
-    evaluateFirestoreRuleRequest(rulesText, {
-      auth: { uid: 'user_a', email_verified: true },
-      operation: 'create',
-      path: '/private-provider-credentials/user_a/providers/gemini',
-      incomingData: { provider: 'gemini', ciphertext: 'abc' },
-    }).allowed,
-    false
-  );
-
-  // 6. Legitimate owner create & read -> ALLOWED
-  assert.equal(
-    evaluateFirestoreRuleRequest(rulesText, {
-      auth: { uid: 'user_a', email_verified: true },
-      operation: 'create',
-      path: '/users/user_a/answer-versions/ver_1',
-      incomingData: {
-        id: 'ver_1',
-        uid: 'user_a',
-        year: 2010,
-        dataVersion: 'v2',
-        questionNumber: 51,
-        versionNumber: 1,
-        practiceMode: 'independent',
-        content: 'Notice...',
-        createdAt: '2026-10-19T00:00:00Z',
+  const mockEval: SubjectiveEvaluationResult = {
+    id: 'eval-pol-34',
+    answerVersionId: polV1.createdVersion.id,
+    taskType: 'politics-analysis',
+    taskId: 'unit-politics-analysis',
+    evaluationMode: 'deep-two-stage',
+    usedHints: false,
+    centralScore: 7.5,
+    maxScore: 10,
+    scoreRangeMin: 7,
+    scoreRangeMax: 8,
+    confidence: 'high',
+    dimensionScores: [
+      {
+        dimensionId: 'kp',
+        name: '理论原理覆盖度',
+        score: 4.5,
+        maxScore: 6,
+        rationale: '主干原理准确，缺少对立统一转化条件说明',
       },
-    }).allowed,
-    true
+      {
+        dimensionId: 'mat',
+        name: '材料结合与论证逻辑',
+        score: 3,
+        maxScore: 4,
+        rationale: '需进一步引用材料案例',
+      },
+    ],
+    strengths: ['原理定位准确'],
+    issues: [
+      {
+        category: 'principle-depth',
+        description: '未展开矛盾双方转化条件',
+        evidence: '共性寓于个性之中，应坚持具体问题具体分析。',
+        deductionRationale: '缺少矛盾对立统一及转化条件的阐释。',
+      },
+    ],
+    annotations: [],
+    revisionTasks: [
+      {
+        id: 'rt-1',
+        priority: 1,
+        instruction: '补充矛盾双方在一定条件下相互转化的材料分析段',
+        targetText: '结合材料中的产业升级条件说明转化契机',
+      },
+    ],
+    transferableLessons: ['原理+方法论+材料案例三步展开'],
+    referenceContent: '参考答案略',
+    referenceContentSource: 'source-provided',
+    reviewerDecision: 'approved',
+    reviewerAdjustments: {
+      stage1Score: 7.5,
+      finalScore: 7.5,
+      scoreDelta: 0,
+      stabilityWarning: false,
+      notes: [],
+      verifiedFactCoverage: true,
+    },
+    modelProvider: 'gemini',
+    modelName: 'gemini-2.5-flash',
+    promptVersion: 'test',
+    createdAt: '2026-11-14T10:00:00.000Z',
+  };
+
+  const polReviews = buildSubjectiveReviewItems(
+    2101,
+    'v1',
+    'unit-politics-analysis',
+    34,
+    polV1.createdVersion.content,
+    mockEval,
+    '2026-11-14T10:00:00.000Z',
+    'device-pol'
   );
+  assert.equal(polReviews.length, 1);
+  assert.equal(polReviews[0].reviewType, 're-analyze-politics');
+  assert.equal(polReviews[0].paperId, 'pol-2027-xiao8-01');
+  assert.equal(polReviews[0].subjectId, 'politics');
 });

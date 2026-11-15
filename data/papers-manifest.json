@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 1,
-  "buildTime": "2026-10-20T13:23:57.846Z",
+  "schemaVersion": "2.0.0",
+  "buildTime": "2026-11-15T12:51:37.018Z",
   "expectedYears": [
     2010,
     2011,
@@ -39,6 +39,33 @@
     2025,
     2026
   ],
+  "availablePaperIds": [
+    "en1-2010",
+    "en1-2011",
+    "en1-2012",
+    "en1-2013",
+    "en1-2014",
+    "en1-2015",
+    "en1-2016",
+    "en1-2017",
+    "en1-2018",
+    "en1-2019",
+    "en1-2020",
+    "en1-2021",
+    "en1-2022",
+    "en1-2023",
+    "en1-2024",
+    "en1-2025",
+    "en1-2026",
+    "pol-2027-xiao8-01",
+    "pol-2027-xiao8-02",
+    "pol-2027-xiao8-03",
+    "pol-2027-xiao8-04",
+    "pol-2027-xiao8-05",
+    "pol-2027-xiao8-06",
+    "pol-2027-xiao8-07",
+    "pol-2027-xiao8-08"
+  ],
   "needsAnswerSourceYears": [],
   "failedYears": [],
   "pendingYears": [],
@@ -59,7 +86,40 @@
     "2023": "v1",
     "2024": "v1",
     "2025": "v1",
-    "2026": "v1"
+    "2026": "v1",
+    "2101": "v1",
+    "2102": "v1",
+    "2103": "v1",
+    "2104": "v1",
+    "2105": "v1",
+    "2106": "v1",
+    "2107": "v1",
+    "2108": "v1",
+    "en1-2010": "v1",
+    "en1-2011": "v1",
+    "en1-2012": "v1",
+    "en1-2013": "v1",
+    "en1-2014": "v1",
+    "en1-2015": "v1",
+    "en1-2016": "v1",
+    "en1-2017": "v1",
+    "en1-2018": "v1",
+    "en1-2019": "v1",
+    "en1-2020": "v1",
+    "en1-2021": "v1",
+    "en1-2022": "v1",
+    "en1-2023": "v1",
+    "en1-2024": "v1",
+    "en1-2025": "v1",
+    "en1-2026": "v1",
+    "pol-2027-xiao8-01": "v1",
+    "pol-2027-xiao8-02": "v1",
+    "pol-2027-xiao8-03": "v1",
+    "pol-2027-xiao8-04": "v1",
+    "pol-2027-xiao8-05": "v1",
+    "pol-2027-xiao8-06": "v1",
+    "pol-2027-xiao8-07": "v1",
+    "pol-2027-xiao8-08": "v1"
   },
   "sourceFormats": {
     "2010": [
@@ -112,6 +172,30 @@
     ],
     "2026": [
       "md"
+    ],
+    "2101": [
+      "pdf"
+    ],
+    "2102": [
+      "pdf"
+    ],
+    "2103": [
+      "pdf"
+    ],
+    "2104": [
+      "pdf"
+    ],
+    "2105": [
+      "pdf"
+    ],
+    "2106": [
+      "pdf"
+    ],
+    "2107": [
+      "pdf"
+    ],
+    "2108": [
+      "pdf"
     ]
   },
   "unitTypes": {
@@ -250,6 +334,46 @@
       "translation",
       "practical-writing",
       "visual-writing"
+    ],
+    "2101": [
+      "politics-single",
+      "politics-multi",
+      "politics-analysis"
+    ],
+    "2102": [
+      "politics-single",
+      "politics-multi",
+      "politics-analysis"
+    ],
+    "2103": [
+      "politics-single",
+      "politics-multi",
+      "politics-analysis"
+    ],
+    "2104": [
+      "politics-single",
+      "politics-multi",
+      "politics-analysis"
+    ],
+    "2105": [
+      "politics-single",
+      "politics-multi",
+      "politics-analysis"
+    ],
+    "2106": [
+      "politics-single",
+      "politics-multi",
+      "politics-analysis"
+    ],
+    "2107": [
+      "politics-single",
+      "politics-multi",
+      "politics-analysis"
+    ],
+    "2108": [
+      "politics-single",
+      "politics-multi",
+      "politics-analysis"
     ]
   },
   "validationStatus": {
@@ -269,13 +393,99 @@
     "2023": "ready",
     "2024": "ready",
     "2025": "ready",
-    "2026": "ready"
+    "2026": "ready",
+    "2101": "ready",
+    "2102": "ready",
+    "2103": "ready",
+    "2104": "ready",
+    "2105": "ready",
+    "2106": "ready",
+    "2107": "ready",
+    "2108": "ready"
+  },
+  "subjects": {
+    "english-i": {
+      "subjectId": "english-i",
+      "name": "考研英语（一）历年真题",
+      "shortName": "英语一",
+      "expectedCount": 17,
+      "readyCount": 17,
+      "paperIds": [
+        "en1-2010",
+        "en1-2011",
+        "en1-2012",
+        "en1-2013",
+        "en1-2014",
+        "en1-2015",
+        "en1-2016",
+        "en1-2017",
+        "en1-2018",
+        "en1-2019",
+        "en1-2020",
+        "en1-2021",
+        "en1-2022",
+        "en1-2023",
+        "en1-2024",
+        "en1-2025",
+        "en1-2026"
+      ],
+      "legacyYears": [
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ]
+    },
+    "politics": {
+      "subjectId": "politics",
+      "name": "考研政治冲刺模拟卷",
+      "shortName": "政治",
+      "expectedCount": 8,
+      "readyCount": 8,
+      "paperIds": [
+        "pol-2027-xiao8-01",
+        "pol-2027-xiao8-02",
+        "pol-2027-xiao8-03",
+        "pol-2027-xiao8-04",
+        "pol-2027-xiao8-05",
+        "pol-2027-xiao8-06",
+        "pol-2027-xiao8-07",
+        "pol-2027-xiao8-08"
+      ],
+      "legacyYears": [
+        2101,
+        2102,
+        2103,
+        2104,
+        2105,
+        2106,
+        2107,
+        2108
+      ]
+    }
   },
   "totalPapers": 17,
   "totalVisualAssets": 29,
   "years": [
     {
       "year": 2010,
+      "paperId": "en1-2010",
+      "subjectId": "english-i",
+      "examYear": 2010,
+      "badgeLabel": "2010 真题",
       "subject": "考研英语一",
       "paperTitle": "2010年全国硕士研究生入学统一考试英语（一）试题",
       "status": "ready",
@@ -306,11 +516,16 @@
       "validationStatus": "ready",
       "errorCodes": [],
       "missingObjectiveCount": 0,
+      "disputedQuestionCount": 0,
       "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2011,
+      "paperId": "en1-2011",
+      "subjectId": "english-i",
+      "examYear": 2011,
+      "badgeLabel": "2011 真题",
       "subject": "考研英语一",
       "paperTitle": "2011年全国硕士研究生入学统一考试英语（一）试题",
       "status": "ready",
@@ -339,13 +554,20 @@
         "visual-writing"
       ],
       "validationStatus": "ready",
-      "errorCodes": [],
+      "errorCodes": [
+        "DATA_ANSWER_DISPUTED"
+      ],
       "missingObjectiveCount": 0,
+      "disputedQuestionCount": 1,
       "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2012,
+      "paperId": "en1-2012",
+      "subjectId": "english-i",
+      "examYear": 2012,
+      "badgeLabel": "2012 真题",
       "subject": "考研英语一",
       "paperTitle": "2012年全国硕士研究生入学统一考试英语（一）试题",
       "status": "ready",
@@ -374,13 +596,20 @@
         "visual-writing"
       ],
       "validationStatus": "ready",
-      "errorCodes": [],
+      "errorCodes": [
+        "DATA_ANSWER_DISPUTED"
+      ],
       "missingObjectiveCount": 0,
+      "disputedQuestionCount": 1,
       "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2013,
+      "paperId": "en1-2013",
+      "subjectId": "english-i",
+      "examYear": 2013,
+      "badgeLabel": "2013 真题",
       "subject": "考研英语一",
       "paperTitle": "2013年全国硕士研究生入学统一考试英语（一）试题",
       "status": "ready",
@@ -409,13 +638,20 @@
         "visual-writing"
       ],
       "validationStatus": "ready",
-      "errorCodes": [],
+      "errorCodes": [
+        "DATA_ANSWER_DISPUTED"
+      ],
       "missingObjectiveCount": 0,
+      "disputedQuestionCount": 1,
       "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2014,
+      "paperId": "en1-2014",
+      "subjectId": "english-i",
+      "examYear": 2014,
+      "badgeLabel": "2014 真题",
       "subject": "考研英语一",
       "paperTitle": "2014年全国硕士研究生入学统一考试英语（一）试题",
       "status": "ready",
@@ -448,11 +684,16 @@
       "validationStatus": "ready",
       "errorCodes": [],
       "missingObjectiveCount": 0,
+      "disputedQuestionCount": 0,
       "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2015,
+      "paperId": "en1-2015",
+      "subjectId": "english-i",
+      "examYear": 2015,
+      "badgeLabel": "2015 真题",
       "subject": "考研英语一",
       "paperTitle": "2015年全国硕士研究生入学统一考试英语（一）试题",
       "status": "ready",
@@ -481,13 +722,20 @@
         "visual-writing"
       ],
       "validationStatus": "ready",
-      "errorCodes": [],
+      "errorCodes": [
+        "DATA_ANSWER_DISPUTED"
+      ],
       "missingObjectiveCount": 0,
+      "disputedQuestionCount": 1,
       "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2016,
+      "paperId": "en1-2016",
+      "subjectId": "english-i",
+      "examYear": 2016,
+      "badgeLabel": "2016 真题",
       "subject": "考研英语一",
       "paperTitle": "2016年全国硕士研究生入学统一考试英语（一）试题",
       "status": "ready",
@@ -520,11 +768,16 @@
       "validationStatus": "ready",
       "errorCodes": [],
       "missingObjectiveCount": 0,
+      "disputedQuestionCount": 0,
       "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2017,
+      "paperId": "en1-2017",
+      "subjectId": "english-i",
+      "examYear": 2017,
+      "badgeLabel": "2017 真题",
       "subject": "考研英语一",
       "paperTitle": "2017年全国硕士研究生入学统一考试英语（一）试题",
       "status": "ready",
@@ -555,13 +808,20 @@
         "visual-writing"
       ],
       "validationStatus": "ready",
-      "errorCodes": [],
+      "errorCodes": [
+        "DATA_ANSWER_DISPUTED"
+      ],
       "missingObjectiveCount": 0,
+      "disputedQuestionCount": 1,
       "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2018,
+      "paperId": "en1-2018",
+      "subjectId": "english-i",
+      "examYear": 2018,
+      "badgeLabel": "2018 真题",
       "subject": "考研英语一",
       "paperTitle": "2018年全国硕士研究生入学统一考试英语（一）试题",
       "status": "ready",
@@ -590,13 +850,20 @@
         "visual-writing"
       ],
       "validationStatus": "ready",
-      "errorCodes": [],
+      "errorCodes": [
+        "DATA_ANSWER_DISPUTED"
+      ],
       "missingObjectiveCount": 0,
+      "disputedQuestionCount": 1,
       "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2019,
+      "paperId": "en1-2019",
+      "subjectId": "english-i",
+      "examYear": 2019,
+      "badgeLabel": "2019 真题",
       "subject": "考研英语一",
       "paperTitle": "2019年全国硕士研究生入学统一考试英语（一）试题",
       "status": "ready",
@@ -627,11 +894,16 @@
       "validationStatus": "ready",
       "errorCodes": [],
       "missingObjectiveCount": 0,
+      "disputedQuestionCount": 0,
       "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2020,
+      "paperId": "en1-2020",
+      "subjectId": "english-i",
+      "examYear": 2020,
+      "badgeLabel": "2020 真题",
       "subject": "考研英语一",
       "paperTitle": "2020年全国硕士研究生入学统一考试英语（一）试题",
       "status": "ready",
@@ -662,13 +934,20 @@
         "visual-writing"
       ],
       "validationStatus": "ready",
-      "errorCodes": [],
+      "errorCodes": [
+        "DATA_ANSWER_DISPUTED"
+      ],
       "missingObjectiveCount": 0,
+      "disputedQuestionCount": 1,
       "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2021,
+      "paperId": "en1-2021",
+      "subjectId": "english-i",
+      "examYear": 2021,
+      "badgeLabel": "2021 真题",
       "subject": "考研英语一",
       "paperTitle": "2021年全国硕士研究生入学统一考试英语（一）试题",
       "status": "ready",
@@ -697,13 +976,20 @@
         "visual-writing"
       ],
       "validationStatus": "ready",
-      "errorCodes": [],
+      "errorCodes": [
+        "DATA_ANSWER_DISPUTED"
+      ],
       "missingObjectiveCount": 0,
+      "disputedQuestionCount": 1,
       "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2022,
+      "paperId": "en1-2022",
+      "subjectId": "english-i",
+      "examYear": 2022,
+      "badgeLabel": "2022 真题",
       "subject": "考研英语一",
       "paperTitle": "2022年全国硕士研究生入学统一考试英语（一）试题",
       "status": "ready",
@@ -734,11 +1020,16 @@
       "validationStatus": "ready",
       "errorCodes": [],
       "missingObjectiveCount": 0,
+      "disputedQuestionCount": 0,
       "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2023,
+      "paperId": "en1-2023",
+      "subjectId": "english-i",
+      "examYear": 2023,
+      "badgeLabel": "2023 真题",
       "subject": "考研英语一",
       "paperTitle": "2023年全国硕士研究生入学统一考试英语（一）试题",
       "status": "ready",
@@ -767,13 +1058,20 @@
         "visual-writing"
       ],
       "validationStatus": "ready",
-      "errorCodes": [],
+      "errorCodes": [
+        "DATA_ANSWER_DISPUTED"
+      ],
       "missingObjectiveCount": 0,
+      "disputedQuestionCount": 1,
       "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2024,
+      "paperId": "en1-2024",
+      "subjectId": "english-i",
+      "examYear": 2024,
+      "badgeLabel": "2024 真题",
       "subject": "考研英语一",
       "paperTitle": "2024年全国硕士研究生入学统一考试英语（一）试题",
       "status": "ready",
@@ -804,13 +1102,20 @@
         "visual-writing"
       ],
       "validationStatus": "ready",
-      "errorCodes": [],
+      "errorCodes": [
+        "DATA_ANSWER_DISPUTED"
+      ],
       "missingObjectiveCount": 0,
+      "disputedQuestionCount": 1,
       "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2025,
+      "paperId": "en1-2025",
+      "subjectId": "english-i",
+      "examYear": 2025,
+      "badgeLabel": "2025 真题",
       "subject": "考研英语一",
       "paperTitle": "2025年全国硕士研究生入学统一考试英语（一）试题",
       "status": "ready",
@@ -839,13 +1144,20 @@
         "visual-writing"
       ],
       "validationStatus": "ready",
-      "errorCodes": [],
+      "errorCodes": [
+        "DATA_ANSWER_DISPUTED"
+      ],
       "missingObjectiveCount": 0,
+      "disputedQuestionCount": 1,
       "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
     },
     {
       "year": 2026,
+      "paperId": "en1-2026",
+      "subjectId": "english-i",
+      "examYear": 2026,
+      "badgeLabel": "2026 真题",
       "subject": "考研英语一",
       "paperTitle": "2026年全国硕士研究生入学统一考试英语（一）试题",
       "status": "ready",
@@ -876,10 +1188,301 @@
         "visual-writing"
       ],
       "validationStatus": "ready",
-      "errorCodes": [],
+      "errorCodes": [
+        "DATA_ANSWER_DISPUTED"
+      ],
       "missingObjectiveCount": 0,
+      "disputedQuestionCount": 1,
       "hasNewerCandidate": false,
       "updatedAt": "2026-10-19T11:30:00.000Z"
+    },
+    {
+      "year": 2101,
+      "paperId": "pol-2027-xiao8-01",
+      "subjectId": "politics",
+      "examYear": 2027,
+      "badgeLabel": "2027 肖八第1套",
+      "subject": "考研政治",
+      "setNumber": 1,
+      "paperTitle": "2027 考研政治冲刺 8 套卷（一）",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [],
+      "objectiveCount": 33,
+      "subjectiveCount": 5,
+      "latestReadyVersion": "v1",
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "pdf"
+      ],
+      "unitTypes": [
+        "politics-single",
+        "politics-multi",
+        "politics-analysis"
+      ],
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "disputedQuestionCount": 0,
+      "hasNewerCandidate": false,
+      "updatedAt": "2026-11-12T00:00:00.000Z"
+    },
+    {
+      "year": 2102,
+      "paperId": "pol-2027-xiao8-02",
+      "subjectId": "politics",
+      "examYear": 2027,
+      "badgeLabel": "2027 肖八第2套",
+      "subject": "考研政治",
+      "setNumber": 2,
+      "paperTitle": "2027 考研政治冲刺 8 套卷（二）",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [],
+      "objectiveCount": 33,
+      "subjectiveCount": 5,
+      "latestReadyVersion": "v1",
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "pdf"
+      ],
+      "unitTypes": [
+        "politics-single",
+        "politics-multi",
+        "politics-analysis"
+      ],
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "disputedQuestionCount": 0,
+      "hasNewerCandidate": false,
+      "updatedAt": "2026-11-12T00:00:00.000Z"
+    },
+    {
+      "year": 2103,
+      "paperId": "pol-2027-xiao8-03",
+      "subjectId": "politics",
+      "examYear": 2027,
+      "badgeLabel": "2027 肖八第3套",
+      "subject": "考研政治",
+      "setNumber": 3,
+      "paperTitle": "2027 考研政治冲刺 8 套卷（三）",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [],
+      "objectiveCount": 33,
+      "subjectiveCount": 5,
+      "latestReadyVersion": "v1",
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "pdf"
+      ],
+      "unitTypes": [
+        "politics-single",
+        "politics-multi",
+        "politics-analysis"
+      ],
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "disputedQuestionCount": 0,
+      "hasNewerCandidate": false,
+      "updatedAt": "2026-11-12T00:00:00.000Z"
+    },
+    {
+      "year": 2104,
+      "paperId": "pol-2027-xiao8-04",
+      "subjectId": "politics",
+      "examYear": 2027,
+      "badgeLabel": "2027 肖八第4套",
+      "subject": "考研政治",
+      "setNumber": 4,
+      "paperTitle": "2027 考研政治冲刺 8 套卷（四）",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [],
+      "objectiveCount": 33,
+      "subjectiveCount": 5,
+      "latestReadyVersion": "v1",
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "pdf"
+      ],
+      "unitTypes": [
+        "politics-single",
+        "politics-multi",
+        "politics-analysis"
+      ],
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "disputedQuestionCount": 0,
+      "hasNewerCandidate": false,
+      "updatedAt": "2026-11-12T00:00:00.000Z"
+    },
+    {
+      "year": 2105,
+      "paperId": "pol-2027-xiao8-05",
+      "subjectId": "politics",
+      "examYear": 2027,
+      "badgeLabel": "2027 肖八第5套",
+      "subject": "考研政治",
+      "setNumber": 5,
+      "paperTitle": "2027 考研政治冲刺 8 套卷（五）",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [],
+      "objectiveCount": 33,
+      "subjectiveCount": 5,
+      "latestReadyVersion": "v1",
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "pdf"
+      ],
+      "unitTypes": [
+        "politics-single",
+        "politics-multi",
+        "politics-analysis"
+      ],
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "disputedQuestionCount": 0,
+      "hasNewerCandidate": false,
+      "updatedAt": "2026-11-12T00:00:00.000Z"
+    },
+    {
+      "year": 2106,
+      "paperId": "pol-2027-xiao8-06",
+      "subjectId": "politics",
+      "examYear": 2027,
+      "badgeLabel": "2027 肖八第6套",
+      "subject": "考研政治",
+      "setNumber": 6,
+      "paperTitle": "2027 考研政治冲刺 8 套卷（六）",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [],
+      "objectiveCount": 33,
+      "subjectiveCount": 5,
+      "latestReadyVersion": "v1",
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "pdf"
+      ],
+      "unitTypes": [
+        "politics-single",
+        "politics-multi",
+        "politics-analysis"
+      ],
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "disputedQuestionCount": 0,
+      "hasNewerCandidate": false,
+      "updatedAt": "2026-11-12T00:00:00.000Z"
+    },
+    {
+      "year": 2107,
+      "paperId": "pol-2027-xiao8-07",
+      "subjectId": "politics",
+      "examYear": 2027,
+      "badgeLabel": "2027 肖八第7套",
+      "subject": "考研政治",
+      "setNumber": 7,
+      "paperTitle": "2027 考研政治冲刺 8 套卷（七）",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [],
+      "objectiveCount": 33,
+      "subjectiveCount": 5,
+      "latestReadyVersion": "v1",
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "pdf"
+      ],
+      "unitTypes": [
+        "politics-single",
+        "politics-multi",
+        "politics-analysis"
+      ],
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "disputedQuestionCount": 0,
+      "hasNewerCandidate": false,
+      "updatedAt": "2026-11-12T00:00:00.000Z"
+    },
+    {
+      "year": 2108,
+      "paperId": "pol-2027-xiao8-08",
+      "subjectId": "politics",
+      "examYear": 2027,
+      "badgeLabel": "2027 肖八第8套",
+      "subject": "考研政治",
+      "setNumber": 8,
+      "paperTitle": "2027 考研政治冲刺 8 套卷（八）",
+      "status": "ready",
+      "answerSourceStatus": "source-provided",
+      "totalScore": 100,
+      "durationMinutes": 180,
+      "visualAssets": [],
+      "objectiveCount": 33,
+      "subjectiveCount": 5,
+      "latestReadyVersion": "v1",
+      "latestCandidateVersion": "v1",
+      "availableVersions": [
+        "v1"
+      ],
+      "sourceFormats": [
+        "pdf"
+      ],
+      "unitTypes": [
+        "politics-single",
+        "politics-multi",
+        "politics-analysis"
+      ],
+      "validationStatus": "ready",
+      "errorCodes": [],
+      "missingObjectiveCount": 0,
+      "disputedQuestionCount": 0,
+      "hasNewerCandidate": false,
+      "updatedAt": "2026-11-12T00:00:00.000Z"
     }
   ]
 }

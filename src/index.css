@@ -2,10 +2,30 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@theme {
+@theme inline {
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   --font-serif: "Source Serif 4", Georgia, Cambria, "Times New Roman", serif;
   --font-mono: "IBM Plex Mono", "Noto Sans SC", ui-monospace, monospace;
+  --color-canvas: var(--bg-canvas);
+  --color-paper: var(--bg-paper);
+  --color-card: var(--bg-card);
+  --color-card-subtle: var(--bg-card-subtle);
+  --color-ink: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --color-muted: var(--text-muted);
+  --color-brand: var(--accent-primary);
+  --color-brand-hover: var(--accent-hover);
+  --color-brand-subtle: var(--accent-subtle);
+  --color-gold: var(--accent-gold);
+  --color-gold-subtle: var(--accent-gold-subtle);
+  --color-mastered: var(--status-mastered);
+  --color-mastered-subtle: var(--status-mastered-subtle);
+  --color-danger: var(--status-error);
+  --color-danger-subtle: var(--status-error-subtle);
+  --color-warning: var(--status-warning);
+  --color-warning-subtle: var(--status-warning-subtle);
+  --color-hairline: var(--border-hairline);
+  --color-subtle: var(--border-subtle);
 }
 
 @layer base {
@@ -56,7 +76,7 @@
   }
 
   html {
-    overflow-x: hidden;
+    overflow-x: clip;
     min-height: 100dvh;
     -webkit-text-size-adjust: 100%;
   }
@@ -67,7 +87,7 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', Roboto, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
+    overflow-x: clip;
     min-height: 100dvh;
   }
 
@@ -118,6 +138,26 @@
 
 .dark ::-webkit-scrollbar-thumb:hover {
   background: #3E545F;
+}
+
+@keyframes quotePulse {
+  0% {
+    background-color: rgba(185, 133, 69, 0.34);
+    box-shadow: 0 0 0 3px rgba(185, 133, 69, 0.22);
+  }
+  70% {
+    background-color: rgba(185, 133, 69, 0.16);
+    box-shadow: 0 0 0 2px rgba(185, 133, 69, 0.12);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: none;
+  }
+}
+
+.highlight-flash {
+  animation: quotePulse 2.4s ease-out forwards;
+  border-radius: 0.5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,6 +1,8 @@
 {
-  "name": "研卷台｜考研英语一真题学习系统",
-  "description": "以考研英语一历年真题为核心的结构化精读、整卷模拟、两阶段主观题批改与间隔复习系统（Yanjuan Desk）。",
+  "name": "研卷台 Yanjuan Desk",
+  "description": "Local-First 考研公共课（英语一 2010–2026 + 考研政治冲刺 8 套卷）全栈研习、版本树追踪、两阶段 AI 批改与艾宾浩斯间隔复习系统，支持 Google AI Studio 单容器全栈部署。",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

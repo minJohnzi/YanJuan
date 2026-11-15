@@ -1,23 +1,28 @@
 import crypto from 'node:crypto';
-import fs from 'node:fs';
 import path from 'node:path';
 import type {
   AITaskType,
   EvaluationRun,
   ModelProfile,
   ProviderConnection,
+  ProviderCredentialStatus,
   ProviderType,
   TaskBindingConfig,
   UserAIWorkspaceConfig,
-} from '../shared/types.ts';
+} from '../domain/ai.ts';
+import { SqliteBackingStore } from './db/sqliteStore.ts';
 import {
   type EncryptedCredentialRecord,
   SecurityError,
   computeConfigurationHash,
   decryptProviderApiKey,
   encryptProviderApiKey,
+  maskApiKey,
   normalizeProviderBaseUrl,
 } from './securityAndCrypto.ts';
+
+export const SERVER_GEMINI_CONNECTION_ID = 'conn-google-aistudio-env';
+export const SERVER_GEMINI_PROFILE_ID = 'prof-google-aistudio-gemini';
 
 export const ALL_AI_TASK_TYPES: AITaskType[] = [
   'objective_explanation',
@@ -165,86 +170,132 @@ export interface AttemptSubmissionRecord {
   ownerUid: string;
   attemptId: string;
   year: number;
+  paperId?: string;
   submittedQuestions: number[];
   submittedAll: boolean;
   submittedAt: string;
 }
 
-interface DiskStoreSchema {
-  schemaVersion: number;
-  updatedAt: string;
-  credentials: Record<string, EncryptedCredentialRecord>;
-  workspaces: Record<string, UserAIWorkspaceConfig>;
-  evaluationRuns: Record<string, EvaluationRun>;
-  submissions: Record<string, AttemptSubmissionRecord>;
-  idempotencyRecords: Record<string, StoredIdempotencyEntry>;
-}
-
 /**
- * Persistent store for user AI connections, model profiles, task bindings, encrypted credentials,
+ * Persistent store backed by Node 24 native `node:sqlite` (WAL mode + ACID transactions)
+ * for user AI connections, model profiles, task bindings, AES-256-GCM encrypted credentials,
  * evaluation runs, and authoritative exam submission states.
- * - Persistent records (`persistent-encrypted`) are atomically written to disk so they survive server restarts.
- * - Session-only records (`session-only`) are kept strictly in process memory and never written to disk.
+ * - `persistent-encrypted` records persist durably in SQLite across restarts.
+ * - `session-only` records remain strictly in process memory.
+ * - `GEMINI_API_KEY` env var (Google AI Studio) injects a read-only `server-env` virtual connection.
  */
 export class PersistentAIStore {
-  private readonly storeFilePath: string;
-  private diskState: DiskStoreSchema;
-  // Session-only in-memory credentials and connections (wiped on process restart)
+  public readonly storeFilePath: string;
+  private readonly sqlite: SqliteBackingStore;
   private readonly sessionCredentials = new Map<string, EncryptedCredentialRecord>();
   private readonly sessionWorkspaces = new Map<string, UserAIWorkspaceConfig>();
 
   constructor(storeFilePath?: string) {
     this.storeFilePath =
-      storeFilePath || path.join(process.cwd(), 'data', 'runtime', 'ai-workspace-store.json');
-    this.diskState = this.loadFromDisk();
+      storeFilePath || path.join(process.cwd(), 'data', 'runtime', 'yanjuan.db');
+    this.sqlite = new SqliteBackingStore(storeFilePath);
   }
 
-  private loadFromDisk(): DiskStoreSchema {
-    try {
-      if (fs.existsSync(this.storeFilePath)) {
-        const raw = fs.readFileSync(this.storeFilePath, 'utf8');
-        const parsed = JSON.parse(raw) as Partial<DiskStoreSchema>;
-        return {
-          schemaVersion: 2,
-          updatedAt: parsed.updatedAt || new Date().toISOString(),
-          credentials: parsed.credentials || {},
-          workspaces: parsed.workspaces || {},
-          evaluationRuns: parsed.evaluationRuns || {},
-          submissions: parsed.submissions || {},
-          idempotencyRecords: parsed.idempotencyRecords || {},
-        };
-      }
-    } catch {
-      // Fallback to fresh state if corrupted
-    }
-    return {
-      schemaVersion: 2,
-      updatedAt: new Date().toISOString(),
-      credentials: {},
-      workspaces: {},
-      evaluationRuns: {},
-      submissions: {},
-      idempotencyRecords: {},
+  public getSqlitePath(): string {
+    return this.sqlite.dbPath;
+  }
+
+  public didMigrateLegacyJson(): boolean {
+    return this.sqlite.migratedFromLegacyJson;
+  }
+
+  public close(): void {
+    this.sqlite.close();
+  }
+
+  private buildServerEnvGeminiEntry(ownerUid: string): {
+    connection: ProviderConnection;
+    profile: ModelProfile;
+  } | null {
+    const envKey = process.env.GEMINI_API_KEY?.trim();
+    if (!envKey) return null;
+
+    const modelId = process.env.GEMINI_DEFAULT_MODEL?.trim() || 'gemini-2.5-flash';
+    const baseUrl = normalizeProviderBaseUrl('gemini');
+    const now = new Date().toISOString();
+    const masked = maskApiKey(envKey);
+    const configHash = computeConfigurationHash({
+      connectionId: SERVER_GEMINI_CONNECTION_ID,
+      providerType: 'gemini',
+      baseUrl,
+      modelId,
+      protocolMode: 'gemini-native',
+      credentialFingerprint: masked,
+    });
+
+    const connection: ProviderConnection = {
+      id: SERVER_GEMINI_CONNECTION_ID,
+      ownerUid,
+      providerType: 'gemini',
+      displayName: 'Google AI Studio 内置 Gemini',
+      baseUrl,
+      protocolMode: 'gemini-native',
+      authenticationType: 'x-goog-api-key',
+      credentialReference: 'env:GEMINI_API_KEY',
+      maskedKey: masked,
+      storageMode: 'server-env',
+      readOnly: true,
+      envVarName: 'GEMINI_API_KEY',
+      enabled: true,
+      configurationHash: configHash,
+      lastTestStatus: 'success',
+      lastTestedAt: now,
+      lastErrorCode: null,
+      createdAt: now,
+      updatedAt: now,
     };
+
+    const profile: ModelProfile = {
+      id: SERVER_GEMINI_PROFILE_ID,
+      connectionId: SERVER_GEMINI_CONNECTION_ID,
+      ownerUid,
+      providerType: 'gemini',
+      modelId,
+      displayName: `${modelId} (Server Env)`,
+      source: 'server-env',
+      capabilities: {
+        text: true,
+        structuredOutput: true,
+        jsonSchema: true,
+        jsonObject: true,
+        vision: true,
+        streaming: true,
+        reasoning: true,
+      },
+      capabilitySource: {
+        text: 'verified',
+        structuredOutput: 'verified',
+        vision: 'verified',
+        streaming: 'verified',
+        reasoning: 'verified',
+      },
+      contextWindow: 1048576,
+      outputLimit: 65536,
+      structuredOutputStrategy: 'json_schema',
+      defaultParameters: {
+        temperature: 0.2,
+        maxOutputTokens: 4096,
+        timeoutMs: 35000,
+      },
+      configurationHash: configHash,
+      lastVerifiedAt: now,
+      enabled: true,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    return { connection, profile };
   }
 
-  private flushToDisk(): void {
-    try {
-      this.diskState.updatedAt = new Date().toISOString();
-      const dir = path.dirname(this.storeFilePath);
-      fs.mkdirSync(dir, { recursive: true });
-      const tmpPath = `${this.storeFilePath}.tmp.${process.pid}`;
-      fs.writeFileSync(tmpPath, JSON.stringify(this.diskState, null, 2), 'utf8');
-      fs.renameSync(tmpPath, this.storeFilePath);
-    } catch {
-      // Ignore write failures in read-only test sandboxes
-    }
-  }
-
-  public getWorkspace(ownerUid: string): UserAIWorkspaceConfig {
-    let persistentWs = this.diskState.workspaces[ownerUid];
-    if (!persistentWs) {
-      persistentWs = {
+  private getOrCreatePersistentWorkspace(ownerUid: string): UserAIWorkspaceConfig {
+    let ws = this.sqlite.getWorkspace(ownerUid);
+    if (!ws) {
+      ws = {
         ownerUid,
         defaultModelProfileId: null,
         connections: [],
@@ -255,32 +306,67 @@ export class PersistentAIStore {
         maxConcurrentJobs: 3,
         updatedAt: new Date().toISOString(),
       };
-      this.diskState.workspaces[ownerUid] = persistentWs;
+      this.sqlite.saveWorkspace(ownerUid, ws);
     }
+    return ws;
+  }
 
+  private getOrCreateSessionWorkspace(ownerUid: string): UserAIWorkspaceConfig {
+    let ws = this.sessionWorkspaces.get(ownerUid);
+    if (!ws) {
+      ws = {
+        ownerUid,
+        defaultModelProfileId: null,
+        connections: [],
+        modelProfiles: [],
+        taskBindings: createDefaultTaskBindings(null),
+        dailyBudgetUsd: 5.0,
+        dailySpentUsd: 0,
+        maxConcurrentJobs: 3,
+        updatedAt: new Date().toISOString(),
+      };
+      this.sessionWorkspaces.set(ownerUid, ws);
+    }
+    return ws;
+  }
+
+  public getWorkspace(ownerUid: string): UserAIWorkspaceConfig {
+    const persistentWs = this.getOrCreatePersistentWorkspace(ownerUid);
     const sessionWs = this.sessionWorkspaces.get(ownerUid);
-    if (!sessionWs) {
-      return persistentWs;
-    }
+    const serverEnvEntry = this.buildServerEnvGeminiEntry(ownerUid);
 
-    // Merge session-only connections and profiles into the effective view
     const connMap = new Map<string, ProviderConnection>();
+    if (serverEnvEntry) {
+      connMap.set(serverEnvEntry.connection.id, serverEnvEntry.connection);
+    }
     for (const c of persistentWs.connections) connMap.set(c.id, c);
-    for (const c of sessionWs.connections) connMap.set(c.id, c);
+    if (sessionWs) {
+      for (const c of sessionWs.connections) connMap.set(c.id, c);
+    }
 
     const profMap = new Map<string, ModelProfile>();
+    if (serverEnvEntry) {
+      profMap.set(serverEnvEntry.profile.id, serverEnvEntry.profile);
+    }
     for (const p of persistentWs.modelProfiles) profMap.set(p.id, p);
-    for (const p of sessionWs.modelProfiles) profMap.set(p.id, p);
+    if (sessionWs) {
+      for (const p of sessionWs.modelProfiles) profMap.set(p.id, p);
+    }
+
+    const defaultModelProfileId =
+      sessionWs?.defaultModelProfileId ||
+      persistentWs.defaultModelProfileId ||
+      serverEnvEntry?.profile.id ||
+      null;
 
     return {
       ...persistentWs,
-      defaultModelProfileId:
-        sessionWs.defaultModelProfileId || persistentWs.defaultModelProfileId,
+      defaultModelProfileId,
       connections: Array.from(connMap.values()),
       modelProfiles: Array.from(profMap.values()),
       taskBindings: {
         ...persistentWs.taskBindings,
-        ...sessionWs.taskBindings,
+        ...(sessionWs ? sessionWs.taskBindings : {}),
       },
     };
   }
@@ -307,6 +393,14 @@ export class PersistentAIStore {
     profile: ModelProfile;
     workspace: UserAIWorkspaceConfig;
   } {
+    if (params.connectionId === SERVER_GEMINI_CONNECTION_ID) {
+      throw new SecurityError(
+        'INTERNAL_CONFIGURATION_ERROR',
+        'Google AI Studio 服务端注入连接为只读模式，不可直接覆盖',
+        403
+      );
+    }
+
     const nowIso = new Date().toISOString();
     const normalizedBase = normalizeProviderBaseUrl(params.providerType, params.baseUrl);
     const protocolMode =
@@ -315,7 +409,6 @@ export class PersistentAIStore {
     const connId =
       params.connectionId || `conn-${params.providerType}-${crypto.randomBytes(4).toString('hex')}`;
     const credKey = `${params.ownerUid}:${connId}`;
-    const legacyCredKey = `${params.ownerUid}:${params.providerType}`;
 
     let encRecord: EncryptedCredentialRecord | undefined;
     if (params.apiKey && params.apiKey.trim()) {
@@ -331,18 +424,18 @@ export class PersistentAIStore {
         }
       );
       if (params.storageMode === 'persistent-encrypted') {
-        this.diskState.credentials[credKey] = encRecord;
-        this.diskState.credentials[legacyCredKey] = encRecord;
+        this.sqlite.upsertCredential(credKey, params.ownerUid, connId, params.providerType, encRecord);
       } else {
         this.sessionCredentials.set(credKey, encRecord);
-        this.sessionCredentials.set(legacyCredKey, encRecord);
       }
     } else {
       encRecord =
-        this.diskState.credentials[credKey] ||
+        this.sqlite.getCredential(credKey) ||
         this.sessionCredentials.get(credKey) ||
-        this.diskState.credentials[legacyCredKey] ||
-        this.sessionCredentials.get(legacyCredKey);
+        this.sqlite.getCredential(`${params.ownerUid}:${params.providerType}`) ||
+        this.sessionCredentials.get(`${params.ownerUid}:${params.providerType}`) ||
+        undefined;
+
       if (!encRecord) {
         throw new SecurityError(
           'PROVIDER_CREDENTIAL_MISSING',
@@ -350,7 +443,7 @@ export class PersistentAIStore {
           400
         );
       }
-      // Update model and baseUrl on existing credential record
+
       const updatedHash = computeConfigurationHash({
         connectionId: connId,
         providerType: params.providerType,
@@ -368,6 +461,12 @@ export class PersistentAIStore {
       encRecord.protocolMode = protocolMode;
       encRecord.configurationHash = updatedHash;
       encRecord.updatedAt = nowIso;
+
+      if (params.storageMode === 'persistent-encrypted') {
+        this.sqlite.upsertCredential(credKey, params.ownerUid, connId, params.providerType, encRecord);
+      } else {
+        this.sessionCredentials.set(credKey, encRecord);
+      }
     }
 
     const configHash = encRecord.configurationHash!;
@@ -404,7 +503,6 @@ export class PersistentAIStore {
     const profileId = `prof-${connId}-${params.modelId.trim().replace(/[^a-zA-Z0-9._-]/g, '_')}`;
     const isManual = params.modelSource === 'manual';
 
-    // Manual models NEVER automatically receive unverified capabilities!
     const defaultCaps = isManual
       ? {
           text: true,
@@ -494,7 +592,7 @@ export class PersistentAIStore {
     targetWs.updatedAt = nowIso;
 
     if (params.storageMode === 'persistent-encrypted') {
-      this.flushToDisk();
+      this.sqlite.saveWorkspace(params.ownerUid, targetWs);
     }
 
     return {
@@ -502,42 +600,6 @@ export class PersistentAIStore {
       profile,
       workspace: this.getWorkspace(params.ownerUid),
     };
-  }
-
-  private getOrCreatePersistentWorkspace(ownerUid: string): UserAIWorkspaceConfig {
-    if (!this.diskState.workspaces[ownerUid]) {
-      this.diskState.workspaces[ownerUid] = {
-        ownerUid,
-        defaultModelProfileId: null,
-        connections: [],
-        modelProfiles: [],
-        taskBindings: createDefaultTaskBindings(null),
-        dailyBudgetUsd: 5.0,
-        dailySpentUsd: 0,
-        maxConcurrentJobs: 3,
-        updatedAt: new Date().toISOString(),
-      };
-    }
-    return this.diskState.workspaces[ownerUid];
-  }
-
-  private getOrCreateSessionWorkspace(ownerUid: string): UserAIWorkspaceConfig {
-    let ws = this.sessionWorkspaces.get(ownerUid);
-    if (!ws) {
-      ws = {
-        ownerUid,
-        defaultModelProfileId: null,
-        connections: [],
-        modelProfiles: [],
-        taskBindings: createDefaultTaskBindings(null),
-        dailyBudgetUsd: 5.0,
-        dailySpentUsd: 0,
-        maxConcurrentJobs: 3,
-        updatedAt: new Date().toISOString(),
-      };
-      this.sessionWorkspaces.set(ownerUid, ws);
-    }
-    return ws;
   }
 
   public setDefaultModelProfile(ownerUid: string, profileId: string): UserAIWorkspaceConfig {
@@ -549,11 +611,12 @@ export class PersistentAIStore {
     const pWs = this.getOrCreatePersistentWorkspace(ownerUid);
     pWs.defaultModelProfileId = profileId;
     pWs.updatedAt = new Date().toISOString();
+    this.sqlite.saveWorkspace(ownerUid, pWs);
+
     const sWs = this.sessionWorkspaces.get(ownerUid);
     if (sWs) {
       sWs.defaultModelProfileId = profileId;
     }
-    this.flushToDisk();
     return this.getWorkspace(ownerUid);
   }
 
@@ -569,7 +632,6 @@ export class PersistentAIStore {
       const taskType = taskKey as AITaskType;
       if (!ALL_AI_TASK_TYPES.includes(taskType) || !cfg) continue;
 
-      // Enforce vision capability check when binding visual_writing primary model
       if (taskType === 'visual_writing' && cfg.primaryModelProfileId) {
         const prof = ws.modelProfiles.find((p) => p.id === cfg.primaryModelProfileId);
         const allowFallback =
@@ -595,7 +657,7 @@ export class PersistentAIStore {
     }
 
     pWs.updatedAt = nowIso;
-    this.flushToDisk();
+    this.sqlite.saveWorkspace(ownerUid, pWs);
     return this.getWorkspace(ownerUid);
   }
 
@@ -611,61 +673,68 @@ export class PersistentAIStore {
     capabilitySources?: Partial<ModelProfile['capabilitySource']>;
     layers?: ModelProfile['lastTestLayers'];
   }): void {
-    const ws = this.getOrCreatePersistentWorkspace(params.ownerUid);
+    const pWs = this.getOrCreatePersistentWorkspace(params.ownerUid);
     const sWs = this.sessionWorkspaces.get(params.ownerUid);
 
-    for (const targetWs of [ws, sWs].filter(Boolean) as UserAIWorkspaceConfig[]) {
-      for (const conn of targetWs.connections) {
-        if (
-          (params.connectionId && conn.id === params.connectionId) ||
-          (!params.connectionId && conn.providerType === params.providerType)
-        ) {
-          conn.lastTestStatus = params.ok ? 'success' : 'failed';
-          conn.lastTestedAt = params.testedAt;
-          conn.configurationHash = params.configurationHash;
-          conn.updatedAt = params.testedAt;
+    this.sqlite.withTransaction(() => {
+      for (const targetWs of [pWs, sWs].filter(Boolean) as UserAIWorkspaceConfig[]) {
+        for (const conn of targetWs.connections) {
+          if (
+            (params.connectionId && conn.id === params.connectionId) ||
+            (!params.connectionId && conn.providerType === params.providerType)
+          ) {
+            conn.lastTestStatus = params.ok ? 'success' : 'failed';
+            conn.lastTestedAt = params.testedAt;
+            conn.configurationHash = params.configurationHash;
+            conn.updatedAt = params.testedAt;
+          }
+        }
+        for (const prof of targetWs.modelProfiles) {
+          if (
+            prof.modelId === params.modelId &&
+            (!params.connectionId || prof.connectionId === params.connectionId)
+          ) {
+            if (params.verifiedCapabilities) {
+              prof.capabilities = { ...prof.capabilities, ...params.verifiedCapabilities };
+            }
+            if (params.capabilitySources) {
+              prof.capabilitySource = { ...prof.capabilitySource, ...params.capabilitySources };
+            }
+            if (params.layers) {
+              prof.lastTestLayers = { ...prof.lastTestLayers, ...params.layers };
+            }
+            if (params.ok) {
+              prof.lastVerifiedAt = params.testedAt;
+            }
+            prof.configurationHash = params.configurationHash;
+            prof.updatedAt = params.testedAt;
+          }
         }
       }
-      for (const prof of targetWs.modelProfiles) {
-        if (
-          prof.modelId === params.modelId &&
-          (!params.connectionId || prof.connectionId === params.connectionId)
-        ) {
-          if (params.verifiedCapabilities) {
-            prof.capabilities = { ...prof.capabilities, ...params.verifiedCapabilities };
-          }
-          if (params.capabilitySources) {
-            prof.capabilitySource = { ...prof.capabilitySource, ...params.capabilitySources };
-          }
-          if (params.layers) {
-            prof.lastTestLayers = { ...prof.lastTestLayers, ...params.layers };
-          }
-          if (params.ok) {
-            prof.lastVerifiedAt = params.testedAt;
-          }
-          prof.configurationHash = params.configurationHash;
-          prof.updatedAt = params.testedAt;
+
+      this.sqlite.saveWorkspace(params.ownerUid, pWs);
+
+      if (params.connectionId) {
+        const credKey = `${params.ownerUid}:${params.connectionId}`;
+        const dRec = this.sqlite.getCredential(credKey);
+        if (dRec) {
+          dRec.lastTestedAt = params.testedAt;
+          dRec.lastTestStatus = params.ok ? 'success' : 'failed';
+          this.sqlite.upsertCredential(
+            credKey,
+            params.ownerUid,
+            params.connectionId,
+            dRec.provider,
+            dRec
+          );
+        }
+        const sRec = this.sessionCredentials.get(credKey);
+        if (sRec) {
+          sRec.lastTestedAt = params.testedAt;
+          sRec.lastTestStatus = params.ok ? 'success' : 'failed';
         }
       }
-    }
-
-    // Also update credential records
-    const legacyKey = `${params.ownerUid}:${params.providerType}`;
-    const connKey = params.connectionId ? `${params.ownerUid}:${params.connectionId}` : legacyKey;
-    for (const k of [connKey, legacyKey]) {
-      const dRec = this.diskState.credentials[k];
-      if (dRec) {
-        dRec.lastTestedAt = params.testedAt;
-        dRec.lastTestStatus = params.ok ? 'success' : 'failed';
-      }
-      const sRec = this.sessionCredentials.get(k);
-      if (sRec) {
-        sRec.lastTestedAt = params.testedAt;
-        sRec.lastTestStatus = params.ok ? 'success' : 'failed';
-      }
-    }
-
-    this.flushToDisk();
+    });
   }
 
   public deleteConnection(
@@ -673,9 +742,19 @@ export class PersistentAIStore {
     connectionIdOrProvider: string,
     force: boolean = false
   ): { deleted: boolean; affectedTasks: AITaskType[] } {
+    if (connectionIdOrProvider === SERVER_GEMINI_CONNECTION_ID) {
+      throw new SecurityError(
+        'INTERNAL_CONFIGURATION_ERROR',
+        'Google AI Studio 环境变量注入连接（server-env）为只读模式，不可删除',
+        403
+      );
+    }
+
     const ws = this.getWorkspace(ownerUid);
     const targetConn = ws.connections.find(
-      (c) => c.id === connectionIdOrProvider || c.providerType === connectionIdOrProvider
+      (c) =>
+        (c.id === connectionIdOrProvider || c.providerType === connectionIdOrProvider) &&
+        c.id !== SERVER_GEMINI_CONNECTION_ID
     );
 
     const affectedTasks: AITaskType[] = [];
@@ -704,47 +783,49 @@ export class PersistentAIStore {
     const pWs = this.getOrCreatePersistentWorkspace(ownerUid);
     const sWs = this.sessionWorkspaces.get(ownerUid);
 
-    for (const w of [pWs, sWs].filter(Boolean) as UserAIWorkspaceConfig[]) {
-      const removedConnIds = new Set(
-        w.connections
-          .filter(
-            (c) => c.id === connectionIdOrProvider || c.providerType === connectionIdOrProvider
-          )
-          .map((c) => c.id)
-      );
-      const removedProfIds = new Set(
-        w.modelProfiles
-          .filter((p) => removedConnIds.has(p.connectionId))
-          .map((p) => p.id)
-      );
+    this.sqlite.withTransaction(() => {
+      for (const w of [pWs, sWs].filter(Boolean) as UserAIWorkspaceConfig[]) {
+        const removedConnIds = new Set(
+          w.connections
+            .filter(
+              (c) => c.id === connectionIdOrProvider || c.providerType === connectionIdOrProvider
+            )
+            .map((c) => c.id)
+        );
+        const removedProfIds = new Set(
+          w.modelProfiles
+            .filter((p) => removedConnIds.has(p.connectionId))
+            .map((p) => p.id)
+        );
 
-      w.connections = w.connections.filter((c) => !removedConnIds.has(c.id));
-      w.modelProfiles = w.modelProfiles.filter((p) => !removedProfIds.has(p.id));
+        w.connections = w.connections.filter((c) => !removedConnIds.has(c.id));
+        w.modelProfiles = w.modelProfiles.filter((p) => !removedProfIds.has(p.id));
 
-      if (w.defaultModelProfileId && removedProfIds.has(w.defaultModelProfileId)) {
-        w.defaultModelProfileId = w.modelProfiles[0]?.id || null;
-      }
-
-      for (const tKey of ALL_AI_TASK_TYPES) {
-        const b = w.taskBindings[tKey];
-        if (!b) continue;
-        if (b.primaryModelProfileId && removedProfIds.has(b.primaryModelProfileId)) {
-          b.primaryModelProfileId = null;
+        if (w.defaultModelProfileId && removedProfIds.has(w.defaultModelProfileId)) {
+          w.defaultModelProfileId = w.modelProfiles[0]?.id || null;
         }
-        if (b.fallbackModelProfileId && removedProfIds.has(b.fallbackModelProfileId)) {
-          b.fallbackModelProfileId = null;
+
+        for (const tKey of ALL_AI_TASK_TYPES) {
+          const b = w.taskBindings[tKey];
+          if (!b) continue;
+          if (b.primaryModelProfileId && removedProfIds.has(b.primaryModelProfileId)) {
+            b.primaryModelProfileId = null;
+          }
+          if (b.fallbackModelProfileId && removedProfIds.has(b.fallbackModelProfileId)) {
+            b.fallbackModelProfileId = null;
+          }
+        }
+
+        for (const cId of removedConnIds) {
+          this.sqlite.deleteCredentialsByConnection(ownerUid, cId);
+          this.sessionCredentials.delete(`${ownerUid}:${cId}`);
         }
       }
 
-      for (const cId of removedConnIds) {
-        delete this.diskState.credentials[`${ownerUid}:${cId}`];
-        this.sessionCredentials.delete(`${ownerUid}:${cId}`);
-      }
-    }
-
-    delete this.diskState.credentials[`${ownerUid}:${connectionIdOrProvider}`];
-    this.sessionCredentials.delete(`${ownerUid}:${connectionIdOrProvider}`);
-    this.flushToDisk();
+      this.sqlite.deleteCredential(`${ownerUid}:${connectionIdOrProvider}`);
+      this.sessionCredentials.delete(`${ownerUid}:${connectionIdOrProvider}`);
+      this.sqlite.saveWorkspace(ownerUid, pWs);
+    });
 
     return { deleted: true, affectedTasks };
   }
@@ -752,45 +833,54 @@ export class PersistentAIStore {
   public getDecryptedCredential(
     ownerUid: string,
     connectionIdOrProvider: string
-  ): { plainKey: string; record: EncryptedCredentialRecord } | null {
+  ): { plainKey: string; record?: EncryptedCredentialRecord } | null {
+    if (connectionIdOrProvider === SERVER_GEMINI_CONNECTION_ID) {
+      const envKey = process.env.GEMINI_API_KEY?.trim();
+      return envKey ? { plainKey: envKey } : null;
+    }
+
     const key = `${ownerUid}:${connectionIdOrProvider}`;
-    const rec =
-      this.diskState.credentials[key] || this.sessionCredentials.get(key);
+    const rec = this.sqlite.getCredential(key) || this.sessionCredentials.get(key);
     if (!rec) return null;
     const plainKey = decryptProviderApiKey(ownerUid, rec.provider, rec);
     return { plainKey, record: rec };
   }
 
-  public getProviderCredentialStatuses(ownerUid: string): Array<{
-    provider: ProviderType;
-    configured: boolean;
-    storageMode: 'none' | 'session-cookie' | 'encrypted-firestore' | 'owner-env';
-    maskedKey: string | null;
-    baseUrl?: string;
-    model: string;
-    lastTestedAt: string | null;
-    lastTestStatus: 'success' | 'failed' | 'untested';
-    connectionId?: string;
-    displayName?: string;
-    configurationHash?: string;
-  }> {
+  public getProviderCredentialStatuses(ownerUid: string): ProviderCredentialStatus[] {
     const ws = this.getWorkspace(ownerUid);
     const providers: ProviderType[] = ['gemini', 'deepseek', 'openai-compatible'];
 
     return providers.map((prov) => {
-      // Prefer the connection corresponding to defaultModelProfileId if it matches this provider, else latest connection for this provider
       const defaultProf = ws.modelProfiles.find((p) => p.id === ws.defaultModelProfileId);
       const matchingConns = ws.connections.filter((c) => c.providerType === prov && c.enabled);
       const activeConn =
         (defaultProf && matchingConns.find((c) => c.id === defaultProf.connectionId)) ||
         matchingConns[matchingConns.length - 1];
 
+      if (activeConn && activeConn.storageMode === 'server-env') {
+        const modelProf = ws.modelProfiles.find((p) => p.connectionId === activeConn.id);
+        return {
+          provider: prov,
+          configured: true,
+          storageMode: 'server-env',
+          maskedKey: activeConn.maskedKey,
+          baseUrl: activeConn.baseUrl,
+          model: modelProf?.modelId || process.env.GEMINI_DEFAULT_MODEL || 'gemini-2.5-flash',
+          lastTestedAt: activeConn.lastTestedAt,
+          lastTestStatus: 'success',
+          connectionId: activeConn.id,
+          displayName: activeConn.displayName,
+          configurationHash: activeConn.configurationHash,
+          readOnly: true,
+        };
+      }
+
       const rec =
         (activeConn
-          ? this.diskState.credentials[`${ownerUid}:${activeConn.id}`] ||
+          ? this.sqlite.getCredential(`${ownerUid}:${activeConn.id}`) ||
             this.sessionCredentials.get(`${ownerUid}:${activeConn.id}`)
           : null) ||
-        this.diskState.credentials[`${ownerUid}:${prov}`] ||
+        this.sqlite.getCredential(`${ownerUid}:${prov}`) ||
         this.sessionCredentials.get(`${ownerUid}:${prov}`);
 
       if (!rec && !activeConn) {
@@ -807,17 +897,21 @@ export class PersistentAIStore {
 
       const isSession = Boolean(
         (activeConn && activeConn.storageMode === 'session-only') ||
+          (activeConn && this.sessionCredentials.has(`${ownerUid}:${activeConn.id}`)) ||
           this.sessionCredentials.has(`${ownerUid}:${prov}`)
       );
 
       const statusVal = rec?.lastTestStatus || activeConn?.lastTestStatus || 'untested';
+      const activeProf = activeConn
+        ? ws.modelProfiles.find((p) => p.connectionId === activeConn.id)
+        : defaultProf;
       return {
         provider: prov,
         configured: true,
-        storageMode: isSession ? 'session-cookie' : 'encrypted-firestore',
+        storageMode: isSession ? 'session-cookie' : 'encrypted-sqlite',
         maskedKey: rec?.maskedKey || activeConn?.maskedKey || null,
         baseUrl: rec?.baseUrl || activeConn?.baseUrl,
-        model: rec?.model || defaultProf?.modelId || '',
+        model: rec?.model || activeProf?.modelId || '',
         lastTestedAt: rec?.lastTestedAt || activeConn?.lastTestedAt || null,
         lastTestStatus: statusVal === 'invalidated' ? 'untested' : statusVal,
         connectionId: activeConn?.id || rec?.connectionId,
@@ -827,15 +921,6 @@ export class PersistentAIStore {
     });
   }
 
-  /**
-   * Resolves which ModelProfile and ProviderConnection should execute a specific AITaskType.
-   * Priority:
-   * 1. Explicit `requestedProfileId` if passed by user
-   * 2. `taskBindings[taskType].primaryModelProfileId`
-   * 3. `workspace.defaultModelProfileId`
-   * 4. Explicit `requestedProvider` if passed for backward compatibility
-   * Never silently picks "the first configured provider" when multiple connections exist without a default!
-   */
   public resolveTaskModelBinding(params: {
     ownerUid: string;
     taskType: AITaskType;
@@ -850,7 +935,8 @@ export class PersistentAIStore {
   } | null {
     const ws = this.getWorkspace(params.ownerUid);
     const binding =
-      ws.taskBindings[params.taskType] || createDefaultTaskBindings(ws.defaultModelProfileId)[params.taskType];
+      ws.taskBindings[params.taskType] ||
+      createDefaultTaskBindings(ws.defaultModelProfileId)[params.taskType];
 
     const candidateProfileId = params.useFallback
       ? binding.fallbackModelProfileId
@@ -863,7 +949,6 @@ export class PersistentAIStore {
       profile = ws.modelProfiles.find((p) => p.id === candidateProfileId && p.enabled);
     }
     if (!profile && params.requestedProvider) {
-      // Only match explicit requestedProvider if default matches or only one profile for that provider exists
       profile = ws.modelProfiles.find(
         (p) => p.providerType === params.requestedProvider && p.enabled
       );
@@ -878,6 +963,17 @@ export class PersistentAIStore {
     );
     if (!connection) {
       return null;
+    }
+
+    if (connection.storageMode === 'server-env' || connection.id === SERVER_GEMINI_CONNECTION_ID) {
+      const envKey = process.env.GEMINI_API_KEY?.trim();
+      if (!envKey) return null;
+      return {
+        connection,
+        profile,
+        binding,
+        plainApiKey: envKey,
+      };
     }
 
     const cred =
@@ -895,18 +991,19 @@ export class PersistentAIStore {
     };
   }
 
-  // EvaluationRun persistence
   public saveEvaluationRun(run: EvaluationRun): void {
-    this.diskState.evaluationRuns[run.runId] = run;
-    if (run.estimatedCostUsd && run.estimatedCostUsd > 0) {
-      const ws = this.getOrCreatePersistentWorkspace(run.userId);
-      ws.dailySpentUsd = Math.round((ws.dailySpentUsd + run.estimatedCostUsd) * 10000) / 10000;
-    }
-    this.flushToDisk();
+    this.sqlite.withTransaction(() => {
+      this.sqlite.saveEvaluationRun(run);
+      if (run.estimatedCostUsd && run.estimatedCostUsd > 0) {
+        const ws = this.getOrCreatePersistentWorkspace(run.userId);
+        ws.dailySpentUsd = Math.round((ws.dailySpentUsd + run.estimatedCostUsd) * 10000) / 10000;
+        this.sqlite.saveWorkspace(run.userId, ws);
+      }
+    });
   }
 
   public getEvaluationRun(ownerUid: string, runId: string): EvaluationRun | null {
-    const run = this.diskState.evaluationRuns[runId];
+    const run = this.sqlite.getEvaluationRun(runId);
     if (!run) return null;
     if (run.userId !== ownerUid) {
       throw new SecurityError('FORBIDDEN_USER_MISMATCH', '无权访问其他用户的批改运行记录', 403);
@@ -915,22 +1012,19 @@ export class PersistentAIStore {
   }
 
   public listEvaluationRuns(ownerUid: string, limit: number = 30): EvaluationRun[] {
-    return Object.values(this.diskState.evaluationRuns)
-      .filter((r) => r.userId === ownerUid)
-      .sort((a, b) => b.startedAt.localeCompare(a.startedAt))
-      .slice(0, limit);
+    return this.sqlite.listEvaluationRuns(ownerUid, limit);
   }
 
-  // Authoritative Attempt Submission State (for Server Anti-Leakage)
   public markAttemptSubmitted(params: {
     ownerUid: string;
     attemptId: string;
     year: number;
+    paperId?: string;
     submittedQuestions?: number[];
     submittedAll?: boolean;
   }): AttemptSubmissionRecord {
     const key = `${params.ownerUid}:${params.attemptId}`;
-    const existing = this.diskState.submissions[key];
+    const existing = this.sqlite.getSubmission(key);
     const mergedQuestions = Array.from(
       new Set([...(existing?.submittedQuestions || []), ...(params.submittedQuestions || [])])
     );
@@ -938,12 +1032,12 @@ export class PersistentAIStore {
       ownerUid: params.ownerUid,
       attemptId: params.attemptId,
       year: params.year,
+      paperId: params.paperId || existing?.paperId,
       submittedQuestions: mergedQuestions,
       submittedAll: params.submittedAll ?? existing?.submittedAll ?? true,
       submittedAt: new Date().toISOString(),
     };
-    this.diskState.submissions[key] = record;
-    this.flushToDisk();
+    this.sqlite.saveSubmission(key, record);
     return record;
   }
 
@@ -954,36 +1048,28 @@ export class PersistentAIStore {
     questionNumber: number;
   }): boolean {
     if (params.attemptId) {
-      const rec = this.diskState.submissions[`${params.ownerUid}:${params.attemptId}`];
+      const rec = this.sqlite.getSubmission(`${params.ownerUid}:${params.attemptId}`);
       if (rec) {
         return rec.submittedAll || rec.submittedQuestions.includes(params.questionNumber);
       }
     }
-    // Check if any submitted attempt for this user & year covers this question
     if (params.year) {
-      for (const rec of Object.values(this.diskState.submissions)) {
-        if (rec.ownerUid === params.ownerUid && rec.year === params.year) {
-          if (rec.submittedAll || rec.submittedQuestions.includes(params.questionNumber)) {
-            return true;
-          }
+      const list = this.sqlite.listSubmissionsByOwnerAndYear(params.ownerUid, params.year);
+      for (const rec of list) {
+        if (rec.submittedAll || rec.submittedQuestions.includes(params.questionNumber)) {
+          return true;
         }
       }
     }
     return false;
   }
 
-  // Idempotency Cache with TTL
   public getIdempotentResponse(
     ownerUid: string,
     compositeKey: string
   ): { status: number; body: unknown } | null {
-    const entry = this.diskState.idempotencyRecords[compositeKey];
+    const entry = this.sqlite.getIdempotentResponse(ownerUid, compositeKey);
     if (!entry) return null;
-    if (entry.ownerUid !== ownerUid) return null;
-    if (Date.now() > entry.expiresAt) {
-      delete this.diskState.idempotencyRecords[compositeKey];
-      return null;
-    }
     return { status: entry.status, body: entry.body };
   }
 
@@ -995,14 +1081,13 @@ export class PersistentAIStore {
     ttlMs: number = 24 * 60 * 60 * 1000
   ): void {
     const now = Date.now();
-    this.diskState.idempotencyRecords[compositeKey] = {
+    this.sqlite.saveIdempotentResponse(compositeKey, {
       compositeKey,
       ownerUid,
       createdAt: now,
       expiresAt: now + ttlMs,
       status,
       body,
-    };
-    this.flushToDisk();
+    });
   }
 }

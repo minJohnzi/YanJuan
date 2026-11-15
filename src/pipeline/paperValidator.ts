@@ -7,6 +7,7 @@ import type {
   ValidationErrorCode,
   ValidationReport,
 } from '../shared/types.ts';
+import { buildPaperIdentity } from '../domain/subjects.ts';
 import type { MergeResult } from './multiSourceMerger.ts';
 
 export interface ValidateExamOptions {
@@ -426,8 +427,11 @@ export function buildAndValidateExam(
     }
   }
 
+  const identity = buildPaperIdentity(mergedDraft.year);
+
   const validationReport: ValidationReport = {
     examId: `exam-${mergedDraft.year}-${options.dataVersion}`,
+    paperId: identity.paperId,
     year: mergedDraft.year,
     dataVersion: options.dataVersion,
     status,
@@ -444,6 +448,12 @@ export function buildAndValidateExam(
 
   return {
     id: `exam-${mergedDraft.year}-${options.dataVersion}`,
+    paperId: identity.paperId,
+    subjectId: identity.subjectId,
+    examYear: identity.examYear,
+    seriesCode: identity.seriesCode,
+    badgeLabel: identity.badgeLabel,
+    identity,
     year: mergedDraft.year,
     subject: '考研英语一',
     totalScore: 100,

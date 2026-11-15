@@ -21,7 +21,7 @@
     "md"
   ],
   "sourceHashes": {
-    "papers/2010.md": "275839fdedceea121bdf8393f05674f764c23cb0f3de8d7ea9927ccf849b91b1",
+    "papers/2010.md": "db6f7dde7af3ecc835ccb08de2802387c033c0d9d298db84b755d1ad0438fac3",
     "answers/2010.md": "56661d65c19d60704b027002282489ba8b460869a9fbc4da640b5f512516be8b",
     "assets/2010/writing-part-b-01.png": "20f44a53ce3c74b1e254f5bd2a74e7bf6633e14c9f947dc2daeacbe97b96f4c2"
   },
@@ -142,6 +142,15 @@
                 "sentence": "In 1924, five-year-old studies at the Hawthorne plant of the Western Electric Company near Chicago began to investigate the relationship between working conditions and productivity. The researchers first changed the lighting in the factory to see [1] the workers would react. To their astonishment, productivity [2] whether the lighting was made brighter or dimmer, and continued to rise even when the lighting was restored to its original [3].",
                 "surroundingParagraph": "In 1924, five-year-old studies at the Hawthorne plant of the Western Electric Company near Chicago began to investigate the relationship between working conditions and productivity. The researchers first changed the lighting in the factory to see [1] the workers would react. To their astonishment, productivity [2] whether the lighting was made brighter or dimmer, and continued to rise even when the lighting was restored to its original [3].",
                 "blankIndex": 1
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -179,6 +188,15 @@
                 "sentence": "In 1924, five-year-old studies at the Hawthorne plant of the Western Electric Company near Chicago began to investigate the relationship between working conditions and productivity. The researchers first changed the lighting in the factory to see [1] the workers would react. To their astonishment, productivity [2] whether the lighting was made brighter or dimmer, and continued to rise even when the lighting was restored to its original [3].",
                 "surroundingParagraph": "In 1924, five-year-old studies at the Hawthorne plant of the Western Electric Company near Chicago began to investigate the relationship between working conditions and productivity. The researchers first changed the lighting in the factory to see [1] the workers would react. To their astonishment, productivity [2] whether the lighting was made brighter or dimmer, and continued to rise even when the lighting was restored to its original [3].",
                 "blankIndex": 2
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -216,6 +234,15 @@
                 "sentence": "In 1924, five-year-old studies at the Hawthorne plant of the Western Electric Company near Chicago began to investigate the relationship between working conditions and productivity. The researchers first changed the lighting in the factory to see [1] the workers would react. To their astonishment, productivity [2] whether the lighting was made brighter or dimmer, and continued to rise even when the lighting was restored to its original [3].",
                 "surroundingParagraph": "In 1924, five-year-old studies at the Hawthorne plant of the Western Electric Company near Chicago began to investigate the relationship between working conditions and productivity. The researchers first changed the lighting in the factory to see [1] the workers would react. To their astonishment, productivity [2] whether the lighting was made brighter or dimmer, and continued to rise even when the lighting was restored to its original [3].",
                 "blankIndex": 3
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -253,6 +280,15 @@
                 "sentence": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
                 "surroundingParagraph": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
                 "blankIndex": 4
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -290,6 +326,15 @@
                 "sentence": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
                 "surroundingParagraph": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
                 "blankIndex": 5
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -327,6 +372,15 @@
                 "sentence": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
                 "surroundingParagraph": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
                 "blankIndex": 6
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -364,6 +418,15 @@
                 "sentence": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
                 "surroundingParagraph": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
                 "blankIndex": 7
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -401,6 +464,15 @@
                 "sentence": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
                 "surroundingParagraph": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
                 "blankIndex": 8
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -438,6 +510,15 @@
                 "sentence": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
                 "surroundingParagraph": "The researchers then [4] other variables, such as the length of rest breaks, the hours in the working day, and the method of payment. In almost every [5], productivity improved. It seemed that the workers were responding not to the specific changes in their physical [6], but to the fact that they were being [7] by the researchers and felt that their work was considered important. This phenomenon came to be known [8] the \"Hawthorne effect\" — the idea that people change their behavior simply because they know they are subjects in a [9].",
                 "blankIndex": 9
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -475,6 +556,15 @@
                 "sentence": "For decades, the Hawthorne effect has been a staple of psychology and management textbooks. [10] in recent years, economists Steven Levitt and John List decided to track down the original data from the 1924–1932 Hawthorne experiments, which had been [11] in archives for decades. When they re-examined the records using modern statistical methods, they [12] a surprising conclusion: the original data provided almost no [13] for the Hawthorne effect as it is commonly described.",
                 "surroundingParagraph": "For decades, the Hawthorne effect has been a staple of psychology and management textbooks. [10] in recent years, economists Steven Levitt and John List decided to track down the original data from the 1924–1932 Hawthorne experiments, which had been [11] in archives for decades. When they re-examined the records using modern statistical methods, they [12] a surprising conclusion: the original data provided almost no [13] for the Hawthorne effect as it is commonly described.",
                 "blankIndex": 10
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -512,6 +602,15 @@
                 "sentence": "For decades, the Hawthorne effect has been a staple of psychology and management textbooks. [10] in recent years, economists Steven Levitt and John List decided to track down the original data from the 1924–1932 Hawthorne experiments, which had been [11] in archives for decades. When they re-examined the records using modern statistical methods, they [12] a surprising conclusion: the original data provided almost no [13] for the Hawthorne effect as it is commonly described.",
                 "surroundingParagraph": "For decades, the Hawthorne effect has been a staple of psychology and management textbooks. [10] in recent years, economists Steven Levitt and John List decided to track down the original data from the 1924–1932 Hawthorne experiments, which had been [11] in archives for decades. When they re-examined the records using modern statistical methods, they [12] a surprising conclusion: the original data provided almost no [13] for the Hawthorne effect as it is commonly described.",
                 "blankIndex": 11
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -549,6 +648,15 @@
                 "sentence": "For decades, the Hawthorne effect has been a staple of psychology and management textbooks. [10] in recent years, economists Steven Levitt and John List decided to track down the original data from the 1924–1932 Hawthorne experiments, which had been [11] in archives for decades. When they re-examined the records using modern statistical methods, they [12] a surprising conclusion: the original data provided almost no [13] for the Hawthorne effect as it is commonly described.",
                 "surroundingParagraph": "For decades, the Hawthorne effect has been a staple of psychology and management textbooks. [10] in recent years, economists Steven Levitt and John List decided to track down the original data from the 1924–1932 Hawthorne experiments, which had been [11] in archives for decades. When they re-examined the records using modern statistical methods, they [12] a surprising conclusion: the original data provided almost no [13] for the Hawthorne effect as it is commonly described.",
                 "blankIndex": 12
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -586,6 +694,15 @@
                 "sentence": "For decades, the Hawthorne effect has been a staple of psychology and management textbooks. [10] in recent years, economists Steven Levitt and John List decided to track down the original data from the 1924–1932 Hawthorne experiments, which had been [11] in archives for decades. When they re-examined the records using modern statistical methods, they [12] a surprising conclusion: the original data provided almost no [13] for the Hawthorne effect as it is commonly described.",
                 "surroundingParagraph": "For decades, the Hawthorne effect has been a staple of psychology and management textbooks. [10] in recent years, economists Steven Levitt and John List decided to track down the original data from the 1924–1932 Hawthorne experiments, which had been [11] in archives for decades. When they re-examined the records using modern statistical methods, they [12] a surprising conclusion: the original data provided almost no [13] for the Hawthorne effect as it is commonly described.",
                 "blankIndex": 13
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -623,6 +740,15 @@
                 "sentence": "According to Levitt and List, the changes in lighting at the Hawthorne plant always took place on Sundays, the only day of the week when the factory was [14]. Output regularly rose on Mondays regardless of whether an experimental change had been [15] the day before. Furthermore, many of the lighting increases occurred as winter turned to spring, when natural daylight and temperatures were also [16] factory output.",
                 "surroundingParagraph": "According to Levitt and List, the changes in lighting at the Hawthorne plant always took place on Sundays, the only day of the week when the factory was [14]. Output regularly rose on Mondays regardless of whether an experimental change had been [15] the day before. Furthermore, many of the lighting increases occurred as winter turned to spring, when natural daylight and temperatures were also [16] factory output.",
                 "blankIndex": 14
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -660,6 +786,15 @@
                 "sentence": "According to Levitt and List, the changes in lighting at the Hawthorne plant always took place on Sundays, the only day of the week when the factory was [14]. Output regularly rose on Mondays regardless of whether an experimental change had been [15] the day before. Furthermore, many of the lighting increases occurred as winter turned to spring, when natural daylight and temperatures were also [16] factory output.",
                 "surroundingParagraph": "According to Levitt and List, the changes in lighting at the Hawthorne plant always took place on Sundays, the only day of the week when the factory was [14]. Output regularly rose on Mondays regardless of whether an experimental change had been [15] the day before. Furthermore, many of the lighting increases occurred as winter turned to spring, when natural daylight and temperatures were also [16] factory output.",
                 "blankIndex": 15
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -697,6 +832,15 @@
                 "sentence": "According to Levitt and List, the changes in lighting at the Hawthorne plant always took place on Sundays, the only day of the week when the factory was [14]. Output regularly rose on Mondays regardless of whether an experimental change had been [15] the day before. Furthermore, many of the lighting increases occurred as winter turned to spring, when natural daylight and temperatures were also [16] factory output.",
                 "surroundingParagraph": "According to Levitt and List, the changes in lighting at the Hawthorne plant always took place on Sundays, the only day of the week when the factory was [14]. Output regularly rose on Mondays regardless of whether an experimental change had been [15] the day before. Furthermore, many of the lighting increases occurred as winter turned to spring, when natural daylight and temperatures were also [16] factory output.",
                 "blankIndex": 16
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -734,6 +878,15 @@
                 "sentence": "Does this mean the Hawthorne effect is a complete [17]? Not necessarily. People do sometimes alter their behavior when they know they are under [18]. However, the original Hawthorne studies were too poorly controlled to [19] what they have long been claimed to show, reminding us that even famous scientific findings deserve [20] scrutiny.",
                 "surroundingParagraph": "Does this mean the Hawthorne effect is a complete [17]? Not necessarily. People do sometimes alter their behavior when they know they are under [18]. However, the original Hawthorne studies were too poorly controlled to [19] what they have long been claimed to show, reminding us that even famous scientific findings deserve [20] scrutiny.",
                 "blankIndex": 17
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -771,6 +924,15 @@
                 "sentence": "Does this mean the Hawthorne effect is a complete [17]? Not necessarily. People do sometimes alter their behavior when they know they are under [18]. However, the original Hawthorne studies were too poorly controlled to [19] what they have long been claimed to show, reminding us that even famous scientific findings deserve [20] scrutiny.",
                 "surroundingParagraph": "Does this mean the Hawthorne effect is a complete [17]? Not necessarily. People do sometimes alter their behavior when they know they are under [18]. However, the original Hawthorne studies were too poorly controlled to [19] what they have long been claimed to show, reminding us that even famous scientific findings deserve [20] scrutiny.",
                 "blankIndex": 18
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -808,6 +970,15 @@
                 "sentence": "Does this mean the Hawthorne effect is a complete [17]? Not necessarily. People do sometimes alter their behavior when they know they are under [18]. However, the original Hawthorne studies were too poorly controlled to [19] what they have long been claimed to show, reminding us that even famous scientific findings deserve [20] scrutiny.",
                 "surroundingParagraph": "Does this mean the Hawthorne effect is a complete [17]? Not necessarily. People do sometimes alter their behavior when they know they are under [18]. However, the original Hawthorne studies were too poorly controlled to [19] what they have long been claimed to show, reminding us that even famous scientific findings deserve [20] scrutiny.",
                 "blankIndex": 19
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -845,6 +1016,15 @@
                 "sentence": "Does this mean the Hawthorne effect is a complete [17]? Not necessarily. People do sometimes alter their behavior when they know they are under [18]. However, the original Hawthorne studies were too poorly controlled to [19] what they have long been claimed to show, reminding us that even famous scientific findings deserve [20] scrutiny.",
                 "surroundingParagraph": "Does this mean the Hawthorne effect is a complete [17]? Not necessarily. People do sometimes alter their behavior when they know they are under [18]. However, the original Hawthorne studies were too poorly controlled to [19] what they have long been claimed to show, reminding us that even famous scientific findings deserve [20] scrutiny.",
                 "blankIndex": 20
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             }
           ]
@@ -947,6 +1127,15 @@
               "readingMeta": {
                 "passageId": "2010-mat-reading-1",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -983,6 +1172,15 @@
               "readingMeta": {
                 "passageId": "2010-mat-reading-1",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -1019,6 +1217,15 @@
               "readingMeta": {
                 "passageId": "2010-mat-reading-1",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -1055,6 +1262,15 @@
               "readingMeta": {
                 "passageId": "2010-mat-reading-1",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -1091,6 +1307,15 @@
               "readingMeta": {
                 "passageId": "2010-mat-reading-1",
                 "questionCategory": "main-idea"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             }
           ]
@@ -1183,6 +1408,15 @@
               "readingMeta": {
                 "passageId": "2010-mat-reading-2",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -1219,6 +1453,15 @@
               "readingMeta": {
                 "passageId": "2010-mat-reading-2",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -1256,6 +1499,15 @@
                 "passageId": "2010-mat-reading-2",
                 "questionCategory": "vocab-in-context",
                 "underlinedTarget": "about-face"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -1292,6 +1544,15 @@
               "readingMeta": {
                 "passageId": "2010-mat-reading-2",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -1328,6 +1589,15 @@
               "readingMeta": {
                 "passageId": "2010-mat-reading-2",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             }
           ]
@@ -1420,6 +1690,15 @@
               "readingMeta": {
                 "passageId": "2010-mat-reading-3",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -1457,6 +1736,15 @@
                 "passageId": "2010-mat-reading-3",
                 "questionCategory": "detail",
                 "underlinedTarget": "two-step flow of communication"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -1493,6 +1781,15 @@
               "readingMeta": {
                 "passageId": "2010-mat-reading-3",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -1530,6 +1827,15 @@
                 "passageId": "2010-mat-reading-3",
                 "questionCategory": "vocab-in-context",
                 "underlinedTarget": "these people"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -1566,6 +1872,15 @@
               "readingMeta": {
                 "passageId": "2010-mat-reading-3",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             }
           ]
@@ -1658,6 +1973,15 @@
               "readingMeta": {
                 "passageId": "2010-mat-reading-4",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -1694,6 +2018,15 @@
               "readingMeta": {
                 "passageId": "2010-mat-reading-4",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -1730,6 +2063,15 @@
               "readingMeta": {
                 "passageId": "2010-mat-reading-4",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -1766,6 +2108,15 @@
               "readingMeta": {
                 "passageId": "2010-mat-reading-4",
                 "questionCategory": "attitude"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -1802,6 +2153,15 @@
               "readingMeta": {
                 "passageId": "2010-mat-reading-4",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             }
           ]
@@ -2009,6 +2369,15 @@
                 "sourceFile": "papers/2010.md",
                 "sourceFormat": "md",
                 "sectionHeading": "Section II Part B"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -2053,6 +2422,15 @@
                 "sourceFile": "papers/2010.md",
                 "sourceFormat": "md",
                 "sectionHeading": "Section II Part B"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "F",
+                "semanticCandidateAnswer": "F",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -2097,6 +2475,15 @@
                 "sourceFile": "papers/2010.md",
                 "sourceFormat": "md",
                 "sectionHeading": "Section II Part B"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -2141,6 +2528,15 @@
                 "sourceFile": "papers/2010.md",
                 "sourceFormat": "md",
                 "sectionHeading": "Section II Part B"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "G",
+                "semanticCandidateAnswer": "G",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -2185,6 +2581,15 @@
                 "sourceFile": "papers/2010.md",
                 "sourceFormat": "md",
                 "sectionHeading": "Section II Part B"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             }
           ]
@@ -2294,6 +2699,15 @@
                 ],
                 "referenceTranslation": "科学家们立即拿出某些明显站不住脚的证据前来补救，大致意思是：如果鸟类不能控制害虫的话，害虫就会把我们人类吃掉。",
                 "referenceSource": "source-provided"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.316Z"
               }
             },
             {
@@ -2346,6 +2760,15 @@
                 ],
                 "referenceTranslation": "但是我们至少已经几乎承认了这样一种观点：不管鸟类的生存对我们是否有经济利益，生存都是它们与生俱来的固有权利。",
                 "referenceSource": "source-provided"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.317Z"
               }
             },
             {
@@ -2398,6 +2821,15 @@
                 ],
                 "referenceTranslation": "曾几何时，生物学家们总是夸大这样一条证据：这些生物通过捕食体弱的猎物来维系猎物种群的健康，或者说它们仅仅捕食“没有价值的”物种。",
                 "referenceSource": "source-provided"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.317Z"
               }
             },
             {
@@ -2450,6 +2882,15 @@
                 ],
                 "referenceTranslation": "在林业生态更为发达的欧洲，那些无商业价值的树种被视为天然森林群落的合乎情理的成员，并得到相应的保护。",
                 "referenceSource": "source-provided"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.317Z"
               }
             },
             {
@@ -2502,6 +2943,15 @@
                 ],
                 "referenceTranslation": "这一体系往往忽视并最终消灭陆地生物群落中许多缺乏商业价值、但对其健康运行至关重要的物种。",
                 "referenceSource": "source-provided"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.317Z"
               }
             }
           ]
@@ -2634,6 +3084,15 @@
                 "sourceFile": "papers/2010.md",
                 "sourceFormat": "md",
                 "sectionHeading": "Section III Part A"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.317Z"
               }
             }
           ]
@@ -2749,6 +3208,15 @@
                 "sourceFile": "papers/2010.md",
                 "sourceFormat": "md",
                 "sectionHeading": "Section III Part B"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2010.md",
+                "answerSourceFile": "answers/2010.md",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.317Z"
               }
             }
           ]
@@ -2818,12 +3286,28 @@
     "consistencyCheckRuns": 2,
     "consistencyMatched": true,
     "sourceDiscrepancies": [],
-    "generatedAt": "2026-10-19T11:30:00.000Z"
+    "generatedAt": "2026-10-19T11:30:00.000Z",
+    "paperId": "en1-2010"
   },
   "referencedAssets": [
     "writing-part-b-01.png"
   ],
   "objectiveAnswerCount": 45,
   "subjectiveCount": 7,
-  "answerSourceStatus": "source-provided"
+  "answerSourceStatus": "source-provided",
+  "paperId": "en1-2010",
+  "subjectId": "english-i",
+  "examYear": 2010,
+  "seriesCode": "real-exam",
+  "badgeLabel": "2010 真题",
+  "identity": {
+    "paperId": "en1-2010",
+    "legacyYear": 2010,
+    "subjectId": "english-i",
+    "examYear": 2010,
+    "seriesCode": "real-exam",
+    "title": "2010年全国硕士研究生入学统一考试英语（一）试题",
+    "shortTitle": "2010年 英语一",
+    "badgeLabel": "2010 真题"
+  }
 }

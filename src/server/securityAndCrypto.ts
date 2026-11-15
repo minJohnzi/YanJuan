@@ -768,6 +768,53 @@ export function isUserInOwnerUids(
 }
 
 /**
+ * Validates that a URL path segment (such as `:year`, `:paperId`, or `:version`)
+ * contains no path traversal sequences, slashes, or null bytes before joining paths.
+ */
+export function assertSafePathSegment(segment: string, label: string = 'parameter'): string {
+  const clean = (segment || '').trim();
+  if (
+    !clean ||
+    clean.includes('..') ||
+    clean.includes('/') ||
+    clean.includes('\\') ||
+    clean.includes('\0') ||
+    !/^[a-zA-Z0-9._-]+$/.test(clean)
+  ) {
+    throw new SecurityError(
+      'UNSAFE_PATH_PARAMETER',
+      `非法路径参数 ${label}: 包含不安全字符`,
+      400
+    );
+  }
+  return clean;
+}
+
+/**
+ * Verifies the optional `SERVER_AI_ACCESS_PIN` header when calling the server-hosted
+ * Google AI Studio `GEMINI_API_KEY`. Always allows requests when no PIN is configured.
+ */
+export function verifyServerAiAccessPin(
+  providedPin: string | undefined | null,
+  env: NodeJS.ProcessEnv = process.env
+): { allowed: boolean; requiresPin: boolean } {
+  const configuredPin = env.SERVER_AI_ACCESS_PIN?.trim();
+  if (!configuredPin) {
+    return { allowed: true, requiresPin: false };
+  }
+  const candidate = (providedPin || '').trim();
+  const candBuf = Buffer.from(candidate, 'utf8');
+  const confBuf = Buffer.from(configuredPin, 'utf8');
+  if (candBuf.length === 0 || candBuf.length !== confBuf.length) {
+    return { allowed: false, requiresPin: true };
+  }
+  return {
+    allowed: crypto.timingSafeEqual(candBuf, confBuf),
+    requiresPin: true,
+  };
+}
+
+/**
  * Maps internal/upstream errors into standardized AIErrorCodes and user-friendly messages.
  */
 export function normalizeToAIError(err: unknown): {

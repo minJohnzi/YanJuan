@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "manifestImported": true,
   "expectedYears": [
     2010,
@@ -58,6 +58,33 @@
     2024,
     2025,
     2026
+  ],
+  "availablePaperIds": [
+    "en1-2010",
+    "en1-2011",
+    "en1-2012",
+    "en1-2013",
+    "en1-2014",
+    "en1-2015",
+    "en1-2016",
+    "en1-2017",
+    "en1-2018",
+    "en1-2019",
+    "en1-2020",
+    "en1-2021",
+    "en1-2022",
+    "en1-2023",
+    "en1-2024",
+    "en1-2025",
+    "en1-2026",
+    "pol-2027-xiao8-01",
+    "pol-2027-xiao8-02",
+    "pol-2027-xiao8-03",
+    "pol-2027-xiao8-04",
+    "pol-2027-xiao8-05",
+    "pol-2027-xiao8-06",
+    "pol-2027-xiao8-07",
+    "pol-2027-xiao8-08"
   ],
   "failedYears": []
 }

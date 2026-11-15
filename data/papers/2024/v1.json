@@ -23,7 +23,7 @@
     "md"
   ],
   "sourceHashes": {
-    "papers/2024.md": "e2558010e8f438e71555290a56c8d49c3034275965e0693edb5a133f00c9d350",
+    "papers/2024.md": "995b04eef07bc916410d9eea49306f33f70a2cfa84194632124931b1b553e736",
     "answers/2024.md": "4b3c76bd052c45d987f96dad56fe918ad71822aae6d1fc2b44aa25405d5541f0",
     "assets/2024/writing-part-b-01.png": "89bc2aa905d127299312491dd831cf869b05fd865d33b30a7d11a405af4efe07",
     "assets/2024/writing-part-b-02.png": "ae1a3f2d4f28636e1ea28804e49bbbf87d072b9f402fa0290975704fc3494955",
@@ -144,6 +144,15 @@
                 "sentence": "In educational and cognitive development research, empirical evidence demonstrates that deep learning occurs when students engage in [1] knowledge construction rather than passive absorption. In the 2024 milestone investigation, researchers [2] the impact of systematic conceptual inquiry on academic [3] across diverse learning environments. When instructional methods were [4] across multiple semesters, scholars found that [5] thinking skills depended heavily on structured feedback.",
                 "surroundingParagraph": "In educational and cognitive development research, empirical evidence demonstrates that deep learning occurs when students engage in [1] knowledge construction rather than passive absorption. In the 2024 milestone investigation, researchers [2] the impact of systematic conceptual inquiry on academic [3] across diverse learning environments. When instructional methods were [4] across multiple semesters, scholars found that [5] thinking skills depended heavily on structured feedback.",
                 "blankIndex": 1
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -181,6 +190,15 @@
                 "sentence": "In educational and cognitive development research, empirical evidence demonstrates that deep learning occurs when students engage in [1] knowledge construction rather than passive absorption. In the 2024 milestone investigation, researchers [2] the impact of systematic conceptual inquiry on academic [3] across diverse learning environments. When instructional methods were [4] across multiple semesters, scholars found that [5] thinking skills depended heavily on structured feedback.",
                 "surroundingParagraph": "In educational and cognitive development research, empirical evidence demonstrates that deep learning occurs when students engage in [1] knowledge construction rather than passive absorption. In the 2024 milestone investigation, researchers [2] the impact of systematic conceptual inquiry on academic [3] across diverse learning environments. When instructional methods were [4] across multiple semesters, scholars found that [5] thinking skills depended heavily on structured feedback.",
                 "blankIndex": 2
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -218,6 +236,15 @@
                 "sentence": "In educational and cognitive development research, empirical evidence demonstrates that deep learning occurs when students engage in [1] knowledge construction rather than passive absorption. In the 2024 milestone investigation, researchers [2] the impact of systematic conceptual inquiry on academic [3] across diverse learning environments. When instructional methods were [4] across multiple semesters, scholars found that [5] thinking skills depended heavily on structured feedback.",
                 "surroundingParagraph": "In educational and cognitive development research, empirical evidence demonstrates that deep learning occurs when students engage in [1] knowledge construction rather than passive absorption. In the 2024 milestone investigation, researchers [2] the impact of systematic conceptual inquiry on academic [3] across diverse learning environments. When instructional methods were [4] across multiple semesters, scholars found that [5] thinking skills depended heavily on structured feedback.",
                 "blankIndex": 3
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -255,6 +282,15 @@
                 "sentence": "In educational and cognitive development research, empirical evidence demonstrates that deep learning occurs when students engage in [1] knowledge construction rather than passive absorption. In the 2024 milestone investigation, researchers [2] the impact of systematic conceptual inquiry on academic [3] across diverse learning environments. When instructional methods were [4] across multiple semesters, scholars found that [5] thinking skills depended heavily on structured feedback.",
                 "surroundingParagraph": "In educational and cognitive development research, empirical evidence demonstrates that deep learning occurs when students engage in [1] knowledge construction rather than passive absorption. In the 2024 milestone investigation, researchers [2] the impact of systematic conceptual inquiry on academic [3] across diverse learning environments. When instructional methods were [4] across multiple semesters, scholars found that [5] thinking skills depended heavily on structured feedback.",
                 "blankIndex": 4
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -292,6 +328,15 @@
                 "sentence": "In educational and cognitive development research, empirical evidence demonstrates that deep learning occurs when students engage in [1] knowledge construction rather than passive absorption. In the 2024 milestone investigation, researchers [2] the impact of systematic conceptual inquiry on academic [3] across diverse learning environments. When instructional methods were [4] across multiple semesters, scholars found that [5] thinking skills depended heavily on structured feedback.",
                 "surroundingParagraph": "In educational and cognitive development research, empirical evidence demonstrates that deep learning occurs when students engage in [1] knowledge construction rather than passive absorption. In the 2024 milestone investigation, researchers [2] the impact of systematic conceptual inquiry on academic [3] across diverse learning environments. When instructional methods were [4] across multiple semesters, scholars found that [5] thinking skills depended heavily on structured feedback.",
                 "blankIndex": 5
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -329,6 +374,15 @@
                 "sentence": "Furthermore, longitudinal [6] indicates that learners whose curiosity is [7] by open-ended problems progress [8] rote memorization. A well-designed curriculum serves as a cognitive [9] that supports independent exploration. [10], when institutions rely exclusively on standardized drills, students' intrinsic motivation is frequently [11], upsetting the delicate [12] between foundational mastery and creative synthesis.",
                 "surroundingParagraph": "Furthermore, longitudinal [6] indicates that learners whose curiosity is [7] by open-ended problems progress [8] rote memorization. A well-designed curriculum serves as a cognitive [9] that supports independent exploration. [10], when institutions rely exclusively on standardized drills, students' intrinsic motivation is frequently [11], upsetting the delicate [12] between foundational mastery and creative synthesis.",
                 "blankIndex": 6
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -366,6 +420,15 @@
                 "sentence": "Furthermore, longitudinal [6] indicates that learners whose curiosity is [7] by open-ended problems progress [8] rote memorization. A well-designed curriculum serves as a cognitive [9] that supports independent exploration. [10], when institutions rely exclusively on standardized drills, students' intrinsic motivation is frequently [11], upsetting the delicate [12] between foundational mastery and creative synthesis.",
                 "surroundingParagraph": "Furthermore, longitudinal [6] indicates that learners whose curiosity is [7] by open-ended problems progress [8] rote memorization. A well-designed curriculum serves as a cognitive [9] that supports independent exploration. [10], when institutions rely exclusively on standardized drills, students' intrinsic motivation is frequently [11], upsetting the delicate [12] between foundational mastery and creative synthesis.",
                 "blankIndex": 7
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -403,6 +466,15 @@
                 "sentence": "Furthermore, longitudinal [6] indicates that learners whose curiosity is [7] by open-ended problems progress [8] rote memorization. A well-designed curriculum serves as a cognitive [9] that supports independent exploration. [10], when institutions rely exclusively on standardized drills, students' intrinsic motivation is frequently [11], upsetting the delicate [12] between foundational mastery and creative synthesis.",
                 "surroundingParagraph": "Furthermore, longitudinal [6] indicates that learners whose curiosity is [7] by open-ended problems progress [8] rote memorization. A well-designed curriculum serves as a cognitive [9] that supports independent exploration. [10], when institutions rely exclusively on standardized drills, students' intrinsic motivation is frequently [11], upsetting the delicate [12] between foundational mastery and creative synthesis.",
                 "blankIndex": 8
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -440,6 +512,15 @@
                 "sentence": "Furthermore, longitudinal [6] indicates that learners whose curiosity is [7] by open-ended problems progress [8] rote memorization. A well-designed curriculum serves as a cognitive [9] that supports independent exploration. [10], when institutions rely exclusively on standardized drills, students' intrinsic motivation is frequently [11], upsetting the delicate [12] between foundational mastery and creative synthesis.",
                 "surroundingParagraph": "Furthermore, longitudinal [6] indicates that learners whose curiosity is [7] by open-ended problems progress [8] rote memorization. A well-designed curriculum serves as a cognitive [9] that supports independent exploration. [10], when institutions rely exclusively on standardized drills, students' intrinsic motivation is frequently [11], upsetting the delicate [12] between foundational mastery and creative synthesis.",
                 "blankIndex": 9
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -477,6 +558,15 @@
                 "sentence": "Furthermore, longitudinal [6] indicates that learners whose curiosity is [7] by open-ended problems progress [8] rote memorization. A well-designed curriculum serves as a cognitive [9] that supports independent exploration. [10], when institutions rely exclusively on standardized drills, students' intrinsic motivation is frequently [11], upsetting the delicate [12] between foundational mastery and creative synthesis.",
                 "surroundingParagraph": "Furthermore, longitudinal [6] indicates that learners whose curiosity is [7] by open-ended problems progress [8] rote memorization. A well-designed curriculum serves as a cognitive [9] that supports independent exploration. [10], when institutions rely exclusively on standardized drills, students' intrinsic motivation is frequently [11], upsetting the delicate [12] between foundational mastery and creative synthesis.",
                 "blankIndex": 10
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -514,6 +604,15 @@
                 "sentence": "Furthermore, longitudinal [6] indicates that learners whose curiosity is [7] by open-ended problems progress [8] rote memorization. A well-designed curriculum serves as a cognitive [9] that supports independent exploration. [10], when institutions rely exclusively on standardized drills, students' intrinsic motivation is frequently [11], upsetting the delicate [12] between foundational mastery and creative synthesis.",
                 "surroundingParagraph": "Furthermore, longitudinal [6] indicates that learners whose curiosity is [7] by open-ended problems progress [8] rote memorization. A well-designed curriculum serves as a cognitive [9] that supports independent exploration. [10], when institutions rely exclusively on standardized drills, students' intrinsic motivation is frequently [11], upsetting the delicate [12] between foundational mastery and creative synthesis.",
                 "blankIndex": 11
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -551,6 +650,15 @@
                 "sentence": "Furthermore, longitudinal [6] indicates that learners whose curiosity is [7] by open-ended problems progress [8] rote memorization. A well-designed curriculum serves as a cognitive [9] that supports independent exploration. [10], when institutions rely exclusively on standardized drills, students' intrinsic motivation is frequently [11], upsetting the delicate [12] between foundational mastery and creative synthesis.",
                 "surroundingParagraph": "Furthermore, longitudinal [6] indicates that learners whose curiosity is [7] by open-ended problems progress [8] rote memorization. A well-designed curriculum serves as a cognitive [9] that supports independent exploration. [10], when institutions rely exclusively on standardized drills, students' intrinsic motivation is frequently [11], upsetting the delicate [12] between foundational mastery and creative synthesis.",
                 "blankIndex": 12
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -588,6 +696,15 @@
                 "sentence": "Educators therefore regard reflective practice as [13] to intellectual growth. Once misconceptions are [14] through collaborative dialogue, classroom [15] becomes far more productive. By maintaining a [16] pedagogical framework, teachers can cultivate lasting analytical [17] that [18] lifelong inquiry, proving that [19] guidance yields superior educational [20].",
                 "surroundingParagraph": "Educators therefore regard reflective practice as [13] to intellectual growth. Once misconceptions are [14] through collaborative dialogue, classroom [15] becomes far more productive. By maintaining a [16] pedagogical framework, teachers can cultivate lasting analytical [17] that [18] lifelong inquiry, proving that [19] guidance yields superior educational [20].",
                 "blankIndex": 13
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -625,6 +742,15 @@
                 "sentence": "Educators therefore regard reflective practice as [13] to intellectual growth. Once misconceptions are [14] through collaborative dialogue, classroom [15] becomes far more productive. By maintaining a [16] pedagogical framework, teachers can cultivate lasting analytical [17] that [18] lifelong inquiry, proving that [19] guidance yields superior educational [20].",
                 "surroundingParagraph": "Educators therefore regard reflective practice as [13] to intellectual growth. Once misconceptions are [14] through collaborative dialogue, classroom [15] becomes far more productive. By maintaining a [16] pedagogical framework, teachers can cultivate lasting analytical [17] that [18] lifelong inquiry, proving that [19] guidance yields superior educational [20].",
                 "blankIndex": 14
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -662,6 +788,15 @@
                 "sentence": "Educators therefore regard reflective practice as [13] to intellectual growth. Once misconceptions are [14] through collaborative dialogue, classroom [15] becomes far more productive. By maintaining a [16] pedagogical framework, teachers can cultivate lasting analytical [17] that [18] lifelong inquiry, proving that [19] guidance yields superior educational [20].",
                 "surroundingParagraph": "Educators therefore regard reflective practice as [13] to intellectual growth. Once misconceptions are [14] through collaborative dialogue, classroom [15] becomes far more productive. By maintaining a [16] pedagogical framework, teachers can cultivate lasting analytical [17] that [18] lifelong inquiry, proving that [19] guidance yields superior educational [20].",
                 "blankIndex": 15
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -699,6 +834,15 @@
                 "sentence": "Educators therefore regard reflective practice as [13] to intellectual growth. Once misconceptions are [14] through collaborative dialogue, classroom [15] becomes far more productive. By maintaining a [16] pedagogical framework, teachers can cultivate lasting analytical [17] that [18] lifelong inquiry, proving that [19] guidance yields superior educational [20].",
                 "surroundingParagraph": "Educators therefore regard reflective practice as [13] to intellectual growth. Once misconceptions are [14] through collaborative dialogue, classroom [15] becomes far more productive. By maintaining a [16] pedagogical framework, teachers can cultivate lasting analytical [17] that [18] lifelong inquiry, proving that [19] guidance yields superior educational [20].",
                 "blankIndex": 16
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -736,6 +880,15 @@
                 "sentence": "Educators therefore regard reflective practice as [13] to intellectual growth. Once misconceptions are [14] through collaborative dialogue, classroom [15] becomes far more productive. By maintaining a [16] pedagogical framework, teachers can cultivate lasting analytical [17] that [18] lifelong inquiry, proving that [19] guidance yields superior educational [20].",
                 "surroundingParagraph": "Educators therefore regard reflective practice as [13] to intellectual growth. Once misconceptions are [14] through collaborative dialogue, classroom [15] becomes far more productive. By maintaining a [16] pedagogical framework, teachers can cultivate lasting analytical [17] that [18] lifelong inquiry, proving that [19] guidance yields superior educational [20].",
                 "blankIndex": 17
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -773,6 +926,15 @@
                 "sentence": "Educators therefore regard reflective practice as [13] to intellectual growth. Once misconceptions are [14] through collaborative dialogue, classroom [15] becomes far more productive. By maintaining a [16] pedagogical framework, teachers can cultivate lasting analytical [17] that [18] lifelong inquiry, proving that [19] guidance yields superior educational [20].",
                 "surroundingParagraph": "Educators therefore regard reflective practice as [13] to intellectual growth. Once misconceptions are [14] through collaborative dialogue, classroom [15] becomes far more productive. By maintaining a [16] pedagogical framework, teachers can cultivate lasting analytical [17] that [18] lifelong inquiry, proving that [19] guidance yields superior educational [20].",
                 "blankIndex": 18
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -810,6 +972,15 @@
                 "sentence": "Educators therefore regard reflective practice as [13] to intellectual growth. Once misconceptions are [14] through collaborative dialogue, classroom [15] becomes far more productive. By maintaining a [16] pedagogical framework, teachers can cultivate lasting analytical [17] that [18] lifelong inquiry, proving that [19] guidance yields superior educational [20].",
                 "surroundingParagraph": "Educators therefore regard reflective practice as [13] to intellectual growth. Once misconceptions are [14] through collaborative dialogue, classroom [15] becomes far more productive. By maintaining a [16] pedagogical framework, teachers can cultivate lasting analytical [17] that [18] lifelong inquiry, proving that [19] guidance yields superior educational [20].",
                 "blankIndex": 19
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -847,6 +1018,15 @@
                 "sentence": "Educators therefore regard reflective practice as [13] to intellectual growth. Once misconceptions are [14] through collaborative dialogue, classroom [15] becomes far more productive. By maintaining a [16] pedagogical framework, teachers can cultivate lasting analytical [17] that [18] lifelong inquiry, proving that [19] guidance yields superior educational [20].",
                 "surroundingParagraph": "Educators therefore regard reflective practice as [13] to intellectual growth. Once misconceptions are [14] through collaborative dialogue, classroom [15] becomes far more productive. By maintaining a [16] pedagogical framework, teachers can cultivate lasting analytical [17] that [18] lifelong inquiry, proving that [19] guidance yields superior educational [20].",
                 "blankIndex": 20
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             }
           ]
@@ -946,6 +1126,16 @@
               "readingMeta": {
                 "passageId": "2024-mat-reading-1",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "disputed",
+                "code": "DATA_ANSWER_DISPUTED",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "A",
+                "reason": "2024年第21题存在题库数据与标注答案语义冲突：原文第1段明确表述 \"mature industries have repeatedly underestimated the disruptive velocity\"，与选项 [A] 语义一致，但答案表标注为 [D]。已标记为 disputed 待人工核验，禁止 AI 自动覆盖标准答案。",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -982,6 +1172,15 @@
               "readingMeta": {
                 "passageId": "2024-mat-reading-1",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -1018,6 +1217,15 @@
               "readingMeta": {
                 "passageId": "2024-mat-reading-1",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -1054,6 +1262,15 @@
               "readingMeta": {
                 "passageId": "2024-mat-reading-1",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -1090,6 +1307,15 @@
               "readingMeta": {
                 "passageId": "2024-mat-reading-1",
                 "questionCategory": "main-idea"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             }
           ]
@@ -1180,6 +1406,15 @@
               "readingMeta": {
                 "passageId": "2024-mat-reading-2",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -1216,6 +1451,15 @@
               "readingMeta": {
                 "passageId": "2024-mat-reading-2",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -1252,6 +1496,15 @@
               "readingMeta": {
                 "passageId": "2024-mat-reading-2",
                 "questionCategory": "attitude"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -1288,6 +1541,15 @@
               "readingMeta": {
                 "passageId": "2024-mat-reading-2",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -1324,6 +1586,15 @@
               "readingMeta": {
                 "passageId": "2024-mat-reading-2",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             }
           ]
@@ -1414,6 +1685,15 @@
               "readingMeta": {
                 "passageId": "2024-mat-reading-3",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -1450,6 +1730,15 @@
               "readingMeta": {
                 "passageId": "2024-mat-reading-3",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -1486,6 +1775,15 @@
               "readingMeta": {
                 "passageId": "2024-mat-reading-3",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -1523,6 +1821,15 @@
                 "passageId": "2024-mat-reading-3",
                 "questionCategory": "vocab-in-context",
                 "underlinedTarget": "these municipal initiatives"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -1559,6 +1866,15 @@
               "readingMeta": {
                 "passageId": "2024-mat-reading-3",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             }
           ]
@@ -1649,6 +1965,15 @@
               "readingMeta": {
                 "passageId": "2024-mat-reading-4",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -1685,6 +2010,15 @@
               "readingMeta": {
                 "passageId": "2024-mat-reading-4",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -1721,6 +2055,15 @@
               "readingMeta": {
                 "passageId": "2024-mat-reading-4",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -1757,6 +2100,15 @@
               "readingMeta": {
                 "passageId": "2024-mat-reading-4",
                 "questionCategory": "detail"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -1793,6 +2145,15 @@
               "readingMeta": {
                 "passageId": "2024-mat-reading-4",
                 "questionCategory": "main-idea"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             }
           ]
@@ -1989,6 +2350,15 @@
                 "sourceFile": "papers/2024.md",
                 "sourceFormat": "md",
                 "sectionHeading": "Section II Part B"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "E",
+                "semanticCandidateAnswer": "E",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -2033,6 +2403,15 @@
                 "sourceFile": "papers/2024.md",
                 "sourceFormat": "md",
                 "sectionHeading": "Section II Part B"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -2077,6 +2456,15 @@
                 "sourceFile": "papers/2024.md",
                 "sourceFormat": "md",
                 "sectionHeading": "Section II Part B"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "F",
+                "semanticCandidateAnswer": "F",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -2121,6 +2509,15 @@
                 "sourceFile": "papers/2024.md",
                 "sourceFormat": "md",
                 "sectionHeading": "Section II Part B"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "G",
+                "semanticCandidateAnswer": "G",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -2165,6 +2562,15 @@
                 "sourceFile": "papers/2024.md",
                 "sourceFormat": "md",
                 "sectionHeading": "Section II Part B"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             }
           ]
@@ -2274,6 +2680,15 @@
                 ],
                 "referenceTranslation": "它们有时会跋涉六十多英里去寻找食物或水源，并且非常善于判断其他大象的位置——即使那些大象不在视线范围内。",
                 "referenceSource": "source-provided"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -2326,6 +2741,15 @@
                 ],
                 "referenceTranslation": "研究人员确信，大象总能精确地知道自己相对于所需全部资源的位置，因此既能走捷径，也能沿熟悉的路线行进。",
                 "referenceSource": "source-provided"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -2378,6 +2802,15 @@
                 ],
                 "referenceTranslation": "一种可能是它们仅仅依靠眼睛观察并试吃所发现的植物，但这很可能造成大量时间和精力的浪费，尤其是因为它们的视力其实并不好。",
                 "referenceSource": "source-provided"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -2430,6 +2863,15 @@
                 ],
                 "referenceTranslation": "植物产生的挥发性化学物质可以传播很远，而且极具特征性：每一种植物或树木都有其独特的气味“签名”。",
                 "referenceSource": "source-provided"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             },
             {
@@ -2482,6 +2924,15 @@
                 ],
                 "referenceTranslation": "实验表明，大象很可能利用嗅觉来识别适合食用的树木区域，其次再评估每个区域内树木的品质。",
                 "referenceSource": "source-provided"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             }
           ]
@@ -2614,6 +3065,15 @@
                 "sourceFile": "papers/2024.md",
                 "sourceFormat": "md",
                 "sectionHeading": "Section III Part A"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.684Z"
               }
             }
           ]
@@ -2781,6 +3241,15 @@
                 "sourceFile": "papers/2024.md",
                 "sourceFormat": "md",
                 "sectionHeading": "Section III Part B"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "papers/2024.md",
+                "answerSourceFile": "answers/2024.md",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.685Z"
               }
             }
           ]
@@ -2794,7 +3263,9 @@
     "dataVersion": "v1",
     "status": "ready",
     "passedAllChecks": true,
-    "errorCodes": [],
+    "errorCodes": [
+      "DATA_ANSWER_DISPUTED"
+    ],
     "missingObjectiveQuestions": [],
     "conflictingObjectiveQuestions": [],
     "checks": [
@@ -2850,7 +3321,18 @@
     "consistencyCheckRuns": 2,
     "consistencyMatched": true,
     "sourceDiscrepancies": [],
-    "generatedAt": "2026-10-19T11:30:00.000Z"
+    "generatedAt": "2026-10-19T11:30:00.000Z",
+    "paperId": "en1-2024",
+    "disputedQuestions": [
+      {
+        "questionNumber": 21,
+        "markedAnswer": "D",
+        "semanticCandidateAnswer": "A",
+        "reason": "2024年第21题存在题库数据与标注答案语义冲突：原文第1段明确表述 \"mature industries have repeatedly underestimated the disruptive velocity\"，与选项 [A] 语义一致，但答案表标注为 [D]。已标记为 disputed 待人工核验，禁止 AI 自动覆盖标准答案。",
+        "paperSourceFile": "papers/2024.md",
+        "answerSourceFile": "answers/2024.md"
+      }
+    ]
   },
   "referencedAssets": [
     "writing-part-b-01.png",
@@ -2859,5 +3341,20 @@
   ],
   "objectiveAnswerCount": 45,
   "subjectiveCount": 7,
-  "answerSourceStatus": "source-provided"
+  "answerSourceStatus": "source-provided",
+  "paperId": "en1-2024",
+  "subjectId": "english-i",
+  "examYear": 2024,
+  "seriesCode": "real-exam",
+  "badgeLabel": "2024 真题",
+  "identity": {
+    "paperId": "en1-2024",
+    "legacyYear": 2024,
+    "subjectId": "english-i",
+    "examYear": 2024,
+    "seriesCode": "real-exam",
+    "title": "2024年全国硕士研究生入学统一考试英语（一）试题",
+    "shortTitle": "2024年 英语一",
+    "badgeLabel": "2024 真题"
+  }
 }

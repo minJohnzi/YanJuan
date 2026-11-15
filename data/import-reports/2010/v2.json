@@ -1,0 +1,222 @@
+{
+  "examId": "exam-2010-v2",
+  "year": 2010,
+  "dataVersion": "v2",
+  "status": "needs-answer-source",
+  "passedAllChecks": false,
+  "errorCodes": [
+    "OBJECTIVE_ANSWER_MISSING"
+  ],
+  "missingObjectiveQuestions": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45
+  ],
+  "conflictingObjectiveQuestions": [],
+  "checks": [
+    {
+      "checkId": "check-01-year-subject",
+      "name": "年份与英语一科目校验",
+      "passed": true,
+      "message": "已验证年份 2010，科目为 考研英语一"
+    },
+    {
+      "checkId": "check-02-question-range",
+      "name": "题号 1–52 完整覆盖校验",
+      "passed": true,
+      "message": "题号 1–52 全部覆盖且无缺漏",
+      "details": []
+    },
+    {
+      "checkId": "check-03-question-order-duplicates",
+      "name": "题号无重复与严格递增顺序校验",
+      "passed": true,
+      "message": "题号 1–52 无重号且严格递增"
+    },
+    {
+      "checkId": "check-04-cloze-count",
+      "name": "完形填空 1–20 题数量校验",
+      "passed": true,
+      "message": "完形填空包含完整 1–20 题"
+    },
+    {
+      "checkId": "check-05-cloze-options",
+      "name": "完形填空每题 4 个有效选项 (A/B/C/D) 校验",
+      "passed": true,
+      "message": "完形填空 20 题均包含 A/B/C/D 四个非空选项"
+    },
+    {
+      "checkId": "check-06-reading-part-a",
+      "name": "阅读 Part A 四篇文章共 20 题 (21–40) 校验",
+      "passed": true,
+      "message": "阅读 Part A 包含 4 篇文章、20 道单选 (21–40)，且第34题下划线保留在阅读正文中"
+    },
+    {
+      "checkId": "check-07-part-b-slots",
+      "name": "Part B 五个计分位置 (41–45) 校验",
+      "passed": true,
+      "message": "Part B 包含 41–45 共 5 个计分位置"
+    },
+    {
+      "checkId": "check-13-part-b-fixed-consistency",
+      "name": "Part B 候选段落 A–G、固定段 E 与多余段落一致性校验",
+      "passed": true,
+      "message": "候选段落覆盖 A–G，E 段固定于序列中，5 个计分空位 + 1 个多余段落结构一致"
+    },
+    {
+      "checkId": "check-08-translation-sentences",
+      "name": "Part C 翻译 5 个划线句 (46–50) 精准识别校验",
+      "passed": true,
+      "message": "准确识别 46–50 共 5 个划线翻译句，且未将阅读第34题 <u>these people</u> 误判为翻译题"
+    },
+    {
+      "checkId": "check-09-writing-existence",
+      "name": "写作 Part A (51题) 与 Part B (52题) 存在性校验",
+      "passed": true,
+      "message": "应用文 (51题) 与图画作文 (52题) 均完整存在"
+    },
+    {
+      "checkId": "check-11-total-score",
+      "name": "各部分与全卷总分 100 分校验",
+      "passed": true,
+      "message": "全卷各部分及题目分值总和严格等于 100 分 (10 + 40 + 10 + 10 + 10 + 20)"
+    },
+    {
+      "checkId": "check-12-asset-paths",
+      "name": "静态图片资源路径存在性校验",
+      "passed": true,
+      "message": "已验证插图资源文件: 2010年写作PartB.png"
+    },
+    {
+      "checkId": "check-14-16-visual-material-facts",
+      "name": "写作视觉材料与图表事实结构完整性校验",
+      "passed": true,
+      "message": "已验证 1 份视觉材料，标题、分类、主要关系及必写事实完整"
+    },
+    {
+      "checkId": "check-17-pie-chart-sum",
+      "name": "图表百分比数值总和校验 (允许误差 ±1.5%)",
+      "passed": true,
+      "message": "视觉材料比例数值总和符合 100% 校验要求"
+    },
+    {
+      "checkId": "check-15-no-answer-leak",
+      "name": "参考答案页未混入正文校验",
+      "passed": true,
+      "message": "所有阅读与完形正文均未混入参考答案内容"
+    },
+    {
+      "checkId": "check-18-unique-file-hashes",
+      "name": "源文件 SHA-256 哈希无重复校验",
+      "passed": true,
+      "message": "全部 2 个输入文件 SHA-256 哈希唯一"
+    },
+    {
+      "checkId": "check-19-no-answer-conflict",
+      "name": "多来源客观题答案无冲突校验",
+      "passed": true,
+      "message": "多来源客观题答案无冲突",
+      "details": []
+    },
+    {
+      "checkId": "check-10-objective-answers-complete",
+      "name": "客观题 (1–45题) 来源答案完整性校验",
+      "passed": false,
+      "message": "缺少客观题来源答案，共缺失 45 题（题号: 1–45）",
+      "code": "OBJECTIVE_ANSWER_MISSING",
+      "details": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45"
+      ]
+    }
+  ],
+  "consistencyCheckRuns": 2,
+  "consistencyMatched": true,
+  "sourceDiscrepancies": [],
+  "generatedAt": "2026-11-11T14:22:15.683Z"
+}

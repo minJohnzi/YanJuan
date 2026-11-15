@@ -13,15 +13,26 @@ import {
   BookOpen,
   Check,
   RotateCcw,
+  CheckSquare,
 } from 'lucide-react';
 import type {
   Exam,
   ExamAttempt,
+  ExamSubject,
   ImportStatus,
   PapersManifest,
   UnitType,
   ValidationReport,
 } from '../shared/types';
+import {
+  formatExamTitle,
+  isPoliticsExamYear,
+  getPoliticsSetNumber,
+} from '../shared/types';
+import {
+  compareAttemptsNewestFirst,
+  findLatestSubmittedAttemptForYear,
+} from '../shared/scoringAndReview';
 import { formatQuestionRanges } from '../pipeline/paperValidator';
 
 interface PaperLibraryViewProps {
@@ -35,10 +46,17 @@ interface PaperLibraryViewProps {
   onOpenImportReport: (year: number, version: string) => void;
   onCloseImportReport: () => void;
   onStartUnit: (year: number, unitType: UnitType, unitId?: string) => void;
+  onStartFresh?: (year: number, unitType: UnitType, unitId?: string) => void;
+  onOpenAttempt?: (
+    attemptId: string,
+    preferredUnitId?: string,
+    focusQuestion?: number
+  ) => void;
   onStartSimulation: (year: number, mode: 'strict-simulation' | 'free-simulation') => void;
   onAppend2010OfficialAnswers: () => Promise<void>;
   isImportingAnswers: boolean;
   onNavigateSettings: () => void;
+  onOpenQuickChecker: (year: number) => void;
 }
 
 export const PaperLibraryView: React.FC<PaperLibraryViewProps> = ({
@@ -52,13 +70,17 @@ export const PaperLibraryView: React.FC<PaperLibraryViewProps> = ({
   onOpenImportReport,
   onCloseImportReport,
   onStartUnit,
+  onStartFresh,
+  onOpenAttempt,
   onStartSimulation,
   onAppend2010OfficialAnswers,
   isImportingAnswers,
   onNavigateSettings,
+  onOpenQuickChecker,
 }) => {
   const [browseMode, setBrowseMode] = useState<'by-year' | 'by-type'>('by-year');
   const [yearFilter, setYearFilter] = useState<'all' | 'ready' | 'study'>('all');
+  const [subjectFilter, setSubjectFilter] = useState<ExamSubject>('考研英语一');
 
   // Sub-view 1: Import Validation Report Inspector
   if (activeReport) {
@@ -76,7 +98,7 @@ export const PaperLibraryView: React.FC<PaperLibraryViewProps> = ({
                 <span>返回真题库</span>
               </button>
               <h1 className="text-xl sm:text-2xl font-bold text-[#202B2F] dark:text-[#E2E8E6]">
-                {activeReport.year}年 考研英语一 题库解析校验报告
+                {formatExamTitle(activeReport.year)} 题库解析校验报告
               </h1>
               <div className="text-xs text-[#68777C] dark:text-[#9CAEB3] font-tabular-mono flex items-center gap-2">
                 <span>版本：{activeReport.dataVersion}</span>
@@ -195,19 +217,21 @@ export const PaperLibraryView: React.FC<PaperLibraryViewProps> = ({
 
             <div className="space-y-2">
               <div className="text-xs font-medium text-[#68777C] dark:text-[#9CAEB3] tracking-wide">
-                全国硕士研究生入学统一考试 · 英语（一）
+                {selectedYearOverview.subject === '考研政治'
+                  ? '全国硕士研究生入学统一考试 · 思想政治理论'
+                  : '全国硕士研究生入学统一考试 · 英语（一）'}
               </div>
               <h1 className="text-2xl sm:text-3xl font-bold text-[#202B2F] dark:text-[#E2E8E6] tracking-tight">
-                {selectedYearOverview.year} 年真题全卷
+                {formatExamTitle(selectedYearOverview.year, selectedYearOverview.subject)}
               </h1>
               <div className="text-xs sm:text-sm text-[#68777C] dark:text-[#9CAEB3] flex flex-wrap items-center gap-3 pt-1">
                 <span>总分：{selectedYearOverview.totalScore} 分</span>
                 <span aria-hidden="true">·</span>
                 <span>考试时间：{selectedYearOverview.durationMinutes} 分钟</span>
                 <span aria-hidden="true">·</span>
-                <span>包含 8 个作答单元</span>
+                <span>包含 {allUnits.length} 个作答单元</span>
                 <span aria-hidden="true">·</span>
-                <span>共 52 题</span>
+                <span>共 {selectedYearOverview.subject === '考研政治' ? 38 : 52} 题</span>
               </div>
             </div>
 
@@ -235,6 +259,19 @@ export const PaperLibraryView: React.FC<PaperLibraryViewProps> = ({
 
               <button
                 type="button"
+                onClick={() => {
+                  onCloseYearOverview();
+                  onOpenQuickChecker(selectedYearOverview.year);
+                }}
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold text-[#174A5B] dark:text-[#38849E] bg-[#E8F1F5] dark:bg-[#1D3642] hover:bg-[#D5E5ED] dark:hover:bg-[#254657] border border-[#B6D1DC] dark:border-[#2E5263] transition-colors whitespace-nowrap min-h-[42px] w-full sm:w-auto shadow-2xs"
+                title="纸上已作答？直接输入答案立即核对并查看官方权威解析"
+              >
+                <CheckSquare className="w-4 h-4" />
+                <span>纸卷极速核对 (直接判分)</span>
+              </button>
+
+              <button
+                type="button"
                 onClick={() =>
                   onOpenImportReport(
                     selectedYearOverview.year,
@@ -246,6 +283,73 @@ export const PaperLibraryView: React.FC<PaperLibraryViewProps> = ({
                 查看解析校验报告
               </button>
             </div>
+
+            {(() => {
+              const submittedForOverview = attempts
+                .filter(
+                  (a) =>
+                    a.year === selectedYearOverview.year && a.status === 'submitted'
+                )
+                .sort(compareAttemptsNewestFirst);
+              if (submittedForOverview.length === 0) return null;
+              const latest = submittedForOverview[0];
+              return (
+                <div className="p-4 rounded-xl bg-emerald-50/70 dark:bg-[#172E27]/70 border border-emerald-200 dark:border-emerald-800/70 flex flex-wrap items-center justify-between gap-3">
+                  <div className="space-y-0.5 text-xs">
+                    <div className="font-semibold text-emerald-900 dark:text-[#4EA387]">
+                      已累计交卷 {submittedForOverview.length} 次 · 最近一次客观题得分{' '}
+                      <span className="font-tabular-mono">
+                        {latest.totalObjectiveScore ?? 0} / {latest.maxObjectiveScore ?? 50} 分
+                      </span>
+                    </div>
+                    <div className="text-[#68777C] dark:text-[#9CAEB3]">
+                      交卷时间：
+                      {new Date(latest.submittedAt || latest.updatedAt).toLocaleString('zh-CN')}
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    {submittedForOverview.slice(0, 3).map((att, idx) => (
+                      <button
+                        key={att.id}
+                        type="button"
+                        onClick={() => onOpenAttempt?.(att.id)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                          idx === 0
+                            ? 'bg-[#3F7664] dark:bg-[#4EA387] text-white hover:opacity-90'
+                            : 'bg-white dark:bg-[#1E2B30] text-[#202B2F] dark:text-[#E2E8E6] border border-[#DCE4E1] dark:border-[#2C3E46] hover:border-[#174A5B]'
+                        }`}
+                      >
+                        {idx === 0
+                          ? '查看最近答卷（复盘）'
+                          : `第 ${submittedForOverview.length - idx} 次 (${
+                              att.totalObjectiveScore ?? 0
+                            }分)`}
+                      </button>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onStartFresh
+                          ? onStartFresh(
+                              selectedYearOverview.year,
+                              allUnits[0]?.unitType || 'reading',
+                              allUnits[0]?.id
+                            )
+                          : onStartUnit(
+                              selectedYearOverview.year,
+                              allUnits[0]?.unitType || 'reading',
+                              allUnits[0]?.id
+                            )
+                      }
+                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-[#174A5B] dark:text-[#75B6CE] bg-white dark:bg-[#1E2B30] border border-[#B6D1DC] dark:border-[#2E5263] hover:bg-stone-50"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      <span>重做一遍</span>
+                    </button>
+                  </div>
+                </div>
+              );
+            })()}
           </div>
 
           {/* Unit Chapter Table of Contents */}
@@ -300,24 +404,62 @@ export const PaperLibraryView: React.FC<PaperLibraryViewProps> = ({
     );
   }
 
-  // Default Sub-view: 2010–2026 Paper Shelf & Catalog (Cards over Tables)
+  // Default Sub-view: Paper Shelf & Catalog (Cards over Tables)
   const yearsList = manifest.years || [];
-  const filteredYears = yearsList.filter((row) => {
-    if (yearFilter === 'ready') return row.status === 'ready' || row.year >= 2024;
-    if (yearFilter === 'study') return row.status !== 'ready' && row.year < 2024;
+  const englishYears = yearsList.filter((y) => !isPoliticsExamYear(y.year));
+  const politicsYears = yearsList.filter((y) => isPoliticsExamYear(y.year));
+
+  const currentSubjectList = subjectFilter === '考研政治' ? politicsYears : englishYears;
+
+  const filteredYears = currentSubjectList.filter((row) => {
+    if (subjectFilter === '考研政治') return true;
+    if (yearFilter === 'ready') return row.year >= 2024 && row.year <= 2026;
+    if (yearFilter === 'study') return row.year >= 2010 && row.year <= 2023;
     return true;
   });
 
   return (
     <div className="max-w-[1440px] w-full mx-auto space-y-6 sm:space-y-8 py-2 sm:py-4">
+      {/* Subject Switcher Bar */}
+      <div className="flex items-center gap-2 p-1.5 bg-stone-100 dark:bg-[#162226] rounded-2xl border border-stone-200/80 dark:border-[#2C3E46] self-start max-w-fit">
+        <button
+          type="button"
+          onClick={() => setSubjectFilter('考研英语一')}
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+            subjectFilter === '考研英语一'
+              ? 'bg-white dark:bg-[#1E2B30] text-[#174A5B] dark:text-[#75B6CE] shadow-xs'
+              : 'text-[#68777C] dark:text-[#9CAEB3] hover:text-[#202B2F] dark:hover:text-[#E2E8E6]'
+          }`}
+        >
+          <span>考研英语（一）</span>
+          <span className="font-tabular-mono text-xs opacity-75">17 套真题</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setSubjectFilter('考研政治')}
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+            subjectFilter === '考研政治'
+              ? 'bg-[#174A5B] dark:bg-[#38849E] text-white shadow-xs'
+              : 'text-[#68777C] dark:text-[#9CAEB3] hover:text-[#202B2F] dark:hover:text-[#E2E8E6]'
+          }`}
+        >
+          <span>考研政治</span>
+          <span className="font-tabular-mono text-xs bg-white/20 px-2 py-0.5 rounded-full">27 肖八 8 套卷</span>
+        </button>
+      </div>
+
       {/* Header with Mode & Filter Segmented Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[#DCE4E1] dark:border-[#2C3E46]">
         <div className="space-y-1">
           <h1 className="text-xl sm:text-2xl font-bold text-[#202B2F] dark:text-[#E2E8E6]">
-            历年真题库（2010—2026）
+            {subjectFilter === '考研政治'
+              ? '2027 考研政治冲刺 8 套卷（肖秀荣）'
+              : '历年真题库（2010—2026）'}
           </h1>
           <p className="text-xs text-[#68777C] dark:text-[#9CAEB3]">
-            共收录 17 套考研英语一真题。各年均已完成 1–52 题全文结构解析与视觉插图关联。
+            {subjectFilter === '考研政治'
+              ? '收录 2027 肖秀荣冲刺 8 套卷全题库与官方逐题详尽解析。全卷 38 题（单选 16 题、多选 17 题、材料分析 5 题），支持整页连续滑动刷题与自动判分。'
+              : '共收录 17 套考研英语一真题。各年均已完成 1–52 题全文结构解析与视觉插图关联。'}
           </p>
         </div>
 
@@ -333,67 +475,82 @@ export const PaperLibraryView: React.FC<PaperLibraryViewProps> = ({
             }`}
           >
             <Calendar className="w-3.5 h-3.5" />
-            <span>按年份试卷 ({yearsList.length})</span>
+            <span>
+              {subjectFilter === '考研政治' ? `冲刺试卷 (${filteredYears.length})` : `按年份试卷 (${englishYears.length})`}
+            </span>
           </button>
-          <button
-            type="button"
-            onClick={() => setBrowseMode('by-type')}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-              browseMode === 'by-type'
-                ? 'bg-white dark:bg-[#1E2B30] text-[#174A5B] dark:text-[#75B6CE] shadow-2xs font-semibold'
-                : 'text-[#68777C] dark:text-[#9CAEB3] hover:text-[#202B2F] dark:hover:text-[#E2E8E6]'
-            }`}
-          >
-            <Layers className="w-3.5 h-3.5" />
-            <span>按题型专练 (6类)</span>
-          </button>
+          {subjectFilter === '考研英语一' && (
+            <button
+              type="button"
+              onClick={() => setBrowseMode('by-type')}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                browseMode === 'by-type'
+                  ? 'bg-white dark:bg-[#1E2B30] text-[#174A5B] dark:text-[#75B6CE] shadow-2xs font-semibold'
+                  : 'text-[#68777C] dark:text-[#9CAEB3] hover:text-[#202B2F] dark:hover:text-[#E2E8E6]'
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>按题型专练 (6类)</span>
+            </button>
+          )}
         </div>
       </div>
 
       {browseMode === 'by-year' ? (
         <div className="space-y-6">
           {/* Sub-filter tabs */}
-          <div className="flex items-center gap-2 text-xs overflow-x-auto pb-1">
-            <button
-              type="button"
-              onClick={() => setYearFilter('all')}
-              className={`px-3 py-1.5 rounded-md font-medium transition-colors shrink-0 ${
-                yearFilter === 'all'
-                  ? 'bg-[#174A5B] dark:bg-[#38849E] text-white'
-                  : 'text-[#68777C] dark:text-[#9CAEB3] hover:text-[#202B2F] dark:hover:text-[#E2E8E6] bg-white dark:bg-[#1E2B30] border border-[#DCE4E1] dark:border-[#2C3E46]'
-              }`}
-            >
-              全部年份 ({yearsList.length})
-            </button>
-            <button
-              type="button"
-              onClick={() => setYearFilter('ready')}
-              className={`px-3 py-1.5 rounded-md font-medium transition-colors shrink-0 ${
-                yearFilter === 'ready'
-                  ? 'bg-[#174A5B] dark:bg-[#38849E] text-white'
-                  : 'text-[#68777C] dark:text-[#9CAEB3] hover:text-[#202B2F] dark:hover:text-[#E2E8E6] bg-white dark:bg-[#1E2B30] border border-[#DCE4E1] dark:border-[#2C3E46]'
-              }`}
-            >
-              官方答案就绪 (2024–2026)
-            </button>
-            <button
-              type="button"
-              onClick={() => setYearFilter('study')}
-              className={`px-3 py-1.5 rounded-md font-medium transition-colors shrink-0 ${
-                yearFilter === 'study'
-                  ? 'bg-[#174A5B] dark:bg-[#38849E] text-white'
-                  : 'text-[#68777C] dark:text-[#9CAEB3] hover:text-[#202B2F] dark:hover:text-[#E2E8E6] bg-white dark:bg-[#1E2B30] border border-[#DCE4E1] dark:border-[#2C3E46]'
-              }`}
-            >
-              经典研读卷 (2010–2023)
-            </button>
-          </div>
+          {subjectFilter === '考研英语一' ? (
+            <div className="flex items-center gap-2 text-xs overflow-x-auto pb-1">
+              <button
+                type="button"
+                onClick={() => setYearFilter('all')}
+                className={`px-3 py-1.5 rounded-md font-medium transition-colors shrink-0 ${
+                  yearFilter === 'all'
+                    ? 'bg-[#174A5B] dark:bg-[#38849E] text-white'
+                    : 'text-[#68777C] dark:text-[#9CAEB3] hover:text-[#202B2F] dark:hover:text-[#E2E8E6] bg-white dark:bg-[#1E2B30] border border-[#DCE4E1] dark:border-[#2C3E46]'
+                }`}
+              >
+                全部年份 ({englishYears.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setYearFilter('ready')}
+                className={`px-3 py-1.5 rounded-md font-medium transition-colors shrink-0 ${
+                  yearFilter === 'ready'
+                    ? 'bg-[#174A5B] dark:bg-[#38849E] text-white'
+                    : 'text-[#68777C] dark:text-[#9CAEB3] hover:text-[#202B2F] dark:hover:text-[#E2E8E6] bg-white dark:bg-[#1E2B30] border border-[#DCE4E1] dark:border-[#2C3E46]'
+                }`}
+              >
+                近三年真题 (2024–2026)
+              </button>
+              <button
+                type="button"
+                onClick={() => setYearFilter('study')}
+                className={`px-3 py-1.5 rounded-md font-medium transition-colors shrink-0 ${
+                  yearFilter === 'study'
+                    ? 'bg-[#174A5B] dark:bg-[#38849E] text-white'
+                    : 'text-[#68777C] dark:text-[#9CAEB3] hover:text-[#202B2F] dark:hover:text-[#E2E8E6] bg-white dark:bg-[#1E2B30] border border-[#DCE4E1] dark:border-[#2C3E46]'
+                }`}
+              >
+                经典历年真题 (2010–2023)
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 text-xs overflow-x-auto pb-1">
+              <span className="px-3 py-1.5 rounded-md font-semibold bg-[#174A5B]/10 dark:bg-[#38849E]/20 text-[#174A5B] dark:text-[#75B6CE]">
+                肖秀荣冲刺 8 套全卷 · 完整客观题带解析
+              </span>
+            </div>
+          )}
 
           {/* Academic Paper Card Grid (Fluid 1 to 6 columns based on container width) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3.5 sm:gap-4">
             {filteredYears.map((row) => {
-              const isReady = row.status === 'ready' || row.year >= 2024;
-              const hasAttempt = attempts.some((a) => a.year === row.year);
+              const isReady = row.status === 'ready' || row.year >= 2024 || isPoliticsExamYear(row.year);
+              const yearAttempts = attempts.filter((a) => a.year === row.year);
+              const submittedForYear = yearAttempts.filter((a) => a.status === 'submitted');
+              const latestSubmitted = findLatestSubmittedAttemptForYear(attempts, row.year);
+              const hasInProgress = yearAttempts.some((a) => a.status === 'in-progress');
 
               return (
                 <div
@@ -403,10 +560,21 @@ export const PaperLibraryView: React.FC<PaperLibraryViewProps> = ({
                   <div className="space-y-3">
                     <div className="flex items-start justify-between">
                       <div>
-                        <span className="font-tabular-mono text-2xl font-bold text-[#202B2F] dark:text-[#E2E8E6]">
-                          {row.year}
-                        </span>
-                        <span className="text-xs text-[#68777C] dark:text-[#9CAEB3] ml-1">年真题</span>
+                        {isPoliticsExamYear(row.year) ? (
+                          <div className="flex items-baseline gap-1.5">
+                            <span className="font-tabular-mono text-xl sm:text-2xl font-bold text-[#202B2F] dark:text-[#E2E8E6]">
+                              第 {row.setNumber || getPoliticsSetNumber(row.year)} 套
+                            </span>
+                            <span className="text-xs text-[#68777C] dark:text-[#9CAEB3]">27肖八</span>
+                          </div>
+                        ) : (
+                          <div>
+                            <span className="font-tabular-mono text-2xl font-bold text-[#202B2F] dark:text-[#E2E8E6]">
+                              {row.year}
+                            </span>
+                            <span className="text-xs text-[#68777C] dark:text-[#9CAEB3] ml-1">年真题</span>
+                          </div>
+                        )}
                       </div>
                       <span className="text-[11px] font-tabular-mono text-[#96A1A4] dark:text-[#657980]">
                         {row.latestReadyVersion || row.latestCandidateVersion || 'v1'}
@@ -414,7 +582,9 @@ export const PaperLibraryView: React.FC<PaperLibraryViewProps> = ({
                     </div>
 
                     <div className="text-xs text-[#68777C] dark:text-[#9CAEB3]">
-                      考研英语（一）· 52 题 · 100 分 · 180 分钟
+                      {isPoliticsExamYear(row.year)
+                        ? '考研政治 · 38 题 · 100 分 · 180 分钟'
+                        : '考研英语（一）· 52 题 · 100 分 · 180 分钟'}
                     </div>
 
                     <div className="text-xs flex items-center gap-1.5 pt-1">
@@ -424,27 +594,57 @@ export const PaperLibraryView: React.FC<PaperLibraryViewProps> = ({
                         }`}
                       />
                       <span className="text-[#68777C] dark:text-[#9CAEB3]">
-                        {isReady
+                        {isPoliticsExamYear(row.year)
+                          ? '含官方答案解析 · 支持连续刷题'
+                          : isReady
                           ? '含官方客观答案 · 支持完整计分'
                           : '真题原文已解析 · 沉浸精读与练习'}
                       </span>
                     </div>
 
-                    {hasAttempt && (
-                      <div className="text-xs font-tabular-mono text-[#3F7664] dark:text-[#4EA387] bg-emerald-50/70 dark:bg-[#172E27]/70 px-2.5 py-1 rounded">
-                        已在本地保存作答记录
+                    {(latestSubmitted || hasInProgress) && (
+                      <div className="text-xs font-tabular-mono text-[#3F7664] dark:text-[#4EA387] bg-emerald-50/70 dark:bg-[#172E27]/70 px-2.5 py-1 rounded flex flex-wrap items-center justify-between gap-1">
+                        <span>
+                          {latestSubmitted
+                            ? `已交卷 ${submittedForYear.length} 次 · 最近 ${
+                                latestSubmitted.totalObjectiveScore ?? 0
+                              }/${latestSubmitted.maxObjectiveScore ?? 50} 分`
+                            : '存在未交卷草稿'}
+                        </span>
                       </div>
                     )}
                   </div>
 
-                  <div className="pt-3 border-t border-[#E8ECEA] dark:border-[#223036] flex items-center justify-between gap-2">
-                    <button
-                      type="button"
-                      onClick={() => onSelectYearOverview(row.year)}
-                      className="px-4 py-2 rounded-lg text-xs font-semibold text-white bg-[#174A5B] dark:bg-[#38849E] hover:bg-[#123D4B] dark:hover:bg-[#489BB8] transition-colors whitespace-nowrap"
-                    >
-                      打开试卷
-                    </button>
+                  <div className="pt-3 border-t border-[#E8ECEA] dark:border-[#223036] flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      {latestSubmitted && onOpenAttempt ? (
+                        <button
+                          type="button"
+                          onClick={() => onOpenAttempt(latestSubmitted.id)}
+                          className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-[#3F7664] dark:bg-[#4EA387] hover:opacity-90 transition-colors whitespace-nowrap shadow-2xs"
+                        >
+                          查看答卷
+                        </button>
+                      ) : null}
+
+                      <button
+                        type="button"
+                        onClick={() => onSelectYearOverview(row.year)}
+                        className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-[#174A5B] dark:bg-[#38849E] hover:bg-[#123D4B] dark:hover:bg-[#489BB8] transition-colors whitespace-nowrap shadow-2xs"
+                      >
+                        {latestSubmitted ? '试卷详情' : '打开试卷'}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => onOpenQuickChecker(row.year)}
+                        className="px-3 py-1.5 rounded-lg text-xs font-semibold text-[#174A5B] dark:text-[#38849E] bg-[#E8F1F5] dark:bg-[#1D3642] hover:bg-[#D5E5ED] dark:hover:bg-[#254657] border border-[#B6D1DC] dark:border-[#2E5263] transition-colors whitespace-nowrap flex items-center gap-1.5 shadow-2xs"
+                        title="纸上已作答？直接输入答案立即核对并查看官方权威解析"
+                      >
+                        <CheckSquare className="w-3.5 h-3.5" />
+                        <span>纸卷核对</span>
+                      </button>
+                    </div>
 
                     <button
                       type="button"
@@ -479,7 +679,7 @@ export const PaperLibraryView: React.FC<PaperLibraryViewProps> = ({
             },
             {
               type: 'reading' as UnitType,
-              unitId: 'unit-reading-text-1',
+              unitId: 'unit-reading-1',
               name: 'Section II Part A · 传统阅读理解 (Text 1–4)',
               range: '第 21–40 题',
               score: '40 分 (每题 2.0 分)',
@@ -497,7 +697,7 @@ export const PaperLibraryView: React.FC<PaperLibraryViewProps> = ({
             },
             {
               type: 'translation' as UnitType,
-              unitId: 'unit-part-c-translation',
+              unitId: 'unit-translation',
               name: 'Section II Part C · 英译汉长难句翻译',
               range: '第 46–50 题',
               score: '10 分 (每题 2.0 分)',
@@ -506,7 +706,7 @@ export const PaperLibraryView: React.FC<PaperLibraryViewProps> = ({
             },
             {
               type: 'practical-writing' as UnitType,
-              unitId: 'unit-writing-part-a',
+              unitId: 'unit-practical-writing',
               name: 'Section III Part A · 应用文小作文',
               range: '第 51 题',
               score: '10 分',
@@ -515,7 +715,7 @@ export const PaperLibraryView: React.FC<PaperLibraryViewProps> = ({
             },
             {
               type: 'visual-writing' as UnitType,
-              unitId: 'unit-writing-part-b',
+              unitId: 'unit-visual-writing',
               name: 'Section III Part B · 图画大作文',
               range: '第 52 题',
               score: '20 分',
@@ -544,16 +744,21 @@ export const PaperLibraryView: React.FC<PaperLibraryViewProps> = ({
 
               <button
                 type="button"
-                onClick={() =>
-                  onStartUnit(
-                    manifest.availableYears[0] || 2024,
-                    item.type,
-                    `${manifest.availableYears[0] || 2024}-${item.unitId}`
-                  )
-                }
+                onClick={() => {
+                  const targetYear = manifest.availableYears.includes(2024)
+                    ? 2024
+                    : manifest.availableYears[0] || 2024;
+                  onStartUnit(targetYear, item.type, `${targetYear}-${item.unitId}`);
+                }}
                 className="inline-flex items-center gap-1 px-4 py-2 rounded-lg text-xs font-semibold text-[#174A5B] dark:text-[#75B6CE] bg-[#174A5B]/10 dark:bg-[#38849E]/20 hover:bg-[#174A5B] hover:text-white dark:hover:bg-[#38849E] dark:hover:text-white transition-all self-start sm:self-center shrink-0"
               >
-                <span>练 {manifest.availableYears[0] || 2024} 年真题</span>
+                <span>
+                  练{' '}
+                  {manifest.availableYears.includes(2024)
+                    ? 2024
+                    : manifest.availableYears[0] || 2024}{' '}
+                  年真题
+                </span>
                 <ChevronRight className="w-3.5 h-3.5" />
               </button>
             </div>

@@ -11,4 +11,4 @@ runPaperBuildPipeline(rootDir);
 // 2. Parse raw exams (2010–2026), sync 29 visual assets, 3 source answers, and generate runtime JSONs & manifests
 executeBuild();
 
-console.log(`[build:papers] 全部 17 份真题 (2010–2026) 构建完成，输出清单已写入: ${path.join(rootDir, 'data/exams/generated/papers-manifest.json')}`);
+console.log(`[build:papers] 全部真题与冲刺卷构建完成，输出清单已写入: ${path.join(rootDir, 'data/exams/generated/papers-manifest.json')}`);

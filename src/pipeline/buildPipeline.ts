@@ -8,6 +8,7 @@ import type {
   ValidationReport,
   YearManifestEntry,
 } from '../shared/types.ts';
+import { buildPaperIdentity } from '../domain/subjects.ts';
 import { parseMarkdownExam, type ParsedExamDraft } from './markdownParser.ts';
 import { mergeMultiSourceExamDrafts } from './multiSourceMerger.ts';
 import { build2010InitialZipBuffer } from './paper2010Source.ts';
@@ -57,11 +58,9 @@ export function runPaperBuildPipeline(
 
   const inputsDir = path.join(rootDir, 'inputs');
   const dataDir = path.join(rootDir, 'data');
-  const publicDataDir = path.join(rootDir, 'public', 'data');
   const publicAssetsDir = path.join(rootDir, 'public', 'assets', 'papers');
 
   fs.mkdirSync(dataDir, { recursive: true });
-  fs.mkdirSync(publicDataDir, { recursive: true });
   fs.mkdirSync(publicAssetsDir, { recursive: true });
 
   // Group discovered archive entries by year
@@ -255,19 +254,12 @@ export function runPaperBuildPipeline(
       consistencyMatched,
     });
 
-    // Write paper JSON and validation report JSON to /data and mirror to /public/data
+    // Write paper JSON and validation report JSON to /data
     const paperJsonStr = JSON.stringify(exam, null, 2);
     const reportJsonStr = JSON.stringify(exam.validationReport, null, 2);
 
     fs.writeFileSync(path.join(yearPaperDir, `${targetVersion}.json`), paperJsonStr);
     fs.writeFileSync(path.join(yearReportDir, `${targetVersion}.json`), reportJsonStr);
-
-    const pubYearPaperDir = path.join(publicDataDir, 'papers', String(year));
-    const pubYearReportDir = path.join(publicDataDir, 'import-reports', String(year));
-    fs.mkdirSync(pubYearPaperDir, { recursive: true });
-    fs.mkdirSync(pubYearReportDir, { recursive: true });
-    fs.writeFileSync(path.join(pubYearPaperDir, `${targetVersion}.json`), paperJsonStr);
-    fs.writeFileSync(path.join(pubYearReportDir, `${targetVersion}.json`), reportJsonStr);
 
     builtExams.push(exam);
     reports.push(exam.validationReport);
@@ -292,11 +284,17 @@ export function runPaperBuildPipeline(
           .sort((a, b) => Number(a.replace(/\D/g, '')) - Number(b.replace(/\D/g, '')))
       : [];
 
+    const identity = buildPaperIdentity(year);
+
     if (versionFiles.length === 0) {
       pendingYears.push(year);
       validationStatusMap[String(year)] = 'pending';
       yearRecords.push({
         year,
+        paperId: identity.paperId,
+        subjectId: identity.subjectId,
+        examYear: identity.examYear,
+        badgeLabel: identity.badgeLabel,
         status: 'pending',
         latestReadyVersion: null,
         latestCandidateVersion: null,
@@ -332,6 +330,10 @@ export function runPaperBuildPipeline(
       validationStatusMap[String(year)] = 'ready';
       yearRecords.push({
         year,
+        paperId: identity.paperId,
+        subjectId: identity.subjectId,
+        examYear: identity.examYear,
+        badgeLabel: identity.badgeLabel,
         status: 'ready',
         latestReadyVersion: latestReady.dataVersion,
         latestCandidateVersion: latestExam.dataVersion,
@@ -349,6 +351,10 @@ export function runPaperBuildPipeline(
       validationStatusMap[String(year)] = latestExam.importStatus;
       yearRecords.push({
         year,
+        paperId: identity.paperId,
+        subjectId: identity.subjectId,
+        examYear: identity.examYear,
+        badgeLabel: identity.badgeLabel,
         status: latestExam.importStatus,
         latestReadyVersion: null,
         latestCandidateVersion: latestExam.dataVersion,
@@ -381,7 +387,6 @@ export function runPaperBuildPipeline(
 
   const manifestJson = JSON.stringify(manifest, null, 2);
   fs.writeFileSync(path.join(dataDir, 'papers-manifest.json'), manifestJson);
-  fs.writeFileSync(path.join(publicDataDir, 'papers-manifest.json'), manifestJson);
 
   const sourceManifestJson = JSON.stringify(
     {
@@ -393,7 +398,6 @@ export function runPaperBuildPipeline(
     2
   );
   fs.writeFileSync(path.join(dataDir, 'source-manifest.json'), sourceManifestJson);
-  fs.writeFileSync(path.join(publicDataDir, 'source-manifest.json'), sourceManifestJson);
 
   return { manifest, builtExams, reports };
 }

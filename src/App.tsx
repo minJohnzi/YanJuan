@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { Suspense, lazy, useState, useEffect, useCallback, useRef } from 'react';
 import {
   BookOpen,
   Library,
   RotateCcw,
   BarChart3,
   Settings,
-  Cloud,
-  CloudOff,
   Sparkles,
   Sun,
   Moon,
@@ -23,14 +21,19 @@ import type {
   PapersManifest,
   ProviderCredentialStatus,
   ReviewItem,
-  ReviewItemType,
   SubjectiveAnswerVersion,
   SubjectivePracticeMode,
-  SyncStatus,
+  SubjectiveUnitType,
+  SystemCapabilitiesResponse,
   UnitType,
   UserAIWorkspaceConfig,
   ValidationReport,
   WritingScaffoldResult,
+} from './shared/types';
+import {
+  formatExamTitle,
+  resolveCanonicalPaperId,
+  resolveSubjectId,
 } from './shared/types';
 import {
   DEFAULT_REVIEW_INTERVALS_DAYS,
@@ -38,32 +41,63 @@ import {
   buildSubjectiveReviewItems,
   calculateNextReviewSchedule,
   gradeObjectiveResponses,
+  sanitizeObjectiveResponsePatch,
 } from './shared/scoringAndReview';
 import {
   LocalLearningDatabase,
   ReadingTypographyPrefs,
   appendSubjectiveAnswerVersion,
-  clearBrowserLocalDatabase,
   createDefaultLearningDatabase,
   exportLearningDataJson,
+  flushPendingDatabaseSave,
   importLearningDataJson,
   loadDatabaseFromBrowser,
   saveDatabaseToBrowser,
+  saveDatabaseToBrowserThrottled,
 } from './services/storageAndSync';
 import {
-  buildApiAuthHeaders,
-  isFirebaseConfigured,
-  signInWithGooglePopup,
-  signOutFirebaseUser,
-  subscribeAuthState,
-  syncRecordToFirestore,
-} from './services/firebaseClient';
+  buildLocalApiHeaders,
+  fetchSystemCapabilities,
+} from './services/localApi';
+import { examTimerStore } from './hooks/useTimerStore';
+import {
+  readUrlNavigationSnapshot,
+  useUrlNavigation,
+  type UrlNavSnapshot,
+} from './hooks/useUrlNavigation';
 import { HomeView } from './components/HomeView';
-import { PaperLibraryView } from './components/PaperLibraryView';
-import { StudyWorkspaceView } from './components/StudyWorkspaceView';
-import { ReviewCenterView } from './components/ReviewCenterView';
-import { StatsView } from './components/StatsView';
-import { SettingsView } from './components/SettingsView';
+import { AiStatusPopover } from './components/ui/AiStatusPopover';
+
+const PaperLibraryView = lazy(() =>
+  import('./components/PaperLibraryView').then((m) => ({
+    default: m.PaperLibraryView,
+  }))
+);
+const StudyWorkspaceView = lazy(() =>
+  import('./components/StudyWorkspaceView').then((m) => ({
+    default: m.StudyWorkspaceView,
+  }))
+);
+const ReviewCenterView = lazy(() =>
+  import('./components/ReviewCenterView').then((m) => ({
+    default: m.ReviewCenterView,
+  }))
+);
+const StatsView = lazy(() =>
+  import('./components/StatsView').then((m) => ({
+    default: m.StatsView,
+  }))
+);
+const SettingsView = lazy(() =>
+  import('./components/SettingsView').then((m) => ({
+    default: m.SettingsView,
+  }))
+);
+const QuickAnswerCheckerModal = lazy(() =>
+  import('./components/QuickAnswerCheckerModal').then((m) => ({
+    default: m.QuickAnswerCheckerModal,
+  }))
+);
 
 type PrimaryTab = 'home' | 'library' | 'review' | 'stats' | 'settings';
 
@@ -117,7 +151,39 @@ const DEFAULT_MANIFEST: PapersManifest = {
 };
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<PrimaryTab>('home');
+  const initialUrlSnapshotRef = useRef<UrlNavSnapshot>(
+    readUrlNavigationSnapshot()
+  );
+  const [activeTab, setActiveTab] = useState<PrimaryTab>(
+    () => initialUrlSnapshotRef.current.tab
+  );
+  const [dbLoaded, setDbLoaded] = useState(false);
+  const [isRestoringUrlPaper, setIsRestoringUrlPaper] = useState(() =>
+    Boolean(
+      initialUrlSnapshotRef.current.paperYear ||
+        initialUrlSnapshotRef.current.attemptId
+    )
+  );
+  const didRestoreUrlPaperRef = useRef(false);
+  const skipNextUrlPushRef = useRef(false);
+  const lastSyncedRouteKeyRef = useRef('');
+  const startExamSessionRef = useRef<
+    ((
+      year: number,
+      mode: 'unit-practice' | 'strict-simulation' | 'free-simulation',
+      unitType?: UnitType,
+      preferredUnitId?: string,
+      options?: { forceNew?: boolean; focusQuestion?: number | null }
+    ) => Promise<void>) | null
+  >(null);
+  const openAttemptByIdRef = useRef<
+    ((
+      attemptId: string,
+      preferredUnitId?: string,
+      focusQuestion?: number | null
+    ) => Promise<boolean>) | null
+  >(null);
+
   const [manifest, setManifest] = useState<PapersManifest>(DEFAULT_MANIFEST);
   const [dbState, setDbState] = useState<LocalLearningDatabase>(() =>
     createDefaultLearningDatabase()
@@ -136,14 +202,13 @@ export default function App() {
     exam: Exam;
     activeUnitId: string;
     attemptId: string;
+    initialFocusQuestion?: number | null;
   } | null>(null);
+  const [quickCheckerExam, setQuickCheckerExam] = useState<Exam | null>(null);
 
-  // Auth & Cloud Sync state
-  const [currentUserUid, setCurrentUserUid] = useState<string | null>(null);
-  const [currentUserEmail, setCurrentUserEmail] = useState<string | null>(null);
-  const [syncStatus, setSyncStatus] = useState<SyncStatus>(
-    isFirebaseConfigured ? 'saved-local' : 'cloud-unconfigured'
-  );
+  // Local-First System Capabilities
+  const [systemCapabilities, setSystemCapabilities] =
+    useState<SystemCapabilitiesResponse | null>(null);
 
   // Server Model Credentials & 4-Layer AI Workspace
   const [credentialStatuses, setCredentialStatuses] = useState<
@@ -152,7 +217,7 @@ export default function App() {
   const [aiWorkspace, setAiWorkspace] = useState<UserAIWorkspaceConfig | null>(
     null
   );
-  const [isImportingAnswers, setIsImportingAnswers] = useState(false);
+  const [isImportingAnswers] = useState(false);
 
   const activeDefaultProfile =
     aiWorkspace?.modelProfiles.find(
@@ -177,33 +242,66 @@ export default function App() {
     ? `${configuredProvider.provider} / ${configuredProvider.model}`
     : activeProviderName;
 
-  // Normalize URL path to / and strip auth token query param
-  useEffect(() => {
-    try {
-      const params = new URLSearchParams(window.location.search);
-      params.delete('__aistudio_auth_token');
-      const search = params.toString();
-      const currentPath = window.location.pathname;
-      const targetPath =
-        !currentPath || currentPath === '/YANJUAN' ? '/' : currentPath;
-      const nextUrl = search
-        ? targetPath === '/'
-          ? `/?${search}`
-          : `${targetPath}?${search}`
-        : targetPath;
-      if (window.location.pathname + window.location.search !== nextUrl) {
-        window.history.replaceState(null, '', nextUrl);
-      }
-    } catch {
-      // ignore history errors in restricted environments
+  const handlePopState = useCallback((snapshot: UrlNavSnapshot) => {
+    skipNextUrlPushRef.current = true;
+    setActiveReport(null);
+    setSelectedYearOverview(null);
+    setActiveTab(snapshot.tab);
+    if (snapshot.attemptId) {
+      void (async () => {
+        const opened = await openAttemptByIdRef.current?.(
+          snapshot.attemptId!,
+          snapshot.unitId || undefined,
+          snapshot.questionNumber || undefined
+        );
+        if (!opened && snapshot.paperYear) {
+          const m =
+            snapshot.mode === 'strict-simulation' ||
+            snapshot.mode === 'free-simulation' ||
+            snapshot.mode === 'unit-practice'
+              ? snapshot.mode
+              : 'unit-practice';
+          await startExamSessionRef.current?.(
+            snapshot.paperYear,
+            m,
+            undefined,
+            snapshot.unitId || undefined,
+            { focusQuestion: snapshot.questionNumber || undefined }
+          );
+        }
+      })();
+      return;
+    }
+    if (snapshot.paperYear) {
+      const m =
+        snapshot.mode === 'strict-simulation' ||
+        snapshot.mode === 'free-simulation' ||
+        snapshot.mode === 'unit-practice'
+          ? snapshot.mode
+          : 'unit-practice';
+      void startExamSessionRef.current?.(
+        snapshot.paperYear,
+        m,
+        undefined,
+        snapshot.unitId || undefined,
+        { focusQuestion: snapshot.questionNumber || undefined }
+      );
+    } else {
+      setWorkspaceState(null);
     }
   }, []);
+
+  const { syncUrl } = useUrlNavigation(handlePopState);
 
   // Load IndexedDB state on boot
   useEffect(() => {
     void (async () => {
-      const loaded = await loadDatabaseFromBrowser();
-      setDbState(loaded);
+      try {
+        const loaded = await loadDatabaseFromBrowser();
+        setDbState(loaded);
+      } finally {
+        setDbLoaded(true);
+      }
     })();
   }, []);
 
@@ -248,31 +346,48 @@ export default function App() {
     }));
   }, [resolvedTheme, setTheme, updateDb]);
 
-  // Subscribe Firebase Auth
+  // Register throttled timer persistence outside React tick loop
   useEffect(() => {
-    return subscribeAuthState((user) => {
-      if (user) {
-        setCurrentUserUid(user.uid);
-        setCurrentUserEmail(user.email || user.uid);
-        setSyncStatus('synced');
-      } else {
-        setCurrentUserUid(null);
-        setCurrentUserEmail(null);
-        setSyncStatus(
-          isFirebaseConfigured ? 'saved-local' : 'cloud-unconfigured'
-        );
-      }
+    examTimerStore.setPersistCallback((attemptId, elapsedSeconds) => {
+      setDbState((prev) => {
+        const att = prev.attempts[attemptId];
+        if (!att || att.status === 'submitted') return prev;
+        const delta = Math.max(0, elapsedSeconds - att.elapsedSeconds);
+        const next: LocalLearningDatabase = {
+          ...prev,
+          attempts: {
+            ...prev.attempts,
+            [attemptId]: {
+              ...att,
+              elapsedSeconds,
+              remainingSeconds: Math.max(
+                0,
+                (att.remainingSeconds ?? 0) - delta
+              ),
+            },
+          },
+        };
+        saveDatabaseToBrowserThrottled(next);
+        return next;
+      });
     });
+    return () => {
+      examTimerStore.setPersistCallback(null);
+    };
   }, []);
 
-  // Fetch Manifest, Provider Credential Statuses & 4-Layer AI Workspace
+  // Fetch Manifest, Provider Credential Statuses, Capabilities & 4-Layer AI Workspace
   const refreshManifestAndCapabilities = useCallback(async () => {
     try {
-      const authHeaders = await buildApiAuthHeaders();
-      const [manifestRes, credRes] = await Promise.all([
+      const authHeaders = buildLocalApiHeaders();
+      const [manifestRes, credRes, caps] = await Promise.all([
         fetch('/api/v1/papers-manifest'),
         fetch('/api/v1/provider-credentials', { headers: authHeaders }),
+        fetchSystemCapabilities(),
       ]);
+      if (caps) {
+        setSystemCapabilities(caps);
+      }
       if (manifestRes.ok) {
         const body = await manifestRes.json();
         const m = (body.data || body) as PapersManifest;
@@ -310,7 +425,7 @@ export default function App() {
 
   useEffect(() => {
     void refreshManifestAndCapabilities();
-  }, [refreshManifestAndCapabilities, currentUserUid]);
+  }, [refreshManifestAndCapabilities]);
 
   // Open Import Validation Report & Candidate Structure Inspector
   const handleOpenImportReport = async (year: number, version: string) => {
@@ -350,40 +465,12 @@ export default function App() {
     }
   };
 
-  // Navigate to Settings for External Answer Source Import
+  // Navigate to Settings
   const handleAppend2010OfficialAnswers = async () => {
     setActiveReport(null);
     setSelectedYearOverview(null);
     setWorkspaceState(null);
     setActiveTab('settings');
-  };
-
-  // Submit External Paper or Answer Source via POST /api/v1/imports
-  const handleSubmitSourceImport = async (params: {
-    year: number;
-    fileName: string;
-    markdownText?: string;
-    contentBase64?: string;
-  }) => {
-    setIsImportingAnswers(true);
-    try {
-      const res = await fetch('/api/v1/imports', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(params),
-      });
-      const body = await res.json();
-      if (!res.ok) {
-        throw new Error(body.error?.message || '导入失败');
-      }
-      const newManifest = (body.data?.manifest || body.manifest) as PapersManifest;
-      if (newManifest) {
-        setManifest(newManifest);
-      }
-      return body.data?.importJob || body.importJob;
-    } finally {
-      setIsImportingAnswers(false);
-    }
   };
 
   // Load Exam JSON on-demand per year (directly reads generated JSON without reparsing Markdown)
@@ -425,12 +512,107 @@ export default function App() {
     }
   };
 
+  // Quick Answer Checker for paper/offline attempts
+  const handleOpenQuickChecker = async (year: number) => {
+    const exam = await fetchReadyExam(year);
+    if (exam) {
+      setQuickCheckerExam(exam);
+    }
+  };
+
+  const handleApplyQuickCheck = (
+    responses: Record<number, ObjectiveItemResponse>
+  ) => {
+    if (!quickCheckerExam) return;
+    const exam = quickCheckerExam;
+    const canGrade = exam.answerSourceStatus !== 'unavailable';
+    const scoring = canGrade ? gradeObjectiveResponses(exam, responses) : null;
+    const nowIso = new Date().toISOString();
+    const mode = 'free-simulation';
+    const allUnits = exam.sections.flatMap((s) => s.units);
+
+    const attemptId = `attempt-${exam.year}-${exam.dataVersion}-paper-check-${Date.now()}`;
+    const paperId = resolveCanonicalPaperId(exam.year, exam.paperId);
+    const subjectId = resolveSubjectId(exam.year, exam.subjectId);
+    const newAttempt: ExamAttempt = {
+      id: attemptId,
+      paperId,
+      subjectId,
+      year: exam.year,
+      dataVersion: exam.dataVersion,
+      mode,
+      unitIds: allUnits.map((u) => u.id),
+      status: 'submitted',
+      startedAt: nowIso,
+      submittedAt: nowIso,
+      updatedAt: nowIso,
+      elapsedSeconds: 0,
+      remainingSeconds: 0,
+      objectiveResponses: scoring ? scoring.itemResults : responses,
+      totalObjectiveScore: scoring?.totalScoreEarned,
+      maxObjectiveScore: scoring?.maxObjectiveScore,
+      subjectiveVersionIds: [],
+      clientRevision: 1,
+      deviceId: dbState.deviceId,
+    };
+
+    const newReviewItems = scoring
+      ? buildObjectiveReviewItems(
+          exam,
+          scoring.itemResults,
+          { attemptId, nowIso },
+          dbState.deviceId
+        )
+      : [];
+    const updatedReviewMap = { ...dbState.reviewItems };
+    for (const rItem of newReviewItems) {
+      updatedReviewMap[rItem.id] = rItem;
+    }
+
+    const updatedDb: LocalLearningDatabase = {
+      ...dbState,
+      attempts: {
+        ...dbState.attempts,
+        [attemptId]: newAttempt,
+      },
+      reviewItems: updatedReviewMap,
+      updatedAt: nowIso,
+    };
+
+    setDbState(updatedDb);
+    saveDatabaseToBrowser(updatedDb);
+
+    // Non-blocking server attempt registration outside React state updater
+    void (async () => {
+      try {
+        const headers = buildLocalApiHeaders({
+          'Content-Type': 'application/json',
+        });
+        await fetch(`/api/v1/exams/${exam.paperId || exam.year}/submit-attempt`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ attemptId: newAttempt.id, attempt: newAttempt }),
+        });
+      } catch {
+        // non-blocking server attempt registration
+      }
+    })();
+
+    setWorkspaceState({
+      exam,
+      activeUnitId: allUnits[0].id,
+      attemptId,
+    });
+    setQuickCheckerExam(null);
+  };
+
   // Start Unit or Full Paper Simulation
   const startExamSession = async (
     year: number,
     mode: 'unit-practice' | 'strict-simulation' | 'free-simulation',
     unitType?: UnitType,
-    preferredUnitId?: string
+    preferredUnitId?: string,
+    options?: { forceNew?: boolean; focusQuestion?: number | null }
   ) => {
     const exam = await fetchReadyExam(year);
     if (!exam) return;
@@ -441,13 +623,15 @@ export default function App() {
       (unitType && allUnits.find((u) => u.unitType === unitType)) ||
       allUnits[0];
 
-    const existingInProgress = Object.values(dbState.attempts).find(
-      (a) =>
-        a.year === exam.year &&
-        a.dataVersion === exam.dataVersion &&
-        a.mode === mode &&
-        a.status === 'in-progress'
-    );
+    const existingInProgress = options?.forceNew
+      ? undefined
+      : Object.values(dbState.attempts).find(
+          (a) =>
+            a.year === exam.year &&
+            a.dataVersion === exam.dataVersion &&
+            a.mode === mode &&
+            a.status === 'in-progress'
+        );
 
     const nowIso = new Date().toISOString();
     const attemptId =
@@ -455,8 +639,12 @@ export default function App() {
       `attempt-${exam.year}-${exam.dataVersion}-${mode}-${Date.now()}`;
 
     if (!existingInProgress) {
+      const paperId = resolveCanonicalPaperId(exam.year, exam.paperId);
+      const subjectId = resolveSubjectId(exam.year, exam.subjectId);
       const newAttempt: ExamAttempt = {
         id: attemptId,
+        paperId,
+        subjectId,
         year: exam.year,
         dataVersion: exam.dataVersion,
         mode,
@@ -486,16 +674,149 @@ export default function App() {
         },
         updatedAt: nowIso,
       }));
+    } else if (mode === 'unit-practice') {
+      const nextUnitIds = [
+        targetUnit.id,
+        ...(existingInProgress.unitIds || []).filter((id) => id !== targetUnit.id),
+      ];
+      updateDb((prev) => {
+        const current = prev.attempts[existingInProgress.id];
+        if (!current) return prev;
+        return {
+          ...prev,
+          attempts: {
+            ...prev.attempts,
+            [existingInProgress.id]: {
+              ...current,
+              unitIds: nextUnitIds,
+              updatedAt: nowIso,
+              clientRevision: current.clientRevision + 1,
+            },
+          },
+          updatedAt: nowIso,
+        };
+      });
     }
 
     setWorkspaceState({
       exam,
       activeUnitId: targetUnit.id,
       attemptId,
+      initialFocusQuestion: options?.focusQuestion ?? null,
     });
     setActiveReport(null);
     setSelectedYearOverview(null);
   };
+
+  // Reopen an existing attempt (e.g., submitted historical paper or mistake-linked attempt)
+  const openAttemptById = async (
+    attemptId: string,
+    preferredUnitId?: string,
+    focusQuestion?: number | null
+  ): Promise<boolean> => {
+    const targetAttempt = dbState.attempts[attemptId];
+    if (!targetAttempt) return false;
+    const exam = await fetchReadyExam(targetAttempt.year);
+    if (!exam) return false;
+
+    const allUnits = exam.sections.flatMap((s) => s.units);
+    let targetUnit =
+      (preferredUnitId && allUnits.find((u) => u.id === preferredUnitId)) ||
+      undefined;
+    if (!targetUnit && focusQuestion) {
+      targetUnit = allUnits.find((u) =>
+        u.items.some((it) => it.questionNumber === focusQuestion)
+      );
+    }
+    if (!targetUnit && targetAttempt.unitIds?.length) {
+      targetUnit = allUnits.find((u) => u.id === targetAttempt.unitIds[0]);
+    }
+    if (!targetUnit) {
+      targetUnit = allUnits[0];
+    }
+
+    setWorkspaceState({
+      exam,
+      activeUnitId: targetUnit.id,
+      attemptId: targetAttempt.id,
+      initialFocusQuestion: focusQuestion ?? null,
+    });
+    setActiveReport(null);
+    setSelectedYearOverview(null);
+    return true;
+  };
+
+  startExamSessionRef.current = startExamSession;
+  openAttemptByIdRef.current = openAttemptById;
+
+  // Restore deep-linked paper session once IndexedDB finishes loading
+  useEffect(() => {
+    if (!dbLoaded || didRestoreUrlPaperRef.current) return;
+    didRestoreUrlPaperRef.current = true;
+    const snap = initialUrlSnapshotRef.current;
+    if (!snap.paperYear && !snap.attemptId) return;
+
+    void (async () => {
+      try {
+        if (snap.attemptId) {
+          const opened = await openAttemptById(
+            snap.attemptId,
+            snap.unitId || undefined,
+            snap.questionNumber ?? null
+          );
+          if (opened) return;
+        }
+        if (snap.paperYear) {
+          const restoredMode =
+            snap.mode === 'strict-simulation' ||
+            snap.mode === 'free-simulation' ||
+            snap.mode === 'unit-practice'
+              ? snap.mode
+              : 'unit-practice';
+          await startExamSession(
+            snap.paperYear,
+            restoredMode,
+            undefined,
+            snap.unitId || undefined,
+            { focusQuestion: snap.questionNumber ?? null }
+          );
+        }
+      } finally {
+        setIsRestoringUrlPaper(false);
+      }
+    })();
+  }, [dbLoaded]);
+
+  // Keep URL query parameters synchronized with active tab & workspace session
+  useEffect(() => {
+    if (!dbLoaded || isRestoringUrlPaper) return;
+    const paperYear = workspaceState?.exam.year ?? null;
+    const unitId = workspaceState?.activeUnitId ?? null;
+    const attemptId = workspaceState?.attemptId ?? null;
+    const questionNumber = workspaceState?.initialFocusQuestion ?? null;
+    const mode = workspaceState
+      ? dbState.attempts[workspaceState.attemptId]?.mode || null
+      : null;
+    const routeKey = `${activeTab}|${paperYear || ''}|${attemptId || ''}|${mode || ''}`;
+    const isInitialSync = lastSyncedRouteKeyRef.current === '';
+    const shouldReplace =
+      isInitialSync ||
+      skipNextUrlPushRef.current ||
+      lastSyncedRouteKeyRef.current === routeKey;
+    skipNextUrlPushRef.current = false;
+    lastSyncedRouteKeyRef.current = routeKey;
+    syncUrl(
+      {
+        tab: activeTab,
+        paperYear,
+        unitId,
+        mode,
+        attemptId,
+        questionNumber,
+      },
+      shouldReplace
+    );
+  }, [dbLoaded, isRestoringUrlPaper, activeTab, workspaceState, dbState.attempts, syncUrl]);
 
   const handleUpdateObjectiveResponse = (
     questionNumber: number,
@@ -505,23 +826,29 @@ export default function App() {
     const { attemptId, activeUnitId, exam } = workspaceState;
     const nowIso = new Date().toISOString();
 
-    const currentUnit = exam.sections
-      .flatMap((s) => s.units)
-      .find((u) => u.id === activeUnitId);
-    const item = currentUnit?.items.find(
+    const allUnits = exam.sections.flatMap((s) => s.units);
+    const matchedUnit =
+      allUnits.find((u) =>
+        u.items.some((i) => i.questionNumber === questionNumber)
+      ) || allUnits.find((u) => u.id === activeUnitId);
+    const item = matchedUnit?.items.find(
       (i) => i.questionNumber === questionNumber
     );
 
     updateDb((prev) => {
       const att = prev.attempts[attemptId];
-      if (!att || att.status === 'submitted') return prev;
+      if (!att) return prev;
+      const safePatch = sanitizeObjectiveResponsePatch(att.status, patch);
+      if (att.status === 'submitted' && Object.keys(safePatch).length === 0) {
+        return prev;
+      }
       const existing: ObjectiveItemResponse = att.objectiveResponses[
         questionNumber
       ] || {
         questionNumber,
         itemId: item?.id || `item-${questionNumber}`,
-        unitId: currentUnit?.id || activeUnitId,
-        unitType: currentUnit?.unitType || 'reading',
+        unitId: matchedUnit?.id || activeUnitId,
+        unitType: matchedUnit?.unitType || 'reading',
         selectedAnswer: '',
         confidence: 'certain',
         flaggedForReview: false,
@@ -534,7 +861,7 @@ export default function App() {
       };
       const updatedResp: ObjectiveItemResponse = {
         ...existing,
-        ...patch,
+        ...safePatch,
         questionNumber,
       };
       const nextAtt: ExamAttempt = {
@@ -557,89 +884,51 @@ export default function App() {
     });
   };
 
-  const handleTickTimer = useCallback(
-    (deltaSeconds: number) => {
-      if (!workspaceState) return;
-      const { attemptId } = workspaceState;
-      updateDb((prev) => {
-        const att = prev.attempts[attemptId];
-        if (!att || att.status === 'submitted') return prev;
-        return {
-          ...prev,
-          attempts: {
-            ...prev.attempts,
-            [attemptId]: {
-              ...att,
-              elapsedSeconds: att.elapsedSeconds + deltaSeconds,
-              remainingSeconds: Math.max(
-                0,
-                (att.remainingSeconds ?? 0) - deltaSeconds
-              ),
-            },
-          },
-        };
-      });
-    },
-    [workspaceState, updateDb]
-  );
-
   // Submit Objective Attempt -> Grade & Generate Spaced Repetition Review Items
   const handleSubmitAttempt = () => {
     if (!workspaceState) return;
     const { exam, attemptId } = workspaceState;
     const nowIso = new Date().toISOString();
+    examTimerStore.setPaused(true);
+
+    const baseAtt = dbState.attempts[attemptId];
+    if (!baseAtt) return;
+    const finalElapsed = examTimerStore.getElapsedForAttempt(
+      attemptId,
+      baseAtt.elapsedSeconds
+    );
+    const canGrade = exam.answerSourceStatus !== 'unavailable';
+    const summary = canGrade
+      ? gradeObjectiveResponses(exam, baseAtt.objectiveResponses)
+      : null;
+    const generatedReviews = summary
+      ? buildObjectiveReviewItems(
+          exam,
+          summary.itemResults,
+          { attemptId, nowIso },
+          dbState.deviceId
+        )
+      : [];
+
+    const submittedAtt: ExamAttempt = {
+      ...baseAtt,
+      paperId: resolveCanonicalPaperId(exam.year, baseAtt.paperId || exam.paperId),
+      subjectId: resolveSubjectId(exam.year, baseAtt.subjectId || exam.subjectId),
+      status: 'submitted',
+      submittedAt: nowIso,
+      updatedAt: nowIso,
+      elapsedSeconds: finalElapsed,
+      objectiveResponses: summary ? summary.itemResults : baseAtt.objectiveResponses,
+      totalObjectiveScore: summary?.totalScoreEarned,
+      maxObjectiveScore: summary?.maxObjectiveScore,
+      clientRevision: baseAtt.clientRevision + 1,
+    };
 
     updateDb((prev) => {
-      const att = prev.attempts[attemptId];
-      if (!att) return prev;
-      const summary = gradeObjectiveResponses(exam, att.objectiveResponses);
-      const generatedReviews = buildObjectiveReviewItems(
-        exam,
-        summary.itemResults,
-        nowIso,
-        prev.deviceId
-      );
-
       const nextReviewMap = { ...prev.reviewItems };
       for (const rev of generatedReviews) {
         nextReviewMap[rev.id] = rev;
       }
-
-      const submittedAtt: ExamAttempt = {
-        ...att,
-        status: 'submitted',
-        submittedAt: nowIso,
-        updatedAt: nowIso,
-        objectiveResponses: summary.itemResults,
-        totalObjectiveScore: summary.totalScoreEarned,
-        maxObjectiveScore: summary.maxObjectiveScore,
-        clientRevision: att.clientRevision + 1,
-      };
-
-      if (currentUserUid && isFirebaseConfigured) {
-        void syncRecordToFirestore(
-          currentUserUid,
-          'attempts',
-          submittedAtt.id,
-          submittedAtt as unknown as Record<string, unknown>
-        );
-      }
-
-      void (async () => {
-        try {
-          const headers = await buildApiAuthHeaders({
-            'Content-Type': 'application/json',
-          });
-          await fetch(`/api/v1/exams/${exam.year}/submit-attempt`, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify({ attemptId: submittedAtt.id }),
-          });
-        } catch {
-          // non-blocking server attempt registration
-        }
-      })();
-
       return {
         ...prev,
         attempts: {
@@ -650,12 +939,30 @@ export default function App() {
         updatedAt: nowIso,
       };
     });
+
+    void flushPendingDatabaseSave();
+
+    // Non-blocking server attempt registration outside React state updater
+    void (async () => {
+      try {
+        const headers = buildLocalApiHeaders({
+          'Content-Type': 'application/json',
+        });
+        await fetch(`/api/v1/exams/${exam.paperId || exam.year}/submit-attempt`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ attemptId: submittedAtt.id, attempt: submittedAtt }),
+        });
+      } catch {
+        // non-blocking server attempt registration
+      }
+    })();
   };
 
   // Save Immutable Subjective Version (V1, V2, V3...)
   const handleSubmitSubjectiveVersion = (params: {
     unitId: string;
-    unitType: 'translation' | 'practical-writing' | 'visual-writing';
+    unitType: SubjectiveUnitType;
     questionNumber: number;
     practiceMode: SubjectivePracticeMode;
     content: string;
@@ -665,10 +972,14 @@ export default function App() {
   }): SubjectiveAnswerVersion => {
     const exam = workspaceState!.exam;
     const attemptId = workspaceState!.attemptId;
+    const paperId = resolveCanonicalPaperId(exam.year, exam.paperId);
+    const subjectId = resolveSubjectId(exam.year, exam.subjectId);
     const { updatedDb, createdVersion } = appendSubjectiveAnswerVersion(
       dbState,
       {
         attemptId,
+        paperId,
+        subjectId,
         year: exam.year,
         dataVersion: exam.dataVersion,
         ...params,
@@ -677,18 +988,25 @@ export default function App() {
 
     const nowIso = new Date().toISOString();
     const nextDue = new Date(Date.now() + 86400 * 1000).toISOString();
+    const unitLabel = params.unitType === 'politics-analysis' ? '字' : '词';
     const baseReview: ReviewItem = {
       id: `rev-subj-draft-${createdVersion.id}`,
+      paperId,
+      subjectId,
       year: exam.year,
       dataVersion: exam.dataVersion,
       unitId: params.unitId,
       unitType: params.unitType,
       questionNumber: params.questionNumber,
       reviewType:
-        params.unitType === 'translation' ? 're-translate' : 'revise-essay',
-      title: `${exam.year}年 第${params.questionNumber}题 主观题复盘改写 (${createdVersion.versionLabel})`,
+        params.unitType === 'translation'
+          ? 're-translate'
+          : params.unitType === 'politics-analysis'
+          ? 're-analyze-politics'
+          : 'revise-essay',
+      title: `${formatExamTitle(exam.year, 'short')} 第${params.questionNumber}题 主观题复盘改写 (${createdVersion.versionLabel})`,
       promptSnapshot: params.content.slice(0, 180),
-      previousUserAnswer: `${createdVersion.versionLabel} (${createdVersion.wordCount}词)`,
+      previousUserAnswer: `${createdVersion.versionLabel} (${createdVersion.wordCount}${unitLabel})`,
       previousFeedbackSummary: `结合批改清单完成 V${createdVersion.versionNumber + 1} 升格改写`,
       knownErrorCauses: [],
       intervalDays: DEFAULT_REVIEW_INTERVALS_DAYS[0],
@@ -730,60 +1048,94 @@ export default function App() {
     const imagePaths = visualMats
       .map((vm) => vm.imagePath)
       .filter((u): u is string => Boolean(u));
-    const rubric = unit.items[0]?.rubric;
+    const targetItem =
+      unit.items.find((it) => it.questionNumber === version.questionNumber) ||
+      unit.items[0];
+    const rubric = targetItem?.rubric || unit.items[0]?.rubric;
+
+    const itemMaterialParagraphs =
+      unit.materials.find((m) =>
+        targetItem && m.relatedItemIds?.includes(targetItem.id)
+      )?.paragraphs ||
+      (Array.isArray((targetItem as any)?.materials)
+        ? ((targetItem as any).materials as string[])
+        : []);
+    const materialText =
+      itemMaterialParagraphs.length > 0
+        ? itemMaterialParagraphs.join('\n\n')
+        : undefined;
+    const referenceText =
+      targetItem?.answerKeyPoints ||
+      targetItem?.rubric?.referenceText ||
+      targetItem?.officialExplanation ||
+      rubric?.referenceText;
 
     // Look up immediately preceding version and its evaluation for V1 -> V2 -> V3 revision verification
-    let previousVersionContent: string | undefined;
-    let previousRevisionItems: string[] | undefined;
+    let previousAnswerVersionId: string | undefined;
+    let previousVersionLabel: string | undefined;
+    let previousUserAnswer: string | undefined;
+    let previousEvaluation: any | undefined;
     if (version.versionNumber > 1) {
       const prevVer = Object.values(dbState.subjectiveVersions).find(
         (v) =>
           v.year === version.year &&
           v.unitId === version.unitId &&
+          v.questionNumber === version.questionNumber &&
           v.versionNumber === version.versionNumber - 1
       );
       if (prevVer) {
-        previousVersionContent = prevVer.content;
-        const prevEval = prevVer.evaluationId
+        previousAnswerVersionId = prevVer.id;
+        previousVersionLabel = prevVer.versionLabel;
+        previousUserAnswer = prevVer.content;
+        previousEvaluation = prevVer.evaluationId
           ? dbState.subjectiveEvaluations[prevVer.evaluationId]
           : Object.values(dbState.subjectiveEvaluations).find(
               (ev) => ev.answerVersionId === prevVer.id
             );
-        if (prevEval && prevEval.revisionTasks.length > 0) {
-          previousRevisionItems = prevEval.revisionTasks.map(
-            (rt) => rt.instruction
-          );
-        }
       }
     }
 
-    const headers = await buildApiAuthHeaders({
+    const headers = buildLocalApiHeaders({
       'Content-Type': 'application/json',
     });
+
+    const questionPrompt =
+      version.unitType === 'politics-analysis'
+        ? targetItem?.subQuestions?.join('\n') ||
+          targetItem?.prompt ||
+          unit.instructions
+        : unit.items
+            .map((i) => i.translationMeta?.underlinedEnglish || i.prompt)
+            .join('\n') || unit.instructions;
 
     const res = await fetch('/api/v1/evaluations', {
       method: 'POST',
       headers,
       body: JSON.stringify({
         provider: activeProviderName || 'gemini',
-        year: version.year,
+        year: version.paperId || version.year,
         taskType: version.unitType,
-        taskId: unit.id,
+        taskId:
+          version.unitType === 'politics-analysis'
+            ? `${unit.id}-q${version.questionNumber}`
+            : unit.id,
         answerVersionId: version.id,
+        previousAnswerVersionId,
+        previousVersionLabel,
+        previousUserAnswer,
+        previousEvaluation,
         evaluationMode: 'deep-two-stage',
         usedHints: version.usedHints.length > 0,
-        questionPrompt:
-          unit.items
-            .map((i) => i.translationMeta?.underlinedEnglish || i.prompt)
-            .join('\n') || unit.instructions,
+        questionPrompt,
         userAnswer: version.content,
+        maxScore: targetItem?.score,
         requiredFacts:
           visualMat?.requiredFacts || practicalSpec?.requiredPoints,
         hasVisualMaterial: Boolean(visualMat),
         imagePaths,
+        materialText,
+        referenceText,
         rubric,
-        previousVersionContent,
-        previousRevisionItems,
       }),
     });
 
@@ -838,7 +1190,7 @@ export default function App() {
     _confidence: ConfidenceLevel
   ) => {
     const passageText = unit.materials.map((m) => m.text).join('\n\n');
-    const headers = await buildApiAuthHeaders({
+    const headers = buildLocalApiHeaders({
       'Content-Type': 'application/json',
     });
 
@@ -847,7 +1199,7 @@ export default function App() {
       headers,
       body: JSON.stringify({
         provider: activeProviderName || 'gemini',
-        year: workspaceState?.exam.year,
+        year: workspaceState?.exam.paperId || workspaceState?.exam.year,
         questionNumber: item.questionNumber,
         passageText,
         questionPrompt: item.prompt,
@@ -886,15 +1238,23 @@ export default function App() {
     userAnswer?: string;
     isSubmitted?: boolean;
   }): Promise<string> => {
-    const headers = await buildApiAuthHeaders({
+    const headers = buildLocalApiHeaders({
       'Content-Type': 'application/json',
     });
+    const activeAttempt = workspaceState
+      ? dbState.attempts[workspaceState.attemptId]
+      : undefined;
+    const followUpMode =
+      activeAttempt?.mode === 'strict-simulation' ? 'exam' : 'study';
+
     const res = await fetch('/api/v1/follow-up-analyses', {
       method: 'POST',
       headers,
       body: JSON.stringify({
         provider: activeProviderName || 'gemini',
-        year: workspaceState?.exam.year,
+        year: workspaceState?.exam.paperId || workspaceState?.exam.year,
+        attemptId: workspaceState?.attemptId,
+        mode: followUpMode,
         unitId: params.unitId,
         unitTitle: params.unitTitle || params.questionContext,
         questionNumber: params.questionNumber,
@@ -920,7 +1280,7 @@ export default function App() {
     promptText: string;
     requiredFacts?: string[];
   }): Promise<WritingScaffoldResult> => {
-    const headers = await buildApiAuthHeaders({
+    const headers = buildLocalApiHeaders({
       'Content-Type': 'application/json',
     });
     const res = await fetch('/api/v1/writing-scaffolds', {
@@ -956,6 +1316,10 @@ export default function App() {
           <button
             type="button"
             onClick={() => {
+              if (workspaceState) {
+                examTimerStore.flushPersist();
+                void flushPendingDatabaseSave();
+              }
               setWorkspaceState(null);
               setActiveReport(null);
               setSelectedYearOverview(null);
@@ -972,7 +1336,7 @@ export default function App() {
                 研卷台
               </span>
               <span className="text-xs text-[#96A1A4] dark:text-[#657980] hidden lg:inline font-normal truncate">
-                考研英语一真题学习系统
+                考研公共课真题与冲刺研习系统
               </span>
             </div>
           </button>
@@ -994,6 +1358,10 @@ export default function App() {
                   key={item.id}
                   type="button"
                   onClick={() => {
+                    if (workspaceState) {
+                      examTimerStore.flushPersist();
+                      void flushPendingDatabaseSave();
+                    }
                     setWorkspaceState(null);
                     setActiveReport(null);
                     setSelectedYearOverview(null);
@@ -1015,27 +1383,21 @@ export default function App() {
 
         {/* Right Controls: Compact status, quick theme toggle & settings */}
         <div className="flex items-center gap-1.5 sm:gap-2.5 text-xs text-[#68777C] dark:text-[#9CAEB3] shrink-0">
-          <button
-            type="button"
-            onClick={() => {
+          <AiStatusPopover
+            systemCapabilities={systemCapabilities}
+            anyModelAvailable={anyModelAvailable}
+            activeModelSummary={activeModelSummary || activeProviderName}
+            aiWorkspace={aiWorkspace}
+            onRefreshWorkspace={refreshManifestAndCapabilities}
+            onNavigateSettings={() => {
+              if (workspaceState) {
+                examTimerStore.flushPersist();
+                void flushPendingDatabaseSave();
+              }
               setWorkspaceState(null);
               setActiveTab('settings');
             }}
-            title="点击前往系统与同步设置"
-            className="inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-1 rounded-md bg-stone-50 dark:bg-[#1E2B30] hover:bg-stone-100 dark:hover:bg-[#25363D] border border-[#DCE4E1] dark:border-[#2C3E46] text-[#68777C] dark:text-[#9CAEB3] hover:text-[#202B2F] dark:hover:text-[#E2E8E6] transition-colors whitespace-nowrap text-xs"
-          >
-            <span
-              className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                isFirebaseConfigured && currentUserUid ? 'bg-[#3F7664] dark:bg-[#4EA387]' : 'bg-[#96A1A4] dark:bg-[#657980]'
-              }`}
-            />
-            <span className="hidden sm:inline">
-              {isFirebaseConfigured && currentUserUid ? '已同步' : '本地模式'} · {anyModelAvailable ? 'AI就绪' : 'AI未配置'}
-            </span>
-            <span className="sm:hidden font-tabular-mono text-[11px]">
-              {isFirebaseConfigured && currentUserUid ? '云端' : '本地'}
-            </span>
-          </button>
+          />
 
           {/* Clean Quick Theme Toggle */}
           <button
@@ -1065,6 +1427,10 @@ export default function App() {
           <button
             type="button"
             onClick={() => {
+              if (workspaceState) {
+                examTimerStore.flushPersist();
+                void flushPendingDatabaseSave();
+              }
               setWorkspaceState(null);
               setActiveTab('settings');
             }}
@@ -1087,10 +1453,18 @@ export default function App() {
           workspaceState ? 'py-3 sm:py-5' : 'py-5 sm:py-8 pb-24 md:pb-10'
         }`}
       >
+        <Suspense
+          fallback={
+            <div className="py-12 text-center text-xs text-secondary">
+              正在加载视图模块...
+            </div>
+          }
+        >
         {workspaceState && dbState.attempts[workspaceState.attemptId] ? (
           <StudyWorkspaceView
             exam={workspaceState.exam}
             activeUnitId={workspaceState.activeUnitId}
+            initialFocusQuestion={workspaceState.initialFocusQuestion ?? null}
             attempt={dbState.attempts[workspaceState.attemptId]}
             subjectiveVersions={subjectiveVersionsList}
             subjectiveEvaluations={dbState.subjectiveEvaluations}
@@ -1101,24 +1475,68 @@ export default function App() {
             onUpdateTypographyPrefs={(prefs: ReadingTypographyPrefs) =>
               updateDb((prev) => ({ ...prev, preferences: prefs }))
             }
-            onSelectUnit={(unitId) =>
+            onSelectUnit={(unitId) => {
+              const activeAttId = workspaceState?.attemptId;
+              if (activeAttId) {
+                const nowIso = new Date().toISOString();
+                updateDb((prev) => {
+                  const current = prev.attempts[activeAttId];
+                  if (!current || current.mode !== 'unit-practice') return prev;
+                  const nextUnitIds = [
+                    unitId,
+                    ...(current.unitIds || []).filter((id) => id !== unitId),
+                  ];
+                  return {
+                    ...prev,
+                    attempts: {
+                      ...prev.attempts,
+                      [activeAttId]: {
+                        ...current,
+                        unitIds: nextUnitIds,
+                        updatedAt: nowIso,
+                        clientRevision: current.clientRevision + 1,
+                      },
+                    },
+                    updatedAt: nowIso,
+                  };
+                });
+              }
               setWorkspaceState((prev) =>
-                prev ? { ...prev, activeUnitId: unitId } : null
-              )
-            }
+                prev
+                  ? { ...prev, activeUnitId: unitId, initialFocusQuestion: null }
+                  : null
+              );
+            }}
+            onRestartFreshPaper={() => {
+              const currentMode =
+                dbState.attempts[workspaceState.attemptId]?.mode || 'unit-practice';
+              void startExamSession(
+                workspaceState.exam.year,
+                currentMode,
+                undefined,
+                workspaceState.activeUnitId,
+                { forceNew: true }
+              );
+            }}
             onUpdateObjectiveResponse={handleUpdateObjectiveResponse}
-            onTickTimer={handleTickTimer}
             onSubmitAttempt={handleSubmitAttempt}
             onSubmitSubjectiveVersion={handleSubmitSubjectiveVersion}
             onRequestSubjectiveEvaluation={handleRequestSubjectiveEvaluation}
             onRequestObjectiveAnalysis={handleRequestObjectiveAnalysis}
             onAskFollowUp={handleAskFollowUp}
             onRequestWritingScaffold={handleRequestWritingScaffold}
-            onExitWorkspace={() => setWorkspaceState(null)}
+            onExitWorkspace={() => {
+              examTimerStore.flushPersist();
+              void flushPendingDatabaseSave();
+              setWorkspaceState(null);
+            }}
             onNavigateSettings={() => {
+              examTimerStore.flushPersist();
+              void flushPendingDatabaseSave();
               setWorkspaceState(null);
               setActiveTab('settings');
             }}
+            onOpenQuickChecker={() => setQuickCheckerExam(workspaceState.exam)}
           />
         ) : activeTab === 'home' ? (
           <HomeView
@@ -1129,6 +1547,14 @@ export default function App() {
             onStartUnit={(year, unitType, unitId) =>
               void startExamSession(year, 'unit-practice', unitType, unitId)
             }
+            onStartFresh={(year, unitType, unitId) =>
+              void startExamSession(year, 'unit-practice', unitType, unitId, {
+                forceNew: true,
+              })
+            }
+            onOpenAttempt={(attemptId, preferredUnitId, focusQuestion) =>
+              void openAttemptById(attemptId, preferredUnitId, focusQuestion)
+            }
             onStartSimulation={(year, mode) =>
               void startExamSession(year, mode)
             }
@@ -1138,6 +1564,7 @@ export default function App() {
             onNavigateTab={(tab) => setActiveTab(tab)}
             onAppend2010OfficialAnswers={handleAppend2010OfficialAnswers}
             isImportingAnswers={isImportingAnswers}
+            onOpenQuickChecker={handleOpenQuickChecker}
           />
         ) : activeTab === 'library' ? (
           <PaperLibraryView
@@ -1158,6 +1585,14 @@ export default function App() {
             onStartUnit={(year, unitType, unitId) =>
               void startExamSession(year, 'unit-practice', unitType, unitId)
             }
+            onStartFresh={(year, unitType, unitId) =>
+              void startExamSession(year, 'unit-practice', unitType, unitId, {
+                forceNew: true,
+              })
+            }
+            onOpenAttempt={(attemptId, preferredUnitId, focusQuestion) =>
+              void openAttemptById(attemptId, preferredUnitId, focusQuestion)
+            }
             onStartSimulation={(year, mode) =>
               void startExamSession(year, mode)
             }
@@ -1167,10 +1602,15 @@ export default function App() {
               setActiveReport(null);
               setActiveTab('settings');
             }}
+            onOpenQuickChecker={handleOpenQuickChecker}
           />
         ) : activeTab === 'review' ? (
           <ReviewCenterView
             reviewItems={reviewItemsList}
+            attempts={attemptsList}
+            onOpenAttempt={(attemptId, unitId, questionNumber) =>
+              void openAttemptById(attemptId, unitId, questionNumber)
+            }
             onCompleteReview={(id, passed) => {
               updateDb((prev) => {
                 const target = prev.reviewItems[id];
@@ -1196,13 +1636,100 @@ export default function App() {
                 const nextDue = new Date(
                   Date.now() + 86400 * 1000
                 ).toISOString();
+                const paperId = resolveCanonicalPaperId(params.year);
+                const subjectId = resolveSubjectId(params.year);
+                const isPolitics = subjectId === 'politics';
+                const unitMapping = ((): {
+                  unitId: string;
+                  unitType: ReviewItem['unitType'];
+                } => {
+                  if (params.reviewType === 're-analyze-politics' || isPolitics) {
+                    if (isPolitics && params.reviewType !== 're-analyze-politics') {
+                      if (params.questionNumber >= 17 && params.questionNumber <= 33) {
+                        return {
+                          unitId: `${params.year}-unit-politics-multi`,
+                          unitType: 'politics-multi',
+                        };
+                      }
+                      if (params.questionNumber >= 1 && params.questionNumber <= 16) {
+                        return {
+                          unitId: `${params.year}-unit-politics-single`,
+                          unitType: 'politics-single',
+                        };
+                      }
+                    }
+                    return {
+                      unitId: `${params.year}-unit-politics-analysis`,
+                      unitType: 'politics-analysis',
+                    };
+                  }
+                  if (params.reviewType === 're-translate') {
+                    return {
+                      unitId: `${params.year}-unit-translation`,
+                      unitType: 'translation',
+                    };
+                  }
+                  if (params.reviewType === 'revise-essay') {
+                    return params.questionNumber === 52
+                      ? {
+                          unitId: `${params.year}-unit-visual-writing`,
+                          unitType: 'visual-writing',
+                        }
+                      : {
+                          unitId: `${params.year}-unit-practical-writing`,
+                          unitType: 'practical-writing',
+                        };
+                  }
+                  if (params.questionNumber >= 1 && params.questionNumber <= 20) {
+                    return {
+                      unitId: `${params.year}-unit-cloze`,
+                      unitType: 'cloze',
+                    };
+                  }
+                  if (params.questionNumber >= 21 && params.questionNumber <= 25) {
+                    return {
+                      unitId: `${params.year}-unit-reading-1`,
+                      unitType: 'reading',
+                    };
+                  }
+                  if (params.questionNumber >= 26 && params.questionNumber <= 30) {
+                    return {
+                      unitId: `${params.year}-unit-reading-2`,
+                      unitType: 'reading',
+                    };
+                  }
+                  if (params.questionNumber >= 31 && params.questionNumber <= 35) {
+                    return {
+                      unitId: `${params.year}-unit-reading-3`,
+                      unitType: 'reading',
+                    };
+                  }
+                  if (params.questionNumber >= 36 && params.questionNumber <= 40) {
+                    return {
+                      unitId: `${params.year}-unit-reading-4`,
+                      unitType: 'reading',
+                    };
+                  }
+                  if (params.questionNumber >= 41 && params.questionNumber <= 45) {
+                    return {
+                      unitId: `${params.year}-unit-part-b`,
+                      unitType: 'passage-assembly',
+                    };
+                  }
+                  return {
+                    unitId: `${params.year}-unit-reading-3`,
+                    unitType: 'reading',
+                  };
+                })();
                 const created: ReviewItem = {
                   id: `rev-custom-${Date.now()}`,
+                  paperId,
+                  subjectId,
                   year: params.year,
                   dataVersion:
                     manifest.latestReadyVersion[String(params.year)] || 'v2',
-                  unitId: 'unit-reading-text-3',
-                  unitType: 'reading',
+                  unitId: unitMapping.unitId,
+                  unitType: unitMapping.unitType,
                   questionNumber: params.questionNumber,
                   reviewType: params.reviewType,
                   title: params.title,
@@ -1229,8 +1756,10 @@ export default function App() {
                 };
               });
             }}
-            onJumpToUnit={(year, unitType, unitId) =>
-              void startExamSession(year, 'unit-practice', unitType, unitId)
+            onJumpToUnit={(year, unitType, unitId, questionNumber) =>
+              void startExamSession(year, 'unit-practice', unitType, unitId, {
+                focusQuestion: questionNumber ?? null,
+              })
             }
           />
         ) : activeTab === 'stats' ? (
@@ -1243,30 +1772,15 @@ export default function App() {
           />
         ) : (
           <SettingsView
-            isFirebaseConfigured={isFirebaseConfigured}
-            currentUserEmail={currentUserEmail}
-            syncStatus={syncStatus}
-            isPrivateDevice={dbState.isPrivateDevice}
-            onTogglePrivateDevice={(val) =>
-              updateDb((prev) => ({ ...prev, isPrivateDevice: val }))
-            }
-            onSignInGoogle={async () => {
-              await signInWithGooglePopup();
-            }}
-            onSignOut={async () => {
-              await signOutFirebaseUser();
-              if (!dbState.isPrivateDevice) {
-                const fresh = await clearBrowserLocalDatabase();
-                setDbState(fresh);
-              }
-            }}
+            systemCapabilities={systemCapabilities}
+            onRefreshCapabilities={refreshManifestAndCapabilities}
             anyModelAvailable={anyModelAvailable}
             activeProviderName={activeModelSummary || activeProviderName}
             credentialStatuses={credentialStatuses}
             aiWorkspace={aiWorkspace}
             onRefreshWorkspace={refreshManifestAndCapabilities}
             onSaveProviderCredential={async (params) => {
-              const headers = await buildApiAuthHeaders({
+              const headers = buildLocalApiHeaders({
                 'Content-Type': 'application/json',
               });
               const res = await fetch('/api/v1/provider-credentials', {
@@ -1281,7 +1795,7 @@ export default function App() {
               await refreshManifestAndCapabilities();
             }}
             onTestProviderCredential={async (params) => {
-              const headers = await buildApiAuthHeaders({
+              const headers = buildLocalApiHeaders({
                 'Content-Type': 'application/json',
               });
               const res = await fetch('/api/v1/model-tests', {
@@ -1296,7 +1810,7 @@ export default function App() {
               return body.data || body;
             }}
             onDeleteProviderCredential={async (provider) => {
-              const headers = await buildApiAuthHeaders();
+              const headers = buildLocalApiHeaders();
               const res = await fetch(`/api/v1/provider-credentials/${provider}`, {
                 method: 'DELETE',
                 headers,
@@ -1313,20 +1827,15 @@ export default function App() {
             }
             themeMode={themeMode}
             onSelectThemeMode={handleSelectThemeMode}
-            onSubmitSourceImport={handleSubmitSourceImport}
-            isImportingAnswers={isImportingAnswers}
             onExportJson={() => exportLearningDataJson(dbState)}
             onImportJson={(raw) => {
               const merged = importLearningDataJson(dbState, raw);
               setDbState(merged);
               void saveDatabaseToBrowser(merged);
             }}
-            onClearAllData={async () => {
-              const fresh = await clearBrowserLocalDatabase();
-              setDbState(fresh);
-            }}
           />
         )}
+        </Suspense>
       </main>
 
       {/* Mobile Bottom Navigation Bar (Fixed with Safe Area Support) */}
@@ -1371,6 +1880,22 @@ export default function App() {
             })}
           </div>
         </nav>
+      )}
+
+      {quickCheckerExam && (
+        <Suspense fallback={null}>
+          <QuickAnswerCheckerModal
+            isOpen={Boolean(quickCheckerExam)}
+            onClose={() => setQuickCheckerExam(null)}
+            exam={quickCheckerExam}
+            onConfirmApply={handleApplyQuickCheck}
+            initialResponses={
+              workspaceState && workspaceState.exam.year === quickCheckerExam.year
+                ? dbState.attempts[workspaceState.attemptId]?.objectiveResponses
+                : undefined
+            }
+          />
+        </Suspense>
       )}
     </div>
   );

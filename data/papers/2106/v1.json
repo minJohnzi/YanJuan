@@ -1,0 +1,1946 @@
+{
+  "id": "exam-2106",
+  "year": 2106,
+  "subject": "考研政治",
+  "setNumber": 6,
+  "paperTitle": "2027 考研政治冲刺 8 套卷（六）",
+  "status": "ready",
+  "importStatus": "ready",
+  "dataVersion": "v1",
+  "schemaVersion": "1.0.0",
+  "parserProvider": "internal",
+  "parserModel": "xiao8-verified-pipeline",
+  "parserVersion": "1.0.0",
+  "importRetryCount": 0,
+  "pageCount": 20,
+  "sourceFiles": [
+    "data/politics/xiao8-2027/set-6.json"
+  ],
+  "sourceFormats": [
+    "pdf"
+  ],
+  "sourceHashes": {
+    "data/politics/xiao8-2027/set-6.json": "38cbf6f98c19ed7b8c744342e9a6f997e5ea6190591de94759db565577cbb13e"
+  },
+  "createdAt": "2026-11-12T00:00:00.000Z",
+  "updatedAt": "2026-11-12T00:00:00.000Z",
+  "totalScore": 100,
+  "durationMinutes": 180,
+  "sections": [
+    {
+      "id": "2106-sec-1",
+      "sectionNumber": "Section I",
+      "title": "一、单项选择题",
+      "score": 16,
+      "suggestedMinutes": 18,
+      "units": [
+        {
+          "id": "2106-unit-politics-single",
+          "sectionId": "Section I",
+          "unitType": "politics-single",
+          "title": "一、单项选择题（第 1～16 题）",
+          "instructions": "每小题 1 分，共 16 分。下列每题给出的四个选项中，只有一个选项是最符合题目要求的。",
+          "score": 16,
+          "suggestedMinutes": 18,
+          "materials": [],
+          "items": [
+            {
+              "id": "2106-q-1",
+              "questionNumber": 1,
+              "answerMode": "single-choice",
+              "prompt": "“加快构建应用场景和生态体系”“实施新技术新产品新场景大规模应用示范行动，加大场景培育和开放力度”“推动新兴领域应用场景向民营企业开放”……在“十五五”规划纲要中，“场景”一词高频出现。场景可以理解为新技术、新产品、新业态创新性应用的具体情境。在场景中进行的是系统性验证，既有技术产品、配套基础设施的“硬验证”，也有商业模式、制度改革的“软验证”。有专家指出，没有场景，技术只是“可能有用”；有了场景，技术变成“马上有用”。通过“场景”让“可能有用”变成“马上有用”，这一做法",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "揭示了可能中是否包含发展成为现实的因素和根据取决于人的主观愿望"
+                },
+                {
+                  "key": "B",
+                  "text": "区分了可能与现实，并指出这种转化是通过人的自觉的活动实现的"
+                },
+                {
+                  "key": "C",
+                  "text": "证明了“场景”是由不可能转化为可能的桥梁和媒介"
+                },
+                {
+                  "key": "D",
+                  "text": "表明“场景”是科技创新的源头活水和所有技术问题的总机关"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": "B",
+              "answerSource": "source-provided",
+              "knowledgeModule": "马原",
+              "officialExplanation": "现实与可能相互区别。现实是当下的客观存在，标志着事物的当前状况；可能是事物潜在的趋势，标志着事物的发展方向。现实与可能相互转化。一方面，现实蕴藏着未来的发展方向，会不断产生新的可能；另一方面，可能包含着发展成为现实的因素和根据，一旦主客观条件成熟，可能就会转化为现实。发展就是现实与可能相互转化的过程。“可能有用”说明这种技术包含着发展成为现实的因素和根据，加快“场景”建设就是通过人的自觉活动创造条件，促使好的可能得以实现，变成“马上有用”。B正确。可能包含着发展成为现实的因素和根据是客观的，不取决于人的主观愿望，A错误。不可能是指违背必然性，没有任何根据，因而在任何时候、任何条件下都不能实现的东西。C错误。基础研究是科技创新的源头活水，是整个科学体系的源头，是所有技术问题的总机关。D错误。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-2",
+              "questionNumber": 2,
+              "answerMode": "single-choice",
+              "prompt": "湖北省五峰土家族自治县，群山之间，绿树成荫，蜜蜂飞舞。五峰县地处武陵山区，当地依托山高林密、花源丰富的优势，探索推进“林药蜂”生态产业模式。“林药蜂”模式，即上层培育黄柏、五倍子等乡土树种、蜜源植物，中层套种黄精等中药材，林下放养蜜蜂，形成“林养蜂、蜂促药、药护林”的良性互动，“长期得林、中期得药、短期得蜜”，实现生态效益和经济效益的双赢。“林药蜂”模式的成功是因为人们",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "利用了事物之间的普遍联系"
+                },
+                {
+                  "key": "B",
+                  "text": "改变了自然界的客观实在性"
+                },
+                {
+                  "key": "C",
+                  "text": "避免了人与自然的物质变换"
+                },
+                {
+                  "key": "D",
+                  "text": "创造了有利于人的自然规律"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": "A",
+              "answerSource": "source-provided",
+              "knowledgeModule": "马原",
+              "officialExplanation": "世界上的万事万物都处于普遍联系之中。“林药蜂”模式的成功是因为人们利用了事物之间的普遍联系。A正确。人类的实践活动能够改变自然事物的形态和面貌，在自然界打上人类的印记，使之成为人化的自然，但不能改变自然界的客观实在性。B错误。自然地理环境是人类社会生存和发展永恒的、必要的条件，是人们生活和生产的自然基础。离开一定的自然条件，人们就不可能进行生活和生产。人与自然之间的物质变换是不可避免的。马克思认为，应当合理地调节人与自然之间的物质变换，在最无愧于和最适合人类本性的条件下进行这种物质变换。C错误。规律是客观的，人既不能创造也不可能改变规律。D错误。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-3",
+              "questionNumber": 3,
+              "answerMode": "single-choice",
+              "prompt": "社会生产是连续不断地进行的，这种连续不断重复的生产就是再生产。社会再生产的核心问题是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "两大部类在总量上的比例问题"
+                },
+                {
+                  "key": "B",
+                  "text": "社会总产品的价值补偿和实物补偿问题"
+                },
+                {
+                  "key": "C",
+                  "text": "工资与剩余价值的分配问题"
+                },
+                {
+                  "key": "D",
+                  "text": "劳动过程和价值增殖过程的统一问题"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": "B",
+              "answerSource": "source-provided",
+              "knowledgeModule": "马原",
+              "officialExplanation": "社会再生产的核心问题是社会总产品的实现问题，即社会总产品的价值补偿和实物补偿问题。B正确。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-4",
+              "questionNumber": 4,
+              "answerMode": "single-choice",
+              "prompt": "第二次世界大战后，由于多种社会因素的影响，资本主义发生了一系列变化。在劳资关系方面，劳动对资本的隶属从资本主义发展初期的形式上隶属逐渐成为实质上的隶属，之所以发生这种变化，是因为",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "资本家与雇佣工人的关系从“自由平等”变为人身依附"
+                },
+                {
+                  "key": "B",
+                  "text": "终身雇佣和职工持股等方式使得劳动者成为资本家的代理人"
+                },
+                {
+                  "key": "C",
+                  "text": "劳动者个人的技能不再对生产过程和结果具有决定意义"
+                },
+                {
+                  "key": "D",
+                  "text": "雇佣劳动者的剩余劳动不再是剩余价值的唯一源泉"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": "C",
+              "answerSource": "source-provided",
+              "knowledgeModule": "马原",
+              "officialExplanation": "在资本主义条件下，劳动从进入生产过程开始，就已经隶属于资本，在表面平等的交换关系背后，是资本对劳动的实际支配和控制。在资本主义发展的初期，资本家指挥下的劳动只是形式上隶属于资本，随着机器大工业生产体系的建立，生产工具使用的社会化程度提高，劳动者个人的技能不再对生产过程和结果具有决定意义，劳动对资本的隶属就成为实质上的隶属。C正确。与以往的剥削制度不同，资本家与雇佣工人的关系不是完全占有，也不是人身依附，而是基于劳动者人身自由基础上的“平等”关系，剥削带有一定的隐蔽性。A错误。劳动者属于受剥削的阶级，不可能成为资本家或其代理人。而且终身雇佣和职工持股也只是让工人产生归属感，从而更加自觉地服从资本家的统治，与题目所问的劳动对资本的实质上的隶属不相符，B错误。雇佣劳动者的剩余劳动是剩余价值的唯一源泉。即使是在生产自动化条件下，雇佣工人的剩余劳动仍然是这种剩余价值的唯一源泉。D错误。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-5",
+              "questionNumber": 5,
+              "answerMode": "single-choice",
+              "prompt": "毛泽东思想是在总结我国革命和建设正反两方面历史经验的基础上，逐步形成和发展起来的。毛泽东思想初步形成的标志是提出并深入阐述",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "实事求是的思想路线"
+                },
+                {
+                  "key": "B",
+                  "text": "新民主主义理论"
+                },
+                {
+                  "key": "C",
+                  "text": "农村包围城市、武装夺取政权的思想"
+                },
+                {
+                  "key": "D",
+                  "text": "中国革命的首要问题"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": "C",
+              "answerSource": "source-provided",
+              "knowledgeModule": "毛中特与新思想",
+              "officialExplanation": "毛泽东思想初步形成的标志是提出并深入阐述农村包围城市、武装夺取政权的思想，C正确。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-6",
+              "questionNumber": 6,
+              "answerMode": "single-choice",
+              "prompt": "邓小平指出，“我们搞改革开放，把工作重心放在经济建设上，没有丢马克思，没有丢列宁，也没有丢毛泽东。老祖宗不能丢啊！问题是要把什么叫社会主义搞清楚，把怎么样建设和发展社会主义搞清楚。”搞清楚什么是社会主义，怎样建设社会主义，关键是要在坚持社会主义基本制度的基础上",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "进一步拓展党的基本路线"
+                },
+                {
+                  "key": "B",
+                  "text": "进一步认清社会主义的本质"
+                },
+                {
+                  "key": "C",
+                  "text": "进一步健全社会主义上层建筑"
+                },
+                {
+                  "key": "D",
+                  "text": "进一步回答“实现什么样的发展、怎样发展”的问题"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": "B",
+              "answerSource": "source-provided",
+              "knowledgeModule": "毛中特与新思想",
+              "officialExplanation": "在中国这样一个经济文化比较落后的国家建设什么样的社会主义、怎样建设社会主义是一个首要的基本的理论问题。搞清楚什么是社会主义，怎样建设社会主义，关键是要在坚持社会主义基本制度的基础上进一步认清社会主义的本质。邓小平认真总结社会主义建设的历史经验教训，指出不能离开生产力抽象地谈论社会主义，把许多束缚生产力发展的、并不具有社会主义本质属性的东西当作“社会主义原则”加以固守，把许多在社会主义条件下有利于生产力发展的东西当作“资本主义复辟”加以反对。他根据马克思主义基本原理及社会主义建设和改革开放的实践，经过深邃思考、不懈探索，科学地、精辟地、创造性地揭示了社会主义本质。B正确。“实现什么样的发展、怎样发展”是科学发展观回答的问题，D不符合题意。A、C错误。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-7",
+              "questionNumber": 7,
+              "answerMode": "single-choice",
+              "prompt": "教育是国之大计、党之大计，建设教育强国，基点在基础教育。基础教育在国民教育体系中处于基础性、先导性地位。基础教育搞得越扎实，教育强国步伐就越稳、后劲就越足。要适应人民群众新期盼，推进基础教育扩优提质，牢牢守住底线。教育要牢牢守住的底线是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "师德师风"
+                },
+                {
+                  "key": "B",
+                  "text": "扩优提质"
+                },
+                {
+                  "key": "C",
+                  "text": "教育公平"
+                },
+                {
+                  "key": "D",
+                  "text": "健康第一"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": "C",
+              "answerSource": "source-provided",
+              "knowledgeModule": "毛中特与新思想",
+              "officialExplanation": "2026年7月22日，全国基础教育工作会议在北京召开。会上传达了习近平总书记重要指示。习近平总书记强调，新征程上，要以习近平新时代中国特色社会主义思想为指导，全面贯彻党的教育方针，落实立德树人根本任务，坚持不懈用党的创新理论铸魂育人，培养德智体美劳全面发展的社会主义建设者和接班人。要遵循教育规律，落实健康第一教育理念，提升教育教学质量，促进广大学生身心健康、成长成才。要适应人民群众新期盼，推进基础教育扩优提质，牢牢守住教育公平底线。要弘扬教育家精神，加强师德师风建设，培养造就高素质专业化教师队伍。C正确，A、B、D不符合题意。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-8",
+              "questionNumber": 8,
+              "answerMode": "single-choice",
+              "prompt": "民生事关人民的生存生活生计，事关民心所向、民情所系、民意所指，决定党的事业成败和国家命运兴衰。保障和改善民生的重要方针是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "坚持尽力而为、量力而行"
+                },
+                {
+                  "key": "B",
+                  "text": "坚守底线、突出重点"
+                },
+                {
+                  "key": "C",
+                  "text": "完善制度、引导预期"
+                },
+                {
+                  "key": "D",
+                  "text": "坚持人人尽责、人人享有"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": "A",
+              "answerSource": "source-provided",
+              "knowledgeModule": "毛中特与新思想",
+              "officialExplanation": "坚持尽力而为、量力而行，是保障和改善民生的重要方针。A正确。坚守底线、突出重点、完善制度、引导预期，是保障和改善民生的工作思路；坚持人人尽责、人人享有，让所有劳动者在推动发展中分享发展成果，是保障和改善民生的重要原则；解决人民群众最关心、最直接、最现实的利益问题，是保障和改善民生的重中之重。B、C、D错误。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-9",
+              "questionNumber": 9,
+              "answerMode": "single-choice",
+              "prompt": "习近平党建思想内涵丰富、逻辑严整、系统完备、体用贯通，形成了以“十四个坚持”为“四梁八柱”的科学体系。“十四个坚持”中的“坚持健全上下贯通、执行有力的组织体系”是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "关系党和国家事业的关键性问题"
+                },
+                {
+                  "key": "B",
+                  "text": "全面从严治党需要牢牢牵住的“牛鼻子”"
+                },
+                {
+                  "key": "C",
+                  "text": "全面从严治党的治本之策"
+                },
+                {
+                  "key": "D",
+                  "text": "党的优势所在、力量所在"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": "D",
+              "answerSource": "source-provided",
+              "knowledgeModule": "毛中特与新思想",
+              "officialExplanation": "《关于学习贯彻习近平党建思想的通知》强调，要深入学习领会习近平党建思想的科学内涵。深刻领会“坚持健全上下贯通、执行有力的组织体系”是党的优势所在、力量所在；深刻领会“坚持建设堪当民族复兴重任的高素质干部队伍”是关系党和国家事业的关键性问题；深刻领会“坚持用严明的纪律管全党治全党”是全面从严治党的治本之策；深刻领会“坚持落实管党治党政治责任”是全面从严治党需要牢牢牵住的“牛鼻子”。D正确，A、B、C不符合题意。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-10",
+              "questionNumber": 10,
+              "answerMode": "single-choice",
+              "prompt": "从1840年至1919年的80年间，中国人民对外来侵略进行了英勇顽强的反抗。但历次的反侵略战争，都是以中国失败、中国政府被迫签订丧权辱国的条约而告结束的。近代中国反侵略战争屡遭失败的最重要的原因是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "社会制度腐败"
+                },
+                {
+                  "key": "B",
+                  "text": "军事战略错误"
+                },
+                {
+                  "key": "C",
+                  "text": "经济技术落后"
+                },
+                {
+                  "key": "D",
+                  "text": "思想观念保守"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": "A",
+              "answerSource": "source-provided",
+              "knowledgeModule": "史纲",
+              "officialExplanation": "腐败的中国半殖民地半封建的社会制度，阻碍了中国人民群众的广泛动员和抵抗，这是近代中国反侵略战争屡遭失败的最重要的原因（也是更根本的原因）。近代中国反侵略战争失败的另一个重要原因，是国家综合实力特别是经济技术的落后。A正确。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-11",
+              "questionNumber": 11,
+              "answerMode": "single-choice",
+              "prompt": "土地革命战争时期，党从残酷的现实中认识到，没有革命的武装就无法战胜武装的反革命，就无法夺取中国革命胜利，就无法改变中国人民和中华民族的命运，必须以武装的革命反对武装的反革命。党领导举行了南昌起义、秋收起义、广州起义和其他许多地区起义。其中，秋收起义不同于南昌起义的特点有\n①以攻占敌人控制比较薄弱的农村为目标\n②公开打出了“工农革命军”的旗帜\n③是中国共产党独立领导的革命战争\n④不仅是军队的行动，而且有数量众多的工农武装参加",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "①②"
+                },
+                {
+                  "key": "B",
+                  "text": "①③"
+                },
+                {
+                  "key": "C",
+                  "text": "②④"
+                },
+                {
+                  "key": "D",
+                  "text": "③④"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": "C",
+              "answerSource": "source-provided",
+              "knowledgeModule": "史纲",
+              "officialExplanation": "1927年9月9日，毛泽东等领导的湘赣边界秋收起义爆发。起义军公开打出了“工农革命军”的旗帜，这是与南昌起义不同的（南昌起义中打的是“国民革命军”的旗帜）。②正确。秋收起义不仅是军队的行动，而且有数量众多的工农武装参加。④正确。秋收起义的目标是攻打中心城市长沙。在攻打中心城市受挫后，毛泽东果断改变计划，决定向敌人控制比较薄弱的农村转移。这一点与南昌起义是相同的。①错误。南昌起义和秋收起义都是中国共产党独立领导的革命战争。③错误。因此，本题选C。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "C",
+                "semanticCandidateAnswer": "C",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-12",
+              "questionNumber": 12,
+              "answerMode": "single-choice",
+              "prompt": "中国革命的发生和胜利不是偶然的，而是有着深刻的社会根源和雄厚的群众基础。由于帝国主义、封建主义、官僚资本主义的残酷压迫，中国人民走上了反帝、反封建、反官僚资本主义斗争的伟大道路。在中国革命过程中，曾经被人称作“开万国未有之奇”的一种现象是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "工人阶级成为革命的领导力量"
+                },
+                {
+                  "key": "B",
+                  "text": "农民、城市小资产阶级群众是革命的主要力量"
+                },
+                {
+                  "key": "C",
+                  "text": "封建势力同外国侵略势力相勾结"
+                },
+                {
+                  "key": "D",
+                  "text": "随着斗争的发展，民族资产阶级也逐步向共产党靠拢"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": "D",
+              "answerSource": "source-provided",
+              "knowledgeModule": "史纲",
+              "officialExplanation": "由于帝国主义、封建主义、官僚资本主义的残酷压迫，中国人民走上了反帝、反封建、反官僚资本主义斗争的伟大道路。工人、农民、城市小资产阶级群众是民主革命的主要力量。随着斗争的发展，民族资产阶级也逐步向共产党靠拢，这种现象曾经被人称作“开万国未有之奇”。（民族资产阶级属于资产阶级、剥削阶级，与无产阶级之间存在矛盾。但是由于中国的特殊国情以及中国共产党的统一战线政策，民族资产阶级也逐步向共产党靠拢，因此被称为“开万国未有之奇”）D正确。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-13",
+              "questionNumber": 13,
+              "answerMode": "single-choice",
+              "prompt": "青青柏坡岭，潺潺滹沱河。西柏坡纪念馆内一块写着“六条规定”的展板，记录着中国共产党人“进京赶考”前定下的规矩。“这里是立规矩的地方。”2013年7月，习近平总书记来到西柏坡时鲜明指出，“党的规矩、制度的建立和执行，有力推动了党的作风和纪律建设。”不以规矩，不能成方圆。严明党的纪律，首要的就是严明",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "政治纪律"
+                },
+                {
+                  "key": "B",
+                  "text": "组织纪律"
+                },
+                {
+                  "key": "C",
+                  "text": "廉洁纪律"
+                },
+                {
+                  "key": "D",
+                  "text": "工作纪律"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": "A",
+              "answerSource": "source-provided",
+              "knowledgeModule": "思修法基",
+              "officialExplanation": "严明党的纪律，首要的就是严明政治纪律。党的纪律是多方面的，但政治纪律是最重要、最根本、最关键的纪律，要把深刻领悟“两个确立”的决定性意义、坚决做到“两个维护”作为首要政治纪律，把维护党中央权威和集中统一领导作为最根本的政治纪律和政治规矩。A正确，B、C、D错误。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "A",
+                "semanticCandidateAnswer": "A",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-14",
+              "questionNumber": 14,
+              "answerMode": "single-choice",
+              "prompt": "中华民族在5000多年的历史进程中不仅创造出光辉灿烂、享誉世界的中华文明，也塑造出中华民族独特的精神气质和精神品格，形成了崇尚精神的优秀传统。中国古人所说的“不义而富且贵，于我如浮云”“一箪食，一瓢饮，在陋巷，人不堪其忧，回也不改其乐”这两句话，表现的是中华民族崇尚精神的优秀传统中的",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "对理想的不懈追求"
+                },
+                {
+                  "key": "B",
+                  "text": "对品格养成的重视"
+                },
+                {
+                  "key": "C",
+                  "text": "注重以和为贵"
+                },
+                {
+                  "key": "D",
+                  "text": "对物质生活与精神生活相互关系的独到理解"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": "D",
+              "answerSource": "source-provided",
+              "knowledgeModule": "思修法基",
+              "officialExplanation": "中华民族崇尚精神的优秀传统，首先表现为对物质生活与精神生活相互关系的独到理解。古圣先贤认为，人之所以异于禽兽，在于人有道德，有精神追求。物质生活固然为人所必需，但如果沉溺于物欲而不能自拔，则无异于禽兽。古人认为，“不义而富且贵，于我如浮云”，崇尚“一箪食，一瓢饮，在陋巷，人不堪其忧，回也不改其乐”的精神追求。D正确。A、B、C不符合题意。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-15",
+              "questionNumber": 15,
+              "answerMode": "single-choice",
+              "prompt": "《中共中央办公厅 国务院办公厅关于做好第二轮土地承包到期后再延长三十年试点工作的意见》于2026年3月18日公开发布。《意见》对第二轮土地承包到期后再延长30年试点工作作了具体部署安排。以家庭承包经营为基础、统分结合的双层经营体制，是我国农村基本经营制度，是党的农村政策的基石。维护农民土地承包经营权的关键是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "坚持集体所有制不动摇"
+                },
+                {
+                  "key": "B",
+                  "text": "坚持农民主体地位"
+                },
+                {
+                  "key": "C",
+                  "text": "坚持承包地所有权、承包权、经营权“三权分置”"
+                },
+                {
+                  "key": "D",
+                  "text": "现有农村土地承包关系保持稳定并长久不变"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": "D",
+              "answerSource": "source-provided",
+              "knowledgeModule": "当代与时政",
+              "officialExplanation": "维护农民土地承包经营权的关键，是现有农村土地承包关系保持稳定并长久不变。改革开放以来，我国农村土地进行了两轮承包。明确第二轮土地承包到期后再延长30年，从农村改革之初的第一轮土地承包算起，土地承包关系将保持稳定长达75年，既体现长久不变的政策要求，又在时间节点上同实现第二个百年奋斗目标相契合。D正确，A、B、C不符合题意。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "D",
+                "semanticCandidateAnswer": "D",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-16",
+              "questionNumber": 16,
+              "answerMode": "single-choice",
+              "prompt": "2026年4月14日，国家主席习近平在北京人民大会堂会见来华访问的阿联酋阿布扎比王储哈立德。习近平主席就维护和促进中东和平稳定提出4点主张，强调坚持和平共处原则，坚持国家主权原则，坚持国际法治原则，坚持统筹发展和安全。其中，维护中东和平稳定、保障地区国家发展权益的核心前提是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "坚持和平共处"
+                },
+                {
+                  "key": "B",
+                  "text": "坚守国家主权"
+                },
+                {
+                  "key": "C",
+                  "text": "维护国际法治"
+                },
+                {
+                  "key": "D",
+                  "text": "统筹发展和安全"
+                }
+              ],
+              "score": 1,
+              "correctAnswer": "B",
+              "answerSource": "source-provided",
+              "knowledgeModule": "当代与时政",
+              "officialExplanation": "坚持和平共处，是破解中东困局、实现地区长治久安的重要基础。坚守国家主权，是维护中东和平稳定、保障地区国家发展权益的核心前提。维护国际法治，是遏制中东战火蔓延、筑牢地区和平屏障的坚实保障。统筹发展和安全，是实现中东和平稳定、促进发展繁荣的长久之计。B正确。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "一、单项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "B",
+                "semanticCandidateAnswer": "B",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            }
+          ],
+          "analysisProfile": {
+            "focusSkills": [
+              "基础概念精准识记",
+              "时政与帽子题定位",
+              "哲学名言与原理对应"
+            ],
+            "commonTraps": [
+              "张冠李戴",
+              "偷换时间节点或会议文献表述"
+            ]
+          },
+          "reviewStrategy": {
+            "defaultIntervalsDays": [
+              1,
+              3,
+              7,
+              14,
+              30
+            ],
+            "recommendedAction": "对照《肖八解析》背诵核心帽子题表述"
+          },
+          "sourceLocator": {
+            "sourceFile": "data/politics/xiao8-2027/set-6.json",
+            "sourceFormat": "pdf"
+          }
+        }
+      ]
+    },
+    {
+      "id": "2106-sec-2",
+      "sectionNumber": "Section II",
+      "title": "二、多项选择题",
+      "score": 34,
+      "suggestedMinutes": 32,
+      "units": [
+        {
+          "id": "2106-unit-politics-multi",
+          "sectionId": "Section II",
+          "unitType": "politics-multi",
+          "title": "二、多项选择题（第 17～33 题）",
+          "instructions": "每小题 2 分，共 34 分。下列每题给出的四个选项中，至少有两个选项是符合题目要求的。多选、少选或错选均不得分。",
+          "score": 34,
+          "suggestedMinutes": 32,
+          "materials": [],
+          "items": [
+            {
+              "id": "2106-q-17",
+              "questionNumber": 17,
+              "answerMode": "multi-choice",
+              "prompt": "第48届世界技能大赛于2026年9月22日至27日在上海举行，国家主席习近平向大赛致贺信。贺信指出，世界技能大赛紧密对接产业需求，为各国技能人才精进技艺、互学互鉴搭建了有益平台。国家如此重视技能培养，是因为",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "技能是区分社会经济时代的客观依据"
+                },
+                {
+                  "key": "B",
+                  "text": "技能始终是推动人类文明进步的重要力量"
+                },
+                {
+                  "key": "C",
+                  "text": "脑力劳动和体力劳动是直接同一的"
+                },
+                {
+                  "key": "D",
+                  "text": "新一轮科技革命和产业变革深刻重塑技能需求"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": "BD",
+              "answerSource": "source-provided",
+              "knowledgeModule": "马原",
+              "officialExplanation": "人们解决社会同自然矛盾的实际能力如何，主要取决于生产工具的质量和数量，生产工具是区分社会经济时代的客观依据。A错误。劳动者一般包括体力劳动者和脑力劳动者。在现代生产中，脑力劳动者的质量和数量日益具有决定性的意义；在高新技术领域，脑力劳动和体力劳动具有直接同一的趋势。不能笼统地说“脑力劳动和体力劳动是直接同一的”，C错误。B、D正确。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "BD",
+                "semanticCandidateAnswer": "BD",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-18",
+              "questionNumber": 18,
+              "answerMode": "multi-choice",
+              "prompt": "一项覆盖2001名高考生及家长的调查显示，有84.8%的人感觉近年来对涉农专业的看法有改观，83.2%的人认为智慧农业提升了身边人报考相关专业的意愿。为什么一些曾被视为“冷门”的学科，正在被重新认识，甚至备受追捧？这背后，是国家和社会对人才的需求变了。端牢饭碗，需要种源、耕地、农机等领域协同发力；盐碱地综合利用、极端天气应对、食品安全，也在提出新的科研课题。需求把实验室与生产一线连在一起，让原本不易被看见的专业价值变得可感可知。被视为“冷门”的学科正在被重新认识，这表明",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "价值评价不仅可以反映价值，还能创造或者消灭价值"
+                },
+                {
+                  "key": "B",
+                  "text": "随着实践和历史的发展，人们对客体价值的判断会发生改变"
+                },
+                {
+                  "key": "C",
+                  "text": "实践的需要推动认识的产生和发展"
+                },
+                {
+                  "key": "D",
+                  "text": "社会意识与社会存在发展具有完全同步性"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": "BC",
+              "answerSource": "source-provided",
+              "knowledgeModule": "马原",
+              "officialExplanation": "价值是一种客观存在，独立于人们对它的认识和评价。认识和评价可以反映价值，但不能创造也不能消灭价值。A错误。价值关系中的主体是在一定社会关系中从事实践的具体的人，随着实践和历史的发展，主体和客体以及主客体之间的关系发生变化，导致人们对客体价值的判断也发生改变。B正确。实践的需要推动认识的产生和发展，推动人类的科学发现和技术发明，推动人类的思想进步和理论创新。比如水利、建筑、航海、战争等的需要，催生了天文学、数学和力学等自然科学。C正确。社会意识与社会存在发展具有不完全同步性和不平衡性。D错误。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "BC",
+                "semanticCandidateAnswer": "BC",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-19",
+              "questionNumber": 19,
+              "answerMode": "multi-choice",
+              "prompt": "资本主义生产的唯一动机和直接目的就是追求剩余价值。为了达到这一目的，资本家便尽可能改进技术，提高劳动生产率，加快资本积累，通过资本积聚和资本集中扩大生产规模。在生产技术水平不断提高的条件下，资本积累不断增长，必然伴随着资本的积聚和集中，使个别资本的规模日益增大。这一过程的结果是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "每个劳动力所推动的生产资料的数量大幅度增加"
+                },
+                {
+                  "key": "B",
+                  "text": "可变资本在资本总额中所占的比重日益下降"
+                },
+                {
+                  "key": "C",
+                  "text": "不可避免地造成大批工人失业，形成相对过剩人口"
+                },
+                {
+                  "key": "D",
+                  "text": "资产阶级政府不得不通过各种干预措施来彻底消灭失业"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": "ABC",
+              "answerSource": "source-provided",
+              "knowledgeModule": "马原",
+              "officialExplanation": "在生产技术水平不断提高的条件下，资本积累不断增长，必然伴随着资本的积聚和集中，使个别资本的规模日益增大。在自然形式上，每个劳动力所推动的生产资料的数量大幅度增加；在价值形式上，不变资本部分日益增多，可变资本在资本总额中所占的比重日益下降，从而资本有机构成得以不断提高。在资本有机构成提高的情况下，由于可变资本的相对量的减少，资本对劳动力的需求日益相对减少，其结果就是不可避免地造成大批工人失业，形成相对过剩人口。A、B、C正确。资产阶级政府通过各种干预措施能在一定程度上缓解失业，但不可能彻底消灭失业。D错误。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "ABC",
+                "semanticCandidateAnswer": "ABC",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-20",
+              "questionNumber": 20,
+              "answerMode": "multi-choice",
+              "prompt": "国家垄断资本主义产生后，国家通过多种形式参与私人垄断资本的再生产过程，这主要包括",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "国家向私人垄断企业大量订货并为私人垄断企业提供有保证的国家市场"
+                },
+                {
+                  "key": "B",
+                  "text": "国家通过各种形式的津贴和补助，直接、间接地资助私人垄断企业"
+                },
+                {
+                  "key": "C",
+                  "text": "国家通过社会福利开支，提高社会购买力，为私人垄断企业创造市场条件"
+                },
+                {
+                  "key": "D",
+                  "text": "国家运用法律手段规范市场秩序，限制垄断，保护竞争"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": "ABC",
+              "answerSource": "source-provided",
+              "knowledgeModule": "马原",
+              "officialExplanation": "国家垄断资本主义的主要形式有5种。（1）国家所有并直接经营企业。（2）国家与私人共有、合营企业。（3）国家通过多种形式参与私人垄断资本的再生产过程，包括国家作为商品和劳务的采购者，向私人垄断企业大量订货，为私人垄断企业提供有保证的国家市场；国家通过各种形式的津贴和补助，直接、间接地资助私人垄断企业；国家通过社会福利开支，提高社会购买力，扩大消费需求，为私人垄断企业创造市场条件。A、B、C正确。（4）宏观调节。（5）微观规制，主要是国家运用法律手段规范市场秩序，限制垄断，保护竞争，维护社会公众的合法权益。D属于微观规制的内容，不符合题意。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "ABC",
+                "semanticCandidateAnswer": "ABC",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-21",
+              "questionNumber": 21,
+              "answerMode": "multi-choice",
+              "prompt": "1921年3月，俄共（布）召开十大，毅然决定从战时共产主义政策过渡到实行以发展商品经济为主要特征的新经济政策。这一决定表明，列宁的社会主义建设思想发生了重大转变，对在俄国这样一个小农经济占优势的国家如何走向社会主义又有了新的认识，标志着列宁正在探索一条符合俄国国情的建设社会主义的道路。新经济政策的实施",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "基本上完成了“剥夺剥夺者”的任务，使无产阶级掌握了国家的经济命脉"
+                },
+                {
+                  "key": "B",
+                  "text": "扭转了国家的严重危机，活跃了苏维埃的城乡经济"
+                },
+                {
+                  "key": "C",
+                  "text": "发展了生产，大大加强了苏维埃的社会主义经济基础"
+                },
+                {
+                  "key": "D",
+                  "text": "改善了工人、农民和其他劳动者的物质文化生活"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": "BCD",
+              "answerSource": "source-provided",
+              "knowledgeModule": "马原",
+              "officialExplanation": "新经济政策的实施，扭转了国家的严重危机，活跃了苏维埃的城乡经济，发展了生产，大大加强了苏维埃的社会主义经济基础，也改善了工人、农民和其他劳动者的物质文化生活。B、C、D正确。列宁领导的苏维埃俄国对社会主义道路的探索，大体上经历了三个时期，即进一步巩固苏维埃政权时期、外国武装干涉和国内战争时期即战时共产主义时期、由战时共产主义转变为新经济政策时期。从1917年11月到1918年春天，苏维埃政权基本上完成了“剥夺剥夺者”的任务，银行和大工业的国有化使无产阶级掌握了国家的经济命脉。从1918年夏到1921年春，列宁领导的苏维埃政权实行了以余粮收集制和取消商品货币关系为主要特征的战时共产主义政策，在经济上采取一系列特殊又带有强制性的非常措施。A发生在施行战时共产主义政策之前，不符合题意。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "BCD",
+                "semanticCandidateAnswer": "BCD",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-22",
+              "questionNumber": 22,
+              "answerMode": "multi-choice",
+              "prompt": "1956年4月和5月，毛泽东先后在中央政治局扩大会议和最高国务会议上，作了《论十大关系》的报告。《论十大关系》的报告",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "明确了建设社会主义必须根据本国情况走自己的道路这一根本思想"
+                },
+                {
+                  "key": "B",
+                  "text": "提出调动一切积极因素为社会主义事业服务的基本方针"
+                },
+                {
+                  "key": "C",
+                  "text": "论述了如何开辟一条和苏联有所不同的中国工业化道路问题"
+                },
+                {
+                  "key": "D",
+                  "text": "初步提出了中国社会主义经济建设的若干新方针、新思路"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": "ABCD",
+              "answerSource": "source-provided",
+              "knowledgeModule": "毛中特与新思想",
+              "officialExplanation": "《论十大关系》的报告，初步总结了我国社会主义建设的经验，明确提出要以苏为鉴，独立自主地探索适合中国情况的社会主义建设道路。这就明确了建设社会主义必须根据本国情况走自己的道路这一根本思想。《论十大关系》标志着党探索中国社会主义建设道路的良好开端。《论十大关系》确定了一个基本方针，就是调动一切积极因素为社会主义事业服务。报告从十个方面论述了我国社会主义建设需要重点把握的一系列重大关系，其中前三条讲重工业和轻工业、农业的关系，沿海工业和内地工业的关系，经济建设和国防建设的关系。这实际上是在论述如何开辟一条和苏联有所不同的中国工业化道路问题。第四、五条讲国家、生产单位和生产者个人的关系，中央和地方的关系，开始涉及经济体制改革。这样就初步提出了中国社会主义经济建设的若干新方针、新思路。后五条论述的是政治生活和思想文化生活领域如何调动各种积极因素的问题。A、B、C、D全选。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "ABCD",
+                "semanticCandidateAnswer": "ABCD",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-23",
+              "questionNumber": 23,
+              "answerMode": "multi-choice",
+              "prompt": "发展新质生产力是推动高质量发展的内在要求和重要着力点。发展新质生产力要统筹好政府和市场的关系，重点在政府有所为、有所不为上。有所为，就是要将工作重心放在",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "优化市场环境上"
+                },
+                {
+                  "key": "B",
+                  "text": "矫正市场失灵上"
+                },
+                {
+                  "key": "C",
+                  "text": "规范竞争秩序上"
+                },
+                {
+                  "key": "D",
+                  "text": "扩大招商引资上"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": "ABC",
+              "answerSource": "source-provided",
+              "knowledgeModule": "毛中特与新思想",
+              "officialExplanation": "《中共中央 国务院关于发展新质生产力的意见》提出了发展新质生产力实践的总要求，指出发展新质生产力要统筹好政府和市场的关系，重点在政府有所为、有所不为上。有所为，就是要将工作重心放在优化市场环境、矫正市场失灵、规范竞争秩序等上。有所不为，就是严禁借发展新质生产力之名搞恶性招商引资、盲目“跟风”上项目、乱“烧钱”等。A、B、C正确，D错误。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "ABC",
+                "semanticCandidateAnswer": "ABC",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.948Z"
+              }
+            },
+            {
+              "id": "2106-q-24",
+              "questionNumber": 24,
+              "answerMode": "multi-choice",
+              "prompt": "党的十八大以来，党中央把科技创新摆在现代化建设突出位置，系统擘画科技强国建设蓝图，深入推动实施创新驱动发展战略，全面深化科技体制改革，推动科技事业取得历史性成就、发生历史性变革。这些成就包括，我国",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "正从全球科技参与者、贡献者向开拓者、引领者加速转变"
+                },
+                {
+                  "key": "B",
+                  "text": "成为创新力上升最快的国家之一"
+                },
+                {
+                  "key": "C",
+                  "text": "已经进入创新型国家前列"
+                },
+                {
+                  "key": "D",
+                  "text": "科技工作的体制机制障碍已彻底消除"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": "AB",
+              "answerSource": "source-provided",
+              "knowledgeModule": "毛中特与新思想",
+              "officialExplanation": "2026年7月8日，习近平总书记在国家科学技术奖励大会、两院院士大会、中国科协第十一次全国代表大会上发表重要讲话。讲话指出，党的十八大以来，党中央把科技创新摆在现代化建设突出位置，系统擘画科技强国建设蓝图，深入推动实施创新驱动发展战略，全面深化科技体制改革，推动科技事业取得历史性成就、发生历史性变革。我国正从全球科技参与者、贡献者向开拓者、引领者加速转变，成为创新力上升最快的国家之一。讲话强调，我国科技发展中还存在一些领域原始创新能力不足、人才队伍结构不够合理、科技投入效能不高等问题，科技工作在思想认识、体制机制等方面也有一些卡点堵点。A、B正确，D错误。我国已经进入创新型国家行列，但还没有进入创新型国家前列。C错误。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "AB",
+                "semanticCandidateAnswer": "AB",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.949Z"
+              }
+            },
+            {
+              "id": "2106-q-25",
+              "questionNumber": 25,
+              "answerMode": "multi-choice",
+              "prompt": "2003年，时任英国财政大臣布朗到访中国，竟发出这样的言论：英国从中国进口了越来越多的家电、服装和其他东西，但可以用出口的一样东西来平衡，那就是英语。这是产业之殇，更是文化之痛！如今，中国文化产业呈现出新气象。实打实的数据让人震撼：中国网文海外活跃用户达2亿人，覆盖200多个国家和地区；中国网游《鸣潮》风靡世界，登顶超100个国家和地区手游排行榜；微短剧相关海外应用超300款，全球累计下载量突破4.7亿次……从“文化逆差”的举步维艰，到“文化出海”的风生水起，中国文化产业实现了华丽转身。这个华丽转身是中国文化大发展大繁荣的真实写照，其原因在于",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "经济底气托起了文化丰盈"
+                },
+                {
+                  "key": "B",
+                  "text": "政策引领照亮了文化航向"
+                },
+                {
+                  "key": "C",
+                  "text": "科技赋能舒展了文化羽翼"
+                },
+                {
+                  "key": "D",
+                  "text": "教育普及培育了丰厚人才"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": "ABCD",
+              "answerSource": "source-provided",
+              "knowledgeModule": "毛中特与新思想",
+              "officialExplanation": "文化的大发展大繁荣，绝非无源之水、无本之木。这源头活水，便是新时代日益增强的综合国力：经济底气，托起了文化丰盈；政策引领，照亮了文化航向；科技赋能，舒展了文化羽翼；教育普及，培育了丰厚人才。经济筑基，政策引领，科技赋能，人才为本，四重力量交织共振，坚定了文化自信，激发了创新活力，共同奏响了文化高质量发展的雄浑交响。A、B、C、D全选。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "ABCD",
+                "semanticCandidateAnswer": "ABCD",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.949Z"
+              }
+            },
+            {
+              "id": "2106-q-26",
+              "questionNumber": 26,
+              "answerMode": "multi-choice",
+              "prompt": "2026年2月4日，香港特别行政区行政长官李家超正式对外宣布：“将领导特区政府不同政策局和部门，主动对接国家‘十五五’规划框架，并首次制定香港的五年规划。”“香港五年规划”迅速成为舆论焦点，受到海内外广泛关注。9月16日，《香港特别行政区经济和社会发展第一个五年规划（2026—2030年）》公布。香港制定首个五年规划",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "体现了全国一盘棋、集中力量办大事的制度优势"
+                },
+                {
+                  "key": "B",
+                  "text": "有利于提升香港特区政府和社会各界的战略、宏观和长远思维"
+                },
+                {
+                  "key": "C",
+                  "text": "有助于香港在融入和服务国家发展大局中实现自身更好发展"
+                },
+                {
+                  "key": "D",
+                  "text": "让企业在投资、布局、转型上有更加清晰的未来视野，更好融入国内国际双循环"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": "BCD",
+              "answerSource": "source-provided",
+              "knowledgeModule": "毛中特与新思想",
+              "officialExplanation": "B、C、D正确。按照“一国两制”方针，国家主体实行社会主义制度，香港特别行政区保持原有的资本主义制度和生活方式长期不变。A错误。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "BCD",
+                "semanticCandidateAnswer": "BCD",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.949Z"
+              }
+            },
+            {
+              "id": "2106-q-27",
+              "questionNumber": 27,
+              "answerMode": "multi-choice",
+              "prompt": "1927年4月12日，蒋介石在上海发动反革命政变。同年7月15日，汪精卫在武汉召开“分共”会议，并在其辖区内对共产党员和革命群众实行搜捕和屠杀，国共合作全面破裂，大革命最终失败。大革命虽然失败了，但它的历史意义仍然是不可磨灭的。正是在这个时期，中国共产党人进行了轰轰烈烈的革命工作，领导了全国反帝反封建的伟大斗争，在中国革命史上写下了光荣的一页，同时",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "开始探索马克思主义中国化的途径"
+                },
+                {
+                  "key": "B",
+                  "text": "初步提出了新民主主义革命的基本思想"
+                },
+                {
+                  "key": "C",
+                  "text": "开始建立人民民主统一战线"
+                },
+                {
+                  "key": "D",
+                  "text": "开始懂得进行土地革命和掌握革命武装的重要性"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": "ABD",
+              "answerSource": "source-provided",
+              "knowledgeModule": "史纲",
+              "officialExplanation": "大革命虽然失败了，但它的历史意义仍然是不可磨灭的。正是在这个时期，中国共产党人进行了轰轰烈烈的革命工作，领导了全国反帝反封建的伟大斗争，在中国革命史上写下了光荣的一页，同时开始探索马克思主义中国化的途径，初步提出了新民主主义革命的基本思想，并从大革命的失败中汲取深刻历史教训，开始懂得进行土地革命和掌握革命武装的重要性。A、B、D正确。\n新民主主义革命时期，中国共产党先后经历了第一次国共合作的统一战线（国民革命联合战线）、工农民主统一战线、抗日民族统一战线、人民民主统一战线等几个时期，其中人民民主统一战线是解放战争时期建立的。C错误。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "ABD",
+                "semanticCandidateAnswer": "ABD",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.949Z"
+              }
+            },
+            {
+              "id": "2106-q-28",
+              "questionNumber": 28,
+              "answerMode": "multi-choice",
+              "prompt": "1949年新中国成立后，经过三年的努力，到1952年我国国民经济得以恢复，民主革命遗留任务已经完成，经济、政治及社会面貌发生巨大变化。民主革命的遗留任务包括",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "摧毁旧政权，普遍召开地方各级各界人民代表会议"
+                },
+                {
+                  "key": "B",
+                  "text": "继续进行废除封建土地制度的改革"
+                },
+                {
+                  "key": "C",
+                  "text": "废除封建婚姻制度，使广大妇女获得婚姻自由的权利"
+                },
+                {
+                  "key": "D",
+                  "text": "肃清国民党遗留在大陆的反动势力"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": "ABCD",
+              "answerSource": "source-provided",
+              "knowledgeModule": "史纲",
+              "officialExplanation": "民主革命的遗留任务包括：在追剿残余敌人、基本完成祖国大陆统一任务的基础上，摧毁旧政权，普遍召开地方各级各界人民代表会议，人民开始行使当家作主的民主权利；继续进行废除封建土地制度的改革；制定《中华人民共和国婚姻法》，废除封建婚姻制度，使广大妇女获得婚姻自由的权利；开展大规模的镇压反革命运动，基本肃清了国民党遗留在大陆的反动势力。A、B、C、D全选。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "ABCD",
+                "semanticCandidateAnswer": "ABCD",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.949Z"
+              }
+            },
+            {
+              "id": "2106-q-29",
+              "questionNumber": 29,
+              "answerMode": "multi-choice",
+              "prompt": "1978年12月，党召开十一届三中全会，实现了新中国成立以来党的历史上具有深远意义的伟大转折。党的十一届三中全会",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "重新确立解放思想、实事求是的思想路线"
+                },
+                {
+                  "key": "B",
+                  "text": "停止使用“以阶级斗争为纲”的错误提法"
+                },
+                {
+                  "key": "C",
+                  "text": "作出把党和国家工作中心转移到经济建设上来、实行改革开放的历史性决策"
+                },
+                {
+                  "key": "D",
+                  "text": "成为正本清源、拨乱反正和改革开放的思想先导"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": "ABC",
+              "answerSource": "source-provided",
+              "knowledgeModule": "史纲",
+              "officialExplanation": "习近平总书记在纪念邓小平同志诞辰120周年座谈会上的讲话中指出，在邓小平指导下，党的十一届三中全会重新确立解放思想、实事求是的思想路线，停止使用“以阶级斗争为纲”的错误提法，作出把党和国家工作中心转移到经济建设上来、实行改革开放的历史性决策，实现了党的历史上具有深远意义的伟大转折。A、B、C正确。关于真理标准问题的大讨论，是一场深刻而广泛的马克思主义思想解放运动，成为正本清源、拨乱反正和改革开放的思想先导。D错误。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "ABC",
+                "semanticCandidateAnswer": "ABC",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.949Z"
+              }
+            },
+            {
+              "id": "2106-q-30",
+              "questionNumber": 30,
+              "answerMode": "multi-choice",
+              "prompt": "马克思说：“我们知道个人是微弱的，但是我们也知道整体就是力量。”在我国革命、建设、改革的历程中，在我国抗疫、抗震、抗灾等斗争中，集体主义从未缺席。长期以来，集体主义已经成为调节国家利益、社会整体利益和个人利益关系的基本原则。集体主义",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "强调国家利益、社会整体利益和个人利益的辩证统一"
+                },
+                {
+                  "key": "B",
+                  "text": "强调国家利益、社会整体利益高于个人利益"
+                },
+                {
+                  "key": "C",
+                  "text": "强调抑制个人利益来发展国家利益、社会整体利益"
+                },
+                {
+                  "key": "D",
+                  "text": "重视和保障个人的正当利益"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": "ABD",
+              "answerSource": "source-provided",
+              "knowledgeModule": "思修法基",
+              "officialExplanation": "集体主义强调国家利益、社会整体利益和个人利益的辩证统一；强调国家利益、社会整体利益高于个人利益；重视和保障个人的正当利益，促进和保障个人正当利益的实现，使个人的才能、价值得到充分的发挥。A、B、D正确。在现实生活中，国家利益、社会整体利益和个人利益是相辅相成的，不能靠抑制一方来发展另一方，而是要力求做到共同发展、相互增益、相得益彰。C错误。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "ABD",
+                "semanticCandidateAnswer": "ABD",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.949Z"
+              }
+            },
+            {
+              "id": "2106-q-31",
+              "questionNumber": 31,
+              "answerMode": "multi-choice",
+              "prompt": "现实中，一些用人单位借助技术发展，“扩大”对员工的管理权限，通过工位摄像头、后台监控等手段，监测劳动者的一举一动。例如，广东一企业以监控发现劳动者“闭眼3分钟”休息为由，要求解除劳动合同。一些企业利用工作软件把“随时在线”当作劳动者的默示义务，甚至因为劳动者在非工作时间未及时回复群消息，就对其随意作出处分、降薪甚至解除劳动合同的处理。此外，还有企业利用算法设置隐形门槛，对女性、35岁以上群体求职者自动过滤，甚至有的企业“组成联盟”将“和原用人单位发生过纠纷者”的简历做特殊技术标注，让就业歧视披上了“技术中立”的隐形外衣。数字技术的演进，不能异化为侵害劳动者权益的“数字枷锁”。上述行为侵害了劳动者人身权利和社会经济权利中的",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "人格尊严权"
+                },
+                {
+                  "key": "B",
+                  "text": "表达权"
+                },
+                {
+                  "key": "C",
+                  "text": "劳动权"
+                },
+                {
+                  "key": "D",
+                  "text": "休息权"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": "ACD",
+              "answerSource": "source-provided",
+              "knowledgeModule": "思修法基",
+              "officialExplanation": "题干材料中列举的行为（监测劳动者的一举一动、挤占劳动者休息时间、就业歧视等），本质上是对劳动者人格尊严权、劳动权、休息权等法定权益的侵害。个人信息保护法明确了个人信息处理的最小必要原则，劳动法、劳动合同法等对用人单位规章制度制定、劳动合同解除设置了严格法定程序，就业促进法更是明令禁止各类就业歧视。任何技术应用都不能突破法律的刚性约束，更不能成为侵权免责的“挡箭牌”。A、C、D正确。表达权属于政治权利，不属于提问限定的人身权利和社会经济权利，B不符合题意。\n\n【点拨】\n①人格尊严权，是指与人身有密切联系的名誉、姓名、肖像等不容侵犯的权利。人格尊严权的基本内容有姓名权、肖像权、名誉权、荣誉权、隐私权等。\n②劳动权，是指一切有劳动能力的公民有获得劳动的机会和适当的劳动条件和报酬的权利。劳动权包括平等就业和选择职业的权利、取得劳动报酬的权利、休息休假的权利、获得劳动安全卫生的权利、提请劳动争议处理的权利等。\n③休息权，是指劳动者在付出一定的劳动以后所享有的休息和休养的权利，是劳动权存在和发展的基础。休息权和劳动权是密切联系的，休息权是提高劳动效率、保障劳动者的生活和身体健康所必需的。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "ACD",
+                "semanticCandidateAnswer": "ACD",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.949Z"
+              }
+            },
+            {
+              "id": "2106-q-32",
+              "questionNumber": 32,
+              "answerMode": "multi-choice",
+              "prompt": "《中华人民共和国民族团结进步促进法》已于2026年7月1日起施行。制定出台民族团结进步促进法，是党的统一战线和民族工作历史上具有里程碑意义的一件大事，是铸牢中华民族共同体意识，推进中华民族共同体建设的重大法律举措。民族团结进步促进法",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "是30多年来中共中央政治局会议研究的第一部法律案"
+                },
+                {
+                  "key": "B",
+                  "text": "是30多年来第一部设置序言的法律"
+                },
+                {
+                  "key": "C",
+                  "text": "是新时代第一部民族领域的专门法律"
+                },
+                {
+                  "key": "D",
+                  "text": "首次从法理层面阐释铸牢中华民族共同体意识、推进中华民族共同体建设等核心概念"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": "ABCD",
+              "answerSource": "source-provided",
+              "knowledgeModule": "当代与时政",
+              "officialExplanation": "《中华人民共和国民族团结进步促进法》是30多年来中共中央政治局会议研究的第一部法律案。党中央的集中统一领导贯穿了立法的立项、起草、审议全过程。民族团结进步促进法是新时代实施宪法有关规定、处理民族事务和开展民族工作的基本法律。体例上专门设置了序言，这是30多年来第一部设置序言的法律。这部法律首次将习近平总书记关于加强和改进民族工作的重要思想写入法律，首次从法理层面阐释铸牢中华民族共同体意识、推进中华民族共同体建设等核心概念，首次在法律中明确新时代党的民族工作格局，是通过国家立法方式把党在民族工作中取得的重大理论和实践成果转化为国家意志的成功实践。民族团结进步促进法是新时代第一部民族领域的专门法律，系统构建了民族团结进步事业的法律框架，为在法治轨道上处理民族事务和开展民族工作、全面推进民族团结进步事业提供了全局性、长远性的基础性保障。A、B、C、D全选。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "ABCD",
+                "semanticCandidateAnswer": "ABCD",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.949Z"
+              }
+            },
+            {
+              "id": "2106-q-33",
+              "questionNumber": 33,
+              "answerMode": "multi-choice",
+              "prompt": "国家主席习近平于2026年9月23日至25日对美国进行国事访问。此访重要的政治成果是习近平主席同特朗普总统进一步拓展了中美关系新定位的内涵，同意构建“基于尊重、公平、对等的中美建设性战略稳定关系”，为中美探索大国相处之道提供了更明确的战略指引。尊重就是",
+              "options": [
+                {
+                  "key": "A",
+                  "text": "尊重彼此主权和领土完整"
+                },
+                {
+                  "key": "B",
+                  "text": "尊重各自选择的社会制度和发展道路"
+                },
+                {
+                  "key": "C",
+                  "text": "尊重对方核心利益和重大关切"
+                },
+                {
+                  "key": "D",
+                  "text": "尊重彼此在亚太地区的传统影响力和排他性主导权"
+                }
+              ],
+              "score": 2,
+              "correctAnswer": "ABC",
+              "answerSource": "source-provided",
+              "knowledgeModule": "当代与时政",
+              "officialExplanation": "中共中央政治局委员、外交部长王毅在阐述构建“基于尊重、公平、对等的中美建设性战略稳定关系”时指出，尊重就是尊重彼此主权和领土完整，尊重各自选择的社会制度和发展道路，尊重对方核心利益和重大关切。公平意味着开展互利合作，协商处理分歧，不搞你输我赢的零和博弈，不追求单方面的绝对优势。对等意味着两国主权平等，没有高低之分，不搞霸道霸凌，对等解决各自关切，平衡发展各领域合作。A、B、C正确。D错误。",
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "二、多项选择题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": "ABC",
+                "semanticCandidateAnswer": "ABC",
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.949Z"
+              }
+            }
+          ],
+          "analysisProfile": {
+            "focusSkills": [
+              "多项组合判断",
+              "干扰项绝对化表述排除",
+              "结合材料语境筛选"
+            ],
+            "commonTraps": [
+              "少选漏选（保守失分）",
+              "误选说法正确但与题干无关项"
+            ]
+          },
+          "reviewStrategy": {
+            "defaultIntervalsDays": [
+              1,
+              3,
+              7,
+              14,
+              30
+            ],
+            "recommendedAction": "逐项复盘每个干扰项错在哪里，消除知识盲区"
+          },
+          "sourceLocator": {
+            "sourceFile": "data/politics/xiao8-2027/set-6.json",
+            "sourceFormat": "pdf"
+          }
+        }
+      ]
+    },
+    {
+      "id": "2106-sec-3",
+      "sectionNumber": "Section III",
+      "title": "三、材料分析题",
+      "score": 50,
+      "suggestedMinutes": 130,
+      "units": [
+        {
+          "id": "2106-unit-politics-analysis",
+          "sectionId": "Section III",
+          "unitType": "politics-analysis",
+          "title": "三、材料分析题（第 34～38 题）",
+          "instructions": "每小题 10 分，共 50 分。要求结合所学知识分析材料回答问题。",
+          "score": 50,
+          "suggestedMinutes": 130,
+          "materials": [
+            {
+              "id": "2106-mat-q-34",
+              "materialType": "analysis-material",
+              "title": "第 34 题材料（马原）",
+              "text": "海南三亚南繁育种基地内，科研人员干劲十足，一身汗一脚泥……不久前，由中国科学院院士钱前领衔培育的新型水稻“小薇”，在试验田里迎来丰收，实现亩产超400公斤。这种身高不足30厘米的超矮秆水稻，蕴含着巨大潜力：不仅适合高密度的工厂化“垂直农场”，更在问天实验舱完成了太空旅行，为未来的“太空农场”播下了希望。从一株奇特的“小矮稻”，到广袤宇宙的“太空农场”，这背后，是钱前在水稻种质资源领域四十余载的漫漫求索。\n追求完美的基因——更高产、更健壮，在传统种质研究中似乎是天经地义的。但在钱前的试验田里，他却对那些“病歪歪”“瘦弱”“奇形怪状”的植株情有独钟。“经常有人开玩笑，说别人的水稻都又高又壮，你怎么净挑这些不起眼的？”但在钱前看来，这些性状各异的“异类”，却是基因多样性最直观的体现。他举例说：“经典病例往往是某个医学领域的突破口。农学也是如此，一株水稻如果长得很健康，反而找不到研究的抓手。但通过精细研究‘奇形怪状’的突变体，就能知道是哪个基因出了问题，从而理解它的正常功能。一个突变体就是一把钥匙，能打开一扇基因功能的大门。”\n从与众不同的视角出发，钱前带领团队年复一年地在田间实践，最终创制了包含近5万份材料的水稻突变体库。“它就像一个巨型的图书馆，珍藏着水稻几万个基因的神奇故事，能让科研人员快速找到研究抓手，把复杂的性状拆解开来。”钱前说。\n为什么要如此执着于收集和创造这些千奇百怪的“基因”呢？\n“地球曾经历过无数次灾难，但生命总能延续，奥秘就在于基因的多样性。”钱前解释说。在他看来，每一个看似微不足道的基因，都可能蕴含着应对某种未知挑战的独特密码——有的能抵御干旱，有的能耐受盐碱。守护和丰富基因多样性，就是在为未来可能出现的各种危机储备宝贵的解题方案。\n“我们不知道未来会面临什么，但应对方案很可能就藏在这些看似不起眼的基因里。”钱前说。\n摘编自《人民日报》（2026年4月22日）",
+              "paragraphs": [
+                "海南三亚南繁育种基地内，科研人员干劲十足，一身汗一脚泥……不久前，由中国科学院院士钱前领衔培育的新型水稻“小薇”，在试验田里迎来丰收，实现亩产超400公斤。这种身高不足30厘米的超矮秆水稻，蕴含着巨大潜力：不仅适合高密度的工厂化“垂直农场”，更在问天实验舱完成了太空旅行，为未来的“太空农场”播下了希望。从一株奇特的“小矮稻”，到广袤宇宙的“太空农场”，这背后，是钱前在水稻种质资源领域四十余载的漫漫求索。\n追求完美的基因——更高产、更健壮，在传统种质研究中似乎是天经地义的。但在钱前的试验田里，他却对那些“病歪歪”“瘦弱”“奇形怪状”的植株情有独钟。“经常有人开玩笑，说别人的水稻都又高又壮，你怎么净挑这些不起眼的？”但在钱前看来，这些性状各异的“异类”，却是基因多样性最直观的体现。他举例说：“经典病例往往是某个医学领域的突破口。农学也是如此，一株水稻如果长得很健康，反而找不到研究的抓手。但通过精细研究‘奇形怪状’的突变体，就能知道是哪个基因出了问题，从而理解它的正常功能。一个突变体就是一把钥匙，能打开一扇基因功能的大门。”\n从与众不同的视角出发，钱前带领团队年复一年地在田间实践，最终创制了包含近5万份材料的水稻突变体库。“它就像一个巨型的图书馆，珍藏着水稻几万个基因的神奇故事，能让科研人员快速找到研究抓手，把复杂的性状拆解开来。”钱前说。\n为什么要如此执着于收集和创造这些千奇百怪的“基因”呢？\n“地球曾经历过无数次灾难，但生命总能延续，奥秘就在于基因的多样性。”钱前解释说。在他看来，每一个看似微不足道的基因，都可能蕴含着应对某种未知挑战的独特密码——有的能抵御干旱，有的能耐受盐碱。守护和丰富基因多样性，就是在为未来可能出现的各种危机储备宝贵的解题方案。\n“我们不知道未来会面临什么，但应对方案很可能就藏在这些看似不起眼的基因里。”钱前说。\n摘编自《人民日报》（2026年4月22日）"
+              ],
+              "relatedItemIds": [
+                "2106-q-34"
+              ]
+            },
+            {
+              "id": "2106-mat-q-35",
+              "materialType": "analysis-material",
+              "title": "第 35 题材料（毛中特与新思想）",
+              "text": "为深入抓好习近平党建思想学习贯彻工作，中央党的建设工作领导小组印发《关于学习贯彻习近平党建思想的通知》（以下简称《通知》）。\n《通知》指出，党的十八大以来，以习近平同志为核心的党中央围绕建设什么样的长期执政的马克思主义政党、怎样建设长期执政的马克思主义政党的重大时代课题，提出一系列管党治党、兴党强党新理念新思想新战略，形成习近平党建思想。\n《通知》强调，要深入学习领会习近平党建思想的科学内涵。深刻领会“坚持党的领导是中国特色社会主义最本质的特征”；深刻领会“坚持党中央集中统一领导”是党的领导的最高原则；深刻领会“坚持全面从严治党”是新时代党的建设的战略方针；深刻领会“坚持不忘初心、牢记使命”是党的宗旨立场和价值取向；深刻领会“坚持以党的政治建设为统领”是新时代党的建设的根本要求；深刻领会“坚持用党的创新理论凝心铸魂”是党的思想建设的根本任务；深刻领会“坚持锤炼坚强党性”是党员、干部的终身课题；深刻领会“坚持健全上下贯通、执行有力的组织体系”是党的优势所在、力量所在；深刻领会“坚持建设堪当民族复兴重任的高素质干部队伍”是关系党和国家事业的关键性问题；深刻领会“坚持推进作风建设常态化长效化”是保持党同人民群众血肉联系的有效途径；深刻领会“坚持用严明的纪律管全党治全党”是全面从严治党的治本之策；深刻领会“坚持一体推进不敢腐不能腐不想腐”是全面从严治党的重要方略和反腐败斗争的基本方针；深刻领会“坚持制度治党、依规治党”是全面从严治党的长远和根本之策；深刻领会“坚持落实管党治党政治责任”是全面从严治党需要牢牢牵住的“牛鼻子”。\n摘编自《人民日报》（2026年6月19日）",
+              "paragraphs": [
+                "为深入抓好习近平党建思想学习贯彻工作，中央党的建设工作领导小组印发《关于学习贯彻习近平党建思想的通知》（以下简称《通知》）。\n《通知》指出，党的十八大以来，以习近平同志为核心的党中央围绕建设什么样的长期执政的马克思主义政党、怎样建设长期执政的马克思主义政党的重大时代课题，提出一系列管党治党、兴党强党新理念新思想新战略，形成习近平党建思想。\n《通知》强调，要深入学习领会习近平党建思想的科学内涵。深刻领会“坚持党的领导是中国特色社会主义最本质的特征”；深刻领会“坚持党中央集中统一领导”是党的领导的最高原则；深刻领会“坚持全面从严治党”是新时代党的建设的战略方针；深刻领会“坚持不忘初心、牢记使命”是党的宗旨立场和价值取向；深刻领会“坚持以党的政治建设为统领”是新时代党的建设的根本要求；深刻领会“坚持用党的创新理论凝心铸魂”是党的思想建设的根本任务；深刻领会“坚持锤炼坚强党性”是党员、干部的终身课题；深刻领会“坚持健全上下贯通、执行有力的组织体系”是党的优势所在、力量所在；深刻领会“坚持建设堪当民族复兴重任的高素质干部队伍”是关系党和国家事业的关键性问题；深刻领会“坚持推进作风建设常态化长效化”是保持党同人民群众血肉联系的有效途径；深刻领会“坚持用严明的纪律管全党治全党”是全面从严治党的治本之策；深刻领会“坚持一体推进不敢腐不能腐不想腐”是全面从严治党的重要方略和反腐败斗争的基本方针；深刻领会“坚持制度治党、依规治党”是全面从严治党的长远和根本之策；深刻领会“坚持落实管党治党政治责任”是全面从严治党需要牢牢牵住的“牛鼻子”。\n摘编自《人民日报》（2026年6月19日）"
+              ],
+              "relatedItemIds": [
+                "2106-q-35"
+              ]
+            },
+            {
+              "id": "2106-mat-q-36",
+              "materialType": "analysis-material",
+              "title": "第 36 题材料（史纲）",
+              "text": "材料1\n孙中山先生的伟大，不仅在于他领导了辛亥革命，而且在于他为了实现革命理想，与时俱进完善自己的革命理念和斗争方略，毫不妥协同逆时代潮流而动的各种势力进行斗争……毛泽东同志把三民主义纲领、统一战线政策、艰苦奋斗精神并称为孙中山先生“留给我们的最中心最本质最伟大的遗产”，是“对于中华民族最伟大的贡献”。\n中国共产党人是孙中山先生革命事业最坚定的支持者、最忠诚的合作者、最忠实的继承者。\n摘自习近平《在纪念孙中山先生诞辰150周年大会上的讲话》\n\n材料2\n2026年11月12日是伟大的民族英雄、伟大的爱国主义者、中国民主革命的伟大先驱孙中山先生诞辰160周年纪念日。为缅怀孙中山先生为民族独立、社会进步、人民幸福所建立的不朽功勋，学习、继承和发扬孙中山先生的爱国思想、革命意志和进取精神，巩固和发展海内外中华儿女大团结，巩固和发展最广泛的爱国统一战线，推动两岸关系和平发展、推进祖国统一大业，最大限度地把全民族的力量凝聚起来，为以中国式现代化全面推进强国建设、民族复兴伟业而不懈奋斗，中国人民政治协商会议第十四届全国委员会常务委员会决定届时举行隆重的纪念活动。\n摘编自《人民日报》（2025年11月2日）",
+              "paragraphs": [
+                "材料1\n孙中山先生的伟大，不仅在于他领导了辛亥革命，而且在于他为了实现革命理想，与时俱进完善自己的革命理念和斗争方略，毫不妥协同逆时代潮流而动的各种势力进行斗争……毛泽东同志把三民主义纲领、统一战线政策、艰苦奋斗精神并称为孙中山先生“留给我们的最中心最本质最伟大的遗产”，是“对于中华民族最伟大的贡献”。\n中国共产党人是孙中山先生革命事业最坚定的支持者、最忠诚的合作者、最忠实的继承者。\n摘自习近平《在纪念孙中山先生诞辰150周年大会上的讲话》",
+                "材料2\n2026年11月12日是伟大的民族英雄、伟大的爱国主义者、中国民主革命的伟大先驱孙中山先生诞辰160周年纪念日。为缅怀孙中山先生为民族独立、社会进步、人民幸福所建立的不朽功勋，学习、继承和发扬孙中山先生的爱国思想、革命意志和进取精神，巩固和发展海内外中华儿女大团结，巩固和发展最广泛的爱国统一战线，推动两岸关系和平发展、推进祖国统一大业，最大限度地把全民族的力量凝聚起来，为以中国式现代化全面推进强国建设、民族复兴伟业而不懈奋斗，中国人民政治协商会议第十四届全国委员会常务委员会决定届时举行隆重的纪念活动。\n摘编自《人民日报》（2025年11月2日）"
+              ],
+              "relatedItemIds": [
+                "2106-q-36"
+              ]
+            },
+            {
+              "id": "2106-mat-q-37",
+              "materialType": "analysis-material",
+              "title": "第 37 题材料（思修法基）",
+              "text": "材料1\n清明假期，各地干部群众前往革命老区、革命纪念馆、烈士陵园等瞻仰凭吊，回望峥嵘岁月、汲取信仰力量，弘扬红色文化、赓续英烈精神。\n抚今追昔，一场场深情的告慰，让历史的丰碑于追忆中愈显巍峨。\n英雄是民族最闪亮的坐标。祭奠，是为了铭记永不磨灭的荣光。\n4月5日上午，上海市龙华烈士陵园，晨光斜照花岗岩广场。9时整，国歌声起，五星红旗冉冉升起。面向巍然矗立的无名烈士墓，礼兵缓步上前，敬献花篮。全体人员肃立默哀，向英雄烈士行三鞠躬礼。\n今年清明，上海在龙华烈士陵园等烈士纪念设施开展主题祭扫活动。活动现场，秦鸿钧烈士后人秦岭在石碑前动情追忆先辈英勇事迹。少先队员们诵读着《青松礼赞》，稚嫩的声音透着坚定。不少市民俯下身，掏出白毛巾擦拭墓碑。\n英魂永驻，浩气长存，家国情怀在追思传承中历久弥坚。\n摘编自《人民日报》（2026年4月6日）\n\n材料2\n平凡岗位可建不凡之功，无名坚守可成不朽之名。\n刘腊梨脑、刘早狗子、吴细豆子……江西瑞金革命烈士陵园，一个个“不像名字的名字”静静镌刻在墙壁之上。这些稚气的名字，属于长征路上年少殉国的红军烈士。按当地旧俗，没成年的孩子，不起大名。这群连大名都没有的孩子，却扛起了山河的重量。\n乳名质朴，信仰如山；生命平凡，气节如钢。回望长征路，牺牲者万千。一部长征史诗，犹如普通群众、红军将士以血肉铺就的精神之途。读懂长征，最动人的底色，便是以无名之身躯，筑有名之山河。\n何谓无名？姓名不载史册，事迹鲜为人知。长征之途漫漫，处处有牺牲。\n湘江血战惊天地，年轻战士前仆后继、浴血突围，将生命永远留在了江河两岸。“三年不饮湘江水，十年不食湘江鱼”，成为老百姓对英烈朴素又深切的缅怀。\n过雪山草地，单衣草鞋的战士逆风前行，“管做饭的饿死了，管衣服的冻死了，有力气的累死了”。长征路上铸丰碑，漫天风雪见证红军的信仰与本色。\n多少年少战士、工农子弟、担架卫士，来不及留下只言片语，便用血肉之躯撕开封锁线、铺就前行路。平凡到渺小、普通到无名，却纯粹到赤诚、坚定如磐石。真正的无名，不是平庸无闻，而是为大义隐身、为家国埋名。\n何谓有名？精神永续、山河铭记、时代传承。个人名号会湮灭，精神丰碑将长存。\n摘编自《人民日报》（2026年10月20日）",
+              "paragraphs": [
+                "材料1\n清明假期，各地干部群众前往革命老区、革命纪念馆、烈士陵园等瞻仰凭吊，回望峥嵘岁月、汲取信仰力量，弘扬红色文化、赓续英烈精神。\n抚今追昔，一场场深情的告慰，让历史的丰碑于追忆中愈显巍峨。\n英雄是民族最闪亮的坐标。祭奠，是为了铭记永不磨灭的荣光。\n4月5日上午，上海市龙华烈士陵园，晨光斜照花岗岩广场。9时整，国歌声起，五星红旗冉冉升起。面向巍然矗立的无名烈士墓，礼兵缓步上前，敬献花篮。全体人员肃立默哀，向英雄烈士行三鞠躬礼。\n今年清明，上海在龙华烈士陵园等烈士纪念设施开展主题祭扫活动。活动现场，秦鸿钧烈士后人秦岭在石碑前动情追忆先辈英勇事迹。少先队员们诵读着《青松礼赞》，稚嫩的声音透着坚定。不少市民俯下身，掏出白毛巾擦拭墓碑。\n英魂永驻，浩气长存，家国情怀在追思传承中历久弥坚。\n摘编自《人民日报》（2026年4月6日）",
+                "材料2\n平凡岗位可建不凡之功，无名坚守可成不朽之名。\n刘腊梨脑、刘早狗子、吴细豆子……江西瑞金革命烈士陵园，一个个“不像名字的名字”静静镌刻在墙壁之上。这些稚气的名字，属于长征路上年少殉国的红军烈士。按当地旧俗，没成年的孩子，不起大名。这群连大名都没有的孩子，却扛起了山河的重量。\n乳名质朴，信仰如山；生命平凡，气节如钢。回望长征路，牺牲者万千。一部长征史诗，犹如普通群众、红军将士以血肉铺就的精神之途。读懂长征，最动人的底色，便是以无名之身躯，筑有名之山河。\n何谓无名？姓名不载史册，事迹鲜为人知。长征之途漫漫，处处有牺牲。\n湘江血战惊天地，年轻战士前仆后继、浴血突围，将生命永远留在了江河两岸。“三年不饮湘江水，十年不食湘江鱼”，成为老百姓对英烈朴素又深切的缅怀。\n过雪山草地，单衣草鞋的战士逆风前行，“管做饭的饿死了，管衣服的冻死了，有力气的累死了”。长征路上铸丰碑，漫天风雪见证红军的信仰与本色。\n多少年少战士、工农子弟、担架卫士，来不及留下只言片语，便用血肉之躯撕开封锁线、铺就前行路。平凡到渺小、普通到无名，却纯粹到赤诚、坚定如磐石。真正的无名，不是平庸无闻，而是为大义隐身、为家国埋名。\n何谓有名？精神永续、山河铭记、时代传承。个人名号会湮灭，精神丰碑将长存。\n摘编自《人民日报》（2026年10月20日）"
+              ],
+              "relatedItemIds": [
+                "2106-q-37"
+              ]
+            },
+            {
+              "id": "2106-mat-q-38",
+              "materialType": "analysis-material",
+              "title": "第 38 题材料（当代与时政）",
+              "text": "材料1\n最近，两则与绿色发展有关的新闻，耐人寻味。\n一则是“车”。\n今年6月，中国车企占欧洲插电式混合动力汽车交付量的34%，创下历史新高；中国主要电动踏板车生产商的海外销售，今年预计增长约70%。“中国车”正引领全球绿色出行新风尚。\n一则是“法”。\n8月15日，生态环境法典将正式施行。这部习近平生态文明思想法治化、系统化、制度化的集大成之作，也是新时代推进全面依法治国的标志性成果，将为全球环境治理送上“独特的中国礼物”。\n“在当前一些国家重新强化高碳发展路径的背景下，中国持续推进生态环境制度建设，更凸显了中国在全球环境治理中的引领作用。”墨西哥城自治大学国际政治研究员爱德华多·齐利如是说。\n去年7月，《习近平生态文明文选》第一卷出版发行。\n全面把握习近平生态文明思想对全球生态文明建设作出的原创性贡献，深刻领悟这一重要思想的世界意义，既要从文献原著中汲取智慧，也要在现实探索中寻找答案。从“参与者”“贡献者”“引领者”三个视角，更能感悟中国绿色发展何以造福世界。\n摘编自《人民日报》（2026年8月14日）\n\n材料2\n“我们要坚持独立自主的和平外交政策，推动落实四大全球倡议，推动构建人类命运共同体，为变乱交织的世界注入更多确定性和正能量。”\n在庆祝中华人民共和国成立77周年招待会上，习近平总书记铿锵有力的话语，展现中国共产党人为人类谋进步、为世界谋大同的天下情怀，彰显中国与世界共享机遇、共谋发展的大国担当。\n“我们有坚定推进中国式现代化的决心，也有以高水平对外开放同世界共享发展机遇的胸怀，将以自身发展为全球经济增长注入信心和动力。”这是古老东方大国一步步迈向伟大复兴给世界带来的新气象、新塑造。\n摘编自《人民日报》（2026年10月4日）",
+              "paragraphs": [
+                "材料1\n最近，两则与绿色发展有关的新闻，耐人寻味。\n一则是“车”。\n今年6月，中国车企占欧洲插电式混合动力汽车交付量的34%，创下历史新高；中国主要电动踏板车生产商的海外销售，今年预计增长约70%。“中国车”正引领全球绿色出行新风尚。\n一则是“法”。\n8月15日，生态环境法典将正式施行。这部习近平生态文明思想法治化、系统化、制度化的集大成之作，也是新时代推进全面依法治国的标志性成果，将为全球环境治理送上“独特的中国礼物”。\n“在当前一些国家重新强化高碳发展路径的背景下，中国持续推进生态环境制度建设，更凸显了中国在全球环境治理中的引领作用。”墨西哥城自治大学国际政治研究员爱德华多·齐利如是说。\n去年7月，《习近平生态文明文选》第一卷出版发行。\n全面把握习近平生态文明思想对全球生态文明建设作出的原创性贡献，深刻领悟这一重要思想的世界意义，既要从文献原著中汲取智慧，也要在现实探索中寻找答案。从“参与者”“贡献者”“引领者”三个视角，更能感悟中国绿色发展何以造福世界。\n摘编自《人民日报》（2026年8月14日）",
+                "材料2\n“我们要坚持独立自主的和平外交政策，推动落实四大全球倡议，推动构建人类命运共同体，为变乱交织的世界注入更多确定性和正能量。”\n在庆祝中华人民共和国成立77周年招待会上，习近平总书记铿锵有力的话语，展现中国共产党人为人类谋进步、为世界谋大同的天下情怀，彰显中国与世界共享机遇、共谋发展的大国担当。\n“我们有坚定推进中国式现代化的决心，也有以高水平对外开放同世界共享发展机遇的胸怀，将以自身发展为全球经济增长注入信心和动力。”这是古老东方大国一步步迈向伟大复兴给世界带来的新气象、新塑造。\n摘编自《人民日报》（2026年10月4日）"
+              ],
+              "relatedItemIds": [
+                "2106-q-38"
+              ]
+            }
+          ],
+          "items": [
+            {
+              "id": "2106-q-34",
+              "questionNumber": 34,
+              "answerMode": "long-text",
+              "prompt": "(1) 指出从“奇形怪状”的植株入手打造基因宝库所涉及的唯物辩证法基本范畴。\n(2) “从与众不同的视角出发”对我们增强辩证思维能力和创新思维能力有何启示？",
+              "subQuestions": [
+                "(1) 指出从“奇形怪状”的植株入手打造基因宝库所涉及的唯物辩证法基本范畴。",
+                "(2) “从与众不同的视角出发”对我们增强辩证思维能力和创新思维能力有何启示？"
+              ],
+              "answerKeyPoints": "(1) 材料中涉及的唯物辩证法基本范畴主要有：本质与现象、现实与可能。本质与现象是揭示事物内在联系和外在表现的一对范畴。本质深藏于事物的内部，只有通过理性思维才能把握，而现象则是表面、外显的，可以直接为人的感官所感知。“奇形怪状”的现象背后可能蕴含着不同基因的本质，科学的任务就在于准确辨别真象和假象，透过现象把握本质。现实与可能是反映事物的过去、现在和将来关系的一对范畴。“看似微不足道的基因”蕴藏着未来的发展方向，包含着发展成为“解题方案”的因素和根据，一旦主客观条件成熟，这种可能就会转化为现实。\n(2) 提高辩证思维能力，要求我们全面地而不是片面地观察事物，在对立中把握统一、在统一中把握对立。创新思维能力意味着不墨守成规，在求新、求变中创造性地提出问题和解决问题。“从与众不同的视角出发”启示我们对事物的各个方面和属性进行全面的分析，既看到不利的一面，也看到有利的一面；同时，要在实践基础上跳出传统思维模式，发挥主观能动性，大胆探索，勇于创新。",
+              "officialExplanation": "(1) 材料中涉及的唯物辩证法基本范畴主要有：本质与现象、现实与可能。本质与现象是揭示事物内在联系和外在表现的一对范畴。本质深藏于事物的内部，只有通过理性思维才能把握，而现象则是表面、外显的，可以直接为人的感官所感知。“奇形怪状”的现象背后可能蕴含着不同基因的本质，科学的任务就在于准确辨别真象和假象，透过现象把握本质。现实与可能是反映事物的过去、现在和将来关系的一对范畴。“看似微不足道的基因”蕴藏着未来的发展方向，包含着发展成为“解题方案”的因素和根据，一旦主客观条件成熟，这种可能就会转化为现实。\n(2) 提高辩证思维能力，要求我们全面地而不是片面地观察事物，在对立中把握统一、在统一中把握对立。创新思维能力意味着不墨守成规，在求新、求变中创造性地提出问题和解决问题。“从与众不同的视角出发”启示我们对事物的各个方面和属性进行全面的分析，既看到不利的一面，也看到有利的一面；同时，要在实践基础上跳出传统思维模式，发挥主观能动性，大胆探索，勇于创新。",
+              "knowledgeModule": "马原",
+              "score": 10,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "rubric": {
+                "maxScore": 10,
+                "dimensions": [
+                  {
+                    "id": "kp",
+                    "name": "核心原理与采分点覆盖",
+                    "maxScore": 6,
+                    "description": "准确调用对应学科核心原理与关键术语"
+                  },
+                  {
+                    "id": "mat",
+                    "name": "结合材料分析与逻辑结构",
+                    "maxScore": 4,
+                    "description": "紧扣材料层次分点作答，逻辑清晰"
+                  }
+                ],
+                "keyPoints": [
+                  "(1) 指出从“奇形怪状”的植株入手打造基因宝库所涉及的唯物辩证法基本范畴。",
+                  "(2) “从与众不同的视角出发”对我们增强辩证思维能力和创新思维能力有何启示？"
+                ],
+                "referenceText": "(1) 材料中涉及的唯物辩证法基本范畴主要有：本质与现象、现实与可能。本质与现象是揭示事物内在联系和外在表现的一对范畴。本质深藏于事物的内部，只有通过理性思维才能把握，而现象则是表面、外显的，可以直接为人的感官所感知。“奇形怪状”的现象背后可能蕴含着不同基因的本质，科学的任务就在于准确辨别真象和假象，透过现象把握本质。现实与可能是反映事物的过去、现在和将来关系的一对范畴。“看似微不足道的基因”蕴藏着未来的发展方向，包含着发展成为“解题方案”的因素和根据，一旦主客观条件成熟，这种可能就会转化为现实。\n(2) 提高辩证思维能力，要求我们全面地而不是片面地观察事物，在对立中把握统一、在统一中把握对立。创新思维能力意味着不墨守成规，在求新、求变中创造性地提出问题和解决问题。“从与众不同的视角出发”启示我们对事物的各个方面和属性进行全面的分析，既看到不利的一面，也看到有利的一面；同时，要在实践基础上跳出传统思维模式，发挥主观能动性，大胆探索，勇于创新。",
+                "referenceSource": "source-provided"
+              },
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "三、材料分析题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.949Z"
+              }
+            },
+            {
+              "id": "2106-q-35",
+              "questionNumber": 35,
+              "answerMode": "long-text",
+              "prompt": "(1) 如何认识习近平党建思想的地位与作用？\n(2) 怎样深刻领会“坚持以党的政治建设为统领”是新时代党的建设的根本要求？",
+              "subQuestions": [
+                "(1) 如何认识习近平党建思想的地位与作用？",
+                "(2) 怎样深刻领会“坚持以党的政治建设为统领”是新时代党的建设的根本要求？"
+              ],
+              "answerKeyPoints": "(1) 习近平党建思想丰富和发展了马克思主义建党学说，是坚持把马克思主义基本原理同中国具体实际相结合、同中华优秀传统文化相结合推进党的理论创新的重大成果，是党和人民实践经验和集体智慧的结晶，是习近平新时代中国特色社会主义思想的重要组成部分，为深入推进新时代党的建设新的伟大工程提供了根本遵循和行动指南。\n(2) 第一，政治属性是政党区别于其他组织的核心要素，是政党的第一属性。旗帜鲜明讲政治是马克思主义政党的根本要求，政治建设决定党的建设方向和效果。\n第二，政治建设是党的根本性建设，在党的建设总体布局中要把政治建设摆在首位。政治建设统领思想建设、组织建设、作风建设、纪律建设、制度建设以及反腐败斗争，为其提供政治方向和政治保证。\n第三，始终重视从政治上建设党是中国共产党的优良传统。注重从政治上建设党，才能确保全党始终拥有统一的思想、坚定的意志、协调的行动、强大的战斗力，不断发展壮大、从胜利走向胜利。\n坚持以党的政治建设为统领，是新时代推进党的自我革命、解决党面临的突出问题的关键举措，是着眼党的长期执政，确保党始终团结统一、成为新时代坚持和发展中国特色社会主义坚强领导核心的必然选择。",
+              "officialExplanation": "(1) 习近平党建思想丰富和发展了马克思主义建党学说，是坚持把马克思主义基本原理同中国具体实际相结合、同中华优秀传统文化相结合推进党的理论创新的重大成果，是党和人民实践经验和集体智慧的结晶，是习近平新时代中国特色社会主义思想的重要组成部分，为深入推进新时代党的建设新的伟大工程提供了根本遵循和行动指南。\n(2) 第一，政治属性是政党区别于其他组织的核心要素，是政党的第一属性。旗帜鲜明讲政治是马克思主义政党的根本要求，政治建设决定党的建设方向和效果。\n第二，政治建设是党的根本性建设，在党的建设总体布局中要把政治建设摆在首位。政治建设统领思想建设、组织建设、作风建设、纪律建设、制度建设以及反腐败斗争，为其提供政治方向和政治保证。\n第三，始终重视从政治上建设党是中国共产党的优良传统。注重从政治上建设党，才能确保全党始终拥有统一的思想、坚定的意志、协调的行动、强大的战斗力，不断发展壮大、从胜利走向胜利。\n坚持以党的政治建设为统领，是新时代推进党的自我革命、解决党面临的突出问题的关键举措，是着眼党的长期执政，确保党始终团结统一、成为新时代坚持和发展中国特色社会主义坚强领导核心的必然选择。",
+              "knowledgeModule": "毛中特与新思想",
+              "score": 10,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "rubric": {
+                "maxScore": 10,
+                "dimensions": [
+                  {
+                    "id": "kp",
+                    "name": "核心原理与采分点覆盖",
+                    "maxScore": 6,
+                    "description": "准确调用对应学科核心原理与关键术语"
+                  },
+                  {
+                    "id": "mat",
+                    "name": "结合材料分析与逻辑结构",
+                    "maxScore": 4,
+                    "description": "紧扣材料层次分点作答，逻辑清晰"
+                  }
+                ],
+                "keyPoints": [
+                  "(1) 如何认识习近平党建思想的地位与作用？",
+                  "(2) 怎样深刻领会“坚持以党的政治建设为统领”是新时代党的建设的根本要求？"
+                ],
+                "referenceText": "(1) 习近平党建思想丰富和发展了马克思主义建党学说，是坚持把马克思主义基本原理同中国具体实际相结合、同中华优秀传统文化相结合推进党的理论创新的重大成果，是党和人民实践经验和集体智慧的结晶，是习近平新时代中国特色社会主义思想的重要组成部分，为深入推进新时代党的建设新的伟大工程提供了根本遵循和行动指南。\n(2) 第一，政治属性是政党区别于其他组织的核心要素，是政党的第一属性。旗帜鲜明讲政治是马克思主义政党的根本要求，政治建设决定党的建设方向和效果。\n第二，政治建设是党的根本性建设，在党的建设总体布局中要把政治建设摆在首位。政治建设统领思想建设、组织建设、作风建设、纪律建设、制度建设以及反腐败斗争，为其提供政治方向和政治保证。\n第三，始终重视从政治上建设党是中国共产党的优良传统。注重从政治上建设党，才能确保全党始终拥有统一的思想、坚定的意志、协调的行动、强大的战斗力，不断发展壮大、从胜利走向胜利。\n坚持以党的政治建设为统领，是新时代推进党的自我革命、解决党面临的突出问题的关键举措，是着眼党的长期执政，确保党始终团结统一、成为新时代坚持和发展中国特色社会主义坚强领导核心的必然选择。",
+                "referenceSource": "source-provided"
+              },
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "三、材料分析题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.949Z"
+              }
+            },
+            {
+              "id": "2106-q-36",
+              "questionNumber": 36,
+              "answerMode": "long-text",
+              "prompt": "(1) 孙中山先生为了实现革命理想，如何“与时俱进完善自己的革命理念和斗争方略，毫不妥协同逆时代潮流而动的各种势力进行斗争”？\n(2) 结合中国共产党在大革命中的作用，说明中国共产党人是孙中山先生革命事业最坚定的支持者、最忠诚的合作者。",
+              "subQuestions": [
+                "(1) 孙中山先生为了实现革命理想，如何“与时俱进完善自己的革命理念和斗争方略，毫不妥协同逆时代潮流而动的各种势力进行斗争”？",
+                "(2) 结合中国共产党在大革命中的作用，说明中国共产党人是孙中山先生革命事业最坚定的支持者、最忠诚的合作者。"
+              ],
+              "answerKeyPoints": "(1) 辛亥革命失败后，为了实现革命理想，孙中山毅然发动了武装反袁的“二次革命”，做出了一系列挽救共和的努力。护法运动的失败，使他认识到想依靠南方军阀来反对北洋军阀，是行不通的。孙中山具有顽强的革命意志和进取精神，他看到中国共产党领导工人运动所产生的影响，认识到中国共产党是一支新兴的、生机勃勃的革命力量，愿意与中国共产党合作。1924年1月，孙中山主持召开中国国民党一大，对三民主义作出新的解释，即“新三民主义”。新三民主义的政纲同中国共产党在民主革命阶段的纲领基本一致，因而有了国共合作的政治基础。国民党一大确认了共产党员以个人身份加入国民党的原则。国民党一大事实上确认了联俄、联共、扶助农工的三大革命政策，标志着第一次国共合作正式形成。毛泽东同志把三民主义纲领、统一战线政策、艰苦奋斗精神并称为孙中山先生“留给我们的最中心最本质最伟大的遗产”，是“对于中华民族最伟大的贡献”。\n(2) 中国共产党正确估计了孙中山的革命立场和国民党进行改革的可能性，决定共产党员以个人身份加入国民党，以实现国共合作。国共合作汇集了全国革命力量，很快掀起了全国范围的大革命高潮。\n在这场革命中，中国共产党起着独特的、不可替代的作用。第一，大革命是在反对帝国主义、反对军阀的政治口号下进行的。而提出这个口号的，正是中国共产党。第二，大革命是在以国共合作为基础的统一战线的组织形式下进行的。而中国共产党正是国共合作的倡导者和统一战线的组织者。第三，大革命是近代中国历史上空前广泛而深刻的群众运动。而中国共产党正是人民群众的主要发动者和组织者。第四，大革命的主要斗争形式是革命战争。共产党人不仅帮助和推动了国民革命军的建立，而且在军队中进行了卓有成效的政治工作，积极提高国民革命军的素质，增强它的凝聚力和战斗力；共产党员在战斗中更是身先士卒，起着先锋作用和表率作用。",
+              "officialExplanation": "(1) 辛亥革命失败后，为了实现革命理想，孙中山毅然发动了武装反袁的“二次革命”，做出了一系列挽救共和的努力。护法运动的失败，使他认识到想依靠南方军阀来反对北洋军阀，是行不通的。孙中山具有顽强的革命意志和进取精神，他看到中国共产党领导工人运动所产生的影响，认识到中国共产党是一支新兴的、生机勃勃的革命力量，愿意与中国共产党合作。1924年1月，孙中山主持召开中国国民党一大，对三民主义作出新的解释，即“新三民主义”。新三民主义的政纲同中国共产党在民主革命阶段的纲领基本一致，因而有了国共合作的政治基础。国民党一大确认了共产党员以个人身份加入国民党的原则。国民党一大事实上确认了联俄、联共、扶助农工的三大革命政策，标志着第一次国共合作正式形成。毛泽东同志把三民主义纲领、统一战线政策、艰苦奋斗精神并称为孙中山先生“留给我们的最中心最本质最伟大的遗产”，是“对于中华民族最伟大的贡献”。\n(2) 中国共产党正确估计了孙中山的革命立场和国民党进行改革的可能性，决定共产党员以个人身份加入国民党，以实现国共合作。国共合作汇集了全国革命力量，很快掀起了全国范围的大革命高潮。\n在这场革命中，中国共产党起着独特的、不可替代的作用。第一，大革命是在反对帝国主义、反对军阀的政治口号下进行的。而提出这个口号的，正是中国共产党。第二，大革命是在以国共合作为基础的统一战线的组织形式下进行的。而中国共产党正是国共合作的倡导者和统一战线的组织者。第三，大革命是近代中国历史上空前广泛而深刻的群众运动。而中国共产党正是人民群众的主要发动者和组织者。第四，大革命的主要斗争形式是革命战争。共产党人不仅帮助和推动了国民革命军的建立，而且在军队中进行了卓有成效的政治工作，积极提高国民革命军的素质，增强它的凝聚力和战斗力；共产党员在战斗中更是身先士卒，起着先锋作用和表率作用。",
+              "knowledgeModule": "史纲",
+              "score": 10,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "rubric": {
+                "maxScore": 10,
+                "dimensions": [
+                  {
+                    "id": "kp",
+                    "name": "核心原理与采分点覆盖",
+                    "maxScore": 6,
+                    "description": "准确调用对应学科核心原理与关键术语"
+                  },
+                  {
+                    "id": "mat",
+                    "name": "结合材料分析与逻辑结构",
+                    "maxScore": 4,
+                    "description": "紧扣材料层次分点作答，逻辑清晰"
+                  }
+                ],
+                "keyPoints": [
+                  "(1) 孙中山先生为了实现革命理想，如何“与时俱进完善自己的革命理念和斗争方略，毫不妥协同逆时代潮流而动的各种势力进行斗争”？",
+                  "(2) 结合中国共产党在大革命中的作用，说明中国共产党人是孙中山先生革命事业最坚定的支持者、最忠诚的合作者。"
+                ],
+                "referenceText": "(1) 辛亥革命失败后，为了实现革命理想，孙中山毅然发动了武装反袁的“二次革命”，做出了一系列挽救共和的努力。护法运动的失败，使他认识到想依靠南方军阀来反对北洋军阀，是行不通的。孙中山具有顽强的革命意志和进取精神，他看到中国共产党领导工人运动所产生的影响，认识到中国共产党是一支新兴的、生机勃勃的革命力量，愿意与中国共产党合作。1924年1月，孙中山主持召开中国国民党一大，对三民主义作出新的解释，即“新三民主义”。新三民主义的政纲同中国共产党在民主革命阶段的纲领基本一致，因而有了国共合作的政治基础。国民党一大确认了共产党员以个人身份加入国民党的原则。国民党一大事实上确认了联俄、联共、扶助农工的三大革命政策，标志着第一次国共合作正式形成。毛泽东同志把三民主义纲领、统一战线政策、艰苦奋斗精神并称为孙中山先生“留给我们的最中心最本质最伟大的遗产”，是“对于中华民族最伟大的贡献”。\n(2) 中国共产党正确估计了孙中山的革命立场和国民党进行改革的可能性，决定共产党员以个人身份加入国民党，以实现国共合作。国共合作汇集了全国革命力量，很快掀起了全国范围的大革命高潮。\n在这场革命中，中国共产党起着独特的、不可替代的作用。第一，大革命是在反对帝国主义、反对军阀的政治口号下进行的。而提出这个口号的，正是中国共产党。第二，大革命是在以国共合作为基础的统一战线的组织形式下进行的。而中国共产党正是国共合作的倡导者和统一战线的组织者。第三，大革命是近代中国历史上空前广泛而深刻的群众运动。而中国共产党正是人民群众的主要发动者和组织者。第四，大革命的主要斗争形式是革命战争。共产党人不仅帮助和推动了国民革命军的建立，而且在军队中进行了卓有成效的政治工作，积极提高国民革命军的素质，增强它的凝聚力和战斗力；共产党员在战斗中更是身先士卒，起着先锋作用和表率作用。",
+                "referenceSource": "source-provided"
+              },
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "三、材料分析题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.949Z"
+              }
+            },
+            {
+              "id": "2106-q-37",
+              "questionNumber": 37,
+              "answerMode": "long-text",
+              "prompt": "(1) 为什么要崇尚英雄、缅怀先烈？\n(2) 结合英雄的“无名”与“有名”，说明新时代青年应当怎样更好地实现人生价值、升华人生境界。",
+              "subQuestions": [
+                "(1) 为什么要崇尚英雄、缅怀先烈？",
+                "(2) 结合英雄的“无名”与“有名”，说明新时代青年应当怎样更好地实现人生价值、升华人生境界。"
+              ],
+              "answerKeyPoints": "(1) 伟大时代呼唤英雄、造就英雄。英雄辈出，党和人民事业就会兴旺发达、长盛不衰。崇尚英雄才会产生英雄，争做英雄才能英雄辈出。国家强盛、民族复兴需要物质文明的积累，更需要精神文明的升华。缅怀英烈事迹、传承英烈精神，都是对世界观、人生观、价值观的洗礼，会转化成爱国情、强国志、报国行的内生动力。以多种形式追思先烈、致敬英雄，有助于进一步增强历史自信、激扬历史主动精神，让爱国主义和革命英雄主义成为引人向前、催人奋斗的强大精神动力。\n(2) 英雄的“无名”，不是平庸无闻，而是为大义隐身、为家国埋名；英雄的“有名”，是精神永续、山河铭记、时代传承。今天的我们，正奋进于新时代的长征路。青年的人生目标会有不同，职业选择也有差异，但只要把自己的小我融入祖国的大我、人民的大我之中，与历史同向、与祖国同行、与人民同在，就能更好地实现人生价值、升华人生境界。\n第一，与历史同向。新时代青年要正确认识世界和中国的发展大势，尊重并顺应历史的选择和人民的选择，增强历史自觉，坚定历史自信，与历史同步伐，与时代共命运。\n第二，与祖国同行。青年只有自觉将人生目标同国家和民族的前途命运紧紧联系在一起，才能最大限度地实现人生价值。新时代青年要正确认识国家和民族赋予的历史使命和时代责任，坚定信心，锐意进取，奋进新征程、建功新时代。\n第三，与人民同在。人民群众是历史的创造者，是国家的主人。新时代青年要在为人民群众服务、实现人民群众利益的过程中实现人生价值。",
+              "officialExplanation": "(1) 伟大时代呼唤英雄、造就英雄。英雄辈出，党和人民事业就会兴旺发达、长盛不衰。崇尚英雄才会产生英雄，争做英雄才能英雄辈出。国家强盛、民族复兴需要物质文明的积累，更需要精神文明的升华。缅怀英烈事迹、传承英烈精神，都是对世界观、人生观、价值观的洗礼，会转化成爱国情、强国志、报国行的内生动力。以多种形式追思先烈、致敬英雄，有助于进一步增强历史自信、激扬历史主动精神，让爱国主义和革命英雄主义成为引人向前、催人奋斗的强大精神动力。\n(2) 英雄的“无名”，不是平庸无闻，而是为大义隐身、为家国埋名；英雄的“有名”，是精神永续、山河铭记、时代传承。今天的我们，正奋进于新时代的长征路。青年的人生目标会有不同，职业选择也有差异，但只要把自己的小我融入祖国的大我、人民的大我之中，与历史同向、与祖国同行、与人民同在，就能更好地实现人生价值、升华人生境界。\n第一，与历史同向。新时代青年要正确认识世界和中国的发展大势，尊重并顺应历史的选择和人民的选择，增强历史自觉，坚定历史自信，与历史同步伐，与时代共命运。\n第二，与祖国同行。青年只有自觉将人生目标同国家和民族的前途命运紧紧联系在一起，才能最大限度地实现人生价值。新时代青年要正确认识国家和民族赋予的历史使命和时代责任，坚定信心，锐意进取，奋进新征程、建功新时代。\n第三，与人民同在。人民群众是历史的创造者，是国家的主人。新时代青年要在为人民群众服务、实现人民群众利益的过程中实现人生价值。",
+              "knowledgeModule": "思修法基",
+              "score": 10,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "rubric": {
+                "maxScore": 10,
+                "dimensions": [
+                  {
+                    "id": "kp",
+                    "name": "核心原理与采分点覆盖",
+                    "maxScore": 6,
+                    "description": "准确调用对应学科核心原理与关键术语"
+                  },
+                  {
+                    "id": "mat",
+                    "name": "结合材料分析与逻辑结构",
+                    "maxScore": 4,
+                    "description": "紧扣材料层次分点作答，逻辑清晰"
+                  }
+                ],
+                "keyPoints": [
+                  "(1) 为什么要崇尚英雄、缅怀先烈？",
+                  "(2) 结合英雄的“无名”与“有名”，说明新时代青年应当怎样更好地实现人生价值、升华人生境界。"
+                ],
+                "referenceText": "(1) 伟大时代呼唤英雄、造就英雄。英雄辈出，党和人民事业就会兴旺发达、长盛不衰。崇尚英雄才会产生英雄，争做英雄才能英雄辈出。国家强盛、民族复兴需要物质文明的积累，更需要精神文明的升华。缅怀英烈事迹、传承英烈精神，都是对世界观、人生观、价值观的洗礼，会转化成爱国情、强国志、报国行的内生动力。以多种形式追思先烈、致敬英雄，有助于进一步增强历史自信、激扬历史主动精神，让爱国主义和革命英雄主义成为引人向前、催人奋斗的强大精神动力。\n(2) 英雄的“无名”，不是平庸无闻，而是为大义隐身、为家国埋名；英雄的“有名”，是精神永续、山河铭记、时代传承。今天的我们，正奋进于新时代的长征路。青年的人生目标会有不同，职业选择也有差异，但只要把自己的小我融入祖国的大我、人民的大我之中，与历史同向、与祖国同行、与人民同在，就能更好地实现人生价值、升华人生境界。\n第一，与历史同向。新时代青年要正确认识世界和中国的发展大势，尊重并顺应历史的选择和人民的选择，增强历史自觉，坚定历史自信，与历史同步伐，与时代共命运。\n第二，与祖国同行。青年只有自觉将人生目标同国家和民族的前途命运紧紧联系在一起，才能最大限度地实现人生价值。新时代青年要正确认识国家和民族赋予的历史使命和时代责任，坚定信心，锐意进取，奋进新征程、建功新时代。\n第三，与人民同在。人民群众是历史的创造者，是国家的主人。新时代青年要在为人民群众服务、实现人民群众利益的过程中实现人生价值。",
+                "referenceSource": "source-provided"
+              },
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "三、材料分析题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.949Z"
+              }
+            },
+            {
+              "id": "2106-q-38",
+              "questionNumber": 38,
+              "answerMode": "long-text",
+              "prompt": "(1) 从“参与者”“贡献者”“引领者”的视角，说明“中国绿色发展何以造福世界”。\n(2) 如何理解中国“为变乱交织的世界注入更多确定性和正能量”？",
+              "subQuestions": [
+                "(1) 从“参与者”“贡献者”“引领者”的视角，说明“中国绿色发展何以造福世界”。",
+                "(2) 如何理解中国“为变乱交织的世界注入更多确定性和正能量”？"
+              ],
+              "answerKeyPoints": "(1) 生态文明建设，关系中华民族永续发展，关乎人类文明未来走向。中国秉持绿水青山就是金山银山理念，坚定不移走生态优先、绿色发展之路，是全球生态文明建设的参与者、贡献者、引领者。中国坚持将生态文明建设融入经济社会发展全过程，实现生态保护与经济增长相互促进，为发展中国家探索绿色发展路径提供了有益启示；中国式现代化是人与自然和谐共生的现代化，创造了人类文明新形态，为全球低碳转型贡献了切实可行的实践方案；中国制定和颁布生态环境法典，为世界各国尤其是发展中国家提供了可资借鉴的立法范例。\n(2) 当前，世界百年变局加速演进，霸权主义、单边主义、保护主义逆流而动，国际形势变乱交织，各种风险挑战层出不穷。人类又一次站在何去何从的十字路口。\n中国始终把自身发展置于人类发展的坐标系中，始终把自身命运与世界各国人民命运紧密相连。中国坚定不移扩大开放、推进高质量发展，持续发挥“稳定锚”作用，为世界经济提供难能可贵的信心和确定性。中国坚持独立自主的和平外交政策，推动落实四大全球倡议，推动构建人类命运共同体，不断为人类和平与发展事业贡献中国智慧、中国方案。一个“站在历史正确的一边，站在人类进步的一边”的中国，始终是世界和平的建设者、全球发展的贡献者、国际秩序的维护者、公共产品的提供者。新征程上，中国必将以自身稳定发展为变乱交织的世界注入更多确定性和正能量。",
+              "officialExplanation": "(1) 生态文明建设，关系中华民族永续发展，关乎人类文明未来走向。中国秉持绿水青山就是金山银山理念，坚定不移走生态优先、绿色发展之路，是全球生态文明建设的参与者、贡献者、引领者。中国坚持将生态文明建设融入经济社会发展全过程，实现生态保护与经济增长相互促进，为发展中国家探索绿色发展路径提供了有益启示；中国式现代化是人与自然和谐共生的现代化，创造了人类文明新形态，为全球低碳转型贡献了切实可行的实践方案；中国制定和颁布生态环境法典，为世界各国尤其是发展中国家提供了可资借鉴的立法范例。\n(2) 当前，世界百年变局加速演进，霸权主义、单边主义、保护主义逆流而动，国际形势变乱交织，各种风险挑战层出不穷。人类又一次站在何去何从的十字路口。\n中国始终把自身发展置于人类发展的坐标系中，始终把自身命运与世界各国人民命运紧密相连。中国坚定不移扩大开放、推进高质量发展，持续发挥“稳定锚”作用，为世界经济提供难能可贵的信心和确定性。中国坚持独立自主的和平外交政策，推动落实四大全球倡议，推动构建人类命运共同体，不断为人类和平与发展事业贡献中国智慧、中国方案。一个“站在历史正确的一边，站在人类进步的一边”的中国，始终是世界和平的建设者、全球发展的贡献者、国际秩序的维护者、公共产品的提供者。新征程上，中国必将以自身稳定发展为变乱交织的世界注入更多确定性和正能量。",
+              "knowledgeModule": "当代与时政",
+              "score": 10,
+              "correctAnswer": null,
+              "answerSource": "source-provided",
+              "rubric": {
+                "maxScore": 10,
+                "dimensions": [
+                  {
+                    "id": "kp",
+                    "name": "核心原理与采分点覆盖",
+                    "maxScore": 6,
+                    "description": "准确调用对应学科核心原理与关键术语"
+                  },
+                  {
+                    "id": "mat",
+                    "name": "结合材料分析与逻辑结构",
+                    "maxScore": 4,
+                    "description": "紧扣材料层次分点作答，逻辑清晰"
+                  }
+                ],
+                "keyPoints": [
+                  "(1) 从“参与者”“贡献者”“引领者”的视角，说明“中国绿色发展何以造福世界”。",
+                  "(2) 如何理解中国“为变乱交织的世界注入更多确定性和正能量”？"
+                ],
+                "referenceText": "(1) 生态文明建设，关系中华民族永续发展，关乎人类文明未来走向。中国秉持绿水青山就是金山银山理念，坚定不移走生态优先、绿色发展之路，是全球生态文明建设的参与者、贡献者、引领者。中国坚持将生态文明建设融入经济社会发展全过程，实现生态保护与经济增长相互促进，为发展中国家探索绿色发展路径提供了有益启示；中国式现代化是人与自然和谐共生的现代化，创造了人类文明新形态，为全球低碳转型贡献了切实可行的实践方案；中国制定和颁布生态环境法典，为世界各国尤其是发展中国家提供了可资借鉴的立法范例。\n(2) 当前，世界百年变局加速演进，霸权主义、单边主义、保护主义逆流而动，国际形势变乱交织，各种风险挑战层出不穷。人类又一次站在何去何从的十字路口。\n中国始终把自身发展置于人类发展的坐标系中，始终把自身命运与世界各国人民命运紧密相连。中国坚定不移扩大开放、推进高质量发展，持续发挥“稳定锚”作用，为世界经济提供难能可贵的信心和确定性。中国坚持独立自主的和平外交政策，推动落实四大全球倡议，推动构建人类命运共同体，不断为人类和平与发展事业贡献中国智慧、中国方案。一个“站在历史正确的一边，站在人类进步的一边”的中国，始终是世界和平的建设者、全球发展的贡献者、国际秩序的维护者、公共产品的提供者。新征程上，中国必将以自身稳定发展为变乱交织的世界注入更多确定性和正能量。",
+                "referenceSource": "source-provided"
+              },
+              "sourceLocator": {
+                "sourceFile": "data/politics/xiao8-2027/set-6.json",
+                "sourceFormat": "pdf",
+                "sectionHeading": "三、材料分析题"
+              },
+              "dataQuality": {
+                "status": "verified",
+                "paperSourceFile": "data/politics/xiao8-2027/set-6.json",
+                "markedAnswer": null,
+                "semanticCandidateAnswer": null,
+                "reason": "选项完备且未检出题干与答案来源冲突",
+                "detectedAt": "2026-11-15T12:51:36.949Z"
+              }
+            }
+          ],
+          "analysisProfile": {
+            "focusSkills": [
+              "马原原理拆解",
+              "新思想与史纲主线串联",
+              "按采分点规范分条作答"
+            ],
+            "commonTraps": [
+              "只抄材料不写原理",
+              "原理堆砌未结合材料"
+            ]
+          },
+          "reviewStrategy": {
+            "defaultIntervalsDays": [
+              1,
+              3,
+              7,
+              14,
+              30
+            ],
+            "recommendedAction": "对照【答案要点】提炼核心采分句框架"
+          },
+          "sourceLocator": {
+            "sourceFile": "data/politics/xiao8-2027/set-6.json",
+            "sourceFormat": "pdf"
+          }
+        }
+      ]
+    }
+  ],
+  "validationReport": {
+    "examId": "exam-2106",
+    "year": 2106,
+    "dataVersion": "v1",
+    "status": "ready",
+    "passedAllChecks": true,
+    "errorCodes": [],
+    "missingObjectiveQuestions": [],
+    "conflictingObjectiveQuestions": [],
+    "checks": [
+      {
+        "checkId": "POL-CHK-01",
+        "name": "考研政治（27肖秀荣冲刺8套卷）科目与套卷校验",
+        "passed": true,
+        "message": "2027 考研政治冲刺 8 套卷（六） (卷号: 6) 校验通过"
+      },
+      {
+        "checkId": "POL-CHK-02",
+        "name": "题号连续性与总题数 (1–38)",
+        "passed": true,
+        "message": "单选 16 题 + 多选 17 题 + 分析 5 题 = 38 题"
+      },
+      {
+        "checkId": "POL-CHK-03",
+        "name": "单项选择题 (1–16 题，每题 1 分) 与官方解析核验",
+        "passed": true,
+        "message": "1–16 题四选一答案与《肖八答案解析》完全对齐"
+      },
+      {
+        "checkId": "POL-CHK-04",
+        "name": "多项选择题 (17–33 题，每题 2 分) 与官方解析核验",
+        "passed": true,
+        "message": "17–33 题多选答案（2～4项）与《肖八答案解析》速查表完全一致"
+      },
+      {
+        "checkId": "POL-CHK-05",
+        "name": "材料分析题 (34–38 题，每题 10 分) 材料与答案要点核验",
+        "passed": true,
+        "message": "34–38 题五大模块材料、小问与【答案要点】完整收录"
+      }
+    ],
+    "consistencyCheckRuns": 2,
+    "consistencyMatched": true,
+    "sourceDiscrepancies": [],
+    "generatedAt": "2026-11-12T00:00:00.000Z",
+    "paperId": "pol-2027-xiao8-06"
+  },
+  "referencedAssets": [],
+  "objectiveAnswerCount": 33,
+  "subjectiveCount": 5,
+  "answerSourceStatus": "source-provided",
+  "paperId": "pol-2027-xiao8-06",
+  "subjectId": "politics",
+  "examYear": 2027,
+  "seriesCode": "xiao8",
+  "badgeLabel": "2027 肖八第6套",
+  "identity": {
+    "paperId": "pol-2027-xiao8-06",
+    "legacyYear": 2106,
+    "subjectId": "politics",
+    "examYear": 2027,
+    "seriesCode": "xiao8",
+    "setNumber": 6,
+    "title": "2027 考研政治冲刺 8 套卷（六）",
+    "shortTitle": "27肖八·卷六",
+    "badgeLabel": "2027 肖八第6套"
+  }
+}

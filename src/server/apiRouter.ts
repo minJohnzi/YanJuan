@@ -4,19 +4,23 @@ import path from 'node:path';
 import express, { type Request, type Response } from 'express';
 import { runPaperBuildPipeline } from '../pipeline/buildPipeline.ts';
 import {
+  stripExamAnswersForExamMode,
   auditExamItemDataQuality,
-  stripUnreleasedAnswerFields,
-} from '../shared/schemaValidator.ts';
+} from '../domain/quoteVerifier.ts';
+import {
+  resolveCanonicalPaperId,
+  resolveLegacyYearFromPaperId,
+} from '../domain/subjects.ts';
 import type {
   AITaskType,
   DataQualityConflictInfo,
   EvaluationRun,
   Exam,
   ExamItem,
-  ExamUnit,
   FollowUpTurn,
   ItemRubric,
   ModelCapabilities,
+  ProviderConnection,
   ProviderType,
   SubjectiveEvaluationResult,
   TaskBindingConfig,
@@ -29,23 +33,28 @@ import {
   runWritingScaffoldGeneration,
 } from './aiEvaluators.ts';
 import {
+  resolveWorkspaceCaller,
+} from './middleware/workspaceContext.ts';
+import {
   type MultimodalImageInput,
   createModelProvider,
 } from './modelProviders.ts';
 import {
-  ALL_AI_TASK_TYPES,
   PersistentAIStore,
+  SERVER_GEMINI_CONNECTION_ID,
   computeCompositeIdempotencyKey,
 } from './persistentStore.ts';
+import { createSystemRouter } from './routes/systemRoutes.ts';
 import {
   SecurityError,
-  computeConfigurationHash,
+  assertSafePathSegment,
   createRedactedLogEntry,
   isUserInOwnerUids,
   loadVerifiedExamImageAsset,
   normalizeProviderBaseUrl,
   normalizeToAIError,
   validateSafeCustomBaseUrl,
+  verifyServerAiAccessPin,
 } from './securityAndCrypto.ts';
 
 export interface ApiV1RouterOptions {
@@ -74,6 +83,7 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
 } {
   const router = express.Router();
   router.use(express.json({ limit: '4mb' }));
+  router.use('/system', createSystemRouter());
 
   const rootDir = options.rootDir || process.cwd();
   const store = new PersistentAIStore(options.storeFilePath);
@@ -81,6 +91,23 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
 
   // Rate limit buckets: key -> timestamps[]
   const rateBuckets = new Map<string, number[]>();
+
+  function enforceServerEnvPinIfNeeded(
+    connection: Pick<ProviderConnection, 'id' | 'storageMode'> | undefined | null,
+    req: Request
+  ): void {
+    if (!connection) return;
+    if (connection.storageMode === 'server-env' || connection.id === SERVER_GEMINI_CONNECTION_ID) {
+      const check = verifyServerAiAccessPin(req.header('X-Server-AI-Pin'));
+      if (!check.allowed) {
+        throw new SecurityError(
+          'AUTH_REQUIRED',
+          '调用服务端内置 Gemini 模型需提供有效的访问口令 (X-Server-AI-Pin)',
+          401
+        );
+      }
+    }
+  }
 
   function checkRateLimit(uidOrIp: string, res: Response): boolean {
     const now = Date.now();
@@ -102,25 +129,26 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
   }
 
   /**
-   * Resolves caller identity:
-   * - If Bearer token is present and verifyIdTokenFn is configured, verifies the Firebase ID token.
-   * - If client passes a spoofed `userId` in query/body that differs from the verified token uid, throws 403 FORBIDDEN_USER_MISMATCH.
-   * - In local workstation mode (no verifyIdTokenFn configured), falls back to `'local-guest'`.
+   * Resolves caller workspace identity:
+   * - If verifyIdTokenFn is explicitly provided (e.g. cloud auth tests), verifies Bearer token.
+   * - Otherwise operates in Local-First workspace mode using `X-Workspace-Id` (default `'local-default'`).
+   * - Rejects spoofed `userId` query/body mismatch with 403 FORBIDDEN_USER_MISMATCH.
    */
   async function resolveCallerUid(req: Request): Promise<{
     uid: string;
     email?: string;
     authenticated: boolean;
   }> {
-    const authHeader = req.headers.authorization;
-    let resolvedUid = 'local-guest';
+    let resolvedUid = 'local-default';
     let resolvedEmail: string | undefined;
     let authenticated = false;
 
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-      const token = authHeader.slice('Bearer '.length).trim();
-      if (token && token !== 'local-guest-token') {
-        if (options.verifyIdTokenFn) {
+    if (options.verifyIdTokenFn) {
+      resolvedUid = 'local-guest';
+      const authHeader = req.headers.authorization;
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        const token = authHeader.slice('Bearer '.length).trim();
+        if (token && token !== 'local-guest-token') {
           try {
             const decoded = await options.verifyIdTokenFn(token);
             resolvedUid = decoded.uid;
@@ -134,17 +162,19 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
             );
           }
         }
+      } else {
+        const requestedUserId =
+          (req.query?.userId as string) || (req.body && (req.body.userId as string));
+        if (requestedUserId) {
+          throw new SecurityError('AUTH_REQUIRED', '访问用户专属配置需提供身份认证凭证', 401);
+        }
       }
-    } else if (options.verifyIdTokenFn) {
-      // When verifyIdTokenFn is strictly configured and no guest header is passed on protected routes
-      const requestedUserId =
-        (req.query?.userId as string) || (req.body && (req.body.userId as string));
-      if (requestedUserId) {
-        throw new SecurityError('AUTH_REQUIRED', '访问用户专属配置需提供身份认证凭证', 401);
-      }
+    } else {
+      const ctx = await resolveWorkspaceCaller(req);
+      resolvedUid = ctx.uid;
+      authenticated = ctx.authenticated;
     }
 
-    // Check against cross-user spoofing in query or body
     const explicitUserId =
       (typeof req.query?.userId === 'string' ? req.query.userId.trim() : '') ||
       (req.body && typeof req.body.userId === 'string' ? req.body.userId.trim() : '');
@@ -160,12 +190,21 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
     return { uid: resolvedUid, email: resolvedEmail, authenticated };
   }
 
-  function loadGeneratedExam(year: number): Exam | null {
+  function loadGeneratedExam(
+    yearOrPaperId: number | string,
+    preferExamSheet: boolean = false
+  ): Exam | null {
+    const safeParam = assertSafePathSegment(String(yearOrPaperId), 'paperId');
+    const paperId = resolveCanonicalPaperId(safeParam);
+    const legacyYear = resolveLegacyYearFromPaperId(safeParam);
+
     const candidates = [
-      path.join(rootDir, 'data', 'exams', 'generated', 'papers', `${year}.json`),
-      path.join(rootDir, 'public', 'data', 'exams', 'generated', 'papers', `${year}.json`),
-      path.join(rootDir, 'data', 'papers', String(year), 'v2.json'),
-      path.join(rootDir, 'data', 'papers', String(year), 'v1.json'),
+      ...(preferExamSheet
+        ? [path.join(rootDir, 'data', 'exams', 'generated', 'papers', `${paperId}.exam.json`)]
+        : []),
+      path.join(rootDir, 'data', 'exams', 'generated', 'papers', `${legacyYear}.json`),
+      path.join(rootDir, 'data', 'papers', String(legacyYear), 'v2.json'),
+      path.join(rootDir, 'data', 'papers', String(legacyYear), 'v1.json'),
     ];
     for (const p of candidates) {
       if (fs.existsSync(p)) {
@@ -180,6 +219,13 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
   }
 
   function attachDataQualityAuditToExam(exam: Exam): Exam {
+    const alreadyAudited = exam.sections.every((s) =>
+      s.units.every((u) => u.items.every((item) => Boolean(item.dataQuality)))
+    );
+    if (alreadyAudited) {
+      return exam;
+    }
+
     const cloned: Exam = structuredClone(exam);
     const paperSource = cloned.sourceFiles?.[0] || `data/exams/raw/papers/${cloned.year}.md`;
     const answerSource = `data/exams/raw/answers/${cloned.year}.md`;
@@ -223,7 +269,6 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
   router.get('/papers-manifest', (_req: Request, res: Response) => {
     const candidates = [
       path.join(rootDir, 'data', 'exams', 'generated', 'papers-manifest.json'),
-      path.join(rootDir, 'public', 'data', 'papers-manifest.json'),
       path.join(rootDir, 'data', 'papers-manifest.json'),
     ];
     for (const p of candidates) {
@@ -242,14 +287,34 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
 
   router.get('/exams/generated/papers/:year', async (req: Request, res: Response) => {
     try {
-      const year = Number(req.params.year);
-      const exam = loadGeneratedExam(year);
+      const caller = await resolveCallerUid(req);
+      const safeYearOrId = assertSafePathSegment(req.params.year, 'year');
+      const mode = String(req.query.mode || 'study');
+      const attemptId =
+        typeof req.query.attemptId === 'string' ? req.query.attemptId.trim() : undefined;
+
+      const isExamMode = mode === 'exam';
+      const legacyYear = resolveLegacyYearFromPaperId(safeYearOrId);
+      const isSubmittedAuthoritative = store.isQuestionSubmittedAuthoritative({
+        ownerUid: caller.uid,
+        attemptId,
+        year: legacyYear || undefined,
+        questionNumber: 1,
+      });
+
+      const shouldStripAnswers = isExamMode && !isSubmittedAuthoritative;
+      const exam = loadGeneratedExam(safeYearOrId, shouldStripAnswers);
       if (!exam) {
-        res.status(404).json({ error: { code: 'EXAM_NOT_FOUND', message: `未找到 ${year} 年真题` } });
+        res
+          .status(404)
+          .json({ error: { code: 'EXAM_NOT_FOUND', message: `未找到 ${safeYearOrId} 试卷` } });
         return;
       }
+
       const auditedExam = attachDataQualityAuditToExam(exam);
-      res.json({ data: auditedExam });
+      res.json({
+        data: shouldStripAnswers ? stripExamAnswersForExamMode(auditedExam) : auditedExam,
+      });
     } catch (err) {
       const norm = normalizeToAIError(err);
       res.status(norm.status).json({ error: { code: norm.code, message: norm.userMessage } });
@@ -257,46 +322,60 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
   });
 
   router.get('/papers/:year/:version', (req: Request, res: Response) => {
-    const { year, version } = req.params;
-    const candidates = [
-      path.join(rootDir, 'data', 'papers', year, `${version}.json`),
-      path.join(rootDir, 'public', 'data', 'papers', year, `${version}.json`),
-      path.join(rootDir, 'data', 'exams', 'generated', 'papers', `${year}.json`),
-    ];
-    for (const p of candidates) {
-      if (fs.existsSync(p)) {
-        try {
-          const exam = attachDataQualityAuditToExam(
-            JSON.parse(fs.readFileSync(p, 'utf8')) as Exam
-          );
-          res.json({ data: exam });
-          return;
-        } catch {
-          // continue
+    try {
+      const rawYear = assertSafePathSegment(req.params.year, 'year');
+      const version = assertSafePathSegment(req.params.version, 'version');
+      const legacyYear = resolveLegacyYearFromPaperId(rawYear);
+      const candidates = [
+        path.join(rootDir, 'data', 'papers', String(legacyYear || rawYear), `${version}.json`),
+        path.join(rootDir, 'data', 'exams', 'generated', 'papers', `${legacyYear || rawYear}.json`),
+      ];
+      for (const p of candidates) {
+        if (fs.existsSync(p)) {
+          try {
+            const exam = attachDataQualityAuditToExam(
+              JSON.parse(fs.readFileSync(p, 'utf8')) as Exam
+            );
+            res.json({ data: exam });
+            return;
+          } catch {
+            // continue
+          }
         }
       }
+      res.status(404).json({ error: { code: 'PAPER_NOT_FOUND', message: '未找到指定版本试卷' } });
+    } catch (err) {
+      const norm = normalizeToAIError(err);
+      res.status(norm.status).json({ error: { code: norm.code, message: norm.userMessage } });
     }
-    res.status(404).json({ error: { code: 'PAPER_NOT_FOUND', message: '未找到指定版本试卷' } });
   });
 
   router.get('/import-reports/:year/:version', (req: Request, res: Response) => {
-    const { year, version } = req.params;
-    const candidates = [
-      path.join(rootDir, 'data', 'import-reports', year, `${version}.json`),
-      path.join(rootDir, 'public', 'data', 'import-reports', year, `${version}.json`),
-    ];
-    for (const p of candidates) {
-      if (fs.existsSync(p)) {
-        res.json({ data: JSON.parse(fs.readFileSync(p, 'utf8')) });
+    try {
+      const rawYear = assertSafePathSegment(req.params.year, 'year');
+      const version = assertSafePathSegment(req.params.version, 'version');
+      const legacyYear = resolveLegacyYearFromPaperId(rawYear);
+      const reportPath = path.join(
+        rootDir,
+        'data',
+        'import-reports',
+        String(legacyYear || rawYear),
+        `${version}.json`
+      );
+      if (fs.existsSync(reportPath)) {
+        res.json({ data: JSON.parse(fs.readFileSync(reportPath, 'utf8')) });
         return;
       }
+      const exam = loadGeneratedExam(rawYear);
+      if (exam?.validationReport) {
+        res.json({ data: exam.validationReport });
+        return;
+      }
+      res.status(404).json({ error: { code: 'REPORT_NOT_FOUND', message: '未找到校验报告' } });
+    } catch (err) {
+      const norm = normalizeToAIError(err);
+      res.status(norm.status).json({ error: { code: norm.code, message: norm.userMessage } });
     }
-    const exam = loadGeneratedExam(Number(year));
-    if (exam?.validationReport) {
-      res.json({ data: exam.validationReport });
-      return;
-    }
-    res.status(404).json({ error: { code: 'REPORT_NOT_FOUND', message: '未找到校验报告' } });
   });
 
   router.post('/imports', (req: Request, res: Response) => {
@@ -328,27 +407,33 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
     }
   });
 
-  router.post(['/exams/:year/submit', '/exams/:year/submit-attempt'], async (req: Request, res: Response) => {
-    try {
-      const caller = await resolveCallerUid(req);
-      const year = Number(req.params.year);
-      const attemptId = String(req.body?.attemptId || `attempt-${year}`);
-      const submittedQuestions = Array.isArray(req.body?.submittedQuestions)
-        ? req.body.submittedQuestions.map(Number)
-        : undefined;
-      const record = store.markAttemptSubmitted({
-        ownerUid: caller.uid,
-        attemptId,
-        year,
-        submittedQuestions,
-        submittedAll: req.body?.submittedAll !== false,
-      });
-      res.json({ ok: true, data: record });
-    } catch (err) {
-      const norm = normalizeToAIError(err);
-      res.status(norm.status).json({ error: { code: norm.code, message: norm.userMessage } });
+  router.post(
+    ['/exams/:year/submit', '/exams/:year/submit-attempt', '/exams/:year/attempts/:attemptId/submit'],
+    async (req: Request, res: Response) => {
+      try {
+        const caller = await resolveCallerUid(req);
+        const safeYear = assertSafePathSegment(req.params.year, 'year');
+        const year = resolveLegacyYearFromPaperId(safeYear);
+        const paperId = resolveCanonicalPaperId(safeYear);
+        const attemptId = String(req.params.attemptId || req.body?.attemptId || `attempt-${paperId}`);
+        const submittedQuestions = Array.isArray(req.body?.submittedQuestions)
+          ? req.body.submittedQuestions.map(Number)
+          : undefined;
+        const record = store.markAttemptSubmitted({
+          ownerUid: caller.uid,
+          attemptId,
+          year,
+          paperId,
+          submittedQuestions,
+          submittedAll: req.body?.submittedAll !== false,
+        });
+        res.json({ ok: true, data: record });
+      } catch (err) {
+        const norm = normalizeToAIError(err);
+        res.status(norm.status).json({ error: { code: norm.code, message: norm.userMessage } });
+      }
     }
-  });
+  );
 
   // ============================================================================
   // 2. Provider Credentials & Four-Layer AI Workspace Configuration
@@ -451,7 +536,7 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
             storageMode:
               effectiveStorageMode === 'session-only'
                 ? 'session-cookie'
-                : 'encrypted-firestore',
+                : 'encrypted-sqlite',
             configurationHash: saved.connection.configurationHash,
           },
           credentials,
@@ -526,8 +611,18 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
             400
           );
         }
+        const activeConn = connectionId
+          ? store.getWorkspace(caller.uid).connections.find((c) => c.id === connectionId) || null
+          : null;
+        enforceServerEnvPinIfNeeded(
+          activeConn ??
+            (connectionId === SERVER_GEMINI_CONNECTION_ID
+              ? { id: SERVER_GEMINI_CONNECTION_ID, storageMode: 'server-env' }
+              : null),
+          req
+        );
         effectiveApiKey = cred.plainKey;
-        if (!effectiveBaseUrl && cred.record.baseUrl) {
+        if (!effectiveBaseUrl && cred.record?.baseUrl) {
           effectiveBaseUrl = cred.record.baseUrl;
         }
       }
@@ -601,11 +696,21 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
             400
           );
         }
+        const activeConn = connectionId
+          ? store.getWorkspace(caller.uid).connections.find((c) => c.id === connectionId) || null
+          : null;
+        enforceServerEnvPinIfNeeded(
+          activeConn ??
+            (connectionId === SERVER_GEMINI_CONNECTION_ID
+              ? { id: SERVER_GEMINI_CONNECTION_ID, storageMode: 'server-env' }
+              : null),
+          req
+        );
         effectiveApiKey = saved.plainKey;
-        if (!effectiveBaseUrl && saved.record.baseUrl) {
+        if (!effectiveBaseUrl && saved.record?.baseUrl) {
           effectiveBaseUrl = saved.record.baseUrl;
         }
-        if (!effectiveModel && saved.record.model) {
+        if (!effectiveModel && saved.record?.model) {
           effectiveModel = saved.record.model;
         }
       }
@@ -811,6 +916,7 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
         requiredFacts,
         hasVisualMaterial,
         imagePaths,
+        materialText,
         referenceText,
       } = req.body || {};
 
@@ -839,12 +945,16 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
         );
       }
 
+      enforceServerEnvPinIfNeeded(stage1Resolved.connection, req);
+
       const stage2Resolved =
         store.resolveTaskModelBinding({
           ownerUid: caller.uid,
           taskType: 'subjective_stage2',
           requestedProfileId: requestedStage2ProfileId,
         }) || stage1Resolved;
+
+      enforceServerEnvPinIfNeeded(stage2Resolved.connection, req);
 
       // Load real verified exam image assets for visual writing
       const loadedImages: MultimodalImageInput[] = [];
@@ -855,8 +965,10 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
       const inferredYear =
         typeof year === 'number'
           ? year
-          : typeof answerVersionId === 'string' && /ver-(\d{4})/.test(answerVersionId)
-          ? Number(answerVersionId.match(/ver-(\d{4})/)![1])
+          : typeof year === 'string' && year.trim()
+          ? resolveLegacyYearFromPaperId(year)
+          : typeof answerVersionId === 'string' && /ver-(\d{4,6})/.test(answerVersionId)
+          ? Number(answerVersionId.match(/ver-(\d{4,6})/)![1])
           : undefined;
 
       if (
@@ -997,6 +1109,7 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
           imageAssetsUsed,
           allowTextFallbackForVision:
             stage1Resolved.binding.allowTextFallbackForVision ?? true,
+          materialText: typeof materialText === 'string' ? materialText : undefined,
           referenceText: typeof referenceText === 'string' ? referenceText : undefined,
           signal: abortController.signal,
         },
@@ -1126,6 +1239,8 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
         );
       }
 
+      enforceServerEnvPinIfNeeded(resolved.connection, req);
+
       const adapter = createModelProvider({
         provider: resolved.connection.providerType,
         apiKey: resolved.plainApiKey,
@@ -1141,6 +1256,13 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
         ? Object.entries(itemOptions).map(([key, text]) => ({ key: key as any, text: String(text) }))
         : [];
 
+      const resolvedObjYear =
+        typeof year === 'number'
+          ? year
+          : typeof year === 'string' && year.trim()
+          ? resolveLegacyYearFromPaperId(year) || 2024
+          : 2024;
+
       const syntheticItemForAudit: ExamItem = {
         id: `q-${questionNumber}`,
         questionNumber: Number(questionNumber) || 1,
@@ -1150,15 +1272,15 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
         score: 2,
         correctAnswer: String(correctAnswer || 'A'),
         answerSource: 'source-provided',
-        sourceLocator: { sourceFile: `data/exams/raw/papers/${year || 2024}.md`, sourceFormat: 'md' },
+        sourceLocator: { sourceFile: `data/exams/raw/papers/${resolvedObjYear}.md`, sourceFormat: 'md' },
       };
 
       const dataQuality: DataQualityConflictInfo = auditExamItemDataQuality(
-        Number(year) || 2024,
+        resolvedObjYear,
         syntheticItemForAudit,
         String(passageText || ''),
-        `data/exams/raw/papers/${year || 2024}.md`,
-        `data/exams/raw/answers/${year || 2024}.md`
+        `data/exams/raw/papers/${resolvedObjYear}.md`,
+        `data/exams/raw/answers/${resolvedObjYear}.md`
       );
 
       const analysis = await runObjectiveItemAnalysis(adapter, {
@@ -1247,6 +1369,7 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
         latestEvaluation,
         history,
         isSubmitted,
+        mode,
       } = req.body || {};
 
       if (!userQuestion || typeof userQuestion !== 'string' || !userQuestion.trim()) {
@@ -1271,6 +1394,8 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
         );
       }
 
+      enforceServerEnvPinIfNeeded(resolved.connection, req);
+
       const adapter = createModelProvider({
         provider: resolved.connection.providerType,
         apiKey: resolved.plainApiKey,
@@ -1280,14 +1405,24 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
         dnsLookupFn: options.dnsLookupFn,
       });
 
+      const resolvedYear =
+        typeof year === 'number'
+          ? year
+          : typeof year === 'string' && year.trim()
+          ? resolveLegacyYearFromPaperId(year)
+          : undefined;
+
+      const authoritativeSubmitted = store.isQuestionSubmittedAuthoritative({
+        ownerUid: caller.uid,
+        attemptId: typeof attemptId === 'string' ? attemptId : undefined,
+        year: resolvedYear,
+        questionNumber: Number(questionNumber) || 1,
+      });
+
       const isSubmittedAuthoritative =
-        Boolean(isSubmitted) ||
-        store.isQuestionSubmittedAuthoritative({
-          ownerUid: caller.uid,
-          attemptId: typeof attemptId === 'string' ? attemptId : undefined,
-          year: typeof year === 'number' ? year : undefined,
-          questionNumber: Number(questionNumber) || 1,
-        });
+        mode === 'exam'
+          ? authoritativeSubmitted
+          : authoritativeSubmitted || Boolean(isSubmitted);
 
       const followUpRes = await runContextualFollowUpAnalysis(adapter, {
         questionNumber: Number(questionNumber) || 1,
@@ -1299,7 +1434,10 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
           questionNumber: Number(questionNumber) || 1,
           prompt: typeof questionPrompt === 'string' ? questionPrompt : undefined,
           options: Array.isArray(itemOptions) ? itemOptions : undefined,
-          correctAnswer: typeof correctAnswer === 'string' ? correctAnswer : null,
+          correctAnswer:
+            isSubmittedAuthoritative && typeof correctAnswer === 'string'
+              ? correctAnswer
+              : null,
         },
         unit:
           typeof passageText === 'string' && passageText
@@ -1371,6 +1509,8 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
           400
         );
       }
+
+      enforceServerEnvPinIfNeeded(resolved.connection, req);
 
       const adapter = createModelProvider({
         provider: resolved.connection.providerType,

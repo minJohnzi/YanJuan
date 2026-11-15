@@ -3,23 +3,29 @@ import {
   Activity,
   AlertTriangle,
   CheckCircle2,
-  Cloud,
   Cpu,
   Database,
   Download,
-  FileUp,
   KeyRound,
   Layers,
   Loader2,
+  Lock,
   RefreshCw,
   Search,
+  Server,
   ShieldCheck,
   Sliders,
   Trash2,
   Type,
   Upload,
 } from 'lucide-react';
-import { buildApiAuthHeaders } from '../services/firebaseClient.ts';
+import {
+  buildLocalApiHeaders,
+  getServerAiPin,
+  getWorkspaceId,
+  setServerAiPin,
+  setWorkspaceId,
+} from '../services/localApi.ts';
 import type { ReadingTypographyPrefs, ThemeMode } from '../services/storageAndSync.ts';
 import type {
   AITaskType,
@@ -29,19 +35,14 @@ import type {
   MultiLayerTestResponse,
   ProviderCredentialStatus,
   ProviderType,
-  SyncStatus,
+  SystemCapabilitiesResponse,
   TaskBindingConfig,
   UserAIWorkspaceConfig,
 } from '../shared/types.ts';
 
 export interface SettingsViewProps {
-  isFirebaseConfigured: boolean;
-  currentUserEmail: string | null;
-  syncStatus: SyncStatus;
-  isPrivateDevice: boolean;
-  onTogglePrivateDevice: (val: boolean) => void;
-  onSignInGoogle: () => Promise<void>;
-  onSignOut: () => Promise<void>;
+  systemCapabilities?: SystemCapabilitiesResponse | null;
+  onRefreshCapabilities?: () => Promise<void>;
   anyModelAvailable: boolean;
   activeProviderName: string | null;
   credentialStatuses: ProviderCredentialStatus[];
@@ -55,7 +56,7 @@ export interface SettingsViewProps {
     baseUrl?: string;
     model: string;
     modelSource?: 'provider-list' | 'manual';
-    storageMode: 'session-cookie' | 'encrypted-firestore';
+    storageMode: 'session-cookie' | 'encrypted-sqlite';
     setAsDefault?: boolean;
     verifiedCapabilities?: Partial<ModelProfile['capabilities']>;
     capabilitySource?: Partial<ModelProfile['capabilitySource']>;
@@ -78,16 +79,8 @@ export interface SettingsViewProps {
   onUpdateTypographyPrefs: (prefs: ReadingTypographyPrefs) => void;
   themeMode: ThemeMode;
   onSelectThemeMode: (mode: ThemeMode) => void;
-  onSubmitSourceImport: (params: {
-    year: number;
-    fileName: string;
-    markdownText?: string;
-    contentBase64?: string;
-  }) => Promise<any>;
-  isImportingAnswers: boolean;
   onExportJson: () => string;
   onImportJson: (raw: string) => void;
-  onClearAllData: () => Promise<void>;
 }
 
 const PROVIDERS: Array<{
@@ -160,13 +153,8 @@ const TASK_DEFINITIONS: Array<{
 ];
 
 export const SettingsView: React.FC<SettingsViewProps> = ({
-  isFirebaseConfigured,
-  currentUserEmail,
-  syncStatus,
-  isPrivateDevice,
-  onTogglePrivateDevice,
-  onSignInGoogle,
-  onSignOut,
+  systemCapabilities,
+  onRefreshCapabilities,
   credentialStatuses,
   aiWorkspace,
   onRefreshWorkspace,
@@ -177,20 +165,19 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   onUpdateTypographyPrefs,
   themeMode,
   onSelectThemeMode,
-  onSubmitSourceImport,
-  isImportingAnswers,
   onExportJson,
   onImportJson,
-  onClearAllData,
 }) => {
   const [selectedProvider, setSelectedProvider] = useState<ProviderType>('deepseek');
   const [connectionName, setConnectionName] = useState<string>('我的 DeepSeek');
   const [baseUrlInput, setBaseUrlInput] = useState<string>('https://api.deepseek.com/v1');
   const [apiKeyInput, setApiKeyInput] = useState<string>('');
-  const [storageMode, setStorageMode] = useState<'encrypted-firestore' | 'session-cookie'>(
-    'encrypted-firestore'
+  const [storageMode, setStorageMode] = useState<'encrypted-sqlite' | 'session-cookie'>(
+    'encrypted-sqlite'
   );
   const [setAsDefault, setSetAsDefault] = useState<boolean>(true);
+  const [workspaceIdInput, setWorkspaceIdInput] = useState<string>(() => getWorkspaceId());
+  const [serverPinInput, setServerPinInput] = useState<string>(() => getServerAiPin());
 
   // Dual-mode Model Configuration: 'provider-list' (Mode A) | 'manual' (Mode B)
   const [modelSourceMode, setModelSourceMode] = useState<'provider-list' | 'manual'>('manual');
@@ -213,9 +200,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
   const [savingCredential, setSavingCredential] = useState<boolean>(false);
   const [updatingBindings, setUpdatingBindings] = useState<boolean>(false);
-  const [recentRuns, setRecentRuns] = useState<EvaluationRun[]>([]);
-  const [importYear, setImportYear] = useState<number>(2010);
-  const [importMarkdown, setImportMarkdown] = useState<string>('');
+  const [, setRecentRuns] = useState<EvaluationRun[]>([]);
 
   const [banner, setBanner] = useState<{
     type: 'success' | 'error' | 'info';
@@ -247,7 +232,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   useEffect(() => {
     void (async () => {
       try {
-        const headers = await buildApiAuthHeaders();
+        const headers = buildLocalApiHeaders();
         const res = await fetch('/api/v1/ai-workspace', { headers });
         if (res.ok) {
           const body = await res.json();
@@ -266,9 +251,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     setFetchingModels(true);
     setBanner(null);
     try {
-      const headers = await buildApiAuthHeaders();
+      const headers = buildLocalApiHeaders({
+        'Content-Type': 'application/json',
+      });
       const existingConn = aiWorkspace?.connections.find(
-        (c) => c.providerType === selectedProvider
+        (c) => c.providerType === selectedProvider && c.storageMode !== 'server-env'
       );
       const res = await fetch('/api/v1/provider-models', {
         method: 'POST',
@@ -338,7 +325,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     setBanner(null);
     try {
       const existingConn = aiWorkspace?.connections.find(
-        (c) => c.providerType === selectedProvider
+        (c) => c.providerType === selectedProvider && c.storageMode !== 'server-env'
       );
       const layers: ('basic' | 'structured' | 'vision' | 'sample')[] = [
         'basic',
@@ -397,7 +384,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     setBanner(null);
     try {
       const existingConn = aiWorkspace?.connections.find(
-        (c) => c.providerType === selectedProvider
+        (c) => c.providerType === selectedProvider && c.storageMode !== 'server-env'
       );
       await onSaveProviderCredential({
         connectionId: existingConn?.id,
@@ -438,7 +425,9 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   const handleSetDefaultModelProfile = async (profileId: string) => {
     setBanner(null);
     try {
-      const headers = await buildApiAuthHeaders();
+      const headers = buildLocalApiHeaders({
+        'Content-Type': 'application/json',
+      });
       const res = await fetch('/api/v1/ai-workspace/default-model', {
         method: 'PUT',
         headers,
@@ -468,7 +457,9 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     setUpdatingBindings(true);
     setBanner(null);
     try {
-      const headers = await buildApiAuthHeaders();
+      const headers = buildLocalApiHeaders({
+        'Content-Type': 'application/json',
+      });
       const res = await fetch('/api/v1/ai-workspace/task-bindings', {
         method: 'PUT',
         headers,
@@ -553,6 +544,109 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           </button>
         </div>
       )}
+
+      {/* 0. Local-First & Google AI Studio Runtime Info */}
+      <section className="bg-white dark:bg-[#1A2529] border border-[#DCE4E1] dark:border-[#2C3E46] p-5 space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#DCE4E1] dark:border-[#2C3E46] pb-3">
+          <div className="flex items-center gap-2">
+            <Server className="w-4 h-4 text-[#174A5B] dark:text-[#56AEC8]" />
+            <h2 className="text-sm font-bold text-[#202B2F] dark:text-[#E2E8E6]">
+              本地优先存储与 Google AI Studio 运行环境
+            </h2>
+          </div>
+          <span className="text-xs px-2 py-0.5 bg-emerald-50 dark:bg-[#172E27] text-emerald-800 dark:text-[#4EA387] border border-emerald-200 dark:border-emerald-800 font-mono">
+            {systemCapabilities?.storageEngine || 'node:sqlite'} · IndexedDB v2
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div className="p-3 bg-[#F1F5F3]/70 dark:bg-[#131B1E]/70 border border-[#DCE4E1] dark:border-[#2C3E46] space-y-1.5">
+            <div className="font-semibold text-[#202B2F] dark:text-[#E2E8E6]">
+              部署环境与内置环境变量检测
+            </div>
+            <div className="text-[#68777C] dark:text-[#9CAEB3] space-y-1">
+              <div>
+                运行模式：
+                <span className="font-mono text-[#202B2F] dark:text-[#E2E8E6]">
+                  {systemCapabilities?.deploymentTarget === 'google-aistudio'
+                    ? 'Google AI Studio 单容器全栈'
+                    : '本地优先单机全栈 (Local-First)'}
+                </span>
+              </div>
+              <div>
+                服务端 GEMINI_API_KEY：
+                <span className="font-semibold text-[#174A5B] dark:text-[#56AEC8]">
+                  {systemCapabilities?.hasServerGeminiKey
+                    ? `已就绪 (默认模型: ${systemCapabilities.serverDefaultModel || 'gemini-2.5-flash'})`
+                    : '未检测到 (请在下方配置私有密钥)'}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-3 bg-[#F1F5F3]/70 dark:bg-[#131B1E]/70 border border-[#DCE4E1] dark:border-[#2C3E46] space-y-2.5">
+            <div className="flex flex-wrap items-center gap-2">
+              <label className="font-semibold text-[#202B2F] dark:text-[#E2E8E6] shrink-0">
+                本地工作区 ID:
+              </label>
+              <input
+                type="text"
+                value={workspaceIdInput}
+                onChange={(e) => setWorkspaceIdInput(e.target.value)}
+                className="flex-1 min-w-[140px] px-2.5 py-1 text-xs font-mono bg-white dark:bg-[#1A2529] border border-[#DCE4E1] dark:border-[#2C3E46]"
+              />
+              <button
+                type="button"
+                onClick={async () => {
+                  const applied = setWorkspaceId(workspaceIdInput);
+                  setWorkspaceIdInput(applied);
+                  if (onRefreshWorkspace) await onRefreshWorkspace();
+                  setBanner({
+                    type: 'success',
+                    message: `已切换本地工作区为「${applied}」。`,
+                  });
+                }}
+                className="px-2.5 py-1 bg-[#174A5B] text-white text-xs font-medium"
+              >
+                切换工作区
+              </button>
+            </div>
+
+            {systemCapabilities?.requiresServerPin && (
+              <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-[#DCE4E1] dark:border-[#2C3E46]">
+                <label className="font-semibold text-[#202B2F] dark:text-[#E2E8E6] flex items-center gap-1 shrink-0">
+                  <Lock className="w-3.5 h-3.5" />
+                  服务端 AI 访问口令:
+                </label>
+                <input
+                  type="password"
+                  value={serverPinInput}
+                  onChange={(e) => setServerPinInput(e.target.value)}
+                  placeholder="输入 SERVER_AI_ACCESS_PIN"
+                  className="flex-1 min-w-[140px] px-2.5 py-1 text-xs font-mono bg-white dark:bg-[#1A2529] border border-[#DCE4E1] dark:border-[#2C3E46]"
+                />
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setServerAiPin(serverPinInput);
+                    if (onRefreshCapabilities) await onRefreshCapabilities();
+                    if (onRefreshWorkspace) await onRefreshWorkspace();
+                    setBanner({
+                      type: 'success',
+                      message: serverPinInput.trim()
+                        ? '已在当前浏览器会话缓存服务端 AI 访问口令。'
+                        : '已清除会话口令。',
+                    });
+                  }}
+                  className="px-2.5 py-1 border border-[#174A5B] text-[#174A5B] dark:text-[#56AEC8] text-xs font-medium"
+                >
+                  应用口令
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
 
       {/* 1. Saved Model Profiles & Explicit Global Default Selector */}
       <section className="bg-white dark:bg-[#1A2529] border border-[#DCE4E1] dark:border-[#2C3E46] p-5 space-y-4">
@@ -640,11 +734,22 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
                     <button
                       type="button"
+                      disabled={conn?.storageMode === 'server-env' || conn?.id === 'conn-google-aistudio-env'}
                       onClick={() => onDeleteProviderCredential(conn?.id || prof.providerType)}
-                      className="text-xs text-red-600 hover:text-red-800 flex items-center gap-1"
+                      className={`text-xs flex items-center gap-1 ${
+                        conn?.storageMode === 'server-env' || conn?.id === 'conn-google-aistudio-env'
+                          ? 'text-[#68777C] cursor-not-allowed'
+                          : 'text-red-600 hover:text-red-800'
+                      }`}
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
-                      删除连接
+                      {conn?.storageMode === 'server-env' || conn?.id === 'conn-google-aistudio-env' ? (
+                        <span>环境变量只读连接</span>
+                      ) : (
+                        <>
+                          <Trash2 className="w-3.5 h-3.5" />
+                          <span>删除连接</span>
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>
@@ -754,12 +859,12 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               <select
                 value={storageMode}
                 onChange={(e) =>
-                  setStorageMode(e.target.value as 'encrypted-firestore' | 'session-cookie')
+                  setStorageMode(e.target.value as 'encrypted-sqlite' | 'session-cookie')
                 }
                 className="w-full px-3 py-2 text-xs bg-white dark:bg-[#1A2529] border border-[#DCE4E1] dark:border-[#2C3E46]"
               >
-                <option value="encrypted-firestore">
-                  持久化加密存储 (AES-256-GCM 落盘，服务重启后依然保留)
+                <option value="encrypted-sqlite">
+                  持久化加密存储 (node:sqlite AES-256-GCM 落盘，服务重启保留)
                 </option>
                 <option value="session-cookie">
                   仅当前进程会话内存 (Session-Only，重启服务即清除)
@@ -1148,11 +1253,20 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 accept=".json,application/json"
                 className="hidden"
                 onChange={async (e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
+                  const inputEl = e.target;
+                  const file = inputEl.files?.[0];
+                  if (!file) return;
+                  try {
                     const text = await file.text();
                     onImportJson(text);
                     setBanner({ type: 'success', message: '本地学习档案已成功合并恢复。' });
+                  } catch (err: any) {
+                    setBanner({
+                      type: 'error',
+                      message: err?.message || '导入失败：请选择有效的研卷台 JSON 备份文件。',
+                    });
+                  } finally {
+                    inputEl.value = '';
                   }
                 }}
               />

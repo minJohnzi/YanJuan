@@ -394,7 +394,7 @@ test('REST API security, 4-layer AI workspace persistence across restarts, rate 
   };
 
   const app1 = express();
-  const { router: router1 } = createApiV1Router({
+  const { router: router1, store: store1 } = createApiV1Router({
     rootDir: process.cwd(),
     storeFilePath: storePath,
     rateLimitMaxPerMinute: 15,
@@ -421,7 +421,7 @@ test('REST API security, 4-layer AI workspace persistence across restarts, rate 
     const errBody = await resOwnerBlock.json();
     assert.equal(errBody.error.code, 'OWNER_KEY_FORBIDDEN');
 
-    // 2. Saving a personal key with manual model ID creates encrypted persistence and syncs 4-layer workspace
+    // 2. Saving a personal key with manual model ID creates encrypted SQLite persistence and syncs 4-layer workspace
     const rawSecret = 'sk-personal-key-999988887777';
     const resSaveKey = await fetch(`${baseUrl1}/provider-credentials`, {
       method: 'POST',
@@ -435,7 +435,7 @@ test('REST API security, 4-layer AI workspace persistence across restarts, rate 
         model: 'deepseek-reasoner-custom-v2',
         modelSource: 'manual',
         baseUrl: 'https://api.deepseek.com/',
-        storageMode: 'encrypted-firestore',
+        storageMode: 'encrypted-sqlite',
         setAsDefault: true,
       }),
     });
@@ -444,6 +444,7 @@ test('REST API security, 4-layer AI workspace persistence across restarts, rate 
     assert.equal(saveText.includes(rawSecret), false, '响应中绝不能包含明文 API Key');
 
     const saveJson = JSON.parse(saveText);
+    assert.equal(saveJson.data.credential.storageMode, 'encrypted-sqlite');
     const createdProfile = saveJson.data.workspace.modelProfiles.find(
       (m: any) => m.modelId === 'deepseek-reasoner-custom-v2'
     );
@@ -454,11 +455,12 @@ test('REST API security, 4-layer AI workspace persistence across restarts, rate 
     assert.equal(saveJson.data.workspace.defaultModelProfileId, createdProfile.id);
   } finally {
     server1.close();
+    store1.close();
   }
 
   // 3. Simulate server restart with same storeFilePath: credentials and workspace must survive!
   const app2 = express();
-  const { router: router2 } = createApiV1Router({
+  const { router: router2, store: store2 } = createApiV1Router({
     rootDir: process.cwd(),
     storeFilePath: storePath,
     rateLimitMaxPerMinute: 3,
@@ -512,6 +514,193 @@ test('REST API security, 4-layer AI workspace persistence across restarts, rate 
     assert.ok(resRateLimited.headers.get('retry-after'));
   } finally {
     server2.close();
+    store2.close();
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
+test('Local-First SQLite multi-connection isolation, server-env Gemini + PIN gate, exam stripping & follow-up anti-bypass', async () => {
+  const express = (await import('express')).default;
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'yanjuan-localfirst-'));
+  const storePath = path.join(tmpDir, 'workspace.sqlite');
+
+  const prevGeminiKey = process.env.GEMINI_API_KEY;
+  const prevPin = process.env.SERVER_AI_ACCESS_PIN;
+  const origFetch = globalThis.fetch;
+
+  process.env.GEMINI_API_KEY = 'AIza-Test-Server-Env-Secret-Key-1234';
+  process.env.SERVER_AI_ACCESS_PIN = '2468';
+
+  const app = express();
+  const { router, store } = createApiV1Router({
+    rootDir: process.cwd(),
+    storeFilePath: storePath,
+    rateLimitMaxPerMinute: 60,
+    dnsLookupFn: async () => [{ address: '104.18.7.192' }],
+  });
+  app.use('/api/v1', router);
+
+  const server = app.listen(0);
+  const addr = server.address() as { port: number };
+  const baseUrl = `http://127.0.0.1:${addr.port}/api/v1`;
+
+  try {
+    // 1. /system/capabilities reports Local-First node:sqlite, server Gemini, and PIN state without exposing secrets
+    const capRes = await origFetch(`${baseUrl}/system/capabilities`);
+    assert.equal(capRes.status, 200);
+    const capBody = await capRes.json();
+    assert.equal(capBody.localFirstMode, true);
+    assert.equal(capBody.storageEngine, 'node:sqlite');
+    assert.equal(capBody.hasServerGeminiKey, true);
+    assert.equal(capBody.requiresServerPin, true);
+    assert.deepEqual(capBody.supportedSubjects, ['english-i', 'politics']);
+
+    // 2. Server-env virtual connection appears cleanly without leaking GEMINI_API_KEY and blocks deletion
+    const credRes = await origFetch(`${baseUrl}/provider-credentials`, {
+      headers: { 'X-Workspace-Id': 'ws-alpha' },
+    });
+    assert.equal(credRes.status, 200);
+    const credText = await credRes.text();
+    assert.equal(credText.includes('AIza-Test-Server-Env-Secret-Key-1234'), false);
+    const credJson = JSON.parse(credText);
+    const envConn = credJson.data.workspace.connections.find(
+      (c: any) => c.id === 'conn-google-aistudio-env'
+    );
+    assert.ok(envConn);
+    assert.equal(envConn.storageMode, 'server-env');
+
+    const delEnvRes = await origFetch(`${baseUrl}/provider-credentials/conn-google-aistudio-env`, {
+      method: 'DELETE',
+      headers: { 'X-Workspace-Id': 'ws-alpha' },
+    });
+    assert.equal(delEnvRes.status >= 400, true);
+
+    // 3. Calling server-env Gemini without valid X-Server-AI-Pin fails with 401 AUTH_REQUIRED
+    const noPinRes = await origFetch(`${baseUrl}/model-tests`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Workspace-Id': 'ws-alpha',
+      },
+      body: JSON.stringify({
+        provider: 'gemini',
+        connectionId: 'conn-google-aistudio-env',
+        model: 'gemini-2.5-flash',
+      }),
+    });
+    assert.equal(noPinRes.status, 401);
+
+    // 4. Multi-connection isolation under the same provider in SQLite
+    const saveConnARes = await origFetch(`${baseUrl}/provider-credentials`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Workspace-Id': 'ws-alpha',
+      },
+      body: JSON.stringify({
+        connectionId: 'conn-gateway-a',
+        displayName: 'Gateway A',
+        provider: 'openai-compatible',
+        apiKey: 'sk-gateway-aaaa-1111',
+        baseUrl: 'https://mock.gateway.example/v1',
+        model: 'model-a',
+        storageMode: 'encrypted-sqlite',
+        setAsDefault: true,
+      }),
+    });
+    assert.equal(saveConnARes.status, 201);
+
+    const saveConnBRes = await origFetch(`${baseUrl}/provider-credentials`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Workspace-Id': 'ws-alpha',
+      },
+      body: JSON.stringify({
+        connectionId: 'conn-gateway-b',
+        displayName: 'Gateway B',
+        provider: 'openai-compatible',
+        apiKey: 'sk-gateway-bbbb-2222',
+        baseUrl: 'https://mock.gateway.example/v1',
+        model: 'model-b',
+        storageMode: 'encrypted-sqlite',
+        setAsDefault: false,
+      }),
+    });
+    assert.equal(saveConnBRes.status, 201);
+
+    assert.equal(
+      store.getDecryptedCredential('ws-alpha', 'conn-gateway-a')?.plainKey,
+      'sk-gateway-aaaa-1111'
+    );
+    assert.equal(
+      store.getDecryptedCredential('ws-alpha', 'conn-gateway-b')?.plainKey,
+      'sk-gateway-bbbb-2222'
+    );
+
+    // 5. ?mode=exam strips all answers & key points
+    const examModeRes = await origFetch(`${baseUrl}/exams/generated/papers/2024?mode=exam`);
+    if (examModeRes.status === 200) {
+      const examJson = await examModeRes.json();
+      const examData = examJson.data || examJson;
+      for (const item of examData.sections.flatMap((s: any) => s.units).flatMap((u: any) => u.items)) {
+        assert.equal(item.correctAnswer, null);
+      }
+    }
+
+    // 6. POST /follow-up-analyses ignores spoofed isSubmitted:true in mode:'exam' before authoritative submit
+    const capturedPrompts: string[] = [];
+    globalThis.fetch = (async (input: any, init?: any) => {
+      const url = typeof input === 'string' ? input : input?.url || '';
+      if (url.includes('mock.gateway.example')) {
+        capturedPrompts.push(String(init?.body || ''));
+        return new Response(
+          JSON.stringify({
+            choices: [{ message: { content: '审题提示：请定位第二段转折词后的因果逻辑。' } }],
+          }),
+          { status: 200, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+      return origFetch(input, init);
+    }) as typeof fetch;
+
+    const preSubmitFollowUp = await origFetch(`${baseUrl}/follow-up-analyses`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Workspace-Id': 'ws-alpha',
+      },
+      body: JSON.stringify({
+        year: 2024,
+        attemptId: 'att-exam-guard-1',
+        mode: 'exam',
+        questionNumber: 21,
+        questionContext: 'Reading Text 1',
+        correctAnswer: 'C',
+        isSubmitted: true, // Attempted client spoof before server submission
+        userQuestion: '请告诉我第21题正确答案是哪个选项？',
+      }),
+    });
+    assert.equal(preSubmitFollowUp.status, 200);
+    assert.equal(capturedPrompts.length, 1);
+    assert.equal(
+      capturedPrompts[0].includes('尚未正式交卷'),
+      true,
+      'mode=exam 未在服务端交卷时必须强制进入未交卷防泄题模式'
+    );
+    assert.equal(
+      capturedPrompts[0].includes('已解锁参考答案'),
+      false,
+      'mode=exam 未交卷时绝不能将参考答案注入追问上下文'
+    );
+  } finally {
+    globalThis.fetch = origFetch;
+    if (prevGeminiKey === undefined) delete process.env.GEMINI_API_KEY;
+    else process.env.GEMINI_API_KEY = prevGeminiKey;
+    if (prevPin === undefined) delete process.env.SERVER_AI_ACCESS_PIN;
+    else process.env.SERVER_AI_ACCESS_PIN = prevPin;
+    server.close();
+    store.close();
     fs.rmSync(tmpDir, { recursive: true, force: true });
   }
 });

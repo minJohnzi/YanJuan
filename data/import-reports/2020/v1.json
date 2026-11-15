@@ -4,7 +4,9 @@
   "dataVersion": "v1",
   "status": "ready",
   "passedAllChecks": true,
-  "errorCodes": [],
+  "errorCodes": [
+    "DATA_ANSWER_DISPUTED"
+  ],
   "missingObjectiveQuestions": [],
   "conflictingObjectiveQuestions": [],
   "checks": [
@@ -60,5 +62,16 @@
   "consistencyCheckRuns": 2,
   "consistencyMatched": true,
   "sourceDiscrepancies": [],
-  "generatedAt": "2026-10-19T11:30:00.000Z"
+  "generatedAt": "2026-10-19T11:30:00.000Z",
+  "paperId": "en1-2020",
+  "disputedQuestions": [
+    {
+      "questionNumber": 21,
+      "markedAnswer": "C",
+      "semanticCandidateAnswer": "A",
+      "reason": "2020年第21题存在题库数据与标注答案语义冲突：原文第1段明确表述 \"mature industries have repeatedly underestimated the disruptive velocity\"，与选项 [A] 语义一致，但答案表标注为 [C]。已标记为 disputed 待人工核验，禁止 AI 自动覆盖标准答案。",
+      "paperSourceFile": "papers/2020.md",
+      "answerSourceFile": "answers/2020.md"
+    }
+  ]
 }

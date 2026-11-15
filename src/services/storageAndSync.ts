@@ -2,11 +2,19 @@ import type {
   ExamAttempt,
   ObjectiveAIAnalysis,
   ReviewItem,
+  SubjectId,
   SubjectiveAnswerVersion,
   SubjectiveEvaluationResult,
   SubjectivePracticeMode,
+  SubjectiveUnitType,
   SyncStatus,
 } from '../shared/types.ts';
+import { resolveCanonicalPaperId, resolveSubjectId } from '../domain/subjects.ts';
+import {
+  clearMultiStoreDatabase,
+  loadMultiStoreDatabase,
+  saveMultiStoreDatabase,
+} from './idbDatabase.ts';
 
 import type { ThemeMode } from './theme.ts';
 
@@ -43,13 +51,11 @@ export interface LocalLearningDatabase {
   updatedAt: string;
 }
 
-const DB_NAME = 'yanjuan_desk_idb_v1';
-const STORE_NAME = 'learning_state';
 const STORAGE_KEY = 'yanjuan_desk_state_v1';
 
 export function createDefaultLearningDatabase(deviceId?: string): LocalLearningDatabase {
   return {
-    schemaVersion: '1.0.0',
+    schemaVersion: '2.0.0',
     deviceId: deviceId || `dev-${Math.random().toString(36).slice(2, 10)}`,
     isPrivateDevice: true,
     preferences: {
@@ -70,6 +76,80 @@ export function createDefaultLearningDatabase(deviceId?: string): LocalLearningD
 }
 
 /**
+ * Migrates legacy numeric-year records to include canonical `paperId` and `subjectId`
+ * without altering immutable answer contents or breaking existing fields.
+ */
+export function migrateDatabasePaperIds(
+  db: LocalLearningDatabase
+): LocalLearningDatabase {
+  let changed = false;
+
+  const attempts: LocalLearningDatabase['attempts'] = {};
+  for (const [id, att] of Object.entries(db.attempts || {})) {
+    const paperId = resolveCanonicalPaperId(att.year, att.paperId);
+    const subjectId = resolveSubjectId(att.year, att.subjectId);
+    if (att.paperId !== paperId || att.subjectId !== subjectId) {
+      attempts[id] = { ...att, paperId, subjectId };
+      changed = true;
+    } else {
+      attempts[id] = att;
+    }
+  }
+
+  const subjectiveVersions: LocalLearningDatabase['subjectiveVersions'] = {};
+  for (const [id, ver] of Object.entries(db.subjectiveVersions || {})) {
+    const paperId = resolveCanonicalPaperId(ver.year, ver.paperId);
+    const subjectId = resolveSubjectId(ver.year, ver.subjectId);
+    if (ver.paperId !== paperId || ver.subjectId !== subjectId) {
+      subjectiveVersions[id] = { ...ver, paperId, subjectId };
+      changed = true;
+    } else {
+      subjectiveVersions[id] = ver;
+    }
+  }
+
+  const objectiveAnalyses: LocalLearningDatabase['objectiveAnalyses'] = {};
+  for (const [id, analysis] of Object.entries(db.objectiveAnalyses || {})) {
+    const yearGuess = analysis.year;
+    if (yearGuess && (!analysis.paperId || !analysis.subjectId)) {
+      objectiveAnalyses[id] = {
+        ...analysis,
+        paperId: resolveCanonicalPaperId(yearGuess, analysis.paperId),
+        subjectId: resolveSubjectId(yearGuess, analysis.subjectId),
+      };
+      changed = true;
+    } else {
+      objectiveAnalyses[id] = analysis;
+    }
+  }
+
+  const reviewItems: LocalLearningDatabase['reviewItems'] = {};
+  for (const [id, rev] of Object.entries(db.reviewItems || {})) {
+    const paperId = resolveCanonicalPaperId(rev.year, rev.paperId);
+    const subjectId = resolveSubjectId(rev.year, rev.subjectId);
+    if (rev.paperId !== paperId || rev.subjectId !== subjectId) {
+      reviewItems[id] = { ...rev, paperId, subjectId };
+      changed = true;
+    } else {
+      reviewItems[id] = rev;
+    }
+  }
+
+  if (!changed && db.schemaVersion === '2.0.0') {
+    return db;
+  }
+
+  return {
+    ...db,
+    schemaVersion: '2.0.0',
+    attempts,
+    subjectiveVersions,
+    objectiveAnalyses,
+    reviewItems,
+  };
+}
+
+/**
  * Creates a new immutable subjective answer version (V1 原稿, V2 修改稿, V3 延时重写...).
  * Strictly forbids overwriting any existing version in db.subjectiveVersions!
  */
@@ -78,10 +158,12 @@ export function appendSubjectiveAnswerVersion(
   params: {
     id?: string;
     attemptId: string;
+    paperId?: string;
+    subjectId?: SubjectId;
     year: number;
     dataVersion: string;
     unitId: string;
-    unitType: 'translation' | 'practical-writing' | 'visual-writing';
+    unitType: SubjectiveUnitType;
     questionNumber: number;
     practiceMode: SubjectivePracticeMode;
     content: string;
@@ -127,15 +209,23 @@ export function appendSubjectiveAnswerVersion(
   };
   const versionLabel = labelMap[nextVersionNumber] || `V${nextVersionNumber} 进阶重写`;
 
-  const words = params.content
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean).length;
+  const paperId = resolveCanonicalPaperId(params.year, params.paperId);
+  const subjectId = resolveSubjectId(params.year, params.subjectId);
+
+  const words =
+    params.unitType === 'politics-analysis'
+      ? params.content.replace(/\s+/g, '').length
+      : params.content
+          .trim()
+          .split(/\s+/)
+          .filter(Boolean).length;
   const nowIso = params.nowIso || new Date().toISOString();
 
   const createdVersion: SubjectiveAnswerVersion = {
     id: versionId,
     attemptId: params.attemptId,
+    paperId,
+    subjectId,
     year: params.year,
     dataVersion: params.dataVersion,
     unitId: params.unitId,
@@ -306,51 +396,76 @@ export function importLearningDataJson(
     currentDb,
     incomingDb
   );
-  return mergedDb;
+  return migrateDatabasePaperIds(mergedDb);
 }
 
 /**
- * Browser IndexedDB + localStorage persistence helpers.
+ * Browser IndexedDB v2 + localStorage persistence helpers with throttled buffered writes.
  */
+let pendingSaveTimer: ReturnType<typeof setTimeout> | null = null;
+let pendingDbToFlush: LocalLearningDatabase | null = null;
+let unloadListenersRegistered = false;
+
+function ensureUnloadListeners(): void {
+  if (unloadListenersRegistered || typeof window === 'undefined') return;
+  unloadListenersRegistered = true;
+
+  const flushSyncOrAsync = () => {
+    void flushPendingDatabaseSave();
+  };
+
+  window.addEventListener('pagehide', flushSyncOrAsync);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+      flushSyncOrAsync();
+    }
+  });
+}
+
+export async function flushPendingDatabaseSave(): Promise<void> {
+  if (pendingSaveTimer) {
+    clearTimeout(pendingSaveTimer);
+    pendingSaveTimer = null;
+  }
+  if (!pendingDbToFlush) return;
+  const snapshot = pendingDbToFlush;
+  pendingDbToFlush = null;
+  await saveDatabaseToBrowser(snapshot);
+}
+
+export function saveDatabaseToBrowserThrottled(
+  db: LocalLearningDatabase,
+  delayMs = 2500
+): void {
+  if (typeof window === 'undefined') return;
+  ensureUnloadListeners();
+  pendingDbToFlush = db;
+  if (pendingSaveTimer) return;
+  pendingSaveTimer = setTimeout(() => {
+    pendingSaveTimer = null;
+    void flushPendingDatabaseSave();
+  }, delayMs);
+}
+
 export async function loadDatabaseFromBrowser(): Promise<LocalLearningDatabase> {
   if (typeof window === 'undefined') {
     return createDefaultLearningDatabase();
   }
 
-  // Try IndexedDB first
-  if (typeof indexedDB !== 'undefined') {
-    try {
-      const fromIdb = await new Promise<LocalLearningDatabase | null>((resolve) => {
-        const req = indexedDB.open(DB_NAME, 1);
-        req.onupgradeneeded = () => {
-          const db = req.result;
-          if (!db.objectStoreNames.contains(STORE_NAME)) {
-            db.createObjectStore(STORE_NAME);
-          }
-        };
-        req.onsuccess = () => {
-          const db = req.result;
-          const tx = db.transaction(STORE_NAME, 'readonly');
-          const store = tx.objectStore(STORE_NAME);
-          const getReq = store.get(STORAGE_KEY);
-          getReq.onsuccess = () => resolve((getReq.result as LocalLearningDatabase) || null);
-          getReq.onerror = () => resolve(null);
-        };
-        req.onerror = () => resolve(null);
-      });
-      if (fromIdb && fromIdb.schemaVersion) {
-        return fromIdb;
-      }
-    } catch {
-      // Fallback to localStorage below
-    }
+  const fromIdb = await loadMultiStoreDatabase();
+  if (fromIdb && fromIdb.schemaVersion) {
+    return migrateDatabasePaperIds(fromIdb);
   }
 
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw) as LocalLearningDatabase;
-      if (parsed && parsed.schemaVersion) return parsed;
+      if (parsed && parsed.schemaVersion) {
+        const migrated = migrateDatabasePaperIds(parsed);
+        await saveMultiStoreDatabase(migrated);
+        return migrated;
+      }
     }
   } catch {
     // ignore
@@ -361,6 +476,11 @@ export async function loadDatabaseFromBrowser(): Promise<LocalLearningDatabase> 
 
 export async function saveDatabaseToBrowser(db: LocalLearningDatabase): Promise<void> {
   if (typeof window === 'undefined') return;
+  pendingDbToFlush = null;
+  if (pendingSaveTimer) {
+    clearTimeout(pendingSaveTimer);
+    pendingSaveTimer = null;
+  }
 
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
@@ -368,33 +488,15 @@ export async function saveDatabaseToBrowser(db: LocalLearningDatabase): Promise<
     // ignore quota errors
   }
 
-  if (typeof indexedDB !== 'undefined') {
-    try {
-      await new Promise<void>((resolve) => {
-        const req = indexedDB.open(DB_NAME, 1);
-        req.onupgradeneeded = () => {
-          const idb = req.result;
-          if (!idb.objectStoreNames.contains(STORE_NAME)) {
-            idb.createObjectStore(STORE_NAME);
-          }
-        };
-        req.onsuccess = () => {
-          const idb = req.result;
-          const tx = idb.transaction(STORE_NAME, 'readwrite');
-          const store = tx.objectStore(STORE_NAME);
-          store.put(db, STORAGE_KEY);
-          tx.oncomplete = () => resolve();
-          tx.onerror = () => resolve();
-        };
-        req.onerror = () => resolve();
-      });
-    } catch {
-      // ignore
-    }
-  }
+  await saveMultiStoreDatabase(db);
 }
 
 export async function clearBrowserLocalDatabase(): Promise<LocalLearningDatabase> {
+  pendingDbToFlush = null;
+  if (pendingSaveTimer) {
+    clearTimeout(pendingSaveTimer);
+    pendingSaveTimer = null;
+  }
   const fresh = createDefaultLearningDatabase();
   if (typeof window !== 'undefined') {
     try {
@@ -403,6 +505,7 @@ export async function clearBrowserLocalDatabase(): Promise<LocalLearningDatabase
       // ignore
     }
   }
+  await clearMultiStoreDatabase();
   await saveDatabaseToBrowser(fresh);
   return fresh;
 }

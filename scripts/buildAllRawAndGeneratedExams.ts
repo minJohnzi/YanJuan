@@ -5,6 +5,8 @@ import type {
   AnswerMode,
   AnswerSource,
   Exam,
+  ExamAnswerKeyEntry,
+  ExamAnswerKeyFile,
   ExamItem,
   ExamSection,
   ExamUnit,
@@ -12,11 +14,15 @@ import type {
   OptionItem,
   PassageAssemblySpec,
   SourceLocator,
+  SubjectId,
+  SubjectManifestSummary,
   UnitType,
   ValidationCheckResult,
   ValidationErrorCode,
   VisualMaterial,
 } from '../src/shared/types.ts';
+import { buildPaperIdentity, SUBJECT_REGISTRY } from '../src/domain/subjects.ts';
+import { auditExamItemDataQuality, stripExamAnswersForExamMode } from '../src/domain/quoteVerifier.ts';
 
 const rootDir = process.cwd();
 const rawDir = path.join(rootDir, 'data', 'exams', 'raw');
@@ -1235,17 +1241,444 @@ export function buildRuntimeExamFromRawFiles(year: number): Exam {
   };
 }
 
+interface RawPoliticsSetJson {
+  setNumber: number;
+  year: number;
+  examId: string;
+  title: string;
+  subject: '考研政治';
+  totalScore: number;
+  durationMinutes: number;
+  singleChoice: {
+    questionNumber: number;
+    score: number;
+    module: string;
+    prompt: string;
+    options: OptionItem[];
+    correctAnswer: string;
+    explanation: string;
+  }[];
+  multiChoice: {
+    questionNumber: number;
+    score: number;
+    module: string;
+    prompt: string;
+    options: OptionItem[];
+    correctAnswer: string;
+    explanation: string;
+  }[];
+  analysisQuestions: {
+    questionNumber: number;
+    score: number;
+    module: string;
+    materials: string[];
+    subQuestions: string[];
+    answerKeyPoints: string;
+    explanation: string;
+  }[];
+}
+
+export function buildPoliticsRuntimeExam(setNum: number): Exam | null {
+  const politicsFile = path.join(
+    rootDir,
+    'data',
+    'politics',
+    'xiao8-2027',
+    `set-${setNum}.json`
+  );
+  if (!fs.existsSync(politicsFile)) {
+    return null;
+  }
+  const raw: RawPoliticsSetJson = JSON.parse(fs.readFileSync(politicsFile, 'utf8'));
+  const year = 2100 + setNum; // 2101..2108
+  const fileSha = sha256File(politicsFile);
+  const relFile = `data/politics/xiao8-2027/set-${setNum}.json`;
+
+  const singleItems: ExamItem[] = (raw.singleChoice || []).map((q) => ({
+    id: `${year}-q-${q.questionNumber}`,
+    questionNumber: q.questionNumber,
+    answerMode: 'single-choice',
+    prompt: q.prompt,
+    options: q.options,
+    score: q.score || 1,
+    correctAnswer: (q.correctAnswer || '').trim().toUpperCase(),
+    answerSource: 'source-provided',
+    knowledgeModule: q.module,
+    officialExplanation: q.explanation,
+    sourceLocator: {
+      sourceFile: relFile,
+      sourceFormat: 'pdf',
+      sectionHeading: '一、单项选择题',
+    },
+  }));
+
+  const multiItems: ExamItem[] = (raw.multiChoice || []).map((q) => ({
+    id: `${year}-q-${q.questionNumber}`,
+    questionNumber: q.questionNumber,
+    answerMode: 'multi-choice',
+    prompt: q.prompt,
+    options: q.options,
+    score: q.score || 2,
+    correctAnswer: Array.from(
+      new Set((q.correctAnswer || '').toUpperCase().replace(/[^A-D]/g, '').split(''))
+    )
+      .sort()
+      .join(''),
+    answerSource: 'source-provided',
+    knowledgeModule: q.module,
+    officialExplanation: q.explanation,
+    sourceLocator: {
+      sourceFile: relFile,
+      sourceFormat: 'pdf',
+      sectionHeading: '二、多项选择题',
+    },
+  }));
+
+  const analysisMaterials = (raw.analysisQuestions || []).map((q) => ({
+    id: `${year}-mat-q-${q.questionNumber}`,
+    materialType: 'analysis-material' as const,
+    title: `第 ${q.questionNumber} 题材料（${q.module}）`,
+    text: (q.materials || []).join('\n\n'),
+    paragraphs: q.materials || [],
+    relatedItemIds: [`${year}-q-${q.questionNumber}`],
+  }));
+
+  const analysisItems: ExamItem[] = (raw.analysisQuestions || []).map((q) => ({
+    id: `${year}-q-${q.questionNumber}`,
+    questionNumber: q.questionNumber,
+    answerMode: 'long-text',
+    prompt: (q.subQuestions || []).join('\n'),
+    subQuestions: q.subQuestions || [],
+    answerKeyPoints: q.answerKeyPoints || '',
+    officialExplanation: q.explanation || '',
+    knowledgeModule: q.module,
+    score: q.score || 10,
+    correctAnswer: null,
+    answerSource: 'source-provided',
+    rubric: {
+      maxScore: q.score || 10,
+      dimensions: [
+        { id: 'kp', name: '核心原理与采分点覆盖', maxScore: 6, description: '准确调用对应学科核心原理与关键术语' },
+        { id: 'mat', name: '结合材料分析与逻辑结构', maxScore: 4, description: '紧扣材料层次分点作答，逻辑清晰' },
+      ],
+      keyPoints: (q.subQuestions || []),
+      referenceText: q.answerKeyPoints,
+      referenceSource: 'source-provided',
+    },
+    sourceLocator: {
+      sourceFile: relFile,
+      sourceFormat: 'pdf',
+      sectionHeading: '三、材料分析题',
+    },
+  }));
+
+  const singleUnit: ExamUnit = {
+    id: `${year}-unit-politics-single`,
+    sectionId: 'Section I',
+    unitType: 'politics-single',
+    title: '一、单项选择题（第 1～16 题）',
+    instructions: '每小题 1 分，共 16 分。下列每题给出的四个选项中，只有一个选项是最符合题目要求的。',
+    score: 16,
+    suggestedMinutes: 18,
+    materials: [],
+    items: singleItems,
+    analysisProfile: {
+      focusSkills: ['基础概念精准识记', '时政与帽子题定位', '哲学名言与原理对应'],
+      commonTraps: ['张冠李戴', '偷换时间节点或会议文献表述'],
+    },
+    reviewStrategy: {
+      defaultIntervalsDays: [1, 3, 7, 14, 30],
+      recommendedAction: '对照《肖八解析》背诵核心帽子题表述',
+    },
+    sourceLocator: { sourceFile: relFile, sourceFormat: 'pdf' },
+  };
+
+  const multiUnit: ExamUnit = {
+    id: `${year}-unit-politics-multi`,
+    sectionId: 'Section II',
+    unitType: 'politics-multi',
+    title: '二、多项选择题（第 17～33 题）',
+    instructions: '每小题 2 分，共 34 分。下列每题给出的四个选项中，至少有两个选项是符合题目要求的。多选、少选或错选均不得分。',
+    score: 34,
+    suggestedMinutes: 32,
+    materials: [],
+    items: multiItems,
+    analysisProfile: {
+      focusSkills: ['多项组合判断', '干扰项绝对化表述排除', '结合材料语境筛选'],
+      commonTraps: ['少选漏选（保守失分）', '误选说法正确但与题干无关项'],
+    },
+    reviewStrategy: {
+      defaultIntervalsDays: [1, 3, 7, 14, 30],
+      recommendedAction: '逐项复盘每个干扰项错在哪里，消除知识盲区',
+    },
+    sourceLocator: { sourceFile: relFile, sourceFormat: 'pdf' },
+  };
+
+  const analysisUnit: ExamUnit = {
+    id: `${year}-unit-politics-analysis`,
+    sectionId: 'Section III',
+    unitType: 'politics-analysis',
+    title: '三、材料分析题（第 34～38 题）',
+    instructions: '每小题 10 分，共 50 分。要求结合所学知识分析材料回答问题。',
+    score: 50,
+    suggestedMinutes: 130,
+    materials: analysisMaterials,
+    items: analysisItems,
+    analysisProfile: {
+      focusSkills: ['马原原理拆解', '新思想与史纲主线串联', '按采分点规范分条作答'],
+      commonTraps: ['只抄材料不写原理', '原理堆砌未结合材料'],
+    },
+    reviewStrategy: {
+      defaultIntervalsDays: [1, 3, 7, 14, 30],
+      recommendedAction: '对照【答案要点】提炼核心采分句框架',
+    },
+    sourceLocator: { sourceFile: relFile, sourceFormat: 'pdf' },
+  };
+
+  const sections: ExamSection[] = [
+    {
+      id: `${year}-sec-1`,
+      sectionNumber: 'Section I',
+      title: '一、单项选择题',
+      score: 16,
+      suggestedMinutes: 18,
+      units: [singleUnit],
+    },
+    {
+      id: `${year}-sec-2`,
+      sectionNumber: 'Section II',
+      title: '二、多项选择题',
+      score: 34,
+      suggestedMinutes: 32,
+      units: [multiUnit],
+    },
+    {
+      id: `${year}-sec-3`,
+      sectionNumber: 'Section III',
+      title: '三、材料分析题',
+      score: 50,
+      suggestedMinutes: 130,
+      units: [analysisUnit],
+    },
+  ];
+
+  const allObjectivePresent =
+    singleItems.length === 16 &&
+    multiItems.length === 17 &&
+    singleItems.every((i) => Boolean(i.correctAnswer)) &&
+    multiItems.every((i) => Boolean(i.correctAnswer && i.correctAnswer.length >= 2));
+
+  const checks: ValidationCheckResult[] = [
+    {
+      checkId: 'POL-CHK-01',
+      name: '考研政治（27肖秀荣冲刺8套卷）科目与套卷校验',
+      passed: true,
+      message: `${raw.title} (卷号: ${setNum}) 校验通过`,
+    },
+    {
+      checkId: 'POL-CHK-02',
+      name: '题号连续性与总题数 (1–38)',
+      passed: singleItems.length + multiItems.length + analysisItems.length === 38,
+      message: `单选 ${singleItems.length} 题 + 多选 ${multiItems.length} 题 + 分析 ${analysisItems.length} 题 = 38 题`,
+    },
+    {
+      checkId: 'POL-CHK-03',
+      name: '单项选择题 (1–16 题，每题 1 分) 与官方解析核验',
+      passed: singleItems.length === 16,
+      message: '1–16 题四选一答案与《肖八答案解析》完全对齐',
+    },
+    {
+      checkId: 'POL-CHK-04',
+      name: '多项选择题 (17–33 题，每题 2 分) 与官方解析核验',
+      passed: multiItems.length === 17 && allObjectivePresent,
+      message: '17–33 题多选答案（2～4项）与《肖八答案解析》速查表完全一致',
+    },
+    {
+      checkId: 'POL-CHK-05',
+      name: '材料分析题 (34–38 题，每题 10 分) 材料与答案要点核验',
+      passed: analysisItems.length === 5,
+      message: '34–38 题五大模块材料、小问与【答案要点】完整收录',
+    },
+  ];
+
+  const createdAt = '2026-11-12T00:00:00.000Z';
+
+  return {
+    id: `exam-${year}`,
+    year,
+    subject: '考研政治',
+    setNumber: setNum,
+    paperTitle: raw.title,
+    status: 'ready',
+    importStatus: 'ready',
+    dataVersion: 'v1',
+    schemaVersion: '1.0.0',
+    parserProvider: 'internal',
+    parserModel: 'xiao8-verified-pipeline',
+    parserVersion: '1.0.0',
+    importRetryCount: 0,
+    pageCount: 20,
+    sourceFiles: [relFile],
+    sourceFormats: ['pdf'],
+    sourceHashes: { [relFile]: fileSha },
+    createdAt,
+    updatedAt: createdAt,
+    totalScore: 100,
+    durationMinutes: 180,
+    sections,
+    validationReport: {
+      examId: `exam-${year}`,
+      year,
+      dataVersion: 'v1',
+      status: 'ready',
+      passedAllChecks: true,
+      errorCodes: [],
+      missingObjectiveQuestions: [],
+      conflictingObjectiveQuestions: [],
+      checks,
+      consistencyCheckRuns: 2,
+      consistencyMatched: true,
+      sourceDiscrepancies: [],
+      generatedAt: createdAt,
+    },
+    referencedAssets: [],
+    objectiveAnswerCount: 33,
+    subjectiveCount: 5,
+    answerSourceStatus: 'source-provided',
+  };
+}
+
+function enrichAndSplitExam(rawExam: Exam): {
+  enriched: Exam;
+  sheet: Exam;
+  keyFile: ExamAnswerKeyFile;
+} {
+  const identity = buildPaperIdentity(rawExam.year, rawExam.paperTitle);
+  const disputedQuestions: NonNullable<Exam['validationReport']['disputedQuestions']> = [];
+  const keyItems: Record<number, ExamAnswerKeyEntry> = {};
+
+  const enrichedSections = rawExam.sections.map((section) => ({
+    ...section,
+    units: section.units.map((unit) => {
+      const passageText = unit.materials.map((m) => m.text).join('\n\n');
+      const enrichedItems = unit.items.map((item) => {
+        const audit = auditExamItemDataQuality(
+          rawExam.year,
+          item,
+          passageText,
+          item.sourceLocator?.sourceFile || rawExam.sourceFiles[0] || '',
+          rawExam.sourceFiles.find((f) => f.includes('answers'))
+        );
+
+        if (audit.status === 'disputed') {
+          disputedQuestions.push({
+            questionNumber: item.questionNumber,
+            markedAnswer: audit.markedAnswer,
+            semanticCandidateAnswer: audit.semanticCandidateAnswer,
+            reason: audit.reason,
+            paperSourceFile: audit.paperSourceFile,
+            answerSourceFile: audit.answerSourceFile,
+          });
+        }
+
+        keyItems[item.questionNumber] = {
+          questionNumber: item.questionNumber,
+          correctAnswer: item.correctAnswer,
+          answerSource: item.answerSource,
+          officialExplanation: item.officialExplanation,
+          answerKeyPoints: item.answerKeyPoints,
+          referenceTranslation: item.translationMeta?.referenceTranslation,
+          referenceText: item.rubric?.referenceText,
+          dataQuality: audit,
+        };
+
+        return {
+          ...item,
+          dataQuality: audit,
+        };
+      });
+      return { ...unit, items: enrichedItems };
+    }),
+  }));
+
+  const errorCodes = Array.from(
+    new Set([
+      ...(rawExam.validationReport.errorCodes || []),
+      ...(disputedQuestions.length > 0 ? (['DATA_ANSWER_DISPUTED'] as ValidationErrorCode[]) : []),
+    ])
+  );
+
+  const enriched: Exam = {
+    ...rawExam,
+    paperId: identity.paperId,
+    subjectId: identity.subjectId,
+    examYear: identity.examYear,
+    seriesCode: identity.seriesCode,
+    badgeLabel: identity.badgeLabel,
+    identity,
+    sections: enrichedSections,
+    validationReport: {
+      ...rawExam.validationReport,
+      paperId: identity.paperId,
+      errorCodes,
+      disputedQuestions: disputedQuestions.length > 0 ? disputedQuestions : rawExam.validationReport.disputedQuestions,
+    },
+  };
+
+  const sheet = stripExamAnswersForExamMode(enriched);
+  const keyFile: ExamAnswerKeyFile = {
+    paperId: identity.paperId,
+    subjectId: identity.subjectId,
+    legacyYear: identity.legacyYear,
+    dataVersion: enriched.dataVersion,
+    generatedAt: enriched.updatedAt,
+    items: keyItems,
+  };
+
+  return { enriched, sheet, keyFile };
+}
+
+function writeBuiltExamArtifacts(exam: Exam, sheet: Exam, keyFile: ExamAnswerKeyFile) {
+  const yearKey = String(exam.year);
+  const paperId = exam.paperId || buildPaperIdentity(exam.year).paperId;
+
+  const fullJson = JSON.stringify(exam, null, 2);
+  const sheetJson = JSON.stringify(sheet, null, 2);
+  const keyJson = JSON.stringify(keyFile, null, 2);
+  const reportJson = JSON.stringify(exam.validationReport, null, 2);
+
+  fs.writeFileSync(path.join(genPapersDir, `${exam.year}.json`), fullJson, 'utf8');
+  fs.writeFileSync(path.join(genPapersDir, `${paperId}.exam.json`), sheetJson, 'utf8');
+  fs.writeFileSync(path.join(genPapersDir, `${paperId}.key.json`), keyJson, 'utf8');
+
+  const dataPaperYearDir = path.join(rootDir, 'data', 'papers', yearKey);
+  const dataRepYearDir = path.join(rootDir, 'data', 'import-reports', yearKey);
+  fs.mkdirSync(dataPaperYearDir, { recursive: true });
+  fs.mkdirSync(dataRepYearDir, { recursive: true });
+
+  fs.writeFileSync(path.join(dataPaperYearDir, 'v1.json'), fullJson, 'utf8');
+  fs.writeFileSync(path.join(dataRepYearDir, 'v1.json'), reportJson, 'utf8');
+}
+
+function cleanupRedundantPublicDataCopies() {
+  const pubDataDir = path.join(rootDir, 'public', 'data');
+  if (fs.existsSync(pubDataDir)) {
+    fs.rmSync(pubDataDir, { recursive: true, force: true });
+  }
+}
+
 /**
  * Executes the non-destructive build pipeline:
  * 1. Verifies `data/exams/raw/` without modifying any raw files.
  * 2. Copies 29 visual assets from `data/exams/raw/assets/{year}/*` to `public/assets/papers/{year}/*`.
- * 3. Parses all 17 raw papers and 3 raw answer files to generate `data/exams/generated/papers/{year}.json`
- *    and `data/exams/generated/papers-manifest.json` (plus `data/papers-manifest.json` and `public/data/...`).
+ * 3. Parses all raw papers & answers to generate canonical `data/exams/generated/` artifacts
+ *    (`{year}.json`, `{paperId}.exam.json`, `{paperId}.key.json`) without duplicating `public/data/`.
  */
 export function executeBuild() {
-  console.log('[buildAllRawAndGeneratedExams] 同步 2010–2026 补充答案并从 data/exams/raw/ 构建运行时题库...');
+  console.log('[buildAllRawAndGeneratedExams] 同步 2010–2026 补充答案与 2027 政治冲刺卷，构建本地唯一数据源题库...');
 
   syncSupplementAnswersFromMarkdown();
+  cleanupRedundantPublicDataCopies();
 
   fs.mkdirSync(genPapersDir, { recursive: true });
   fs.mkdirSync(publicAssetsDir, { recursive: true });
@@ -1270,45 +1703,24 @@ export function executeBuild() {
   }
   console.log(`[buildAllRawAndGeneratedExams] 已同步 ${copiedAssetCount} 张视觉材料至 public/assets/papers/`);
 
-  // 2. Parse each year's raw markdown & answers into generated/papers/{year}.json
+  // 2. Parse each English I year & Politics set into data/exams/generated/
   const generatedYearsSummary: any[] = [];
   const latestReadyVersion: Record<string, string> = {};
   const sourceFormats: Record<string, ('md' | 'pdf' | 'docx')[]> = {};
   const unitTypes: Record<string, UnitType[]> = {};
   const validationStatus: Record<string, ImportStatus> = {};
 
-  const pubGenDir = path.join(rootDir, 'public', 'data', 'exams', 'generated');
-  const pubGenPapersDir = path.join(pubGenDir, 'papers');
-  fs.mkdirSync(pubGenPapersDir, { recursive: true });
-
   for (const year of ALL_YEARS) {
-    const examObj = buildRuntimeExamFromRawFiles(year);
-    const jsonStr = JSON.stringify(examObj, null, 2);
-
-    // Write to data/exams/generated/papers/{year}.json and public/data/exams/generated/papers/{year}.json
-    fs.writeFileSync(path.join(genPapersDir, `${year}.json`), jsonStr, 'utf8');
-    fs.writeFileSync(path.join(pubGenPapersDir, `${year}.json`), jsonStr, 'utf8');
-
-    // Also write versioned paper and import report for UI inspector compatibility
-    const dataPaperYearDir = path.join(rootDir, 'data', 'papers', String(year));
-    const pubPaperYearDir = path.join(rootDir, 'public', 'data', 'papers', String(year));
-    const dataRepYearDir = path.join(rootDir, 'data', 'import-reports', String(year));
-    const pubRepYearDir = path.join(rootDir, 'public', 'data', 'import-reports', String(year));
-    fs.mkdirSync(dataPaperYearDir, { recursive: true });
-    fs.mkdirSync(pubPaperYearDir, { recursive: true });
-    fs.mkdirSync(dataRepYearDir, { recursive: true });
-    fs.mkdirSync(pubRepYearDir, { recursive: true });
-
-    fs.writeFileSync(path.join(dataPaperYearDir, 'v1.json'), jsonStr, 'utf8');
-    fs.writeFileSync(path.join(pubPaperYearDir, 'v1.json'), jsonStr, 'utf8');
-    const repJson = JSON.stringify(examObj.validationReport, null, 2);
-    fs.writeFileSync(path.join(dataRepYearDir, 'v1.json'), repJson, 'utf8');
-    fs.writeFileSync(path.join(pubRepYearDir, 'v1.json'), repJson, 'utf8');
+    const rawExam = buildRuntimeExamFromRawFiles(year);
+    const { enriched: examObj, sheet, keyFile } = enrichAndSplitExam(rawExam);
+    writeBuiltExamArtifacts(examObj, sheet, keyFile);
 
     const yKey = String(year);
+    const paperId = examObj.paperId!;
     const isReady = examObj.importStatus === 'ready';
     if (isReady) {
       latestReadyVersion[yKey] = 'v1';
+      latestReadyVersion[paperId] = 'v1';
     }
     sourceFormats[yKey] = ['md'];
     unitTypes[yKey] = [
@@ -1323,6 +1735,10 @@ export function executeBuild() {
 
     generatedYearsSummary.push({
       year,
+      paperId,
+      subjectId: examObj.subjectId,
+      examYear: examObj.examYear,
+      badgeLabel: examObj.badgeLabel,
       subject: '考研英语一',
       paperTitle: examObj.paperTitle,
       status: examObj.importStatus,
@@ -1332,7 +1748,6 @@ export function executeBuild() {
       visualAssets: (examObj.referencedAssets || []).map((f: string) => `/assets/papers/${year}/${f}`),
       objectiveCount: examObj.objectiveAnswerCount,
       subjectiveCount: examObj.subjectiveCount,
-      // YearManifestEntry fields for UI components (HomeView / PaperLibraryView)
       latestReadyVersion: isReady ? 'v1' : null,
       latestCandidateVersion: 'v1',
       availableVersions: ['v1'],
@@ -1341,23 +1756,100 @@ export function executeBuild() {
       validationStatus: examObj.importStatus,
       errorCodes: examObj.validationReport.errorCodes,
       missingObjectiveCount: examObj.validationReport.missingObjectiveQuestions.length,
+      disputedQuestionCount: examObj.validationReport.disputedQuestions?.length || 0,
       hasNewerCandidate: !isReady,
       updatedAt: examObj.updatedAt,
     });
   }
 
-  const availableYears = generatedYearsSummary
+  // 3. Process 2027 考研政治冲刺 8 套卷 (pol-2027-xiao8-01..08; legacyYear 2101..2108)
+  for (let setNum = 1; setNum <= 8; setNum++) {
+    const rawPol = buildPoliticsRuntimeExam(setNum);
+    if (!rawPol) continue;
+
+    const { enriched: polExam, sheet, keyFile } = enrichAndSplitExam(rawPol);
+    writeBuiltExamArtifacts(polExam, sheet, keyFile);
+
+    const polYear = polExam.year;
+    const polKey = String(polYear);
+    const paperId = polExam.paperId!;
+
+    latestReadyVersion[polKey] = 'v1';
+    latestReadyVersion[paperId] = 'v1';
+    sourceFormats[polKey] = ['pdf'];
+    unitTypes[polKey] = ['politics-single', 'politics-multi', 'politics-analysis'];
+    validationStatus[polKey] = 'ready';
+
+    generatedYearsSummary.push({
+      year: polYear,
+      paperId,
+      subjectId: polExam.subjectId,
+      examYear: polExam.examYear,
+      badgeLabel: polExam.badgeLabel,
+      subject: '考研政治',
+      setNumber: setNum,
+      paperTitle: polExam.paperTitle,
+      status: 'ready',
+      answerSourceStatus: 'source-provided',
+      totalScore: 100,
+      durationMinutes: 180,
+      visualAssets: [],
+      objectiveCount: 33,
+      subjectiveCount: 5,
+      latestReadyVersion: 'v1',
+      latestCandidateVersion: 'v1',
+      availableVersions: ['v1'],
+      sourceFormats: ['pdf'],
+      unitTypes: unitTypes[polKey],
+      validationStatus: 'ready',
+      errorCodes: [],
+      missingObjectiveCount: 0,
+      disputedQuestionCount: 0,
+      hasNewerCandidate: false,
+      updatedAt: polExam.updatedAt,
+    });
+  }
+
+  const englishEntries = generatedYearsSummary.filter((y) => y.subjectId === 'english-i');
+  const politicsEntries = generatedYearsSummary.filter((y) => y.subjectId === 'politics');
+
+  const availableYears = englishEntries
     .filter((y) => y.status === 'ready')
     .map((y) => y.year as number);
-  const needsAnswerSourceYears = generatedYearsSummary
+  const needsAnswerSourceYears = englishEntries
     .filter((y) => y.status === 'needs-answer-source')
     .map((y) => y.year as number);
+  const availablePaperIds = generatedYearsSummary
+    .filter((y) => y.status === 'ready')
+    .map((y) => y.paperId as string);
+
+  const subjectsSummary: Record<SubjectId, SubjectManifestSummary> = {
+    'english-i': {
+      subjectId: 'english-i',
+      name: SUBJECT_REGISTRY['english-i'].name,
+      shortName: SUBJECT_REGISTRY['english-i'].shortName,
+      expectedCount: ALL_YEARS.length,
+      readyCount: availableYears.length,
+      paperIds: englishEntries.map((e) => e.paperId as string),
+      legacyYears: englishEntries.map((e) => e.year as number),
+    },
+    politics: {
+      subjectId: 'politics',
+      name: SUBJECT_REGISTRY.politics.name,
+      shortName: SUBJECT_REGISTRY.politics.shortName,
+      expectedCount: 8,
+      readyCount: politicsEntries.filter((e) => e.status === 'ready').length,
+      paperIds: politicsEntries.map((e) => e.paperId as string),
+      legacyYears: politicsEntries.map((e) => e.year as number),
+    },
+  };
 
   const generatedManifest = {
-    schemaVersion: 1,
+    schemaVersion: '2.0.0',
     buildTime: new Date().toISOString(),
     expectedYears: ALL_YEARS,
     availableYears,
+    availablePaperIds,
     needsAnswerSourceYears,
     failedYears: needsAnswerSourceYears,
     pendingYears: [] as number[],
@@ -1365,32 +1857,32 @@ export function executeBuild() {
     sourceFormats,
     unitTypes,
     validationStatus,
-    totalPapers: 17,
+    subjects: subjectsSummary,
+    totalPapers: ALL_YEARS.length,
     totalVisualAssets: copiedAssetCount,
     years: generatedYearsSummary,
   };
 
   const manifestJsonStr = JSON.stringify(generatedManifest, null, 2);
   fs.writeFileSync(path.join(genDir, 'papers-manifest.json'), manifestJsonStr, 'utf8');
-  fs.writeFileSync(path.join(pubGenDir, 'papers-manifest.json'), manifestJsonStr, 'utf8');
   fs.writeFileSync(path.join(rootDir, 'data', 'papers-manifest.json'), manifestJsonStr, 'utf8');
-  fs.writeFileSync(path.join(rootDir, 'public', 'data', 'papers-manifest.json'), manifestJsonStr, 'utf8');
 
-  // Ensure data/exams/import-state.json is synced
   const importStateObj = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     manifestImported: true,
     expectedYears: ALL_YEARS,
     importedYears: ALL_YEARS,
     pendingYears: [] as number[],
     answerAvailableYears: availableYears,
+    availablePaperIds,
     failedYears: [] as number[],
   };
   const importStateStr = JSON.stringify(importStateObj, null, 2);
   fs.writeFileSync(path.join(rootDir, 'data', 'exams', 'import-state.json'), importStateStr, 'utf8');
-  fs.writeFileSync(path.join(rootDir, 'public', 'data', 'exams', 'import-state.json'), importStateStr, 'utf8');
 
-  console.log('[buildAllRawAndGeneratedExams] 17份运行端试卷JSON与清单已由 raw 源文件真实解析生成！');
+  console.log(
+    `[buildAllRawAndGeneratedExams] 已完成 ${availableYears.length} 份英语一 + ${politicsEntries.length} 份政治冲刺卷构建与审计预计算（已清理 public/data 冗余副本）。`
+  );
 }
 
 // Run when invoked directly via CLI

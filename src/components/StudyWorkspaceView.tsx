@@ -1,24 +1,22 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
   BookOpen,
   Clock,
   CheckCircle2,
-  HelpCircle,
-  Sparkles,
   Flag,
   Layers,
-  Send,
-  History,
-  GitCompare,
   Pause,
   Play,
   Sliders,
   Highlighter,
   X,
-  ChevronLeft,
-  ChevronRight,
+  CheckSquare,
+  Square,
+  Check,
+  ClipboardList,
+  RotateCcw,
 } from 'lucide-react';
 import type {
   ConfidenceLevel,
@@ -32,15 +30,93 @@ import type {
   SubjectiveAnswerVersion,
   SubjectiveEvaluationResult,
   SubjectivePracticeMode,
+  SubjectiveUnitType,
   WritingScaffoldResult,
 } from '../shared/types';
+import {
+  formatExamTitle,
+  isPoliticsExamYear,
+} from '../shared/types';
 import { computeVersionDiff } from '../shared/schemaValidator';
+import { examTimerStore, useTimerSnapshot } from '../hooks/useTimerStore';
 import { ReadingTypographyPrefs } from '../services/storageAndSync';
-import { CulturalHotpotIllustration } from './CulturalHotpotIllustration';
+import { ModalDialog, SegmentedTabs } from './ui/primitives';
+import { ObjectiveQuestionCard } from './workspace/ObjectiveQuestionCard';
+import { EnglishSubjectiveStudio } from './workspace/EnglishSubjectiveStudio';
+import { PoliticsAnalysisStudio } from './workspace/PoliticsAnalysisStudio';
+
+function formatTimerClock(sec: number): string {
+  const safe = Math.max(0, Math.floor(sec));
+  const mins = Math.floor(safe / 60);
+  const rem = safe % 60;
+  return `${String(mins).padStart(2, '0')}:${String(rem).padStart(2, '0')}`;
+}
+
+const WorkspaceTimerControls: React.FC<{
+  mode: ExamAttempt['mode'];
+  durationMinutes: number;
+  isSubmitted: boolean;
+  isStrictSimulation: boolean;
+  isPaused: boolean;
+  onTogglePause: () => void;
+}> = React.memo(
+  ({
+    mode,
+    durationMinutes,
+    isSubmitted,
+    isStrictSimulation,
+    isPaused,
+    onTogglePause,
+  }) => {
+    const timer = useTimerSnapshot();
+    const remainingSimulationSec = Math.max(
+      0,
+      durationMinutes * 60 - timer.elapsedSeconds
+    );
+
+    return (
+      <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-stone-50 dark:bg-[#162226] border border-stone-200 dark:border-[#2C3E46] rounded-lg text-xs font-tabular-mono text-stone-800 dark:text-[#E2E8E6]">
+        <Clock className="w-3.5 h-3.5 text-[#174A5B] dark:text-[#75B6CE]" />
+        <span>
+          {mode === 'unit-practice'
+            ? `用时 ${formatTimerClock(timer.elapsedSeconds)}`
+            : `剩余 ${formatTimerClock(remainingSimulationSec)}`}
+        </span>
+        {!isStrictSimulation && !isSubmitted && (
+          <button
+            type="button"
+            aria-label={isPaused ? '继续计时' : '暂停计时'}
+            onClick={onTogglePause}
+            className="ml-1 text-[#174A5B] dark:text-[#75B6CE] hover:underline inline-flex items-center gap-0.5 font-medium"
+          >
+            {isPaused ? (
+              <Play className="w-3 h-3 fill-current" />
+            ) : (
+              <Pause className="w-3 h-3 fill-current" />
+            )}
+            <span>{isPaused ? '继续' : '暂停'}</span>
+          </button>
+        )}
+      </div>
+    );
+  }
+);
+
+const SubjectiveTimerReadout: React.FC<{ baseElapsedSeconds: number }> =
+  React.memo(({ baseElapsedSeconds }) => {
+    const timer = useTimerSnapshot();
+    const elapsed = Math.max(0, timer.elapsedSeconds - baseElapsedSeconds);
+    return (
+      <div className="text-xs font-tabular-mono text-[#174A5B] dark:text-[#75B6CE]">
+        本稿计时：{formatTimerClock(elapsed)}
+      </div>
+    );
+  });
 
 interface StudyWorkspaceViewProps {
   exam: Exam;
   activeUnitId: string;
+  initialFocusQuestion?: number | null;
   attempt: ExamAttempt;
   subjectiveVersions: SubjectiveAnswerVersion[];
   subjectiveEvaluations: Record<string, SubjectiveEvaluationResult>;
@@ -50,15 +126,16 @@ interface StudyWorkspaceViewProps {
   typographyPrefs: ReadingTypographyPrefs;
   onUpdateTypographyPrefs: (prefs: ReadingTypographyPrefs) => void;
   onSelectUnit: (unitId: string) => void;
+  onRestartFreshPaper?: () => void;
   onUpdateObjectiveResponse: (
     questionNumber: number,
     patch: Partial<ObjectiveItemResponse>
   ) => void;
-  onTickTimer: (deltaSeconds: number) => void;
+  onTickTimer?: (deltaSeconds: number) => void;
   onSubmitAttempt: () => void;
   onSubmitSubjectiveVersion: (params: {
     unitId: string;
-    unitType: 'translation' | 'practical-writing' | 'visual-writing';
+    unitType: SubjectiveUnitType;
     questionNumber: number;
     practiceMode: SubjectivePracticeMode;
     content: string;
@@ -95,6 +172,7 @@ interface StudyWorkspaceViewProps {
   }) => Promise<WritingScaffoldResult>;
   onExitWorkspace: () => void;
   onNavigateSettings: () => void;
+  onOpenQuickChecker?: () => void;
 }
 
 const KNOWN_ERROR_CAUSE_OPTIONS = [
@@ -109,6 +187,7 @@ const KNOWN_ERROR_CAUSE_OPTIONS = [
 export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
   exam,
   activeUnitId,
+  initialFocusQuestion = null,
   attempt,
   subjectiveVersions,
   subjectiveEvaluations,
@@ -118,8 +197,8 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
   typographyPrefs,
   onUpdateTypographyPrefs,
   onSelectUnit,
+  onRestartFreshPaper,
   onUpdateObjectiveResponse,
-  onTickTimer,
   onSubmitAttempt,
   onSubmitSubjectiveVersion,
   onRequestSubjectiveEvaluation,
@@ -128,6 +207,7 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
   onRequestWritingScaffold,
   onExitWorkspace,
   onNavigateSettings,
+  onOpenQuickChecker,
 }) => {
   const allUnits = useMemo(
     () => exam.sections.flatMap((sec) => sec.units),
@@ -142,11 +222,21 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
   const [showAnswerSheet, setShowAnswerSheet] = useState(false);
   const [showPrefsPopover, setShowPrefsPopover] = useState(false);
   const [submitConfirmModal, setSubmitConfirmModal] = useState(false);
+  const [reviewDensity, setReviewDensity] = useState<'compact' | 'comfortable'>('compact');
+  const [reviewFilter, setReviewFilter] = useState<'all' | 'wrong' | 'flagged'>('all');
   const [activeQuestionNumber, setActiveQuestionNumber] = useState<number>(
-    currentUnit?.items[0]?.questionNumber || 1
+    initialFocusQuestion || currentUnit?.items[0]?.questionNumber || 1
   );
   const [questionDisplayMode, setQuestionDisplayMode] = useState<'single' | 'all'>('single');
   const [mobileReadingTab, setMobileReadingTab] = useState<'article' | 'questions'>('questions');
+  const [splitPaneRatio, setSplitPaneRatio] = useState<'5:7' | '6:6' | '7:5'>('7:5');
+  const [highlightedParagraphKey, setHighlightedParagraphKey] = useState<string | null>(null);
+  const highlightTimeoutRef = useRef<number | null>(null);
+  const pendingUnitJumpRef = useRef<{
+    unitId: string;
+    qNum: number;
+    isPartB: boolean;
+  } | null>(null);
 
   // Reading Highlight & Note state
   const [highlightedQuotes, setHighlightedQuotes] = useState<
@@ -156,21 +246,71 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
   // Part B active slot selection
   const [selectedPartBSlot, setSelectedPartBSlot] = useState<number>(41);
 
-  // Subjective practice states
-  const [practiceMode, setPracticeMode] =
-    useState<SubjectivePracticeMode>('independent');
-  const [usedHints, setUsedHints] = useState<HintRecord[]>([]);
-  const [translationInputs, setTranslationInputs] = useState<
-    Record<number, string>
-  >({
-    46: '',
-    47: '',
-    48: '',
-    49: '',
-    50: '',
-  });
-  const [writingDraft, setWritingDraft] = useState<string>('');
-  const [subjectiveElapsed, setSubjectiveElapsed] = useState<number>(0);
+  // Subjective practice states (isolated by exam year and unit)
+  const [practiceModeByKey, setPracticeModeByKey] = useState<
+    Record<string, SubjectivePracticeMode>
+  >({});
+  const [usedHintsByKey, setUsedHintsByKey] = useState<
+    Record<string, HintRecord[]>
+  >({});
+  const [translationInputsByYear, setTranslationInputsByYear] = useState<
+    Record<number, Record<number, string>>
+  >({});
+  const [writingDraftByKey, setWritingDraftByKey] = useState<
+    Record<string, string>
+  >({});
+
+  const subjectiveUnitKey = `${exam.year}:${currentUnit?.id || 'default'}`;
+  const practiceMode: SubjectivePracticeMode =
+    practiceModeByKey[subjectiveUnitKey] || 'independent';
+  const setPracticeMode = (mode: SubjectivePracticeMode) =>
+    setPracticeModeByKey((prev) => ({ ...prev, [subjectiveUnitKey]: mode }));
+  const usedHints = useMemo<HintRecord[]>(
+    () => usedHintsByKey[subjectiveUnitKey] || [],
+    [usedHintsByKey, subjectiveUnitKey]
+  );
+  const setUsedHints = (
+    updater: HintRecord[] | ((prev: HintRecord[]) => HintRecord[])
+  ) =>
+    setUsedHintsByKey((prev) => {
+      const current = prev[subjectiveUnitKey] || [];
+      const next = typeof updater === 'function' ? updater(current) : updater;
+      return { ...prev, [subjectiveUnitKey]: next };
+    });
+  const translationInputs = useMemo<Record<number, string>>(
+    () =>
+      translationInputsByYear[exam.year] || {
+        46: '',
+        47: '',
+        48: '',
+        49: '',
+        50: '',
+      },
+    [translationInputsByYear, exam.year]
+  );
+  const setTranslationInputs = (
+    updater:
+      | Record<number, string>
+      | ((prev: Record<number, string>) => Record<number, string>)
+  ) =>
+    setTranslationInputsByYear((prev) => {
+      const current = prev[exam.year] || {
+        46: '',
+        47: '',
+        48: '',
+        49: '',
+        50: '',
+      };
+      const next = typeof updater === 'function' ? updater(current) : updater;
+      return { ...prev, [exam.year]: next };
+    });
+  const writingDraft = writingDraftByKey[subjectiveUnitKey] || '';
+  const setWritingDraft = (val: string) =>
+    setWritingDraftByKey((prev) => ({ ...prev, [subjectiveUnitKey]: val }));
+  const subjectiveBaseSecRef = useRef<number>(attempt.elapsedSeconds);
+  const [subjectiveBaseSec, setSubjectiveBaseSec] = useState<number>(
+    attempt.elapsedSeconds
+  );
   const [selectedVersionId, setSelectedVersionId] = useState<string | null>(
     null
   );
@@ -188,10 +328,9 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
   >(null);
   const [aiErrorBanner, setAiErrorBanner] = useState<string | null>(null);
 
-  // Follow-up Q&A state
-  const [followUpInput, setFollowUpInput] = useState<string>('');
+  // Follow-up Q&A state (isolated by exam year + question number)
   const [followUpHistory, setFollowUpHistory] = useState<
-    Record<number, { q: string; a: string }[]>
+    Record<string, { q: string; a: string }[]>
   >({});
   const [askingFollowUpQ, setAskingFollowUpQ] = useState<number | null>(null);
   const [aiScaffolds, setAiScaffolds] = useState<
@@ -201,13 +340,51 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
 
   const isStrictSimulation = attempt.mode === 'strict-simulation';
   const isSubmitted = attempt.status === 'submitted';
+  const isPoliticsWorkspace =
+    exam.subject === '考研政治' ||
+    isPoliticsExamYear(exam.year) ||
+    currentUnit?.unitType.startsWith('politics-');
+  const isCompactReview = isSubmitted && reviewDensity === 'compact';
 
   useEffect(() => {
-    if (currentUnit?.items[0]) {
-      setActiveQuestionNumber(currentUnit.items[0].questionNumber);
+    setReviewFilter('all');
+  }, [attempt.id]);
+
+  useEffect(() => {
+    if (initialFocusQuestion) {
+      setActiveQuestionNumber(initialFocusQuestion);
+      if (currentUnit?.unitType === 'passage-assembly') {
+        setSelectedPartBSlot(initialFocusQuestion);
+      }
+      window.setTimeout(() => {
+        document
+          .getElementById(`question-card-${initialFocusQuestion}`)
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 120);
     }
+  }, [initialFocusQuestion, attempt.id, exam.year]);
+
+  useEffect(() => {
+    const pending = pendingUnitJumpRef.current;
+    if (pending && pending.unitId === currentUnit?.id) {
+      pendingUnitJumpRef.current = null;
+      setActiveQuestionNumber(pending.qNum);
+      if (pending.isPartB) {
+        setSelectedPartBSlot(pending.qNum);
+      }
+    } else if (!initialFocusQuestion) {
+      if (currentUnit?.items[0]) {
+        setActiveQuestionNumber(currentUnit.items[0].questionNumber);
+      }
+      const firstPartBSlot =
+        currentUnit?.unitType === 'passage-assembly'
+          ? currentUnit.items[0]?.questionNumber || 41
+          : 41;
+      setSelectedPartBSlot(firstPartBSlot);
+    }
+    setShowDiffPanel(false);
     setAiErrorBanner(null);
-  }, [currentUnit?.id]);
+  }, [currentUnit?.id, exam.year]);
 
   const unitVersions = useMemo(() => {
     if (!currentUnit) return [];
@@ -222,6 +399,8 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
       .sort((a, b) => a.versionNumber - b.versionNumber);
   }, [subjectiveVersions, exam.year, exam.dataVersion, currentUnit]);
 
+  const latestUnitVersionId = unitVersions[unitVersions.length - 1]?.id || null;
+
   useEffect(() => {
     if (unitVersions.length > 0) {
       const latest = unitVersions[unitVersions.length - 1];
@@ -235,17 +414,21 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
       setSelectedVersionId(null);
       setCompareBaseVersionId(null);
     }
-  }, [unitVersions.length, currentUnit?.id]);
+  }, [unitVersions.length, latestUnitVersionId, currentUnit?.id, exam.year, exam.dataVersion]);
 
-  // Timer effect
+  // Sync isolated external timer store without re-rendering full workspace on 1s ticks
   useEffect(() => {
-    if (isSubmitted || (isPaused && !isStrictSimulation)) return;
-    const timer = window.setInterval(() => {
-      onTickTimer(1);
-      setSubjectiveElapsed((prev) => prev + 1);
-    }, 1000);
-    return () => window.clearInterval(timer);
-  }, [isSubmitted, isPaused, isStrictSimulation, onTickTimer]);
+    const paused = isSubmitted || (isPaused && !isStrictSimulation);
+    examTimerStore.syncAttempt(attempt.id, attempt.elapsedSeconds, paused);
+  }, [attempt.id, attempt.elapsedSeconds, isSubmitted, isPaused, isStrictSimulation]);
+
+  useEffect(() => {
+    const snap = examTimerStore.getSnapshot();
+    const base =
+      snap.attemptId === attempt.id ? snap.elapsedSeconds : attempt.elapsedSeconds;
+    subjectiveBaseSecRef.current = base;
+    setSubjectiveBaseSec(base);
+  }, [currentUnit?.id, attempt.id]);
 
   // Close modals on Escape
   useEffect(() => {
@@ -257,32 +440,192 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      if (highlightTimeoutRef.current !== null) {
+        window.clearTimeout(highlightTimeoutRef.current);
+      }
+    };
   }, []);
 
-  const formatDuration = (sec: number) => {
-    const mins = Math.floor(sec / 60);
-    const rem = sec % 60;
-    return `${String(mins).padStart(2, '0')}:${String(rem).padStart(2, '0')}`;
+  const getCurrentSubjectiveElapsed = () => {
+    const snap = examTimerStore.getSnapshot();
+    const nowSec =
+      snap.attemptId === attempt.id ? snap.elapsedSeconds : attempt.elapsedSeconds;
+    return Math.max(0, nowSec - subjectiveBaseSecRef.current);
   };
 
-  const remainingSimulationSec = Math.max(
-    0,
-    exam.durationMinutes * 60 - attempt.elapsedSeconds
+  const resetSubjectiveTimerOrigin = () => {
+    const snap = examTimerStore.getSnapshot();
+    const nowSec =
+      snap.attemptId === attempt.id ? snap.elapsedSeconds : attempt.elapsedSeconds;
+    subjectiveBaseSecRef.current = nowSec;
+    setSubjectiveBaseSec(nowSec);
+  };
+
+  const totalObjectiveCount = useMemo(() => {
+    const count = allUnits
+      .flatMap((u) => u.items)
+      .filter(
+        (it) =>
+          it.answerMode === 'single-choice' ||
+          it.answerMode === 'multi-choice'
+      ).length;
+    return count > 0 ? count : (exam.subject === '考研政治' ? 33 : 45);
+  }, [allUnits, exam.subject]);
+
+  const handleLocateEvidenceQuote = useCallback(
+    (rawQuote: string) => {
+      if (!rawQuote || !currentUnit) return;
+      const normalize = (s: string) =>
+        s
+          .toLowerCase()
+          .replace(/[\u2018\u2019]/g, "'")
+          .replace(/[\u201C\u201D]/g, '"')
+          .replace(/<u>|<\/u>/gi, '')
+          .replace(/[^a-z0-9\u4e00-\u9fa5\s]/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+      const normQuote = normalize(rawQuote);
+      if (!normQuote) return;
+      const quoteWords = normQuote.split(' ').filter((w) => w.length >= 3);
+      const quoteSnippets = [
+        normQuote.slice(0, 48),
+        normQuote.slice(0, 28),
+        normQuote.slice(-36),
+      ].filter((s) => s.length >= 8);
+
+      let bestKey: string | null = null;
+      let bestScore = -1;
+
+      for (const mat of currentUnit.materials) {
+        const paragraphs =
+          mat.paragraphs && mat.paragraphs.length > 0
+            ? mat.paragraphs
+            : mat.text.split(/\n{2,}/).filter(Boolean);
+        paragraphs.forEach((paraText, pIdx) => {
+          const normPara = normalize(paraText);
+          let score = 0;
+          if (normPara.includes(normQuote)) {
+            score += 1000;
+          }
+          for (const snip of quoteSnippets) {
+            if (normPara.includes(snip)) {
+              score += 200;
+            }
+          }
+          for (const word of quoteWords) {
+            if (normPara.includes(word)) {
+              score += 10;
+            }
+          }
+          if (score > bestScore && score > 0) {
+            bestScore = score;
+            bestKey = `${mat.id}-${pIdx}`;
+          }
+        });
+      }
+
+      if (!bestKey && currentUnit.materials[0]) {
+        bestKey = `${currentUnit.materials[0].id}-0`;
+      }
+      if (!bestKey) return;
+
+      setMobileReadingTab('article');
+      setHighlightedParagraphKey(bestKey);
+      if (highlightTimeoutRef.current !== null) {
+        window.clearTimeout(highlightTimeoutRef.current);
+      }
+      window.setTimeout(() => {
+        document
+          .getElementById(`passage-para-${bestKey}`)
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 60);
+      highlightTimeoutRef.current = window.setTimeout(() => {
+        setHighlightedParagraphKey((prev) => (prev === bestKey ? null : prev));
+      }, 2400);
+    },
+    [currentUnit]
+  );
+
+  const handleAskQuestionFollowUp = useCallback(
+    async (qNum: number, questionText: string) => {
+      const targetItem =
+        currentUnit.items.find((it) => it.questionNumber === qNum) ||
+        currentUnit.items[0];
+      const resp = attempt.objectiveResponses[qNum];
+      const existingAnalysis = objectiveAnalyses[`${exam.year}-q${qNum}`];
+      const prevSummary = existingAnalysis
+        ? `证据句：${existingAnalysis.evidenceQuote}；结论：${existingAnalysis.transferableConclusion}`
+        : undefined;
+      try {
+        setAskingFollowUpQ(qNum);
+        const reply = await onAskFollowUp({
+          questionNumber: qNum,
+          questionContext: `${currentUnit.title} #${qNum}`,
+          unitId: currentUnit.id,
+          unitTitle: currentUnit.title,
+          passageText: currentUnit.materials.map((m) => m.text).join('\n\n'),
+          promptText: targetItem
+            ? `${targetItem.prompt}\n${(targetItem.options || [])
+                .map((o) => `${o.key}. ${o.text}`)
+                .join('\n')}`
+            : currentUnit.instructions,
+          userAnswer: resp?.selectedAnswer || '未作答',
+          isSubmitted,
+          userQuestion: questionText,
+          previousAnalysisSummary: prevSummary,
+        });
+        const followUpKey = `${exam.year}:${qNum}`;
+        setFollowUpHistory((prev) => ({
+          ...prev,
+          [followUpKey]: [...(prev[followUpKey] || []), { q: questionText, a: reply }],
+        }));
+      } catch (err: any) {
+        setAiErrorBanner(err?.message || '追问请求失败');
+      } finally {
+        setAskingFollowUpQ(null);
+      }
+    },
+    [
+      attempt.objectiveResponses,
+      currentUnit,
+      exam.year,
+      isSubmitted,
+      objectiveAnalyses,
+      onAskFollowUp,
+    ]
   );
 
   const answeredObjectiveCount = Object.values(
     attempt.objectiveResponses
   ).filter((r) => Boolean(r.selectedAnswer)).length;
 
-  const handleSelectOption = (questionNumber: number, optionKey: string) => {
+  const handleSelectOption = (questionNumber: number, optionKey: string, isMulti?: boolean) => {
     if (isSubmitted) return;
     const existing = attempt.objectiveResponses[questionNumber];
-    onUpdateObjectiveResponse(questionNumber, {
-      questionNumber,
-      selectedAnswer: optionKey,
-      confidence: existing?.confidence || 'certain',
-    });
+    if (isMulti) {
+      const current = existing?.selectedAnswer || '';
+      const set = new Set(current.split(''));
+      if (set.has(optionKey)) {
+        set.delete(optionKey);
+      } else {
+        set.add(optionKey);
+      }
+      const next = Array.from(set).sort().join('');
+      onUpdateObjectiveResponse(questionNumber, {
+        questionNumber,
+        selectedAnswer: next,
+        confidence: existing?.confidence || 'certain',
+      });
+    } else {
+      onUpdateObjectiveResponse(questionNumber, {
+        questionNumber,
+        selectedAnswer: optionKey,
+        confidence: existing?.confidence || 'certain',
+      });
+    }
   };
 
   const handleSelectConfidence = (
@@ -319,8 +662,139 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
     });
   };
 
+  // Keyboard shortcuts for fast objective question navigation & answering
+  const shortcutStateRef = useRef<{
+    allUnits: ExamUnit[];
+    currentUnit: ExamUnit;
+    isPoliticsWorkspace: boolean;
+    activeQuestionNumber: number;
+    questionDisplayMode: 'single' | 'all';
+    isSubmitted: boolean;
+    hasOpenModal: boolean;
+    handleSelectOption: (qNum: number, optKey: string, isMulti?: boolean) => void;
+    handleSelectConfidence: (qNum: number, conf: ConfidenceLevel) => void;
+    handleToggleFlag: (qNum: number) => void;
+  } | null>(null);
+  shortcutStateRef.current = {
+    allUnits,
+    currentUnit,
+    isPoliticsWorkspace,
+    activeQuestionNumber,
+    questionDisplayMode,
+    isSubmitted,
+    hasOpenModal: showAnswerSheet || submitConfirmModal || showPrefsPopover,
+    handleSelectOption,
+    handleSelectConfidence,
+    handleToggleFlag,
+  };
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      const state = shortcutStateRef.current;
+      if (!state || state.hasOpenModal) return;
+      if (document.querySelector('[role="dialog"][aria-modal="true"]')) return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.tagName === 'SELECT' ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+      const uType = state.currentUnit.unitType;
+      const isObjUnit =
+        state.isPoliticsWorkspace ||
+        uType === 'cloze' ||
+        uType === 'reading';
+      const items = state.isPoliticsWorkspace
+        ? state.allUnits
+            .filter(
+              (u) =>
+                u.unitType === 'politics-single' ||
+                u.unitType === 'politics-multi'
+            )
+            .flatMap((u) => u.items)
+        : state.currentUnit.items;
+      if (!isObjUnit || items.length === 0) return;
+
+      const activeIdx = Math.max(
+        0,
+        items.findIndex((i) => i.questionNumber === state.activeQuestionNumber)
+      );
+      const activeItem = items[activeIdx];
+      if (!activeItem) return;
+
+      const lower = e.key.toLowerCase();
+      if (lower === 'j' || lower === 'k') {
+        const nextIdx =
+          lower === 'j'
+            ? Math.min(items.length - 1, activeIdx + 1)
+            : Math.max(0, activeIdx - 1);
+        if (nextIdx !== activeIdx) {
+          e.preventDefault();
+          const nextQ = items[nextIdx].questionNumber;
+          setActiveQuestionNumber(nextQ);
+          if (
+            state.questionDisplayMode === 'all' ||
+            state.isPoliticsWorkspace
+          ) {
+            window.setTimeout(() => {
+              document
+                .getElementById(`question-card-${nextQ}`)
+                ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 20);
+          }
+        }
+        return;
+      }
+
+      if (lower === 'f') {
+        e.preventDefault();
+        state.handleToggleFlag(activeItem.questionNumber);
+        return;
+      }
+
+      if (state.isSubmitted) return;
+
+      if (['a', 'b', 'c', 'd'].includes(lower)) {
+        const optKey = lower.toUpperCase();
+        if (activeItem.options?.some((o) => o.key === optKey)) {
+          e.preventDefault();
+          const isMulti =
+            activeItem.answerMode === 'multi-choice' ||
+            (!state.isPoliticsWorkspace && uType === 'politics-multi');
+          state.handleSelectOption(activeItem.questionNumber, optKey, isMulti);
+        }
+        return;
+      }
+
+      if (lower === '1' || lower === '2' || lower === '3') {
+        e.preventDefault();
+        const confMap: Record<string, ConfidenceLevel> = {
+          '1': 'certain',
+          '2': 'hesitant',
+          '3': 'guessed',
+        };
+        state.handleSelectConfidence(activeItem.questionNumber, confMap[lower]);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, []);
+
   const handleLocateUnfinished = () => {
-    const firstUnfinished = currentUnit.items.find(
+    const searchItems = isPoliticsWorkspace
+      ? allUnits
+          .filter(
+            (u) =>
+              u.unitType === 'politics-single' || u.unitType === 'politics-multi'
+          )
+          .flatMap((u) => u.items)
+      : currentUnit.items;
+    const firstUnfinished = searchItems.find(
       (it) => !attempt.objectiveResponses[it.questionNumber]?.selectedAnswer
     );
     if (firstUnfinished) {
@@ -385,11 +859,11 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
         practiceMode,
         content: combined,
         subAnswers: { ...translationInputs },
-        durationSeconds: subjectiveElapsed,
+        durationSeconds: getCurrentSubjectiveElapsed(),
         usedHints,
       });
       setSelectedVersionId(created.id);
-      setSubjectiveElapsed(0);
+      resetSubjectiveTimerOrigin();
       if (autoTriggerAi && anyModelAvailable) {
         try {
           setEvaluatingVersionId(created.id);
@@ -415,11 +889,11 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
         questionNumber: qNum,
         practiceMode,
         content: writingDraft,
-        durationSeconds: subjectiveElapsed,
+        durationSeconds: getCurrentSubjectiveElapsed(),
         usedHints,
       });
       setSelectedVersionId(created.id);
-      setSubjectiveElapsed(0);
+      resetSubjectiveTimerOrigin();
       if (autoTriggerAi && anyModelAvailable) {
         try {
           setEvaluatingVersionId(created.id);
@@ -559,24 +1033,52 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
     )?.visualMaterials || [];
   const visualMat = visualMats[0];
 
-  return (
-    <div className="space-y-4">
-      {/* Top Workspace Control Bar */}
-      <header className="bg-white/95 dark:bg-[#1C262B]/95 backdrop-blur-xs rounded-xl border border-stone-200/90 dark:border-[#2C3E46] shadow-xs p-2.5 sm:p-4 flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 sticky top-14 z-20 transition-all">
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3 min-w-0">
-          <button
-            type="button"
-            onClick={onExitWorkspace}
-            className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-semibold text-stone-700 dark:text-[#E2E8E6] bg-stone-100 dark:bg-[#162226] hover:bg-stone-200 dark:hover:bg-[#203036] rounded-lg transition-colors whitespace-nowrap shrink-0"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>退出</span>
-          </button>
+  const getCompactUnitPillLabel = (u: ExamUnit): string => {
+    const firstQ = u.items[0]?.questionNumber;
+    const lastQ = u.items[u.items.length - 1]?.questionNumber;
+    const range =
+      firstQ && lastQ
+        ? firstQ === lastQ
+          ? `${firstQ}`
+          : `${firstQ}-${lastQ}`
+        : '';
+    if (u.unitType === 'politics-single') return `单选 ${range}`;
+    if (u.unitType === 'politics-multi') return `多选 ${range}`;
+    if (u.unitType === 'politics-analysis') return `分析 ${range}`;
+    if (u.unitType === 'cloze') return `完形 ${range}`;
+    if (u.unitType === 'reading') {
+      const m = u.title.match(/Text\s*\d+/i);
+      return m ? `${m[0]} ${range}` : `阅读 ${range}`;
+    }
+    if (u.unitType === 'passage-assembly') return `新题型 ${range}`;
+    if (u.unitType === 'translation') return `翻译 ${range}`;
+    if (u.unitType === 'practical-writing') return `小作文 ${range}`;
+    if (u.unitType === 'visual-writing') return `大作文 ${range}`;
+    return `${u.title} ${range}`;
+  };
 
-          <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-sm font-bold text-stone-900 dark:text-[#E2E8E6]">
-                {exam.year}年 考研英语一
+  return (
+    <div className={isCompactReview ? 'space-y-3' : 'space-y-4'}>
+      {/* Top Workspace Control Bar */}
+      <header
+        className={`bg-white/95 dark:bg-[#1C262B]/95 backdrop-blur-xs rounded-xl border border-stone-200/90 dark:border-[#2C3E46] shadow-xs flex flex-col gap-2 sticky top-14 z-20 transition-all ${
+          isCompactReview ? 'p-2 sm:p-3' : 'p-2.5 sm:p-4'
+        }`}
+      >
+        <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 min-w-0">
+            <button
+              type="button"
+              onClick={onExitWorkspace}
+              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-semibold text-stone-700 dark:text-[#E2E8E6] bg-stone-100 dark:bg-[#162226] hover:bg-stone-200 dark:hover:bg-[#203036] rounded-lg transition-colors whitespace-nowrap shrink-0"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>退出</span>
+            </button>
+
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <span className="text-xs sm:text-sm font-bold text-stone-900 dark:text-[#E2E8E6]">
+                {formatExamTitle(exam.year, exam.subject)}
               </span>
               <span className="text-xs text-stone-400 dark:text-[#657980]">·</span>
               <span className="text-xs text-stone-600 dark:text-[#9CAEB3] font-medium">
@@ -584,7 +1086,7 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
                   ? '整卷严格模拟'
                   : attempt.mode === 'free-simulation'
                   ? '整卷自由模拟'
-                  : '单项训练'}
+                  : '专项练习'}
               </span>
               {exam.answerSourceStatus === 'unavailable' && (
                 <span className="text-xs text-amber-700 dark:text-[#E5B55E] bg-amber-50 dark:bg-[#2E2413] px-2 py-0.5 rounded font-medium">
@@ -594,7 +1096,7 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
               {isSubmitted && (
                 <span className="text-xs text-emerald-800 dark:text-[#4EA387] bg-emerald-50 dark:bg-[#172E27] px-2 py-0.5 rounded font-semibold font-tabular-mono">
                   {exam.answerSourceStatus === 'unavailable'
-                    ? '已保存作答'
+                    ? '已保存作答 · 复盘模式'
                     : `已交卷 · 客观题 ${attempt.totalObjectiveScore ?? 0} / ${
                         attempt.maxObjectiveScore ?? 60
                       } 分`}
@@ -603,162 +1105,255 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
             </div>
           </div>
 
-          <label className="inline-flex items-center gap-1.5 text-xs text-stone-500 dark:text-[#9CAEB3]">
-            <span className="sr-only">切换试卷单元</span>
-            <select
-              aria-label="切换试卷单元"
-              value={currentUnit.id}
-              onChange={(e) => onSelectUnit(e.target.value)}
-              className="px-2.5 py-1.5 text-xs font-medium text-stone-800 dark:text-[#E2E8E6] bg-stone-50 dark:bg-[#162226] border border-stone-200 dark:border-[#2C3E46] rounded-lg focus:outline-none focus:border-[#174A5B] dark:focus:border-[#38849E]"
-            >
-              {allUnits.map((u) => {
-                const firstQ = u.items[0]?.questionNumber;
-                const lastQ = u.items[u.items.length - 1]?.questionNumber;
-                return (
-                  <option key={u.id} value={u.id}>
-                    {u.title} (
-                    {firstQ === lastQ ? `${firstQ}题` : `${firstQ}-${lastQ}题`})
-                  </option>
-                );
-              })}
-            </select>
-          </label>
-        </div>
+          {/* Right Controls */}
+          <div className="flex flex-wrap items-center gap-2">
+            {!isSubmitted && (
+              <WorkspaceTimerControls
+                mode={attempt.mode}
+                durationMinutes={exam.durationMinutes}
+                isSubmitted={isSubmitted}
+                isStrictSimulation={isStrictSimulation}
+                isPaused={isPaused}
+                onTogglePause={() => {
+                  setIsPaused((p) => {
+                    const next = !p;
+                    examTimerStore.setPaused(next);
+                    return next;
+                  });
+                }}
+              />
+            )}
 
-        {/* Right Controls */}
-        <div className="flex flex-wrap items-center gap-2.5">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-stone-50 dark:bg-[#162226] border border-stone-200 dark:border-[#2C3E46] rounded-lg text-xs font-tabular-mono text-stone-800 dark:text-[#E2E8E6]">
-            <Clock className="w-3.5 h-3.5 text-[#174A5B] dark:text-[#75B6CE]" />
-            <span>
-              {attempt.mode === 'unit-practice'
-                ? `用时 ${formatDuration(attempt.elapsedSeconds)}`
-                : `剩余 ${formatDuration(remainingSimulationSec)}`}
-            </span>
-            {!isStrictSimulation && !isSubmitted && (
+            {isSubmitted && (
+              <>
+                <div
+                  className="inline-flex items-center p-0.5 rounded-lg bg-stone-100 dark:bg-[#162226] border border-stone-200 dark:border-[#2C3E46] text-[11px]"
+                  role="group"
+                  aria-label="复盘排版密度"
+                >
+                  {(
+                    [
+                      { id: 'compact', label: '紧凑复盘' },
+                      { id: 'comfortable', label: '舒适视图' },
+                    ] as const
+                  ).map((opt) => (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      onClick={() => setReviewDensity(opt.id)}
+                      className={`px-2 py-1 rounded-md font-medium transition-colors ${
+                        reviewDensity === opt.id
+                          ? 'bg-white dark:bg-[#1E2B30] text-[#174A5B] dark:text-[#75B6CE] shadow-2xs'
+                          : 'text-[#68777C] dark:text-[#9CAEB3]'
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div
+                  className="inline-flex items-center p-0.5 rounded-lg bg-stone-100 dark:bg-[#162226] border border-stone-200 dark:border-[#2C3E46] text-[11px]"
+                  role="group"
+                  aria-label="复盘题目筛选"
+                >
+                  {(
+                    [
+                      { id: 'all', label: '全部' },
+                      { id: 'wrong', label: '仅错题' },
+                      { id: 'flagged', label: '已标疑' },
+                    ] as const
+                  ).map((f) => (
+                    <button
+                      key={f.id}
+                      type="button"
+                      onClick={() => setReviewFilter(f.id)}
+                      className={`px-2 py-1 rounded-md font-medium transition-colors ${
+                        reviewFilter === f.id
+                          ? 'bg-[#174A5B] dark:bg-[#38849E] text-white'
+                          : 'text-[#68777C] dark:text-[#9CAEB3]'
+                      }`}
+                    >
+                      {f.label}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {!isSubmitted && (
+              <span className="text-[11px] text-stone-400 dark:text-[#657980] font-tabular-mono hidden md:inline">
+                已自动保存
+              </span>
+            )}
+
+            {/* Typography Settings Trigger (English texts) */}
+            {!isPoliticsWorkspace && (
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setShowPrefsPopover((prev) => !prev)}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-stone-700 dark:text-[#E2E8E6] bg-stone-50 dark:bg-[#162226] hover:bg-stone-100 dark:hover:bg-[#203036] border border-stone-200 dark:border-[#2C3E46] rounded-lg whitespace-nowrap"
+                >
+                  <Sliders className="w-3.5 h-3.5" />
+                  <span>排版 ({typographyPrefs.fontSizePx}px)</span>
+                </button>
+                {showPrefsPopover && (
+                  <div className="absolute right-0 mt-1 w-64 bg-white dark:bg-[#1E2B30] border border-[#DCE4E1] dark:border-[#2C3E46] p-4 shadow-md z-30 space-y-3 text-xs rounded-xl">
+                    <div className="font-semibold text-[#202B2F] dark:text-[#E2E8E6] flex items-center justify-between border-b border-[#DCE4E1] dark:border-[#2C3E46] pb-1.5">
+                      <span>英语文章排版控制</span>
+                      <button
+                        type="button"
+                        aria-label="关闭排版设置"
+                        onClick={() => setShowPrefsPopover(false)}
+                      >
+                        <X className="w-3.5 h-3.5 text-[#68777C] dark:text-[#9CAEB3]" />
+                      </button>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-[#68777C] dark:text-[#9CAEB3]">
+                        <span>字号 (默认 18px)</span>
+                        <span className="font-tabular-mono text-[#202B2F] dark:text-[#E2E8E6]">
+                          {typographyPrefs.fontSizePx}px
+                        </span>
+                      </div>
+                      <div className="flex gap-1.5">
+                        {[16, 18, 20, 22].map((sz) => (
+                          <button
+                            key={sz}
+                            type="button"
+                            onClick={() =>
+                              onUpdateTypographyPrefs({
+                                ...typographyPrefs,
+                                fontSizePx: sz,
+                              })
+                            }
+                            className={`flex-1 py-1 rounded text-xs border font-tabular-mono transition-colors ${
+                              typographyPrefs.fontSizePx === sz
+                                ? 'bg-[#174A5B] dark:bg-[#38849E] text-white border-[#174A5B] dark:border-[#38849E]'
+                                : 'bg-[#F1F5F3] dark:bg-[#162226] text-[#202B2F] dark:text-[#E2E8E6] border-[#DCE4E1] dark:border-[#2C3E46]'
+                            }`}
+                          >
+                            {sz}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-[#68777C] dark:text-[#9CAEB3]">
+                        <span>行高 (默认 1.8)</span>
+                        <span className="font-tabular-mono text-[#202B2F] dark:text-[#E2E8E6]">
+                          {typographyPrefs.lineHeight}
+                        </span>
+                      </div>
+                      <div className="flex gap-1.5">
+                        {[1.6, 1.8, 2.0].map((lh) => (
+                          <button
+                            key={lh}
+                            type="button"
+                            onClick={() =>
+                              onUpdateTypographyPrefs({
+                                ...typographyPrefs,
+                                lineHeight: lh,
+                              })
+                            }
+                            className={`flex-1 py-1 rounded text-xs border font-tabular-mono transition-colors ${
+                              typographyPrefs.lineHeight === lh
+                                ? 'bg-[#174A5B] dark:bg-[#38849E] text-white border-[#174A5B] dark:border-[#38849E]'
+                                : 'bg-[#F1F5F3] dark:bg-[#162226] text-[#202B2F] dark:text-[#E2E8E6] border-[#DCE4E1] dark:border-[#2C3E46]'
+                            }`}
+                          >
+                            {lh}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <button
+              type="button"
+              onClick={() => setShowAnswerSheet(true)}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-stone-700 dark:text-[#E2E8E6] bg-stone-50 dark:bg-[#162226] hover:bg-stone-100 dark:hover:bg-[#203036] border border-stone-200 dark:border-[#2C3E46] rounded-lg font-tabular-mono whitespace-nowrap transition-colors"
+            >
+              <Layers className="w-3.5 h-3.5 text-[#174A5B] dark:text-[#75B6CE]" />
+              <span>答题卡 ({answeredObjectiveCount}/{totalObjectiveCount})</span>
+            </button>
+
+            {isSubmitted && onRestartFreshPaper && (
               <button
                 type="button"
-                aria-label={isPaused ? '继续计时' : '暂停计时'}
-                onClick={() => setIsPaused((p) => !p)}
-                className="ml-1 text-[#174A5B] dark:text-[#75B6CE] hover:underline inline-flex items-center gap-0.5 font-medium"
+                onClick={onRestartFreshPaper}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#174A5B] dark:text-[#75B6CE] bg-[#E8F1F5] dark:bg-[#1D3642] hover:bg-[#D5E5ED] dark:hover:bg-[#254657] border border-[#B6D1DC] dark:border-[#2E5263] rounded-lg transition-colors whitespace-nowrap"
               >
-                {isPaused ? (
-                  <Play className="w-3 h-3 fill-current" />
-                ) : (
-                  <Pause className="w-3 h-3 fill-current" />
-                )}
-                <span>{isPaused ? '继续' : '暂停'}</span>
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>再刷一遍</span>
+              </button>
+            )}
+
+            {!isSubmitted && onOpenQuickChecker && (
+              <button
+                type="button"
+                onClick={onOpenQuickChecker}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#174A5B] dark:text-[#38849E] bg-[#E8F1F5] dark:bg-[#1D3642] hover:bg-[#D5E5ED] dark:hover:bg-[#254657] border border-[#B6D1DC] dark:border-[#2E5263] rounded-lg transition-colors whitespace-nowrap shadow-2xs"
+                title="纸上已做完？点击快速批量输入/粘贴答案并立即核对判分"
+              >
+                <ClipboardList className="w-3.5 h-3.5" />
+                <span>纸卷极速对答案</span>
+              </button>
+            )}
+
+            {!isSubmitted && (
+              <button
+                type="button"
+                onClick={() => setSubmitConfirmModal(true)}
+                className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold text-white bg-[#174A5B] dark:bg-[#38849E] hover:bg-[#123D4B] dark:hover:bg-[#489BB8] rounded-lg shadow-xs whitespace-nowrap transition-colors"
+              >
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>交卷核对</span>
               </button>
             )}
           </div>
-
-          <span className="text-[11px] text-stone-400 dark:text-[#657980] font-tabular-mono hidden md:inline">
-            已自动保存
-          </span>
-
-          {/* Typography Settings Trigger */}
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setShowPrefsPopover((prev) => !prev)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-stone-700 dark:text-[#E2E8E6] bg-stone-50 dark:bg-[#162226] hover:bg-stone-100 dark:hover:bg-[#203036] border border-stone-200 dark:border-[#2C3E46] rounded-lg whitespace-nowrap"
-            >
-              <Sliders className="w-3.5 h-3.5" />
-              <span>排版 ({typographyPrefs.fontSizePx}px)</span>
-            </button>
-            {showPrefsPopover && (
-              <div className="absolute right-0 mt-1 w-64 bg-white dark:bg-[#1E2B30] border border-[#DCE4E1] dark:border-[#2C3E46] p-4 shadow-md z-30 space-y-3 text-xs rounded-xl">
-                <div className="font-semibold text-[#202B2F] dark:text-[#E2E8E6] flex items-center justify-between border-b border-[#DCE4E1] dark:border-[#2C3E46] pb-1.5">
-                  <span>英语文章排版控制</span>
-                  <button
-                    type="button"
-                    aria-label="关闭排版设置"
-                    onClick={() => setShowPrefsPopover(false)}
-                  >
-                    <X className="w-3.5 h-3.5 text-[#68777C] dark:text-[#9CAEB3]" />
-                  </button>
-                </div>
-                <div className="space-y-1">
-                  <div className="flex justify-between text-[#68777C] dark:text-[#9CAEB3]">
-                    <span>字号 (默认 18px)</span>
-                    <span className="font-tabular-mono text-[#202B2F] dark:text-[#E2E8E6]">
-                      {typographyPrefs.fontSizePx}px
-                    </span>
-                  </div>
-                  <div className="flex gap-1.5">
-                    {[16, 18, 20, 22].map((sz) => (
-                      <button
-                        key={sz}
-                        type="button"
-                        onClick={() =>
-                          onUpdateTypographyPrefs({
-                            ...typographyPrefs,
-                            fontSizePx: sz,
-                          })
-                        }
-                        className={`flex-1 py-1 rounded text-xs border font-tabular-mono transition-colors ${
-                          typographyPrefs.fontSizePx === sz
-                            ? 'bg-[#174A5B] dark:bg-[#38849E] text-white border-[#174A5B] dark:border-[#38849E]'
-                            : 'bg-[#F1F5F3] dark:bg-[#162226] text-[#202B2F] dark:text-[#E2E8E6] border-[#DCE4E1] dark:border-[#2C3E46]'
-                        }`}
-                      >
-                        {sz}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <div className="flex justify-between text-[#68777C] dark:text-[#9CAEB3]">
-                    <span>行高 (默认 1.8)</span>
-                    <span className="font-tabular-mono text-[#202B2F] dark:text-[#E2E8E6]">
-                      {typographyPrefs.lineHeight}
-                    </span>
-                  </div>
-                  <div className="flex gap-1.5">
-                    {[1.6, 1.8, 2.0].map((lh) => (
-                      <button
-                        key={lh}
-                        type="button"
-                        onClick={() =>
-                          onUpdateTypographyPrefs({
-                            ...typographyPrefs,
-                            lineHeight: lh,
-                          })
-                        }
-                        className={`flex-1 py-1 rounded text-xs border font-tabular-mono transition-colors ${
-                          typographyPrefs.lineHeight === lh
-                            ? 'bg-[#174A5B] dark:bg-[#38849E] text-white border-[#174A5B] dark:border-[#38849E]'
-                            : 'bg-[#F1F5F3] dark:bg-[#162226] text-[#202B2F] dark:text-[#E2E8E6] border-[#DCE4E1] dark:border-[#2C3E46]'
-                        }`}
-                      >
-                        {lh}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setShowAnswerSheet(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-stone-700 dark:text-[#E2E8E6] bg-stone-50 dark:bg-[#162226] hover:bg-stone-100 dark:hover:bg-[#203036] border border-stone-200 dark:border-[#2C3E46] rounded-lg font-tabular-mono whitespace-nowrap transition-colors"
-          >
-            <Layers className="w-3.5 h-3.5 text-[#174A5B] dark:text-[#75B6CE]" />
-            <span>答题卡 ({answeredObjectiveCount}/45)</span>
-          </button>
-
-          {!isSubmitted && (
-            <button
-              type="button"
-              onClick={() => setSubmitConfirmModal(true)}
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[#174A5B] dark:bg-[#38849E] hover:bg-[#123D4B] dark:hover:bg-[#489BB8] rounded-lg shadow-xs whitespace-nowrap transition-colors"
-            >
-              <CheckCircle2 className="w-3.5 h-3.5" />
-              <span>交卷核对</span>
-            </button>
-          )}
         </div>
+
+        {/* Horizontal Direct Section / Unit Jump Bar (replaces dropdown select) */}
+        <nav
+          aria-label="试卷题区直达跳转"
+          className="flex items-center gap-1.5 overflow-x-auto pt-1.5 border-t border-stone-100 dark:border-[#26373E]"
+        >
+          <span className="text-[11px] font-medium text-stone-400 dark:text-[#657980] whitespace-nowrap shrink-0 mr-1">
+            {isPoliticsWorkspace ? '同卷分区跳转：' : '切换题区：'}
+          </span>
+          {allUnits.map((u) => {
+            const isActiveUnit = u.id === currentUnit?.id;
+            return (
+              <button
+                key={u.id}
+                type="button"
+                onClick={() => {
+                  onSelectUnit(u.id);
+                  if (isPoliticsWorkspace) {
+                    if (reviewFilter !== 'all') setReviewFilter('all');
+                    window.setTimeout(() => {
+                      document
+                        .getElementById(`unit-section-${u.id}`)
+                        ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 30);
+                  }
+                }}
+                className={`px-2.5 py-1 rounded-md text-xs font-medium whitespace-nowrap shrink-0 transition-colors font-tabular-mono ${
+                  isActiveUnit
+                    ? 'bg-[#174A5B] dark:bg-[#38849E] text-white shadow-2xs'
+                    : 'bg-stone-100 dark:bg-[#162226] text-stone-700 dark:text-[#9CAEB3] hover:bg-stone-200 dark:hover:bg-[#203036]'
+                }`}
+              >
+                {getCompactUnitPillLabel(u)}
+              </button>
+            );
+          })}
+        </nav>
       </header>
 
       {aiErrorBanner && (
@@ -773,6 +1368,648 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
             className="text-[#202B2F] dark:text-[#E2E8E6] underline ml-4"
           >
             关闭
+          </button>
+        </div>
+      )}
+
+      {/* UNIT TYPE: POLITICS UNIFIED FULL PAPER (1–16 单选 + 17–33 多选 + 34–38 材料分析) */}
+      {isPoliticsWorkspace && (
+        <div className={isCompactReview ? 'space-y-3' : 'space-y-5'}>
+          {/* Compact Top Exam Summary Strip */}
+          {(!isSubmitted || reviewDensity === 'comfortable') && (
+            <div
+              className={`bg-white dark:bg-[#1E2B30] rounded-2xl border border-stone-200/80 dark:border-[#2C3E46] shadow-xs flex flex-wrap items-center justify-between gap-3 ${
+                isSubmitted ? 'p-3.5 sm:p-4' : 'p-4 sm:p-5'
+              }`}
+            >
+              <div className="space-y-0.5">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="px-2 py-0.5 rounded-md text-xs font-bold bg-[#174A5B]/10 dark:bg-[#38849E]/20 text-[#174A5B] dark:text-[#75B6CE]">
+                    全卷整页作答与复盘
+                  </span>
+                  <h1 className="text-sm sm:text-base font-bold text-[#202B2F] dark:text-[#E2E8E6]">
+                    {formatExamTitle(exam.year, exam.subject)} · 完整试卷 (第 1–38 题)
+                  </h1>
+                </div>
+                <p className="text-xs text-[#68777C] dark:text-[#9CAEB3]">
+                  单选 (1–16)、多选 (17–33) 与材料分析 (34–38) 同卷顺排，点击右侧或顶部题区按钮即可瞬时跳转。
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+                <span className="hidden xl:inline text-[11px] text-[#68777C] dark:text-[#9CAEB3]">
+                  快捷键：J/K 切题 · A-D 作答 · 1-3 把握度 · F 标疑
+                </span>
+                {!isSubmitted && (
+                  <button
+                    type="button"
+                    onClick={handleLocateUnfinished}
+                    className="px-3 py-1.5 text-xs font-medium text-[#174A5B] dark:text-[#75B6CE] bg-[#174A5B]/10 dark:bg-[#38849E]/20 hover:bg-[#174A5B] hover:text-white dark:hover:bg-[#38849E] dark:hover:text-white rounded-lg transition-colors"
+                  >
+                    定位未做题
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Continuous Full-Paper Grid with Truly Fixed Right Navigator */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+            {/* Left/Main Column: All Sections Sequential Feed (1-16, 17-33, 34-38) */}
+            <div className={`lg:col-span-9 xl:col-span-9 ${isCompactReview ? 'space-y-4' : 'space-y-6'}`}>
+              {allUnits.map((sectionUnit) => {
+                if (
+                  sectionUnit.unitType === 'politics-single' ||
+                  sectionUnit.unitType === 'politics-multi'
+                ) {
+                  const isMultiUnit = sectionUnit.unitType === 'politics-multi';
+                  const filteredItems = sectionUnit.items.filter((item) => {
+                    if (!isSubmitted || reviewFilter === 'all') return true;
+                    const r = attempt.objectiveResponses[item.questionNumber];
+                    if (reviewFilter === 'flagged') return Boolean(r?.flaggedForReview);
+                    if (reviewFilter === 'wrong') {
+                      return Boolean(item.correctAnswer) && r?.selectedAnswer !== item.correctAnswer;
+                    }
+                    return true;
+                  });
+
+                  return (
+                    <section
+                      key={sectionUnit.id}
+                      id={`unit-section-${sectionUnit.id}`}
+                      className={`scroll-mt-36 ${isCompactReview ? 'space-y-2.5' : 'space-y-4'}`}
+                    >
+                      <div
+                        className={`bg-white dark:bg-[#1E2B30] rounded-xl border border-stone-200/80 dark:border-[#2C3E46] flex flex-wrap items-center justify-between gap-2 ${
+                          isCompactReview ? 'px-4 py-2.5' : 'px-5 py-3.5'
+                        }`}
+                      >
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="px-2 py-0.5 rounded text-xs font-bold bg-[#174A5B]/10 dark:bg-[#38849E]/20 text-[#174A5B] dark:text-[#75B6CE]">
+                            {isMultiUnit ? '多项选择题' : '单项选择题'}
+                          </span>
+                          <h2 className="text-sm sm:text-base font-bold text-[#202B2F] dark:text-[#E2E8E6]">
+                            {sectionUnit.title}
+                          </h2>
+                        </div>
+                        <span className="text-xs font-tabular-mono text-[#68777C] dark:text-[#9CAEB3]">
+                          满分 {sectionUnit.score} 分 · 共 {sectionUnit.items.length} 题
+                        </span>
+                      </div>
+
+                      {filteredItems.length === 0 ? (
+                        <div className="p-4 rounded-xl bg-stone-50 dark:bg-[#162226] border border-stone-200/80 dark:border-[#2C3E46] text-xs text-[#68777C] dark:text-[#9CAEB3] flex items-center justify-between">
+                          <span>本部分暂无符合「{reviewFilter === 'wrong' ? '仅错题' : '已标疑'}」条件的题目。</span>
+                          <button
+                            type="button"
+                            onClick={() => setReviewFilter('all')}
+                            className="text-[#174A5B] dark:text-[#75B6CE] font-medium hover:underline"
+                          >
+                            显示全部题目
+                          </button>
+                        </div>
+                      ) : (
+                        filteredItems.map((item) => {
+                          const qNum = item.questionNumber;
+                          const isMulti = isMultiUnit || item.answerMode === 'multi-choice';
+                          const resp = attempt.objectiveResponses[qNum];
+                          const selectedAns = resp?.selectedAnswer || '';
+                          const confidence = resp?.confidence || 'certain';
+                          const officialAns = item.correctAnswer || '';
+                          const isCorrect =
+                            isSubmitted && Boolean(officialAns) && selectedAns === officialAns;
+                          const isWrong =
+                            isSubmitted && Boolean(officialAns) && selectedAns !== officialAns;
+                          const isCurrent = activeQuestionNumber === qNum;
+
+                          const missedLetters =
+                            isMulti && isSubmitted
+                              ? officialAns.split('').filter((c) => !selectedAns.includes(c))
+                              : [];
+                          const wrongLetters =
+                            isMulti && isSubmitted
+                              ? selectedAns.split('').filter((c) => !officialAns.includes(c))
+                              : [];
+
+                          return (
+                            <div
+                              key={item.id}
+                              id={`question-card-${qNum}`}
+                              onClick={() => setActiveQuestionNumber(qNum)}
+                              className={`bg-white dark:bg-[#1E2B30] rounded-2xl border transition-all shadow-xs ${
+                                isCompactReview
+                                  ? 'p-3.5 sm:p-4 space-y-2.5'
+                                  : 'p-5 sm:p-7 space-y-4'
+                              } ${
+                                isCurrent
+                                  ? 'border-[#174A5B] dark:border-[#38849E] ring-1 ring-[#174A5B]/20 dark:ring-[#38849E]/30'
+                                  : isCorrect
+                                  ? 'border-emerald-200 dark:border-emerald-800/60'
+                                  : isWrong
+                                  ? 'border-rose-200 dark:border-rose-900/60'
+                                  : 'border-stone-200/80 dark:border-[#2C3E46]'
+                              }`}
+                            >
+                              {/* Card Header */}
+                              <div
+                                className={`flex items-start justify-between gap-2 border-b border-stone-100 dark:border-[#26373E] ${
+                                  isCompactReview ? 'pb-2' : 'pb-3'
+                                }`}
+                              >
+                                <div className="flex flex-wrap items-center gap-2">
+                                  <span
+                                    className={`font-tabular-mono font-bold text-[#174A5B] dark:text-[#75B6CE] ${
+                                      isCompactReview ? 'text-sm sm:text-base' : 'text-base sm:text-lg'
+                                    }`}
+                                  >
+                                    第 {qNum} 题
+                                  </span>
+                                  {item.knowledgeModule && (
+                                    <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-stone-100 dark:bg-[#162226] text-stone-700 dark:text-[#9CAEB3] border border-stone-200/80 dark:border-[#2C3E46]">
+                                      {item.knowledgeModule}
+                                    </span>
+                                  )}
+                                  <span className="text-xs font-medium text-[#68777C] dark:text-[#9CAEB3]">
+                                    ({item.score}分 · {isMulti ? '多选题' : '单选题'})
+                                  </span>
+                                </div>
+
+                                <div className="flex items-center gap-2 shrink-0">
+                                  <button
+                                    type="button"
+                                    aria-label={`标记第${qNum}题待复查`}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleToggleFlag(qNum);
+                                    }}
+                                    className={`p-1.5 rounded-lg border transition-colors ${
+                                      resp?.flaggedForReview
+                                        ? 'bg-rose-50 dark:bg-[#351C1A] border-rose-300 dark:border-rose-800 text-rose-700 dark:text-[#CF695E]'
+                                        : 'bg-stone-50 dark:bg-[#162226] border-stone-200 dark:border-[#2C3E46] text-[#96A1A4] dark:text-[#657980] hover:text-[#202B2F] dark:hover:text-[#E2E8E6]'
+                                    }`}
+                                  >
+                                    <Flag className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
+                              </div>
+
+                              {/* Question Prompt */}
+                              <div
+                                className={`font-medium text-[#202B2F] dark:text-[#E2E8E6] ${
+                                  isCompactReview
+                                    ? 'text-sm sm:text-[15px] leading-snug'
+                                    : 'text-base sm:text-[17px] leading-relaxed'
+                                }`}
+                              >
+                                {renderTextWithSafeUnderline(item.prompt)}
+                              </div>
+
+                              {/* Options List */}
+                              <div className={isCompactReview ? 'grid grid-cols-1 gap-1.5' : 'grid grid-cols-1 gap-2.5'}>
+                                {(item.options || []).map((opt) => {
+                                  const isSelected = isMulti
+                                    ? selectedAns.includes(opt.key)
+                                    : selectedAns === opt.key;
+                                  const isOfficialRight =
+                                    isSubmitted &&
+                                    (isMulti
+                                      ? officialAns.includes(opt.key)
+                                      : officialAns === opt.key);
+                                  const isSelectedMistake =
+                                    isSubmitted &&
+                                    isSelected &&
+                                    !(isMulti
+                                      ? officialAns.includes(opt.key)
+                                      : officialAns === opt.key);
+
+                                  const badgeStyle = isOfficialRight
+                                    ? 'bg-emerald-600 text-white'
+                                    : isSelectedMistake
+                                    ? 'bg-rose-600 text-white'
+                                    : isSelected && !isSubmitted
+                                    ? 'bg-white/20 text-white'
+                                    : 'bg-stone-200/70 dark:bg-[#2C3E46] text-[#202B2F] dark:text-[#E2E8E6]';
+
+                                  return (
+                                    <button
+                                      key={opt.key}
+                                      type="button"
+                                      disabled={isSubmitted}
+                                      onClick={() => handleSelectOption(qNum, opt.key, isMulti)}
+                                      className={`w-full text-left rounded-xl border flex items-start gap-2.5 transition-all ${
+                                        isCompactReview
+                                          ? 'px-3 py-2 text-xs sm:text-sm min-h-[38px]'
+                                          : 'px-4 py-3 sm:py-3.5 text-sm sm:text-base min-h-[48px]'
+                                      } ${
+                                        isOfficialRight
+                                          ? 'bg-emerald-50 dark:bg-[#172E27] border-emerald-500 dark:border-[#4EA387] text-[#202B2F] dark:text-[#E2E8E6] font-medium'
+                                          : isSelectedMistake
+                                          ? 'bg-rose-50 dark:bg-[#351C1A] border-rose-400 dark:border-[#CF695E] text-[#202B2F] dark:text-[#E2E8E6]'
+                                          : isSelected
+                                          ? 'bg-[#174A5B] dark:bg-[#38849E] text-white border-[#174A5B] dark:border-[#38849E] shadow-2xs'
+                                          : 'bg-stone-50/70 dark:bg-[#162226] text-[#202B2F] dark:text-[#E2E8E6] border-stone-200/90 dark:border-[#2C3E46] hover:bg-stone-100 dark:hover:bg-[#203036] hover:border-stone-300 dark:hover:border-[#3B515B]'
+                                      }`}
+                                    >
+                                      <span
+                                        className={`font-tabular-mono font-bold shrink-0 px-2 py-0.5 rounded flex items-center justify-center ${
+                                          isCompactReview ? 'text-xs min-w-[24px]' : 'text-xs sm:text-sm min-w-[28px]'
+                                        } ${badgeStyle}`}
+                                      >
+                                        {opt.key}
+                                      </span>
+                                      <span className="leading-snug pt-0.5 flex-1">
+                                        {opt.text}
+                                      </span>
+                                      {/* Post-submit attribution pill OR pre-submit checkbox/radio */}
+                                      {isSubmitted && (isOfficialRight || isSelectedMistake) ? (
+                                        <span
+                                          className={`shrink-0 self-center text-[11px] font-semibold px-1.5 py-0.5 rounded whitespace-nowrap ${
+                                            isOfficialRight
+                                              ? 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-[#7CE0BE]'
+                                              : 'bg-rose-100 dark:bg-rose-900/50 text-rose-800 dark:text-[#F39990]'
+                                          }`}
+                                        >
+                                          {isOfficialRight && isSelected
+                                            ? '✓ 选对'
+                                            : isOfficialRight
+                                            ? isMulti
+                                              ? '+ 漏选'
+                                              : '+ 应选'
+                                            : '✕ 错选'}
+                                        </span>
+                                      ) : (
+                                        <span className="shrink-0 pt-1 text-xs opacity-75">
+                                          {isMulti ? (
+                                            isSelected ? (
+                                              <CheckSquare className="w-4 h-4 text-white" />
+                                            ) : (
+                                              <Square className="w-4 h-4 text-stone-400" />
+                                            )
+                                          ) : isSelected ? (
+                                            <span className="w-3.5 h-3.5 rounded-full bg-white block" />
+                                          ) : (
+                                            <span className="w-3.5 h-3.5 rounded-full border border-stone-400 block" />
+                                          )}
+                                        </span>
+                                      )}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+
+                              {/* Pre-submit: Multi-choice Selection summary & Confidence */}
+                              {!isSubmitted && (
+                                <div className="pt-3 border-t border-stone-100 dark:border-[#26373E] flex flex-wrap items-center justify-between gap-3 text-xs">
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-[#68777C] dark:text-[#9CAEB3]">
+                                      {isMulti ? '多选作答状态：' : '单选作答状态：'}
+                                    </span>
+                                    <span
+                                      className={`font-tabular-mono font-bold px-2 py-0.5 rounded ${
+                                        selectedAns
+                                          ? 'bg-[#174A5B]/10 dark:bg-[#38849E]/20 text-[#174A5B] dark:text-[#75B6CE]'
+                                          : 'bg-stone-100 dark:bg-[#162226] text-stone-400'
+                                      }`}
+                                    >
+                                      {selectedAns
+                                        ? `已选 [ ${selectedAns.split('').join(' ')} ]`
+                                        : '尚未选定'}
+                                    </span>
+                                  </div>
+
+                                  <div className="flex items-center gap-1.5">
+                                    <span className="text-[#68777C] dark:text-[#9CAEB3] mr-1">
+                                      做题把握：
+                                    </span>
+                                    {(
+                                      [
+                                        { key: 'certain', label: '确定' },
+                                        { key: 'hesitant', label: '犹豫' },
+                                        { key: 'guessed', label: '猜测' },
+                                      ] as { key: ConfidenceLevel; label: string }[]
+                                    ).map((c) => (
+                                      <button
+                                        key={c.key}
+                                        type="button"
+                                        onClick={() => handleSelectConfidence(qNum, c.key)}
+                                        className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
+                                          confidence === c.key
+                                            ? 'bg-[#174A5B] dark:bg-[#38849E] text-white'
+                                            : 'bg-stone-100 dark:bg-[#162226] text-[#68777C] dark:text-[#9CAEB3] hover:text-[#202B2F] dark:hover:text-[#E2E8E6]'
+                                        }`}
+                                      >
+                                        {c.label}
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Post-submit: Correctness Banner, Official Explanation & Review Notes */}
+                              {isSubmitted && (
+                                <div
+                                  className={`border-t border-stone-100 dark:border-[#26373E] ${
+                                    isCompactReview ? 'space-y-2.5 pt-2' : 'space-y-3.5 pt-3'
+                                  }`}
+                                >
+                                  <div
+                                    className={`rounded-xl border flex flex-wrap items-center justify-between gap-2 ${
+                                      isCompactReview ? 'px-3 py-2 text-xs' : 'p-4 text-sm'
+                                    } ${
+                                      isCorrect
+                                        ? 'bg-emerald-50/70 dark:bg-[#172E27]/70 border-emerald-300 dark:border-emerald-800 text-emerald-900 dark:text-[#4EA387]'
+                                        : 'bg-rose-50/70 dark:bg-[#351C1A]/70 border-rose-300 dark:border-rose-900 text-rose-900 dark:text-[#CF695E]'
+                                    }`}
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      <span className={isCompactReview ? 'font-bold text-xs sm:text-sm' : 'font-bold text-base'}>
+                                        {isCorrect ? '✓ 作答正确' : '✕ 作答错误'}
+                                      </span>
+                                      <span className="font-tabular-mono font-semibold">
+                                        ({isCorrect ? `+${item.score}分` : '0分'})
+                                      </span>
+                                    </div>
+
+                                    <div className="flex items-center gap-3 font-tabular-mono text-xs">
+                                      <span>
+                                        你的答案：
+                                        <strong className="underline ml-0.5">
+                                          {selectedAns || '未答'}
+                                        </strong>
+                                      </span>
+                                      <span>·</span>
+                                      <span>
+                                        官方标准答案：
+                                        <strong className="underline ml-0.5">
+                                          {officialAns}
+                                        </strong>
+                                      </span>
+                                    </div>
+
+                                    {isWrong && isMulti && (
+                                      <div className="w-full text-xs text-rose-700 dark:text-[#E07A70] flex flex-wrap items-center gap-2 pt-1 border-t border-rose-200/60 dark:border-rose-900/40">
+                                        <span>失分诊断：</span>
+                                        {missedLetters.length > 0 && (
+                                          <span className="bg-rose-100/80 dark:bg-rose-900/40 px-2 py-0.5 rounded">
+                                            漏选 {missedLetters.join('、')}
+                                          </span>
+                                        )}
+                                        {wrongLetters.length > 0 && (
+                                          <span className="bg-rose-100/80 dark:bg-rose-900/40 px-2 py-0.5 rounded">
+                                            误选干扰项 {wrongLetters.join('、')}
+                                          </span>
+                                        )}
+                                      </div>
+                                    )}
+                                  </div>
+
+                                  {item.officialExplanation && (
+                                    <div
+                                      className={`bg-stone-50 dark:bg-[#162226] rounded-xl border border-stone-200/80 dark:border-[#2C3E46] ${
+                                        isCompactReview ? 'p-3 space-y-1.5' : 'p-4 sm:p-5 space-y-2'
+                                      }`}
+                                    >
+                                      <div className="font-bold text-xs text-[#174A5B] dark:text-[#75B6CE] flex items-center justify-between border-b border-stone-200/70 dark:border-[#26373E] pb-1.5">
+                                        <span>【肖秀荣答案与逐题详尽解析】</span>
+                                        <span className="font-tabular-mono text-[11px] text-stone-400">
+                                          权威精析 · 知识点关联
+                                        </span>
+                                      </div>
+                                      <div
+                                        className={`text-[#202B2F] dark:text-[#E2E8E6] whitespace-pre-wrap font-sans pt-0.5 ${
+                                          isCompactReview ? 'text-xs leading-relaxed' : 'text-xs sm:text-sm leading-relaxed'
+                                        }`}
+                                      >
+                                        {item.officialExplanation}
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {/* Editable Post-Submit Notes */}
+                                  <div className="space-y-1">
+                                    <label className="block text-[11px] font-medium text-[#68777C] dark:text-[#9CAEB3]">
+                                      我的复盘笔记：
+                                    </label>
+                                    <textarea
+                                      rows={isCompactReview ? 1 : 2}
+                                      value={resp?.userNotes || ''}
+                                      onChange={(e) =>
+                                        onUpdateObjectiveResponse(qNum, {
+                                          questionNumber: qNum,
+                                          userNotes: e.target.value,
+                                        })
+                                      }
+                                      onClick={(e) => e.stopPropagation()}
+                                      placeholder="随时记录本题核心考点、干扰项陷阱..."
+                                      className="w-full px-2.5 py-1.5 text-xs bg-stone-50 dark:bg-[#162226] text-[#202B2F] dark:text-[#E2E8E6] rounded-lg border border-stone-200/80 dark:border-[#2C3E46] focus:outline-none focus:border-[#174A5B] dark:focus:border-[#38849E] resize-y"
+                                    />
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })
+                      )}
+                    </section>
+                  );
+                }
+
+                if (sectionUnit.unitType === 'politics-analysis') {
+                  return (
+                    <section
+                      key={sectionUnit.id}
+                      id={`unit-section-${sectionUnit.id}`}
+                      className="scroll-mt-36 space-y-4"
+                    >
+                      <div
+                        className={`bg-white dark:bg-[#1E2B30] rounded-xl border border-stone-200/80 dark:border-[#2C3E46] flex flex-wrap items-center justify-between gap-2 ${
+                          isCompactReview ? 'px-4 py-2.5' : 'px-5 py-3.5'
+                        }`}
+                      >
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="px-2 py-0.5 rounded text-xs font-bold bg-[#174A5B]/10 dark:bg-[#38849E]/20 text-[#174A5B] dark:text-[#75B6CE]">
+                            材料分析题
+                          </span>
+                          <h2 className="text-sm sm:text-base font-bold text-[#202B2F] dark:text-[#E2E8E6]">
+                            {sectionUnit.title}
+                          </h2>
+                        </div>
+                        <span className="text-xs font-tabular-mono text-[#68777C] dark:text-[#9CAEB3]">
+                          共 {sectionUnit.items.length} 题 · 满分 {sectionUnit.score} 分
+                        </span>
+                      </div>
+
+                      {isSubmitted && reviewFilter === 'wrong' ? (
+                        <div className="p-4 rounded-xl bg-stone-50 dark:bg-[#162226] border border-stone-200/80 dark:border-[#2C3E46] text-xs text-[#68777C] dark:text-[#9CAEB3] flex flex-wrap items-center justify-between gap-2">
+                          <span>当前处于「仅错题」筛选视图，34–38 材料分析题已折叠。</span>
+                          <button
+                            type="button"
+                            onClick={() => setReviewFilter('all')}
+                            className="text-[#174A5B] dark:text-[#75B6CE] font-medium hover:underline"
+                          >
+                            展开全部题型（含材料分析）
+                          </button>
+                        </div>
+                      ) : (
+                        <PoliticsAnalysisStudio
+                          key={`${exam.year}-${sectionUnit.id}`}
+                          year={exam.year}
+                          dataVersion={exam.dataVersion}
+                          currentUnit={sectionUnit}
+                          isSubmitted={isSubmitted}
+                          isStrictSimulation={isStrictSimulation}
+                          showAnswerSheet={showAnswerSheet}
+                          anyModelAvailable={anyModelAvailable}
+                          activeProviderName={activeProviderName}
+                          unitVersions={subjectiveVersions.filter(
+                            (v) => v.unitId === sectionUnit.id
+                          )}
+                          subjectiveEvaluations={subjectiveEvaluations}
+                          drafts={translationInputs}
+                          onChangeDraft={(qNum, value) =>
+                            setTranslationInputs((prev) => ({ ...prev, [qNum]: value }))
+                          }
+                          getElapsedSeconds={getCurrentSubjectiveElapsed}
+                          onSubmitSubjectiveVersion={(params) => {
+                            const created = onSubmitSubjectiveVersion(params);
+                            resetSubjectiveTimerOrigin();
+                            return created;
+                          }}
+                          onRequestSubjectiveEvaluation={onRequestSubjectiveEvaluation}
+                          onNavigateSettings={onNavigateSettings}
+                        />
+                      )}
+                    </section>
+                  );
+                }
+
+                return null;
+              })}
+            </div>
+
+            {/* Right Viewport-Pinned Full-Paper Navigator Pane (Desktop) */}
+            <aside className="lg:col-span-3 xl:col-span-3 lg:sticky lg:top-40 lg:max-h-[calc(100dvh-10.5rem)] lg:overflow-y-auto space-y-3">
+              <div className="bg-white dark:bg-[#1E2B30] rounded-2xl border border-stone-200/80 dark:border-[#2C3E46] p-4 shadow-xs space-y-3.5">
+                <div className="flex items-center justify-between border-b border-stone-100 dark:border-[#26373E] pb-2.5">
+                  <h3 className="text-xs font-bold text-[#202B2F] dark:text-[#E2E8E6]">
+                    全卷题号快速跳转
+                  </h3>
+                  <span className="text-xs font-tabular-mono text-[#174A5B] dark:text-[#75B6CE] font-semibold">
+                    客观 {answeredObjectiveCount}/{totalObjectiveCount}
+                  </span>
+                </div>
+
+                {allUnits.map((navUnit) => {
+                  const isAnalysisUnit = navUnit.unitType === 'politics-analysis';
+                  return (
+                    <div key={navUnit.id} className="space-y-1.5">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onSelectUnit(navUnit.id);
+                          if (isAnalysisUnit && reviewFilter !== 'all') {
+                            setReviewFilter('all');
+                          }
+                          window.setTimeout(() => {
+                            document
+                              .getElementById(`unit-section-${navUnit.id}`)
+                              ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                          }, 30);
+                        }}
+                        className="w-full flex items-center justify-between text-[11px] font-semibold text-[#68777C] dark:text-[#9CAEB3] hover:text-[#174A5B] dark:hover:text-[#75B6CE] transition-colors"
+                      >
+                        <span>{getCompactUnitPillLabel(navUnit)}</span>
+                        <span className="font-tabular-mono opacity-75">
+                          {navUnit.items.length}题
+                        </span>
+                      </button>
+
+                      <div className={isAnalysisUnit ? 'grid grid-cols-5 gap-1.5' : 'grid grid-cols-4 gap-1.5'}>
+                        {navUnit.items.map((it) => {
+                          const qN = it.questionNumber;
+                          const resp = attempt.objectiveResponses[qN];
+                          const hasSubj =
+                            isAnalysisUnit &&
+                            subjectiveVersions.some(
+                              (v) => v.year === exam.year && v.questionNumber === qN
+                            );
+                          const isCur = qN === activeQuestionNumber;
+                          const hasAnswer = Boolean(resp?.selectedAnswer) || hasSubj;
+                          const isRight =
+                            isSubmitted &&
+                            !isAnalysisUnit &&
+                            Boolean(it.correctAnswer) &&
+                            resp?.selectedAnswer === it.correctAnswer;
+                          const isFault =
+                            isSubmitted &&
+                            !isAnalysisUnit &&
+                            Boolean(it.correctAnswer) &&
+                            resp?.selectedAnswer !== it.correctAnswer;
+
+                          return (
+                            <button
+                              key={qN}
+                              type="button"
+                              onClick={() => {
+                                onSelectUnit(navUnit.id);
+                                setActiveQuestionNumber(qN);
+                                if (reviewFilter !== 'all') {
+                                  setReviewFilter('all');
+                                }
+                                window.setTimeout(() => {
+                                  document
+                                    .getElementById(`question-card-${qN}`)
+                                    ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                }, 40);
+                              }}
+                              className={`h-8 rounded-md font-tabular-mono text-xs font-bold transition-all flex items-center justify-center relative ${
+                                isCur
+                                  ? 'ring-2 ring-[#174A5B] dark:ring-[#38849E] scale-[1.03] shadow-2xs '
+                                  : ''
+                              } ${
+                                isRight
+                                  ? 'bg-emerald-50 dark:bg-[#172E27] text-emerald-800 dark:text-[#4EA387] border border-emerald-400 dark:border-emerald-700'
+                                  : isFault
+                                  ? 'bg-rose-50 dark:bg-[#351C1A] text-rose-800 dark:text-[#CF695E] border border-rose-400 dark:border-rose-900'
+                                  : hasAnswer
+                                  ? 'bg-[#174A5B] dark:bg-[#38849E] text-white'
+                                  : 'bg-stone-50 dark:bg-[#162226] text-stone-600 dark:text-[#9CAEB3] border border-stone-200 dark:border-[#2C3E46] hover:bg-stone-100 dark:hover:bg-[#203036]'
+                              }`}
+                            >
+                              <span>{qN}</span>
+                              {resp?.flaggedForReview && (
+                                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 absolute top-0.5 right-0.5" />
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {!isSubmitted && (
+                  <div className="pt-2 border-t border-stone-100 dark:border-[#26373E]">
+                    <button
+                      type="button"
+                      onClick={handleLocateUnfinished}
+                      className="w-full py-2 px-3 rounded-lg text-xs font-semibold text-center text-[#174A5B] dark:text-[#75B6CE] bg-stone-50 dark:bg-[#162226] hover:bg-stone-100 dark:hover:bg-[#203036] border border-stone-200 dark:border-[#2C3E46] transition-colors"
+                    >
+                      跳转到首个未做题
+                    </button>
+                  </div>
+                )}
+              </div>
+            </aside>
+          </div>
+
+          {/* Mobile Fixed Quick Jump Pill */}
+          <button
+            type="button"
+            onClick={() => setShowAnswerSheet(true)}
+            className="lg:hidden fixed bottom-4 right-4 z-30 inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-full bg-[#174A5B] dark:bg-[#38849E] text-white text-xs font-semibold shadow-lg"
+          >
+            <Layers className="w-4 h-4" />
+            <span>题号跳转</span>
           </button>
         </div>
       )}
@@ -812,7 +2049,13 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
             {/* Left Passage Pane */}
             <div
-              className={`lg:col-span-7 bg-[#FBFAF6] dark:bg-[#1B262A] rounded-2xl border border-stone-200/80 dark:border-[#2C3E46] shadow-xs p-4 sm:p-7 lg:sticky lg:top-28 lg:max-h-[calc(100dvh-8rem)] lg:overflow-y-auto space-y-6 ${
+              className={`${
+                splitPaneRatio === '5:7'
+                  ? 'lg:col-span-5'
+                  : splitPaneRatio === '6:6'
+                  ? 'lg:col-span-6'
+                  : 'lg:col-span-7'
+              } bg-[#FBFAF6] dark:bg-[#1B262A] rounded-2xl border border-stone-200/80 dark:border-[#2C3E46] shadow-xs p-4 sm:p-7 lg:sticky lg:top-40 lg:max-h-[calc(100dvh-10.5rem)] lg:overflow-y-auto space-y-6 ${
                 mobileReadingTab === 'article' ? 'block' : 'hidden lg:block'
               }`}
             >
@@ -825,7 +2068,20 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
                     {currentUnit.instructions}
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="hidden lg:inline-flex items-center">
+                    <SegmentedTabs
+                      size="xs"
+                      ariaLabel="左右栏宽比例"
+                      value={splitPaneRatio}
+                      onChange={setSplitPaneRatio}
+                      options={[
+                        { id: '7:5', label: '7:5 精读' },
+                        { id: '6:6', label: '6:6 均衡' },
+                        { id: '5:7', label: '5:7 刷题' },
+                      ]}
+                    />
+                  </div>
                   {currentUnit.unitType === 'reading' &&
                     currentUnit.materials[0] && (
                       <button
@@ -866,16 +2122,26 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
                     }}
                     className="font-english-serif text-[#202B2F] dark:text-[#E2E8E6] space-y-5 mx-auto text-justify"
                   >
-                    {paragraphs.map((paraText, pIdx) => (
-                      <p key={pIdx} className="leading-relaxed tracking-normal">
-                        <span className="font-tabular-mono text-xs text-[#96A1A4] dark:text-[#657980] mr-2.5 select-none font-medium">
-                          [{pIdx + 1}]
-                        </span>
-                        {currentUnit.unitType === 'cloze'
-                          ? renderClozePassage(paraText)
-                          : renderTextWithSafeUnderline(paraText)}
-                      </p>
-                    ))}
+                    {paragraphs.map((paraText, pIdx) => {
+                      const pKey = `${mat.id}-${pIdx}`;
+                      const isFlashed = highlightedParagraphKey === pKey;
+                      return (
+                        <p
+                          key={pIdx}
+                          id={`passage-para-${pKey}`}
+                          className={`leading-relaxed tracking-normal rounded-lg transition-colors ${
+                            isFlashed ? 'highlight-flash px-2 py-1 -mx-2' : ''
+                          }`}
+                        >
+                          <span className="font-tabular-mono text-xs text-[#96A1A4] dark:text-[#657980] mr-2.5 select-none font-medium">
+                            [{pIdx + 1}]
+                          </span>
+                          {currentUnit.unitType === 'cloze'
+                            ? renderClozePassage(paraText)
+                            : renderTextWithSafeUnderline(paraText)}
+                        </p>
+                      );
+                    })}
 
                     {(highlightedQuotes[mat.id] || []).length > 0 && (
                       <div className="mt-6 pt-4 border-t border-stone-100 dark:border-[#26373E] font-sans text-xs space-y-2">
@@ -919,7 +2185,13 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
 
             {/* Right Question Cards Pane */}
             <div
-              className={`lg:col-span-5 space-y-4 ${
+              className={`${
+                splitPaneRatio === '5:7'
+                  ? 'lg:col-span-7'
+                  : splitPaneRatio === '6:6'
+                  ? 'lg:col-span-6'
+                  : 'lg:col-span-5'
+              } space-y-4 ${
                 mobileReadingTab === 'questions' ? 'block' : 'hidden lg:block'
               }`}
             >
@@ -938,8 +2210,8 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
                 </button>
               </div>
 
-              {/* Top Question Switcher & Display Mode Toggle */}
-              <div className="bg-white dark:bg-[#1E2B30] rounded-xl border border-stone-200/80 dark:border-[#2C3E46] p-3 flex items-center justify-between gap-2 shadow-xs">
+              {/* Top Question Switcher & Display Mode Toggle (sticky in right pane) */}
+              <div className="bg-white dark:bg-[#1E2B30] rounded-xl border border-stone-200/80 dark:border-[#2C3E46] p-3 flex items-center justify-between gap-2 shadow-xs lg:sticky lg:top-40 z-10">
                 <div className="flex items-center gap-1.5 overflow-x-auto py-0.5">
                   {currentUnit.items.map((it) => {
                     const qN = it.questionNumber;
@@ -991,309 +2263,83 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
               </button>
             </div>
 
+            <div className="hidden md:flex items-center justify-between text-[11px] text-[#68777C] dark:text-[#9CAEB3] px-1">
+              <span>键盘快捷操作：J/K 切换题号 · A–D 选中答案 · 1/2/3 标记把握度 · F 标记疑难</span>
+            </div>
+
             {/* Questions Rendering (Single or All) */}
             {(questionDisplayMode === 'single'
               ? [
                   currentUnit.items.find((i) => i.questionNumber === activeQuestionNumber) ||
                     currentUnit.items[0],
                 ]
-              : currentUnit.items
+              : currentUnit.items.filter((item) => {
+                  if (!isSubmitted || reviewFilter === 'all') return true;
+                  const r = attempt.objectiveResponses[item.questionNumber];
+                  if (reviewFilter === 'flagged') return Boolean(r?.flaggedForReview);
+                  if (reviewFilter === 'wrong') {
+                    return Boolean(item.correctAnswer) && r?.selectedAnswer !== item.correctAnswer;
+                  }
+                  return true;
+                })
             ).map((item) => {
               if (!item) return null;
               const qNum = item.questionNumber;
-              const resp = attempt.objectiveResponses[qNum];
-              const selectedAns = resp?.selectedAnswer || '';
-              const confidence = resp?.confidence || 'certain';
-              const officialAns = item.correctAnswer;
-              const isCorrect =
-                isSubmitted && officialAns && selectedAns === officialAns;
-              const isWrong =
-                isSubmitted && officialAns && selectedAns !== officialAns;
-              const aiAnalysis = objectiveAnalyses[`${exam.year}-q${qNum}`];
-
-              const currentIdx = currentUnit.items.findIndex((i) => i.questionNumber === qNum);
+              const currentIdx = currentUnit.items.findIndex(
+                (i) => i.questionNumber === qNum
+              );
 
               return (
-                <div
+                <ObjectiveQuestionCard
                   key={item.id}
-                  id={`question-card-${qNum}`}
-                  onClick={() => setActiveQuestionNumber(qNum)}
-                  className={`bg-white dark:bg-[#1E2B30] rounded-2xl border p-5 sm:p-6 space-y-4 transition-all shadow-xs ${
-                    activeQuestionNumber === qNum
-                      ? 'border-[#174A5B] dark:border-[#38849E] ring-1 ring-[#174A5B]/20 dark:ring-[#38849E]/30'
-                      : 'border-stone-200/80 dark:border-[#2C3E46]'
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="text-sm font-semibold text-[#202B2F] dark:text-[#E2E8E6] leading-snug">
-                      <span className="font-tabular-mono text-[#174A5B] dark:text-[#75B6CE] font-bold mr-2 text-base">
-                        #{qNum}
-                      </span>
-                      <span className="font-english-serif text-base">
-                        {renderTextWithSafeUnderline(item.prompt)}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      <span className="text-xs font-tabular-mono text-[#96A1A4] dark:text-[#657980]">
-                        {item.score}分
-                      </span>
-                      <button
-                        type="button"
-                        aria-label={`标记第${qNum}题待复查`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleToggleFlag(qNum);
-                        }}
-                        className={`p-1.5 rounded-md border transition-colors ${
-                          resp?.flaggedForReview
-                            ? 'bg-rose-50 dark:bg-[#351C1A] border-rose-300 dark:border-rose-800 text-rose-700 dark:text-[#CF695E]'
-                            : 'bg-stone-50 dark:bg-[#162226] border-stone-200 dark:border-[#2C3E46] text-[#96A1A4] dark:text-[#657980] hover:text-[#202B2F] dark:hover:text-[#E2E8E6]'
-                        }`}
-                      >
-                        <Flag className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Options List */}
-                  <div className="grid grid-cols-1 gap-2.5">
-                    {(item.options || []).map((opt) => {
-                      const isSelected = selectedAns === opt.key;
-                      const isOfficialCorrect =
-                        isSubmitted && officialAns === opt.key;
-                      const isSelectedWrong =
-                        isSubmitted && isSelected && officialAns !== opt.key;
-
-                      return (
-                        <button
-                          key={opt.key}
-                          type="button"
-                          disabled={isSubmitted}
-                          onClick={() => handleSelectOption(qNum, opt.key)}
-                          className={`w-full text-left px-4 py-3 rounded-xl text-sm border flex items-start gap-3 transition-all min-h-[48px] ${
-                            isOfficialCorrect
-                              ? 'bg-emerald-50 dark:bg-[#172E27] border-emerald-500 dark:border-[#4EA387] text-[#202B2F] dark:text-[#E2E8E6] font-medium'
-                              : isSelectedWrong
-                              ? 'bg-rose-50 dark:bg-[#351C1A] border-rose-400 dark:border-[#CF695E] text-[#202B2F] dark:text-[#E2E8E6]'
-                              : isSelected
-                              ? 'bg-[#174A5B] dark:bg-[#38849E] text-white border-[#174A5B] dark:border-[#38849E] shadow-2xs'
-                              : 'bg-stone-50/70 dark:bg-[#162226] text-[#202B2F] dark:text-[#E2E8E6] border-stone-200/90 dark:border-[#2C3E46] hover:bg-stone-100 dark:hover:bg-[#203036] hover:border-stone-300 dark:hover:border-[#3B515B]'
-                          }`}
-                        >
-                          <span className={`font-tabular-mono font-bold shrink-0 px-1.5 py-0.5 rounded text-xs ${
-                            isSelected ? 'bg-white/20 text-white' : 'bg-stone-200/70 dark:bg-[#2C3E46] text-[#202B2F] dark:text-[#E2E8E6]'
-                          }`}>
-                            {opt.key}
-                          </span>
-                          <span className="font-english-serif text-sm leading-relaxed pt-0.5">
-                            {opt.text}
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  {/* Confidence Selector */}
-                  <div className="pt-3 border-t border-[#E8ECEA] dark:border-[#223036] flex flex-wrap items-center justify-between gap-2 text-xs">
-                    <span className="text-[#68777C] dark:text-[#9CAEB3]">做题把握度：</span>
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      {(
-                        [
-                          { key: 'certain', label: '确定 (Certain)' },
-                          { key: 'hesitant', label: '犹豫 (Hesitant)' },
-                          { key: 'guessed', label: '猜测 (Guessed)' },
-                        ] as { key: ConfidenceLevel; label: string }[]
-                      ).map((c) => (
-                        <button
-                          key={c.key}
-                          type="button"
-                          disabled={isSubmitted}
-                          onClick={() => handleSelectConfidence(qNum, c.key)}
-                          className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
-                            confidence === c.key
-                              ? 'bg-[#174A5B] dark:bg-[#38849E] text-white'
-                              : 'bg-stone-100 dark:bg-[#162226] text-[#68777C] dark:text-[#9CAEB3] hover:text-[#202B2F] dark:hover:text-[#E2E8E6]'
-                          }`}
-                        >
-                          {c.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Single Mode Navigation Footer */}
-                  {questionDisplayMode === 'single' && (
-                    <div className="pt-4 border-t border-[#E8ECEA] dark:border-[#223036] flex items-center justify-between">
-                      <button
-                        type="button"
-                        disabled={currentIdx <= 0}
-                        onClick={() =>
-                          setActiveQuestionNumber(
-                            currentUnit.items[currentIdx - 1].questionNumber
-                          )
-                        }
-                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-[#202B2F] dark:text-[#E2E8E6] bg-stone-100 dark:bg-[#162226] hover:bg-stone-200 dark:hover:bg-[#203036] disabled:opacity-30 disabled:pointer-events-none transition-colors"
-                      >
-                        <ChevronLeft className="w-3.5 h-3.5" />
-                        <span>上一题</span>
-                      </button>
-
-                      <span className="text-xs font-tabular-mono text-stone-400">
-                        {currentIdx + 1} / {currentUnit.items.length} 题
-                      </span>
-
-                      <button
-                        type="button"
-                        disabled={currentIdx >= currentUnit.items.length - 1}
-                        onClick={() =>
-                          setActiveQuestionNumber(
-                            currentUnit.items[currentIdx + 1].questionNumber
-                          )
-                        }
-                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-[#202B2F] dark:text-[#E2E8E6] bg-stone-100 dark:bg-[#162226] hover:bg-stone-200 dark:hover:bg-[#203036] disabled:opacity-30 disabled:pointer-events-none transition-colors"
-                      >
-                        <span>下一题</span>
-                        <ChevronRight className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  )}
-
-                  {/* Post-Submission Result & Error Cause Analysis */}
-                  {isSubmitted && (
-                    <div className="pt-3 border-t border-[#E8ECEA] dark:border-[#223036] space-y-3 text-xs bg-stone-50 dark:bg-[#162226] rounded-xl p-3.5">
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <div className="font-tabular-mono font-semibold">
-                          {!officialAns ? (
-                            <span className="text-[#68777C] dark:text-[#9CAEB3]">
-                              暂无来源答案 · 你的作答: {selectedAns || '未作答'} · 不计客观分
-                            </span>
-                          ) : isCorrect ? (
-                            <span className="text-[#3F7664] dark:text-[#4EA387]">
-                              ✓ 回答正确 · 你的答案: {selectedAns} · 官方答案: {officialAns}
-                            </span>
-                          ) : (
-                            <span className="text-[#A8544A] dark:text-[#CF695E]">
-                              ✗ 回答错误 · 你的答案: {selectedAns || '未作答'} · 官方答案: {officialAns}
-                            </span>
-                          )}
-                        </div>
-                        <button
-                          type="button"
-                          disabled={
-                            !anyModelAvailable || analyzingQuestionNum === qNum
-                          }
-                          onClick={async () => {
-                            try {
-                              setAnalyzingQuestionNum(qNum);
-                              await onRequestObjectiveAnalysis(
-                                item,
-                                currentUnit,
-                                selectedAns || '未作答',
-                                confidence
-                              );
-                            } catch (err: any) {
-                              setAiErrorBanner(
-                                err?.message || '客观题 AI 解析失败'
-                              );
-                            } finally {
-                              setAnalyzingQuestionNum(null);
-                            }
-                          }}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded border border-[#174A5B] dark:border-[#38849E] text-[#174A5B] dark:text-[#75B6CE] hover:bg-[#174A5B] hover:text-white dark:hover:bg-[#38849E] dark:hover:text-white disabled:opacity-50 transition-colors"
-                        >
-                          <Sparkles className="w-3.5 h-3.5" />
-                          <span>
-                            {!anyModelAvailable
-                              ? '需配置模型'
-                              : analyzingQuestionNum === qNum
-                              ? '正在解析...'
-                              : 'AI 证据句精析'}
-                          </span>
-                        </button>
-                      </div>
-
-                      {isWrong && (
-                        <div className="space-y-1.5 pt-1">
-                          <div className="font-medium text-[#202B2F] dark:text-[#E2E8E6]">
-                            标记已知错因（记入错题库）：
-                          </div>
-                          <div className="flex flex-wrap gap-1.5">
-                            {KNOWN_ERROR_CAUSE_OPTIONS.map((cause) => {
-                              const active = (
-                                resp?.knownErrorCauses || []
-                              ).includes(cause);
-                              return (
-                                <button
-                                  key={cause}
-                                  type="button"
-                                  onClick={() =>
-                                    handleToggleKnownErrorCause(qNum, cause)
-                                  }
-                                  className={`px-2 py-0.5 text-[11px] rounded transition-colors ${
-                                    active
-                                      ? 'bg-rose-700 dark:bg-[#CF695E] text-white font-medium'
-                                      : 'bg-white dark:bg-[#1E2B30] text-[#68777C] dark:text-[#9CAEB3] border border-[#DCE4E1] dark:border-[#2C3E46] hover:border-stone-400'
-                                  }`}
-                                >
-                                  {cause}
-                                </button>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      )}
-
-                      {aiAnalysis && (
-                        <div className="p-3 bg-white dark:bg-[#1E2B30] rounded-lg border border-[#DCE4E1] dark:border-[#2C3E46] space-y-2">
-                          <div className="flex items-center justify-between text-[11px] text-[#68777C] dark:text-[#9CAEB3] border-b border-[#E8ECEA] dark:border-[#223036] pb-1">
-                            <span className="font-semibold text-[#174A5B] dark:text-[#75B6CE]">
-                              AI 辅助证据分析（非官方，仅供参考）
-                            </span>
-                            <span className="font-tabular-mono">
-                              {aiAnalysis.modelProvider} ({aiAnalysis.modelName})
-                            </span>
-                          </div>
-                          {aiAnalysis.dataQualityWarning && (
-                            <div className="p-2.5 bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-800 rounded-md text-[11px] space-y-1 text-amber-900 dark:text-amber-200">
-                              <div className="font-bold">
-                                ⚠ 数据源与原文语义争议提示（已与 AI 模型错误隔离）
-                              </div>
-                              <div className="leading-relaxed">
-                                {aiAnalysis.dataQualityWarning}
-                              </div>
-                            </div>
-                          )}
-                          <div>
-                            <span className="font-semibold text-[#202B2F] dark:text-[#E2E8E6]">
-                              原文证据句定位：
-                            </span>
-                            <span className="font-english-serif text-[#202B2F] dark:text-[#E2E8E6] ml-1">
-                              “{aiAnalysis.evidenceQuote}”
-                            </span>
-                          </div>
-                          <div>
-                            <span className="font-semibold text-[#202B2F] dark:text-[#E2E8E6]">
-                              解题思路结论：
-                            </span>
-                            <span className="text-[#202B2F] dark:text-[#E2E8E6] ml-1">
-                              {aiAnalysis.transferableConclusion}
-                            </span>
-                          </div>
-                          {aiAnalysis.possibleErrorCauses.length > 0 && (
-                            <div>
-                              <span className="font-semibold text-[#A8544A] dark:text-[#CF695E]">
-                                干扰项与错因推测：
-                              </span>
-                              <span className="text-[#68777C] dark:text-[#9CAEB3] ml-1">
-                                {aiAnalysis.possibleErrorCauses.join('；')}
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
+                  item={item}
+                  unit={currentUnit}
+                  resp={attempt.objectiveResponses[qNum]}
+                  isActive={activeQuestionNumber === qNum}
+                  isSubmitted={isSubmitted}
+                  compactReview={isCompactReview}
+                  anyModelAvailable={anyModelAvailable}
+                  isAnalyzing={analyzingQuestionNum === qNum}
+                  aiAnalysis={objectiveAnalyses[`${exam.year}-q${qNum}`]}
+                  showSingleNav={questionDisplayMode === 'single'}
+                  currentIndex={currentIdx}
+                  totalCountInUnit={currentUnit.items.length}
+                  knownErrorCauseOptions={KNOWN_ERROR_CAUSE_OPTIONS}
+                  followUpHistory={followUpHistory[`${exam.year}:${qNum}`] || []}
+                  isAskingFollowUp={askingFollowUpQ === qNum}
+                  renderTextWithSafeUnderline={renderTextWithSafeUnderline}
+                  onActivate={setActiveQuestionNumber}
+                  onSelectOption={handleSelectOption}
+                  onSelectConfidence={handleSelectConfidence}
+                  onToggleFlag={handleToggleFlag}
+                  onToggleKnownErrorCause={handleToggleKnownErrorCause}
+                  onUpdateUserNotes={(qn, notes) =>
+                    onUpdateObjectiveResponse(qn, {
+                      questionNumber: qn,
+                      userNotes: notes,
+                    })
+                  }
+                  onNavigateQuestion={(dir) => {
+                    const targetIdx =
+                      dir === 'prev'
+                        ? Math.max(0, currentIdx - 1)
+                        : Math.min(currentUnit.items.length - 1, currentIdx + 1);
+                    const nextQ = currentUnit.items[targetIdx]?.questionNumber;
+                    if (nextQ !== undefined) setActiveQuestionNumber(nextQ);
+                  }}
+                  onRequestAnalysis={async (it, un, ans, conf) => {
+                    try {
+                      setAnalyzingQuestionNum(it.questionNumber);
+                      await onRequestObjectiveAnalysis(it, un, ans, conf);
+                    } catch (err: any) {
+                      setAiErrorBanner(err?.message || '客观题 AI 解析失败');
+                    } finally {
+                      setAnalyzingQuestionNum(null);
+                    }
+                  }}
+                  onLocateEvidenceQuote={handleLocateEvidenceQuote}
+                  onAskFollowUp={handleAskQuestionFollowUp}
+                />
               );
             })}
           </div>
@@ -1305,11 +2351,34 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
       {currentUnit.unitType === 'passage-assembly' && partBSpec && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Left: Main Passage Flow with Slots 41-45 and Fixed E */}
-          <div className="lg:col-span-7 bg-[#FBFAF6] dark:bg-[#1B262A] rounded-2xl border border-[#DCE4E1] dark:border-[#2C3E46] p-6 space-y-4 shadow-xs">
-            <div className="border-b border-[#E8ECEA] dark:border-[#223036] pb-3 space-y-1">
-              <h1 className="text-base font-bold text-[#202B2F] dark:text-[#E2E8E6]">
-                {currentUnit.title}
-              </h1>
+          <div
+            className={`${
+              splitPaneRatio === '5:7'
+                ? 'lg:col-span-5'
+                : splitPaneRatio === '6:6'
+                ? 'lg:col-span-6'
+                : 'lg:col-span-7'
+            } bg-[#FBFAF6] dark:bg-[#1B262A] rounded-2xl border border-[#DCE4E1] dark:border-[#2C3E46] p-6 space-y-4 shadow-xs`}
+          >
+            <div className="border-b border-[#E8ECEA] dark:border-[#223036] pb-3 space-y-2">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h1 className="text-base font-bold text-[#202B2F] dark:text-[#E2E8E6]">
+                  {currentUnit.title}
+                </h1>
+                <div className="hidden lg:inline-flex items-center">
+                  <SegmentedTabs
+                    size="xs"
+                    ariaLabel="新题型左右栏宽比例"
+                    value={splitPaneRatio}
+                    onChange={setSplitPaneRatio}
+                    options={[
+                      { id: '7:5', label: '7:5 精读' },
+                      { id: '6:6', label: '6:6 均衡' },
+                      { id: '5:7', label: '5:7 匹配' },
+                    ]}
+                  />
+                </div>
+              </div>
               <p className="text-xs text-[#68777C] dark:text-[#9CAEB3]">
                 {currentUnit.instructions}
               </p>
@@ -1435,7 +2504,15 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
           </div>
 
           {/* Right: Candidate Paragraph Pool A-G */}
-          <div className="lg:col-span-5 bg-white dark:bg-[#1E2B30] rounded-2xl border border-[#DCE4E1] dark:border-[#2C3E46] p-6 space-y-4 lg:sticky lg:top-32 lg:max-h-[calc(100vh-9.5rem)] lg:overflow-y-auto shadow-xs">
+          <div
+            className={`${
+              splitPaneRatio === '5:7'
+                ? 'lg:col-span-7'
+                : splitPaneRatio === '6:6'
+                ? 'lg:col-span-6'
+                : 'lg:col-span-5'
+            } bg-white dark:bg-[#1E2B30] rounded-2xl border border-[#DCE4E1] dark:border-[#2C3E46] p-6 space-y-4 lg:sticky lg:top-32 lg:max-h-[calc(100vh-9.5rem)] lg:overflow-y-auto shadow-xs`}
+          >
             <div className="flex items-center justify-between border-b border-[#E8ECEA] dark:border-[#223036] pb-3">
               <div>
                 <h2 className="text-sm font-bold text-[#202B2F] dark:text-[#E2E8E6]">
@@ -1535,1048 +2612,290 @@ export const StudyWorkspaceView: React.FC<StudyWorkspaceViewProps> = ({
       {(currentUnit.unitType === 'translation' ||
         currentUnit.unitType === 'practical-writing' ||
         currentUnit.unitType === 'visual-writing') && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          {/* Left Column */}
-          <div className="lg:col-span-6 bg-white dark:bg-[#1E2B30] rounded-2xl border border-[#DCE4E1] dark:border-[#2C3E46] p-6 space-y-5 shadow-xs">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E8ECEA] dark:border-[#26373E] pb-3">
-              <div>
-                <h1 className="text-base font-bold text-[#202B2F] dark:text-[#E2E8E6]">
-                  {currentUnit.title}
-                </h1>
-                <p className="text-xs text-[#68777C] dark:text-[#9CAEB3] mt-0.5">
-                  {currentUnit.instructions}
-                </p>
-              </div>
-            </div>
-
-            {/* Three Practice Modes Switcher */}
-            <div className="p-3 bg-stone-50 dark:bg-[#162226] rounded-xl border border-[#DCE4E1] dark:border-[#2C3E46] space-y-2">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="text-xs font-semibold text-[#202B2F] dark:text-[#E2E8E6]">
-                  主观题三阶训练模式：
-                </span>
-                <div className="flex items-center gap-1">
-                  {(
-                    [
-                      { key: 'independent', label: '1. 独立作答' },
-                      { key: 'guided', label: '2. 引导练习 (结构支架)' },
-                      { key: 'rewrite', label: '3. 复盘改写 (V2/V3)' },
-                    ] as { key: SubjectivePracticeMode; label: string }[]
-                  ).map((m) => (
-                    <button
-                      key={m.key}
-                      type="button"
-                      onClick={() => {
-                        setPracticeMode(m.key);
-                        if (
-                          m.key === 'guided' &&
-                          !usedHints.some((h) => h.id === 'hint-scaffold')
-                        ) {
-                          setUsedHints((prev) => [
-                            ...prev,
-                            {
-                              id: 'hint-scaffold',
-                              level: 1,
-                              title: '句法与段落结构提示',
-                              content: '已开启引导练习结构支架',
-                              usedAt: new Date().toISOString(),
-                            },
-                          ]);
-                        }
-                      }}
-                      className={`px-2.5 py-1 text-xs font-medium rounded-md border transition-colors ${
-                        practiceMode === m.key
-                          ? 'bg-[#174A5B] dark:bg-[#38849E] text-white border-[#174A5B] dark:border-[#38849E]'
-                          : 'bg-white dark:bg-[#1A2529] text-[#202B2F] dark:text-[#E2E8E6] border-[#DCE4E1] dark:border-[#2C3E46]'
-                      }`}
-                    >
-                      {m.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              {practiceMode === 'guided' && (
-                <div className="p-3 bg-white dark:bg-[#1A2529] rounded-lg border border-[#DCE4E1] dark:border-[#2C3E46] text-xs space-y-2 text-[#202B2F] dark:text-[#E2E8E6]">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div className="font-semibold text-[#174A5B] dark:text-[#75B6CE]">
-                      引导练习结构提示（作答提交前严禁泄露参考译文或完整范文 · 启用支架将记录独立度系数）：
-                    </div>
-                    {anyModelAvailable && onRequestWritingScaffold && (
-                      <button
-                        type="button"
-                        disabled={loadingScaffold}
-                        onClick={async () => {
-                          try {
-                            setLoadingScaffold(true);
-                            const scaffold = await onRequestWritingScaffold({
-                              unitType: currentUnit.unitType as
-                                | 'translation'
-                                | 'practical-writing'
-                                | 'visual-writing',
-                              promptText:
-                                currentUnit.items
-                                  .map(
-                                    (i) =>
-                                      i.translationMeta?.underlinedEnglish ||
-                                      i.prompt
-                                  )
-                                  .join('\n') || currentUnit.instructions,
-                              requiredFacts:
-                                visualMat?.requiredFacts ||
-                                practicalSpec?.requiredPoints,
-                            });
-                            setAiScaffolds((prev) => ({
-                              ...prev,
-                              [currentUnit.id]: scaffold,
-                            }));
-                          } catch (err: any) {
-                            setAiErrorBanner(
-                              err?.message || '生成 AI 结构支架失败'
-                            );
-                          } finally {
-                            setLoadingScaffold(false);
-                          }
-                        }}
-                        className="px-2.5 py-1 text-[11px] font-medium rounded border border-[#174A5B] dark:border-[#38849E] text-[#174A5B] dark:text-[#75B6CE] hover:bg-[#174A5B] hover:text-white dark:hover:bg-[#38849E] dark:hover:text-white disabled:opacity-50 transition-colors"
-                      >
-                        {loadingScaffold
-                          ? '生成 AI 支架中...'
-                          : aiScaffolds[currentUnit.id]
-                          ? '重新生成 AI 定制结构支架'
-                          : '生成 AI 定制三段式支架与词块'}
-                      </button>
-                    )}
-                  </div>
-                  {aiScaffolds[currentUnit.id] ? (
-                    <div className="space-y-2 pt-1 border-t border-[#E8ECEA] dark:border-[#26373E]">
-                      <div className="grid grid-cols-1 gap-1.5">
-                        {aiScaffolds[currentUnit.id].paragraphPurposes.map(
-                          (p) => (
-                            <div
-                              key={p.paragraphIndex}
-                              className="p-2 bg-stone-50 dark:bg-[#162226] rounded border border-[#DCE4E1] dark:border-[#2C3E46]"
-                            >
-                              <div className="font-semibold text-[#174A5B] dark:text-[#75B6CE]">
-                                第 {p.paragraphIndex} 段（{p.title} · {p.recommendedWordCount}）：
-                              </div>
-                              <div className="text-[#68777C] dark:text-[#9CAEB3]">
-                                写作目标：{p.purpose}
-                              </div>
-                            </div>
-                          )
-                        )}
-                      </div>
-                      <div className="text-[11px] text-[#68777C] dark:text-[#9CAEB3]">
-                        推荐核心表达词块：
-                        <span className="font-english-serif text-[#202B2F] dark:text-[#E2E8E6] ml-1">
-                          {aiScaffolds[currentUnit.id].corePhraseBank
-                            .map((cp) => `${cp.phrase} (${cp.usageNote})`)
-                            .join(' · ')}
-                        </span>
-                      </div>
-                    </div>
-                  ) : currentUnit.unitType === 'translation' ? (
-                    <ul className="list-disc pl-4 space-y-1 text-[#68777C] dark:text-[#9CAEB3]">
-                      <li>
-                        (46) 句法重点：找到主干 scientists have a duty...，处理好以 because 引导的原因状语从句。
-                      </li>
-                      <li>
-                        (47) 句法重点：Such a system 承接上文，注意 be based on 的被动转主动译法。
-                      </li>
-                      <li>
-                        (48) 句法重点：拆解定语从句修饰关系，先译主干再顺译修饰成分。
-                      </li>
-                      <li>
-                        (49) 句法重点：区分 bird species 与 the rest of the creatures 的并列对比结构。
-                      </li>
-                      <li>
-                        (50) 句法重点：末句总结段意，确保代词指代与中文语序自然顺畅。
-                      </li>
-                    </ul>
-                  ) : currentUnit.unitType === 'practical-writing' ? (
-                    <ul className="list-disc pl-4 space-y-1 text-[#68777C] dark:text-[#9CAEB3]">
-                      <li>
-                        第一段（目的）：以研究生会名义直接表明招募国际学术会议志愿者的通知目的。
-                      </li>
-                      <li>
-                        第二段（条件与职责）：简明列出英语流利、跨文化沟通能力、团队协作意识等核心要求。
-                      </li>
-                      <li>
-                        第三段（报名方式）：交代报名截止时间与联系方式，礼貌收尾（控制在 100 词左右）。
-                      </li>
-                    </ul>
-                  ) : (
-                    <ul className="list-disc pl-4 space-y-1 text-[#68777C] dark:text-[#9CAEB3]">
-                      <li>
-                        第一段（图画描摹）：准确描述硕大火锅及其中包含的中西方多元文化元素（京剧、功夫、莎士比亚、芭蕾等）与底部标题“文化火锅既美味又营养”。
-                      </li>
-                      <li>
-                        第二段（象征意义论证）：阐明全球化时代跨文化交融（兼收并蓄、和而不同）的必要性与精神养分。
-                      </li>
-                      <li>
-                        第三段（结论与升华）：提出对中华传统文化保护与外来优秀文化吸收的平衡建议（160–200词）。
-                      </li>
-                    </ul>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* Translation Passage */}
-            {currentUnit.unitType === 'translation' &&
-              currentUnit.materials.map((mat) => {
-                const paras =
-                  mat.paragraphs && mat.paragraphs.length > 0
-                    ? mat.paragraphs
-                    : mat.text.split(/\n{2,}/).filter(Boolean);
-                return (
-                  <article
-                    key={mat.id}
-                    style={{
-                      fontSize: `${typographyPrefs.fontSizePx}px`,
-                      lineHeight: typographyPrefs.lineHeight,
-                    }}
-                    className="font-english-serif text-[#202B2F] dark:text-[#E2E8E6] space-y-3"
-                  >
-                    {paras.map((pText, idx) => (
-                      <p key={idx} className="leading-relaxed">
-                        <span className="font-tabular-mono text-xs text-[#96A1A4] dark:text-[#657980] mr-2">
-                          [P{idx + 1}]
-                        </span>
-                        {renderTextWithSafeUnderline(pText)}
-                      </p>
-                    ))}
-                  </article>
-                );
-              })}
-
-            {/* Practical Writing Prompt Spec (Q51) */}
-            {currentUnit.unitType === 'practical-writing' && (
-              <div className="space-y-3 text-xs">
-                <div className="p-4 bg-stone-50 dark:bg-[#162226] border border-[#DCE4E1] dark:border-[#2C3E46] rounded-xl font-english-serif text-sm text-[#202B2F] dark:text-[#E2E8E6] leading-relaxed">
-                  {currentUnit.items[0]?.prompt}
-                </div>
-                {practicalSpec && (
-                  <div className="p-4 bg-white dark:bg-[#1A2529] rounded-xl border border-[#DCE4E1] dark:border-[#2C3E46] space-y-2">
-                    <div className="font-semibold text-[#202B2F] dark:text-[#E2E8E6]">
-                      应用文审题必含要素核查清单：
-                    </div>
-                    <ul className="list-disc pl-4 space-y-1 text-[#68777C] dark:text-[#9CAEB3]">
-                      {practicalSpec.requiredPoints.map((pt, i) => (
-                        <li key={i}>{pt}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Visual Writing Illustration & Prompt (Q52) */}
-            {currentUnit.unitType === 'visual-writing' && visualMat && (
-              <div className="space-y-4">
-                <CulturalHotpotIllustration
-                  visualMaterial={visualMat}
-                  allVisualMaterials={visualMats}
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Right Column: Subjective Editor, Immutable Version History, Two-Stage Evaluation & Diff */}
-          <div className="lg:col-span-6 space-y-5">
-            <div className="bg-white dark:bg-[#1E2B30] rounded-2xl border border-[#DCE4E1] dark:border-[#2C3E46] p-6 space-y-4 shadow-xs">
-              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#E8ECEA] dark:border-[#26373E] pb-3">
-                <div>
-                  <h2 className="text-sm font-bold text-[#202B2F] dark:text-[#E2E8E6]">
-                    主观题作答与不可变版本工作台
-                  </h2>
-                  <span className="text-xs text-[#68777C] dark:text-[#9CAEB3]">
-                    每次保存均新增独立版本（V1 原稿 → V2 修改稿 → V3 延时重写），严禁覆盖历史稿件
-                  </span>
-                </div>
-                <div className="text-xs font-tabular-mono text-[#174A5B] dark:text-[#75B6CE]">
-                  本稿计时：{formatDuration(subjectiveElapsed)}
-                </div>
-              </div>
-
-              {currentUnit.unitType === 'translation' ? (
-                <div className="space-y-4">
-                  {currentUnit.items.map((item) => (
-                    <div key={item.id} className="space-y-1.5">
-                      <label
-                        htmlFor={`trans-input-${item.questionNumber}`}
-                        className="block text-xs font-semibold text-[#202B2F] dark:text-[#E2E8E6]"
-                      >
-                        <span className="font-tabular-mono text-[#174A5B] dark:text-[#75B6CE] mr-1.5">
-                          ({item.questionNumber})
-                        </span>
-                        <span className="font-english-serif font-normal">
-                          {item.translationMeta?.underlinedEnglish ||
-                            item.prompt}
-                        </span>
-                      </label>
-                      <textarea
-                        id={`trans-input-${item.questionNumber}`}
-                        rows={2}
-                        value={translationInputs[item.questionNumber] || ''}
-                        onChange={(e) =>
-                          setTranslationInputs((prev) => ({
-                            ...prev,
-                            [item.questionNumber]: e.target.value,
-                          }))
-                        }
-                        placeholder={`请输入第 (${item.questionNumber}) 句的中文译文...`}
-                        className="w-full p-2.5 text-sm bg-stone-50 dark:bg-[#162226] border border-[#DCE4E1] dark:border-[#2C3E46] rounded-lg text-[#202B2F] dark:text-[#E2E8E6] focus:bg-white dark:focus:bg-[#1A2529] focus:border-[#174A5B] dark:focus:border-[#38849E] focus:outline-none"
-                      />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-xs text-[#68777C] dark:text-[#9CAEB3] font-tabular-mono">
-                    <span>
-                      当前英文词数：{countEnglishWords(writingDraft)} 词
-                    </span>
-                    <span>
-                      建议词数区间：
-                      {currentUnit.unitType === 'practical-writing'
-                        ? '90–120 词'
-                        : '160–200 词'}
-                    </span>
-                  </div>
-                  <textarea
-                    rows={12}
-                    aria-label="英文作文输入框"
-                    value={writingDraft}
-                    onChange={(e) => setWritingDraft(e.target.value)}
-                    placeholder="请在此处撰写英文作文（支持多版本保存与两阶段 AI 批改）..."
-                    className="w-full p-4 text-sm font-english-serif leading-relaxed bg-stone-50 dark:bg-[#162226] border border-[#DCE4E1] dark:border-[#2C3E46] rounded-xl text-[#202B2F] dark:text-[#E2E8E6] focus:bg-white dark:focus:bg-[#1A2529] focus:border-[#174A5B] dark:focus:border-[#38849E] focus:outline-none"
-                  />
-                </div>
-              )}
-
-              <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[#E8ECEA] dark:border-[#26373E]">
-                <button
-                  type="button"
-                  onClick={() => void handleSaveSubjectiveVersion(false)}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-[#202B2F] dark:text-[#E2E8E6] bg-stone-100 dark:bg-[#162226] hover:bg-stone-200 dark:hover:bg-[#203036] border border-[#DCE4E1] dark:border-[#2C3E46] rounded-lg transition-colors"
-                >
-                  <History className="w-3.5 h-3.5" />
-                  <span>仅保存新版本 (生成 V{unitVersions.length + 1})</span>
-                </button>
-
-                {anyModelAvailable ? (
-                  <button
-                    type="button"
-                    disabled={Boolean(evaluatingVersionId)}
-                    onClick={() => void handleSaveSubjectiveVersion(true)}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[#174A5B] dark:bg-[#38849E] hover:bg-[#123D4B] dark:hover:bg-[#489BB8] rounded-lg disabled:opacity-50 transition-colors shadow-xs"
-                  >
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>
-                      {evaluatingVersionId
-                        ? '正在执行两阶段 AI 批改...'
-                        : `提交 V${unitVersions.length + 1} 并执行两阶段 AI 批改 (${activeProviderName || 'gemini'})`}
-                    </span>
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={onNavigateSettings}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-[#68777C] dark:text-[#9CAEB3] bg-stone-100 dark:bg-[#162226] border border-[#DCE4E1] dark:border-[#2C3E46] rounded-lg hover:text-[#202B2F] dark:hover:text-[#E2E8E6] transition-colors"
-                  >
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>需要配置模型（前往设置页配置 API Key）</span>
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* Immutable Version History & Diff Comparison Panel */}
-            {unitVersions.length > 0 && (
-              <div className="bg-white dark:bg-[#1E2B30] rounded-2xl border border-[#DCE4E1] dark:border-[#2C3E46] p-6 space-y-4 shadow-xs">
-                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#E8ECEA] dark:border-[#26373E] pb-3">
-                  <div className="flex items-center gap-2">
-                    <History className="w-4 h-4 text-[#174A5B] dark:text-[#75B6CE]" />
-                    <h3 className="text-sm font-bold text-[#202B2F] dark:text-[#E2E8E6]">
-                      历史版本库（共 {unitVersions.length} 稿 · 不可原地覆盖）
-                    </h3>
-                  </div>
-                  {unitVersions.length >= 2 && (
-                    <button
-                      type="button"
-                      onClick={() => setShowDiffPanel((p) => !p)}
-                      className="inline-flex items-center gap-1 px-3 py-1 text-xs font-medium text-[#174A5B] dark:text-[#75B6CE] border border-[#174A5B] dark:border-[#38849E] hover:bg-[#174A5B] hover:text-white dark:hover:bg-[#38849E] dark:hover:text-white rounded-md transition-colors"
-                    >
-                      <GitCompare className="w-3.5 h-3.5" />
-                      <span>
-                        {showDiffPanel ? '收起版本对比' : '对比版本差异 (Diff)'}
-                      </span>
-                    </button>
-                  )}
-                </div>
-
-                <div className="flex flex-wrap items-center gap-2">
-                  {unitVersions.map((ver) => (
-                    <button
-                      key={ver.id}
-                      type="button"
-                      onClick={() => setSelectedVersionId(ver.id)}
-                      className={`px-3 py-1.5 text-xs font-tabular-mono rounded-md border transition-colors ${
-                        selectedVersionId === ver.id
-                          ? 'bg-[#174A5B] dark:bg-[#38849E] text-white border-[#174A5B] dark:border-[#38849E] font-semibold'
-                          : 'bg-stone-50 dark:bg-[#162226] text-[#202B2F] dark:text-[#E2E8E6] border-[#DCE4E1] dark:border-[#2C3E46]'
-                      }`}
-                    >
-                      {ver.versionLabel} ({ver.wordCount}词)
-                    </button>
-                  ))}
-                </div>
-
-                {/* Version Diff Comparison Box */}
-                {showDiffPanel &&
-                  selectedVersion &&
-                  compareBaseVersion &&
-                  versionDiffResult &&
-                  unitVersions.length >= 2 && (
-                    <div className="p-4 bg-stone-50 dark:bg-[#162226] rounded-xl border border-[#DCE4E1] dark:border-[#2C3E46] space-y-2 text-xs">
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <span className="font-semibold text-[#202B2F] dark:text-[#E2E8E6]">
-                          版本对比：{compareBaseVersion.versionLabel} →{' '}
-                          {selectedVersion.versionLabel}（新增{' '}
-                          {versionDiffResult.addedCount} 处 / 删除{' '}
-                          {versionDiffResult.removedCount} 处）
-                        </span>
-                        <select
-                          aria-label="选择基准对比版本"
-                          value={compareBaseVersion.id}
-                          onChange={(e) =>
-                            setCompareBaseVersionId(e.target.value)
-                          }
-                          className="px-2 py-1 bg-white dark:bg-[#1A2529] border border-[#DCE4E1] dark:border-[#2C3E46] rounded text-xs text-[#202B2F] dark:text-[#E2E8E6]"
-                        >
-                          {unitVersions.map((v) => (
-                            <option key={v.id} value={v.id}>
-                              基准: {v.versionLabel}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="p-3 bg-white dark:bg-[#1A2529] rounded-lg border border-[#DCE4E1] dark:border-[#2C3E46] font-english-serif text-sm leading-relaxed text-[#202B2F] dark:text-[#E2E8E6]">
-                        {versionDiffResult.segments.map((seg, i) => {
-                          if (seg.type === 'added') {
-                            return (
-                              <span
-                                key={i}
-                                className="bg-emerald-500/20 text-emerald-800 dark:text-[#4EA387] font-semibold underline px-0.5 rounded"
-                              >
-                                {seg.text}
-                              </span>
-                            );
-                          }
-                          if (seg.type === 'removed') {
-                            return (
-                              <span
-                                key={i}
-                                className="bg-rose-500/20 text-rose-800 dark:text-[#CF695E] line-through px-0.5 rounded"
-                              >
-                                {seg.text}
-                              </span>
-                            );
-                          }
-                          return <span key={i}>{seg.text}</span>;
-                        })}
-                      </div>
-                    </div>
-                  )}
-
-                {selectedVersion && (
-                  <div className="space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#68777C] dark:text-[#9CAEB3] font-tabular-mono">
-                      <span>
-                        版本时间：
-                        {new Date(selectedVersion.createdAt).toLocaleString(
-                          'zh-CN'
-                        )}{' '}
-                        · 模式：{selectedVersion.practiceMode}
-                      </span>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setPracticeMode('rewrite');
-                            if (
-                              currentUnit.unitType === 'translation' &&
-                              selectedVersion.subAnswers
-                            ) {
-                              setTranslationInputs({
-                                ...selectedVersion.subAnswers,
-                              });
-                            } else {
-                              setWritingDraft(selectedVersion.content);
-                            }
-                          }}
-                          className="text-[#174A5B] dark:text-[#75B6CE] hover:underline font-sans font-medium"
-                        >
-                          基于此版本载入编辑器准备重写 →
-                        </button>
-                        {!selectedEvaluation && anyModelAvailable && (
-                          <button
-                            type="button"
-                            disabled={
-                              evaluatingVersionId === selectedVersion.id
-                            }
-                            onClick={async () => {
-                              try {
-                                setEvaluatingVersionId(selectedVersion.id);
-                                await onRequestSubjectiveEvaluation(
-                                  selectedVersion,
-                                  currentUnit
-                                );
-                              } catch (err: any) {
-                                setAiErrorBanner(err?.message || 'AI 批改失败');
-                              } finally {
-                                setEvaluatingVersionId(null);
-                              }
-                            }}
-                            className="px-2.5 py-1 bg-[#174A5B] dark:bg-[#38849E] text-white rounded font-sans font-medium hover:bg-[#123D4B] dark:hover:bg-[#489BB8]"
-                          >
-                            {evaluatingVersionId === selectedVersion.id
-                              ? '批改中...'
-                              : '对此版本运行 AI 批改'}
-                          </button>
-                        )}
-                      </div>
-                    </div>
-
-                    <pre className="p-3.5 bg-stone-50 dark:bg-[#162226] border border-[#DCE4E1] dark:border-[#2C3E46] rounded-xl text-xs font-english-serif whitespace-pre-wrap text-[#202B2F] dark:text-[#E2E8E6] leading-relaxed">
-                      {selectedVersion.content}
-                    </pre>
-
-                    {/* Two-Stage Subjective Evaluation Report */}
-                    {selectedEvaluation && (
-                      <div className="border border-[#174A5B] dark:border-[#38849E] bg-stone-50 dark:bg-[#162226] rounded-xl p-4 space-y-4 text-xs">
-                        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#DCE4E1] dark:border-[#2C3E46] pb-2">
-                          <div className="space-y-0.5">
-                            <div className="text-sm font-bold text-[#202B2F] dark:text-[#E2E8E6]">
-                              两阶段主观题 AI 批改报告（非官方内容 · 仅供学习参考）
-                            </div>
-                            <div className="text-[11px] text-[#68777C] dark:text-[#9CAEB3] font-tabular-mono">
-                              模型：{selectedEvaluation.modelProvider} (
-                              {selectedEvaluation.modelName}) · 二阶段复核状态：
-                              {selectedEvaluation.reviewerDecision}
-                              {selectedEvaluation.reviewerAdjustments
-                                ?.stabilityWarning
-                                ? ' · 含分差稳定性提示'
-                                : ''}
-                            </div>
-                          </div>
-                          <div className="text-right font-tabular-mono">
-                            <div className="text-lg font-bold text-[#174A5B] dark:text-[#75B6CE]">
-                              参考中心分：{selectedEvaluation.centralScore} /{' '}
-                              {selectedEvaluation.maxScore} 分
-                            </div>
-                            <div className="text-[11px] text-[#68777C] dark:text-[#9CAEB3]">
-                              建议区间：[{selectedEvaluation.scoreRangeMin},{' '}
-                              {selectedEvaluation.scoreRangeMax}] · 置信度：
-                              {selectedEvaluation.confidence}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Dimension Scores Table */}
-                        <div className="overflow-x-auto bg-white dark:bg-[#1A2529] border border-[#DCE4E1] dark:border-[#2C3E46] rounded-lg">
-                          <table className="w-full text-left border-collapse text-xs">
-                            <thead>
-                              <tr className="border-b border-[#DCE4E1] dark:border-[#2C3E46] bg-stone-100 dark:bg-[#1E2B30] text-[#68777C] dark:text-[#9CAEB3]">
-                                <th className="py-2 px-3">评分维度</th>
-                                <th className="py-2 px-3">得分</th>
-                                <th className="py-2 px-3">诊断反馈</th>
-                              </tr>
-                            </thead>
-                            <tbody className="divide-y divide-[#DCE4E1] dark:divide-[#2C3E46]">
-                              {selectedEvaluation.dimensionScores.map(
-                                (d, i) => (
-                                  <tr key={i}>
-                                    <td className="py-2 px-3 font-semibold text-[#202B2F] dark:text-[#E2E8E6]">
-                                      {d.name}
-                                    </td>
-                                    <td className="py-2 px-3 font-tabular-mono text-[#174A5B] dark:text-[#75B6CE]">
-                                      {d.score} / {d.maxScore}
-                                    </td>
-                                    <td className="py-2 px-3 text-[#68777C] dark:text-[#9CAEB3]">
-                                      {d.rationale}
-                                    </td>
-                                  </tr>
-                                )
-                              )}
-                            </tbody>
-                          </table>
-                        </div>
-
-                        {/* Quote-Verified Annotations */}
-                        {selectedEvaluation.annotations.length > 0 && (
-                          <div className="space-y-2">
-                            <div className="font-semibold text-[#202B2F] dark:text-[#E2E8E6]">
-                              原文引用校验批注（已通过字符偏移核验）：
-                            </div>
-                            {selectedEvaluation.annotations.map((ann, idx) => (
-                              <div
-                                key={idx}
-                                className="p-3 bg-white dark:bg-[#1A2529] rounded-lg border border-[#DCE4E1] dark:border-[#2C3E46] space-y-1"
-                              >
-                                <div className="flex items-center justify-between font-tabular-mono text-[11px]">
-                                  <span className="text-rose-700 dark:text-[#CF695E] font-semibold">
-                                    [{ann.issueType}] 偏移 [{ann.startOffset}:
-                                    {ann.endOffset}]
-                                  </span>
-                                  <span className="text-emerald-700 dark:text-[#4EA387]">
-                                    ✓ 原文精确匹配
-                                  </span>
-                                </div>
-                                <div className="font-english-serif text-[#202B2F] dark:text-[#E2E8E6]">
-                                  原句摘录：“{ann.quotedUserText}”
-                                </div>
-                                <div className="text-[#68777C] dark:text-[#9CAEB3]">
-                                  诊断：{ann.explanation}
-                                </div>
-                                <div className="text-emerald-700 dark:text-[#4EA387] font-english-serif">
-                                  建议改写：{ann.suggestion}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-
-                        {selectedEvaluation.visionDegradedToText && (
-                          <div className="p-2.5 bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-800 rounded-lg text-[11px] text-amber-900 dark:text-amber-200">
-                            <span className="font-bold">
-                              视觉回退模式说明：
-                            </span>
-                            <span>
-                              当前模型未启用原图视觉直传，已降级为结构化图画要素描述核查，评分置信度相应下调。
-                            </span>
-                          </div>
-                        )}
-
-                        {selectedEvaluation.reviewerAdjustments?.notes?.length > 0 && (
-                          <div className="p-2.5 bg-white dark:bg-[#1A2529] border border-[#DCE4E1] dark:border-[#2C3E46] rounded-lg text-[11px] text-[#68777C] dark:text-[#9CAEB3]">
-                            <span className="font-semibold text-[#174A5B] dark:text-[#75B6CE]">
-                              Stage 2 审校结论：
-                            </span>{' '}
-                            {selectedEvaluation.reviewerAdjustments.notes.join('；')}
-                          </div>
-                        )}
-
-                        {/* V1 -> V2 -> V3 Revision Verification Table */}
-                        {selectedEvaluation.revisionVerification &&
-                          selectedEvaluation.revisionVerification.length > 0 && (
-                            <div className="space-y-1.5">
-                              <div className="font-semibold text-[#202B2F] dark:text-[#E2E8E6]">
-                                上一版本改进项落实核验（V
-                                {Math.max(1, selectedVersion.versionNumber - 1)}{' '}
-                                → V{selectedVersion.versionNumber}）：
-                              </div>
-                              <div className="grid grid-cols-1 gap-1.5">
-                                {selectedEvaluation.revisionVerification.map(
-                                  (rv, idx) => (
-                                    <div
-                                      key={idx}
-                                      className="p-2.5 bg-white dark:bg-[#1A2529] rounded-lg border border-[#DCE4E1] dark:border-[#2C3E46] flex flex-wrap items-start justify-between gap-2"
-                                    >
-                                      <div className="space-y-0.5">
-                                        <div className="font-medium text-[#202B2F] dark:text-[#E2E8E6]">
-                                          {rv.instruction}
-                                        </div>
-                                        <div className="text-[11px] text-[#68777C] dark:text-[#9CAEB3]">
-                                          核验依据：{rv.evidence}（{rv.explanation}）
-                                        </div>
-                                      </div>
-                                      <span
-                                        className={`px-2 py-0.5 rounded text-[11px] font-semibold font-tabular-mono ${
-                                          rv.status === 'resolved'
-                                            ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-[#4EA387]'
-                                            : rv.status === 'partially-resolved'
-                                            ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300'
-                                            : 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-[#CF695E]'
-                                        }`}
-                                      >
-                                        {rv.status === 'resolved'
-                                          ? '✓ 已完成'
-                                          : rv.status === 'partially-resolved'
-                                          ? '△ 部分落实'
-                                          : rv.status === 'regressed'
-                                          ? '↓ 发生回退'
-                                          : '✗ 未落实'}
-                                      </span>
-                                    </div>
-                                  )
-                                )}
-                              </div>
-                            </div>
-                          )}
-
-                        {/* Executable Revision Tasks */}
-                        {selectedEvaluation.revisionTasks.length > 0 && (
-                          <div className="space-y-1.5">
-                            <div className="font-semibold text-[#202B2F] dark:text-[#E2E8E6]">
-                              下一次重写（V{selectedVersion.versionNumber + 1}
-                              ）可执行改进清单：
-                            </div>
-                            <ul className="space-y-1">
-                              {selectedEvaluation.revisionTasks.map((rt, i) => (
-                                <li
-                                  key={i}
-                                  className="p-2 bg-white dark:bg-[#1A2529] rounded border border-[#DCE4E1] dark:border-[#2C3E46] flex items-start gap-2 text-[#202B2F] dark:text-[#E2E8E6]"
-                                >
-                                  <span className="font-tabular-mono text-[#174A5B] dark:text-[#75B6CE] font-semibold shrink-0">
-                                    [P{rt.priority}]
-                                  </span>
-                                  <span>{rt.instruction}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-
-                        {/* Non-Official AI Reference Text */}
-                        {selectedEvaluation.referenceContent && (
-                          <div className="p-3 bg-white dark:bg-[#1A2529] rounded-lg border border-[#DCE4E1] dark:border-[#2C3E46] space-y-1">
-                            <div className="font-semibold text-[#174A5B] dark:text-[#75B6CE]">
-                              {selectedEvaluation.taskType === 'translation'
-                                ? 'AI参考译文（非官方）'
-                                : 'AI生成示例（非官方范文）'}{' '}
-                              · 仅在提交版本后提供对比参考：
-                            </div>
-                            <p className="font-english-serif text-xs text-[#202B2F] dark:text-[#E2E8E6] whitespace-pre-wrap leading-relaxed">
-                              {selectedEvaluation.referenceContent}
-                            </p>
-                          </div>
-                        )}
-
-                        {/* EvaluationRun Telemetry Footer */}
-                        {selectedEvaluation.runId && (
-                          <div className="pt-2 border-t border-[#DCE4E1] dark:border-[#2C3E46] flex flex-wrap items-center justify-between gap-2 text-[10px] font-tabular-mono text-[#68777C] dark:text-[#9CAEB3]">
-                            <span>
-                              Run ID: {selectedEvaluation.runId} · Stage1:{' '}
-                              {selectedEvaluation.modelName}
-                              {selectedEvaluation.stage2ModelName
-                                ? ` · Stage2: ${selectedEvaluation.stage2ModelName}`
-                                : ''}
-                            </span>
-                            <span>
-                              耗时: {selectedEvaluation.latencyMs || 0}ms · 缓存:{' '}
-                              {selectedEvaluation.cacheStatus || 'miss'} · 重试:{' '}
-                              {selectedEvaluation.retryCount || 0}次
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    {/* Source-Provided Reference Translations (46-50) or Model Essays (51-52) */}
-                    {currentUnit.unitType === 'translation' &&
-                      currentUnit.items.some(
-                        (it) =>
-                          it.translationMeta?.referenceTranslation ||
-                          it.rubric?.referenceText
-                      ) && (
-                        <div className="p-4 bg-emerald-50/50 dark:bg-[#172E27]/60 rounded-xl border border-emerald-200 dark:border-[#2B5446] space-y-2.5 text-xs">
-                          <div className="font-bold text-emerald-800 dark:text-[#4EA387] flex items-center justify-between">
-                            <span>
-                              来源参考译文（46–50题 · 题库收录标准参考答案）
-                            </span>
-                            <span className="font-tabular-mono text-[11px]">
-                              Source: answers/{exam.year}.md
-                            </span>
-                          </div>
-                          <div className="space-y-2">
-                            {currentUnit.items.map((it) => {
-                              const refT =
-                                it.translationMeta?.referenceTranslation ||
-                                it.rubric?.referenceText;
-                              if (!refT) return null;
-                              return (
-                                <div
-                                  key={it.id}
-                                  className="p-2.5 bg-white dark:bg-[#1A2529] rounded-lg border border-[#DCE4E1] dark:border-[#2C3E46] space-y-1"
-                                >
-                                  <div className="font-tabular-mono font-semibold text-[#174A5B] dark:text-[#75B6CE]">
-                                    ({it.questionNumber}){' '}
-                                    <span className="font-english-serif font-normal text-[#68777C] dark:text-[#9CAEB3]">
-                                      {it.translationMeta?.underlinedEnglish}
-                                    </span>
-                                  </div>
-                                  <div className="text-[#202B2F] dark:text-[#E2E8E6] leading-relaxed font-medium">
-                                    参考译文：{refT}
-                                  </div>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      )}
-
-                    {(currentUnit.unitType === 'practical-writing' ||
-                      currentUnit.unitType === 'visual-writing') &&
-                      currentUnit.items[0]?.rubric?.referenceText && (
-                        <div className="p-4 bg-emerald-50/50 dark:bg-[#172E27]/60 rounded-xl border border-emerald-200 dark:border-[#2B5446] space-y-2 text-xs">
-                          <div className="font-bold text-emerald-800 dark:text-[#4EA387] flex items-center justify-between">
-                            <span>
-                              来源参考范文（第{' '}
-                              {currentUnit.items[0].questionNumber} 题 ·
-                              题库收录标准参考范文）
-                            </span>
-                            <span className="font-tabular-mono text-[11px]">
-                              Source: answers/{exam.year}.md
-                            </span>
-                          </div>
-                          <pre className="p-3 bg-white dark:bg-[#1A2529] rounded-lg border border-[#DCE4E1] dark:border-[#2C3E46] font-english-serif text-xs text-[#202B2F] dark:text-[#E2E8E6] whitespace-pre-wrap leading-relaxed">
-                            {currentUnit.items[0].rubric.referenceText}
-                          </pre>
-                        </div>
-                      )}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Follow-up Contextual Q&A Box */}
-            <div className="bg-white dark:bg-[#1E2B30] rounded-2xl border border-[#DCE4E1] dark:border-[#2C3E46] p-5 space-y-3 shadow-xs">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xs font-bold text-[#202B2F] dark:text-[#E2E8E6] flex items-center gap-1.5">
-                  <HelpCircle className="w-3.5 h-3.5 text-[#174A5B] dark:text-[#75B6CE]" />
-                  <span>针对当前单元的长难句或语法追问</span>
-                </h3>
-                {!anyModelAvailable && (
-                  <span className="text-[11px] text-[#68777C] dark:text-[#9CAEB3]">
-                    需要配置模型
-                  </span>
-                )}
-              </div>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={followUpInput}
-                  onChange={(e) => setFollowUpInput(e.target.value)}
-                  placeholder="输入你的语法、词汇或审题疑问（不泄露未提交题目的标准答案）..."
-                  className="flex-1 px-3 py-1.5 text-xs bg-stone-50 dark:bg-[#162226] border border-[#DCE4E1] dark:border-[#2C3E46] rounded-lg text-[#202B2F] dark:text-[#E2E8E6] focus:bg-white dark:focus:bg-[#1A2529] focus:border-[#174A5B] dark:focus:border-[#38849E] focus:outline-none"
-                />
-                <button
-                  type="button"
-                  disabled={
-                    !anyModelAvailable ||
-                    askingFollowUpQ !== null ||
-                    !followUpInput.trim()
-                  }
-                  onClick={async () => {
-                    const qNum = currentUnit.items[0]?.questionNumber || 46;
-                    const qText = followUpInput.trim();
-                    setFollowUpInput('');
-                    try {
-                      setAskingFollowUpQ(qNum);
-                      const passageText = currentUnit.materials
-                        .map((m) => m.text)
-                        .join('\n\n');
-                      const promptText =
+        <EnglishSubjectiveStudio
+          examYear={exam.year}
+          currentUnit={currentUnit}
+          anyModelAvailable={anyModelAvailable}
+          activeProviderName={activeProviderName}
+          typographyPrefs={typographyPrefs}
+          practiceMode={practiceMode}
+          onSelectPracticeMode={(mode) => {
+            setPracticeMode(mode);
+            if (
+              mode === 'guided' &&
+              !usedHints.some((h) => h.id === 'hint-scaffold')
+            ) {
+              setUsedHints((prev) => [
+                ...prev,
+                {
+                  id: 'hint-scaffold',
+                  level: 1,
+                  title: '句法与段落结构提示',
+                  content: '已开启引导练习结构支架',
+                  usedAt: new Date().toISOString(),
+                },
+              ]);
+            }
+          }}
+          translationInputs={translationInputs}
+          onChangeTranslationInput={(qNum, val) =>
+            setTranslationInputs((prev) => ({ ...prev, [qNum]: val }))
+          }
+          writingDraft={writingDraft}
+          onChangeWritingDraft={setWritingDraft}
+          unitVersions={unitVersions}
+          selectedVersion={selectedVersion}
+          compareBaseVersion={compareBaseVersion}
+          selectedEvaluation={selectedEvaluation}
+          subjectiveEvaluations={subjectiveEvaluations}
+          versionDiffResult={versionDiffResult}
+          showDiffPanel={showDiffPanel}
+          onToggleDiffPanel={() => setShowDiffPanel((p) => !p)}
+          onSelectVersionId={setSelectedVersionId}
+          onSelectCompareBaseVersionId={setCompareBaseVersionId}
+          evaluatingVersionId={evaluatingVersionId}
+          onSaveVersion={handleSaveSubjectiveVersion}
+          onEvaluateExistingVersion={async (version) => {
+            try {
+              setEvaluatingVersionId(version.id);
+              await onRequestSubjectiveEvaluation(version, currentUnit);
+            } catch (err: any) {
+              setAiErrorBanner(err?.message || 'AI 批改失败');
+            } finally {
+              setEvaluatingVersionId(null);
+            }
+          }}
+          aiScaffolds={aiScaffolds}
+          loadingScaffold={loadingScaffold}
+          onGenerateScaffold={
+            onRequestWritingScaffold
+              ? async () => {
+                  try {
+                    setLoadingScaffold(true);
+                    const scaffold = await onRequestWritingScaffold({
+                      unitType: currentUnit.unitType as
+                        | 'translation'
+                        | 'practical-writing'
+                        | 'visual-writing',
+                      promptText:
                         currentUnit.items
                           .map(
                             (i) =>
                               i.translationMeta?.underlinedEnglish || i.prompt
                           )
-                          .join('\n') || currentUnit.instructions;
-                      const userAnswerText =
-                        selectedVersion?.content ||
-                        writingDraft ||
-                        Object.values(translationInputs)
-                          .filter(Boolean)
-                          .join('\n');
-                      const prevSummary = selectedEvaluation
-                        ? `得分 ${selectedEvaluation.centralScore}/${selectedEvaluation.maxScore}；改进建议：${selectedEvaluation.revisionTasks
-                            .map((r) => r.instruction)
-                            .join('；')}`
-                        : undefined;
-                      const reply = await onAskFollowUp({
-                        questionNumber: qNum,
-                        questionContext: currentUnit.title,
-                        unitId: currentUnit.id,
-                        unitTitle: currentUnit.title,
-                        passageText,
-                        promptText,
-                        userAnswer: userAnswerText,
-                        isSubmitted: Boolean(selectedVersion) || isSubmitted,
-                        userQuestion: qText,
-                        previousAnalysisSummary: prevSummary,
-                      });
-                      setFollowUpHistory((prev) => ({
-                        ...prev,
-                        [qNum]: [
-                          ...(prev[qNum] || []),
-                          { q: qText, a: reply },
-                        ],
-                      }));
-                    } catch (err: any) {
-                      setAiErrorBanner(err?.message || '追问请求失败');
-                    } finally {
-                      setAskingFollowUpQ(null);
-                    }
-                  }}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-white bg-[#174A5B] dark:bg-[#38849E] hover:bg-[#123D4B] dark:hover:bg-[#489BB8] rounded-lg disabled:opacity-50 transition-colors"
-                >
-                  <Send className="w-3 h-3" />
-                  <span>
-                    {askingFollowUpQ !== null ? '思考中...' : '发送追问'}
-                  </span>
-                </button>
-              </div>
-              {(
-                followUpHistory[currentUnit.items[0]?.questionNumber || 46] ||
-                []
-              ).map((entry, idx) => (
-                <div
-                  key={idx}
-                  className="p-3 bg-stone-50 dark:bg-[#162226] border border-[#DCE4E1] dark:border-[#2C3E46] rounded-lg text-xs space-y-1"
-                >
-                  <div className="font-semibold text-[#202B2F] dark:text-[#E2E8E6]">
-                    问：{entry.q}
-                  </div>
-                  <div className="text-[#68777C] dark:text-[#9CAEB3] whitespace-pre-wrap leading-relaxed">
-                    答（AI 助教）：{entry.a}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+                          .join('\n') || currentUnit.instructions,
+                      requiredFacts:
+                        visualMat?.requiredFacts ||
+                        practicalSpec?.requiredPoints,
+                    });
+                    setAiScaffolds((prev) => ({
+                      ...prev,
+                      [currentUnit.id]: scaffold,
+                    }));
+                  } catch (err: any) {
+                    setAiErrorBanner(err?.message || '生成 AI 结构支架失败');
+                  } finally {
+                    setLoadingScaffold(false);
+                  }
+                }
+              : undefined
+          }
+          practicalSpec={practicalSpec}
+          visualMat={visualMat}
+          visualMats={visualMats}
+          subjectiveBaseSec={subjectiveBaseSec}
+          renderTimerReadout={(baseSec) => (
+            <SubjectiveTimerReadout baseElapsedSeconds={baseSec} />
+          )}
+          renderTextWithSafeUnderline={renderTextWithSafeUnderline}
+          countEnglishWords={countEnglishWords}
+          followUpHistory={
+            followUpHistory[`${exam.year}:${currentUnit.items[0]?.questionNumber || 46}`] || []
+          }
+          isAskingFollowUp={askingFollowUpQ !== null}
+          onSendFollowUp={async (qText) => {
+            const qNum = currentUnit.items[0]?.questionNumber || 46;
+            try {
+              setAskingFollowUpQ(qNum);
+              const passageText = currentUnit.materials
+                .map((m) => m.text)
+                .join('\n\n');
+              const promptText =
+                currentUnit.items
+                  .map(
+                    (i) => i.translationMeta?.underlinedEnglish || i.prompt
+                  )
+                  .join('\n') || currentUnit.instructions;
+              const userAnswerText =
+                selectedVersion?.content ||
+                writingDraft ||
+                Object.values(translationInputs).filter(Boolean).join('\n');
+              const prevSummary = selectedEvaluation
+                ? `得分 ${selectedEvaluation.centralScore}/${selectedEvaluation.maxScore}；改进建议：${selectedEvaluation.revisionTasks
+                    .map((r) => r.instruction)
+                    .join('；')}`
+                : undefined;
+              const reply = await onAskFollowUp({
+                questionNumber: qNum,
+                questionContext: currentUnit.title,
+                unitId: currentUnit.id,
+                unitTitle: currentUnit.title,
+                passageText,
+                promptText,
+                userAnswer: userAnswerText,
+                isSubmitted: Boolean(selectedVersion) || isSubmitted,
+                userQuestion: qText,
+                previousAnalysisSummary: prevSummary,
+              });
+              const subjFollowUpKey = `${exam.year}:${qNum}`;
+              setFollowUpHistory((prev) => ({
+                ...prev,
+                [subjFollowUpKey]: [...(prev[subjFollowUpKey] || []), { q: qText, a: reply }],
+              }));
+            } catch (err: any) {
+              setAiErrorBanner(err?.message || '追问请求失败');
+            } finally {
+              setAskingFollowUpQ(null);
+            }
+          }}
+          onNavigateSettings={onNavigateSettings}
+          usedHints={usedHints}
+        />
       )}
 
       {/* Accessible Answer Sheet Modal */}
-      {showAnswerSheet && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="全卷 1—52 题答题卡"
-          className="fixed inset-0 z-50 bg-[#131B1E]/75 dark:bg-black/75 backdrop-blur-xs flex items-center justify-center p-4"
-          onClick={() => setShowAnswerSheet(false)}
-        >
-          <div
-            className="bg-white dark:bg-[#1E2B30] border border-[#DCE4E1] dark:border-[#2C3E46] rounded-2xl max-w-2xl w-full p-6 space-y-4 max-h-[85vh] overflow-y-auto shadow-xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between border-b border-[#E8ECEA] dark:border-[#26373E] pb-3">
-              <h3 className="text-base font-bold text-[#202B2F] dark:text-[#E2E8E6]">
-                {exam.year}年 考研英语一 答题卡（1—52 题）
-              </h3>
-              <button
-                type="button"
-                aria-label="关闭答题卡"
-                onClick={() => setShowAnswerSheet(false)}
-                className="p-1 text-[#96A1A4] dark:text-[#657980] hover:text-[#202B2F] dark:hover:text-[#E2E8E6]"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="space-y-4 text-xs">
-              {allUnits.map((u) => (
-                <div key={u.id} className="space-y-2">
-                  <div className="font-semibold text-[#202B2F] dark:text-[#E2E8E6]">{u.title}</div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {u.items.map((it) => {
-                      const q = it.questionNumber;
-                      const resp = attempt.objectiveResponses[q];
-                      const hasSubj = subjectiveVersions.some(
-                        (v) =>
-                          v.year === exam.year &&
-                          (v.questionNumber === q || v.unitId === u.id)
-                      );
-                      const isDone = Boolean(resp?.selectedAnswer) || hasSubj;
+      <ModalDialog
+        isOpen={showAnswerSheet}
+        onClose={() => setShowAnswerSheet(false)}
+        ariaLabel={
+          exam.subject === '考研政治' ? '全卷 1—38 题答题卡' : '全卷 1—52 题答题卡'
+        }
+        title={`${formatExamTitle(exam.year, exam.subject)} 答题卡（${
+          exam.subject === '考研政治' ? '1—38 题' : '1—52 题'
+        }）`}
+        maxWidthClass="max-w-2xl"
+      >
+        <div className="space-y-4 text-xs">
+          {allUnits.map((u) => (
+            <div key={u.id} className="space-y-2">
+              <div className="font-semibold text-ink">{u.title}</div>
+              <div className="flex flex-wrap gap-1.5">
+                {u.items.map((it) => {
+                  const q = it.questionNumber;
+                  const resp = attempt.objectiveResponses[q];
+                  const hasSubj = subjectiveVersions.some((v) => {
+                    if (v.year !== exam.year) return false;
+                    if (u.unitType === 'translation') {
                       return (
-                        <button
-                          key={q}
-                          type="button"
-                          onClick={() => {
-                            onSelectUnit(u.id);
-                            setActiveQuestionNumber(q);
-                            setShowAnswerSheet(false);
-                          }}
-                          className={`w-10 h-9 font-tabular-mono border text-xs rounded-md flex flex-col items-center justify-center transition-colors ${
-                            isDone
-                              ? 'bg-[#174A5B] dark:bg-[#38849E] text-white border-[#174A5B] dark:border-[#38849E] font-semibold'
-                              : 'bg-stone-50 dark:bg-[#162226] text-[#202B2F] dark:text-[#E2E8E6] border-[#DCE4E1] dark:border-[#2C3E46] hover:bg-stone-100 dark:hover:bg-[#203036]'
-                          }`}
-                        >
-                          <span>{q}</span>
-                          {resp?.selectedAnswer && (
-                            <span className="text-[10px]">
-                              {resp.selectedAnswer}
-                            </span>
-                          )}
-                        </button>
+                        v.unitId === u.id &&
+                        (v.subAnswers ? Boolean(v.subAnswers[q]?.trim()) : true)
                       );
-                    })}
-                  </div>
-                </div>
-              ))}
+                    }
+                    return v.questionNumber === q;
+                  });
+                  const isDone = Boolean(resp?.selectedAnswer) || hasSubj;
+                  return (
+                    <button
+                      key={q}
+                      type="button"
+                      onClick={() => {
+                        const isSameUnit = currentUnit?.id === u.id;
+                        const isPartB = u.unitType === 'passage-assembly';
+                        if (isPoliticsWorkspace) {
+                          onSelectUnit(u.id);
+                          setActiveQuestionNumber(q);
+                          if (reviewFilter !== 'all') {
+                            setReviewFilter('all');
+                          }
+                          window.setTimeout(() => {
+                            document
+                              .getElementById(`question-card-${q}`)
+                              ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                          }, 80);
+                          setShowAnswerSheet(false);
+                          return;
+                        }
+                        if (!isSameUnit) {
+                          pendingUnitJumpRef.current = {
+                            unitId: u.id,
+                            qNum: q,
+                            isPartB,
+                          };
+                          onSelectUnit(u.id);
+                        } else {
+                          setActiveQuestionNumber(q);
+                          if (isPartB) {
+                            setSelectedPartBSlot(q);
+                          }
+                        }
+                        if (!isPartB) {
+                          setMobileReadingTab('questions');
+                          window.setTimeout(() => {
+                            document
+                              .getElementById(`question-card-${q}`)
+                              ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                          }, 80);
+                        }
+                        setShowAnswerSheet(false);
+                      }}
+                      className={`w-10 h-9 font-tabular-mono border text-xs rounded-md flex flex-col items-center justify-center transition-colors ${
+                        isDone
+                          ? 'bg-brand text-white border-brand font-semibold'
+                          : 'bg-card-subtle text-ink border-subtle hover:bg-stone-100 dark:hover:bg-[#203036]'
+                      }`}
+                    >
+                      <span>{q}</span>
+                      {resp?.selectedAnswer && (
+                        <span className="text-[10px]">{resp.selectedAnswer}</span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          ))}
         </div>
-      )}
+      </ModalDialog>
 
       {/* Submit Attempt Confirmation Modal */}
-      {submitConfirmModal && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="确认交卷评分"
-          className="fixed inset-0 z-50 bg-[#131B1E]/75 dark:bg-black/75 backdrop-blur-xs flex items-center justify-center p-4"
-          onClick={() => setSubmitConfirmModal(false)}
-        >
-          <div
-            className="bg-white dark:bg-[#1E2B30] border border-[#DCE4E1] dark:border-[#2C3E46] rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between border-b border-[#E8ECEA] dark:border-[#26373E] pb-3">
-              <h3 className="text-base font-bold text-[#202B2F] dark:text-[#E2E8E6]">
-                确认交卷并执行客观题确定性评分
-              </h3>
-              <button
-                type="button"
-                aria-label="关闭确认弹窗"
-                onClick={() => setSubmitConfirmModal(false)}
-              >
-                <X className="w-4 h-4 text-[#96A1A4] dark:text-[#657980] hover:text-[#202B2F] dark:hover:text-[#E2E8E6]" />
-              </button>
-            </div>
-            <p className="text-xs text-[#68777C] dark:text-[#9CAEB3] leading-relaxed">
-              当前已完成客观题：
-              <strong className="font-tabular-mono text-[#202B2F] dark:text-[#E2E8E6] mx-1">
-                {answeredObjectiveCount} / 45
-              </strong>
-              题。交卷后将立即核对 1–45 题官方答案、计算客观题得分，并将错题、自信答错题与猜测题自动加入间隔复习队列。
-            </p>
-            <div className="flex justify-end gap-2 pt-2 border-t border-[#E8ECEA] dark:border-[#26373E]">
-              <button
-                type="button"
-                onClick={() => setSubmitConfirmModal(false)}
-                className="px-4 py-2 text-xs font-medium text-[#68777C] dark:text-[#9CAEB3] hover:bg-stone-100 dark:hover:bg-[#162226] rounded-lg transition-colors"
-              >
-                继续检查
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setSubmitConfirmModal(false);
-                  onSubmitAttempt();
-                }}
-                className="px-4 py-2 text-xs font-semibold text-white bg-[#174A5B] dark:bg-[#38849E] hover:bg-[#123D4B] dark:hover:bg-[#489BB8] rounded-lg transition-colors shadow-xs"
-              >
-                确认交卷评分
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ModalDialog
+        isOpen={submitConfirmModal}
+        onClose={() => setSubmitConfirmModal(false)}
+        ariaLabel="确认交卷评分"
+        title="确认交卷并执行客观题确定性评分"
+        maxWidthClass="max-w-md"
+        footer={
+          <>
+            <button
+              type="button"
+              onClick={() => setSubmitConfirmModal(false)}
+              className="px-4 py-2 text-xs font-medium text-secondary hover:bg-stone-100 dark:hover:bg-[#162226] rounded-lg transition-colors"
+            >
+              继续检查
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setSubmitConfirmModal(false);
+                onSubmitAttempt();
+              }}
+              className="px-4 py-2 text-xs font-semibold text-white bg-brand hover:bg-brand-hover rounded-lg transition-colors shadow-xs"
+            >
+              确认交卷评分
+            </button>
+          </>
+        }
+      >
+        <p className="text-xs text-secondary leading-relaxed">
+          当前已完成客观题：
+          <strong className="font-tabular-mono text-ink mx-1">
+            {answeredObjectiveCount} / {totalObjectiveCount}
+          </strong>
+          题。交卷后将立即核对{' '}
+          {exam.subject === '考研政治' ? '1–33 题' : `1–${totalObjectiveCount} 题`}
+          官方答案、计算客观题得分，并将错题、自信答错题与猜测题自动加入间隔复习队列。
+        </p>
+      </ModalDialog>
     </div>
   );
 };

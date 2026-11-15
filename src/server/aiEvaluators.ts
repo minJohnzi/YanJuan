@@ -25,7 +25,7 @@ import { SecurityError } from './securityAndCrypto.ts';
 export const PROMPT_VERSION = 'yanjuan-eval-v2.0';
 
 export interface SubjectiveEvaluationInput {
-  taskType: 'translation' | 'practical-writing' | 'visual-writing';
+  taskType: 'translation' | 'practical-writing' | 'visual-writing' | 'politics-analysis';
   taskId: string;
   answerVersionId: string;
   previousAnswerVersionId?: string | null;
@@ -39,6 +39,7 @@ export interface SubjectiveEvaluationInput {
   maxScore?: number;
   rubric?: ItemRubric;
   requiredFacts?: string[];
+  materialText?: string;
   hasVisualMaterial?: boolean;
   images?: MultimodalImageInput[];
   imageAssetsUsed?: string[];
@@ -50,6 +51,7 @@ export interface SubjectiveEvaluationInput {
 function getDefaultMaxScore(taskType: SubjectiveEvaluationInput['taskType']): number {
   if (taskType === 'practical-writing') return 10;
   if (taskType === 'visual-writing') return 20;
+  if (taskType === 'politics-analysis') return 10;
   return 10;
 }
 
@@ -57,6 +59,25 @@ function getDefaultRubric(
   taskType: SubjectiveEvaluationInput['taskType'],
   maxScore: number
 ): ItemRubric {
+  if (taskType === 'politics-analysis') {
+    return {
+      maxScore,
+      dimensions: [
+        {
+          id: 'kp',
+          name: '核心原理与采分点覆盖',
+          maxScore: Math.round(maxScore * 0.6 * 10) / 10,
+          description: '准确调用马原、毛中特/新思想、史纲或思修法基核心原理，规范使用政治术语并覆盖标准答案要点。',
+        },
+        {
+          id: 'mat',
+          name: '结合材料分析与逻辑结构',
+          maxScore: Math.round(maxScore * 0.4 * 10) / 10,
+          description: '紧扣设问分条作答（原理+方法论+结合材料阐释），层次清晰，避免空泛堆砌或脱离设问。',
+        },
+      ],
+    };
+  }
   if (taskType === 'translation') {
     return {
       maxScore,
@@ -158,7 +179,7 @@ const STAGE1_SCHEMA_DESCRIPTION = `{
   "annotations": [
     {
       "id": "string",
-      "issueType": "grammar | vocabulary | coherence | completeness | register | translation-accuracy | chart-fact",
+      "issueType": "grammar | vocabulary | coherence | completeness | register | translation-accuracy | chart-fact | theory-principle | material-link",
       "quotedUserText": "string (必须逐字精确摘自考生原文，不能改动任何字符)",
       "startOffset": number,
       "endOffset": number,
@@ -306,18 +327,28 @@ ${input.previousEvaluation.revisionTasks
 请在输出中提供 revisionVerification 数组，逐项核对上述修改任务在本版中是否已解决 (resolved / partially-resolved / unaddressed / regressed)，并引用本版文本证据说明！\n`
       : '';
 
-  const stage1Prompt = `你是全国硕士研究生入学统一考试英语（一）主观题阅卷专家。
+  const isPolitics = input.taskType === 'politics-analysis';
+  const expertRole = isPolitics
+    ? '全国硕士研究生入学统一考试思想政治理论（考研政治）材料分析题阅卷专家'
+    : '全国硕士研究生入学统一考试英语（一）主观题阅卷专家';
+
+  const stage1Prompt = `你是${expertRole}。
 请对以下考生作答进行第一阶段精细化批改。
 【题型】${input.taskType}（满分 ${maxScore} 分）
 【模式】${usedVision ? '多模态真实看图批改（已附真题插图）' : visionDegradedToText ? '图画文字要素降级模式（未传原图，依据 requiredFacts 判分）' : '标准文本批改'}
-【题目指令】
+【题目指令与设问】
 ${input.questionPrompt}
+${
+  input.materialText
+    ? `【考试材料原文】\n${input.materialText.slice(0, 3500)}\n`
+    : ''
+}
 ${
   input.requiredFacts && input.requiredFacts.length > 0
     ? `【必含图画/内容要素】\n${input.requiredFacts.map((f, i) => `${i + 1}. ${f}`).join('\n')}\n`
     : ''
 }
-${input.referenceText ? `【来源参考译文/范文】\n${input.referenceText}\n` : ''}
+${input.referenceText ? `【来源参考译文/范文/答案要点】\n${input.referenceText}\n` : ''}
 【分项评分标准 (Rubric)】
 ${rubricBlock}
 ${revisionPromptBlock}
