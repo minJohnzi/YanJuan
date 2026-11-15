@@ -8,7 +8,12 @@ async function startServer() {
   assertProductionMasterKeyConfigured();
 
   const app = express();
-  const PORT = Number(process.env.PORT || 3000);
+  const PORT = Number(
+    process.env.DEFAULT_APP_PORT ||
+      (process.env.PORT && process.env.PORT !== process.env.NGINX_PORT
+        ? process.env.PORT
+        : 3000)
+  );
   const rootDir = process.cwd();
 
   app.get('/healthz', (_req, res) => {
@@ -26,7 +31,7 @@ async function startServer() {
   if (process.env.NODE_ENV !== 'production') {
     const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: { middlewareMode: true, hmr: false },
       appType: 'spa',
     });
     app.use(vite.middlewares);
