@@ -217,6 +217,7 @@ export function collectMistakeItemsForScope(
       moduleKey: string;
       moduleLabel: string;
       answeredCount: number;
+      correctCount: number;
       wrongCount: number;
       scoreLost: number;
     }
@@ -229,6 +230,7 @@ export function collectMistakeItemsForScope(
         moduleKey: mKey,
         moduleLabel: mLabel,
         answeredCount: 0,
+        correctCount: 0,
         wrongCount: 0,
         scoreLost: 0,
       };
@@ -276,6 +278,7 @@ export function collectMistakeItemsForScope(
       totalAnsweredScope += 1;
 
       if (!isWrong) {
+        bucket.correctCount += 1;
         totalCorrectScope += 1;
         continue;
       }
@@ -356,7 +359,7 @@ export function collectMistakeItemsForScope(
       wrongCount: b.wrongCount,
       accuracyRate:
         b.answeredCount > 0
-          ? Math.round(((b.answeredCount - b.wrongCount) / b.answeredCount) * 1000) / 10
+          ? Math.round((b.correctCount / b.answeredCount) * 1000) / 10
           : 0,
       scoreLost: b.scoreLost,
     }))
@@ -419,7 +422,7 @@ export function collectMistakeItemsForScope(
   const totalWrong = filteredCandidates.length;
   const totalCorrectInModule =
     moduleKey && moduleKey !== 'all'
-      ? Math.max(0, filteredAnswered - totalWrong)
+      ? moduleStatsMap.get(moduleKey)?.correctCount ?? 0
       : totalCorrectScope;
 
   const accuracyRate =
@@ -692,15 +695,25 @@ export function buildCombinedMistakeSummaryMarkdown(params: {
   items: MistakeItemMinimalPayload[];
   includeRawAppendix?: boolean;
 }): string {
+  const compactBreakdown = params.stats.moduleBreakdown
+    .filter((m) => m.wrongCount > 0)
+    .map((m) => `${m.moduleLabel} ${m.wrongCount}`)
+    .join(' · ');
+
+  const summaryHeaderLine = `> 错题 ${params.stats.totalWrong}/${params.stats.totalAnswered} 题（正确率 ${params.stats.accuracyRate}% · 失分 ${params.stats.totalScoreLost} 分${
+    compactBreakdown ? ` ｜ ${compactBreakdown}` : ''
+  }）· 模型：${params.modelLabel || '已配置 AI 模型'} · ${
+    params.generatedAt || new Date().toLocaleString('zh-CN')
+  }`;
+
   const sections = [
     `# ${params.title}`,
     '',
-    `> 生成模型：${params.modelLabel || '已配置 AI 模型'} · 生成时间：${
-      params.generatedAt || new Date().toLocaleString('zh-CN')
-    }`,
+    summaryHeaderLine,
     '',
-    formatDeterministicStatsMarkdown(params.subjectId, params.stats),
-    '',
+    ...(params.includeRawAppendix
+      ? [formatDeterministicStatsMarkdown(params.subjectId, params.stats), '']
+      : []),
     params.aiMarkdown.trim(),
   ];
 
@@ -722,6 +735,7 @@ function escapeHtml(text: string): string {
 function renderInlineMarkdownToHtml(text: string): string {
   let html = escapeHtml(text);
   html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
   html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
   return html;
 }
@@ -838,15 +852,15 @@ export function buildPrintableHtmlDocument(params: {
   <meta charset="UTF-8" />
   <title>${escapeHtml(params.title)}</title>
   <style>
-    @page { size: A4; margin: 16mm; }
+    @page { size: A4; margin: 10mm 12mm; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
       color: #1f2937;
-      line-height: 1.65;
+      line-height: 1.5;
       max-width: 820px;
-      margin: 24px auto;
-      padding: 0 20px;
-      font-size: 13.5px;
+      margin: 18px auto;
+      padding: 0 18px;
+      font-size: 12.5px;
     }
     .toolbar {
       display: flex;

@@ -30,6 +30,7 @@ export interface GenerateOptions {
   temperature?: number;
   maxOutputTokens?: number;
   timeoutMs?: number;
+  disableThinking?: boolean;
   signal?: AbortSignal;
   images?: MultimodalImageInput[];
   structuredOutputStrategy?: StructuredOutputStrategy;
@@ -826,16 +827,41 @@ export class OpenAICompatibleModelProvider implements ModelProvider {
       messages.push({ role: 'user', content: prompt });
     }
 
+    const isDeepSeekFamily =
+      this.providerId === 'deepseek' || /deepseek/i.test(this.modelName);
+    const isReasonerOnly = /reasoner|r1/i.test(this.modelName);
+    const shouldDisableThinking =
+      isDeepSeekFamily &&
+      !isReasonerOnly &&
+      (options.disableThinking === true ||
+        options.structuredOutputStrategy === 'json_object' ||
+        options.structuredOutputStrategy === 'json_schema');
+
+    const requestedMaxTokens = options.maxOutputTokens ?? 4096;
+    const effectiveMaxTokens =
+      isDeepSeekFamily && !shouldDisableThinking
+        ? Math.max(requestedMaxTokens, 16384)
+        : requestedMaxTokens;
+
     const bodyPayload: Record<string, unknown> = {
       model: this.modelName,
       messages,
       temperature: options.temperature ?? 0.2,
-      max_tokens: options.maxOutputTokens ?? 4096,
+      max_tokens: effectiveMaxTokens,
     };
+
+    if (shouldDisableThinking) {
+      bodyPayload.thinking = { type: 'disabled' };
+    }
 
     if (options.structuredOutputStrategy === 'json_object') {
       bodyPayload.response_format = { type: 'json_object' };
     }
+
+    const effectiveTimeoutMs =
+      isDeepSeekFamily && !shouldDisableThinking
+        ? Math.max(options.timeoutMs ?? 30000, 90000)
+        : options.timeoutMs ?? 30000;
 
     const res = await safeExternalFetch(
       url,
@@ -848,7 +874,7 @@ export class OpenAICompatibleModelProvider implements ModelProvider {
         body: JSON.stringify(bodyPayload),
       },
       {
-        timeoutMs: options.timeoutMs ?? 30000,
+        timeoutMs: effectiveTimeoutMs,
         signal: options.signal,
         dnsLookupFn: this.dnsLookupFn,
       }
@@ -886,7 +912,7 @@ export class OpenAICompatibleModelProvider implements ModelProvider {
     const data = JSON.parse(res.bodyText) as {
       id?: string;
       choices?: Array<{
-        message?: { content?: string };
+        message?: { content?: string | null; reasoning_content?: string | null };
         finish_reason?: string;
       }>;
       usage?: {
@@ -897,8 +923,18 @@ export class OpenAICompatibleModelProvider implements ModelProvider {
       };
     };
 
-    const text = data.choices?.[0]?.message?.content || '';
+    const firstChoice = data.choices?.[0];
+    const rawContent = firstChoice?.message?.content;
+    const text = typeof rawContent === 'string' ? rawContent : '';
     if (!text.trim()) {
+      const hasReasoning = Boolean(firstChoice?.message?.reasoning_content?.trim());
+      if (firstChoice?.finish_reason === 'length' || hasReasoning) {
+        throw new SecurityError(
+          'PROVIDER_UNAVAILABLE',
+          `${this.providerId} (${this.modelName}) 思考过程耗尽输出上限 (${effectiveMaxTokens} tokens)，导致正文返回为空，请重试或增大输出上限`,
+          502
+        );
+      }
       throw new SecurityError('PROVIDER_UNAVAILABLE', `${this.providerId} 返回空内容`, 502);
     }
 

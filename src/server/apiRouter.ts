@@ -1643,6 +1643,10 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
         totalBatches: typeof totalBatches === 'number' ? totalBatches : 1,
         deterministicStats: deterministicStats as MistakeDeterministicStats | undefined,
         items: typedItems,
+        temperature: resolved.binding.temperature,
+        maxOutputTokens: Math.max(resolved.binding.maxOutputTokens || 8192, 4096),
+        timeoutMs: Math.max(resolved.binding.timeoutMs || 90000, 60000),
+        disableThinking: true,
       });
 
       const runId = `run-ms-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`;

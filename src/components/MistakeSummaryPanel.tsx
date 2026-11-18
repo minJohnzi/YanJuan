@@ -92,7 +92,18 @@ export const MistakeSummaryPanel: React.FC<MistakeSummaryPanelProps> = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [copiedState, setCopiedState] = useState(false);
   const [printFallbackHint, setPrintFallbackHint] = useState(false);
+  const [includeRawAppendix, setIncludeRawAppendix] = useState(false);
   const printFrameRef = useRef<HTMLIFrameElement | null>(null);
+  const partialBatchCacheRef = useRef<{
+    signature: string;
+    completed: Record<number, { markdown: string; provider: string; model: string; promptVersion: string }>;
+  }>({ signature: '', completed: {} });
+
+  useEffect(() => {
+    return () => {
+      document.body.classList.remove('printing-mistake-summary');
+    };
+  }, []);
 
   // Keep selectedPaperYear valid when submitted papers change
   useEffect(() => {
@@ -258,7 +269,7 @@ export const MistakeSummaryPanel: React.FC<MistakeSummaryPanelProps> = ({
           : undefined,
         generatedAt: new Date(cachedRecord.updatedAt).toLocaleString('zh-CN'),
         items: collected.items,
-        includeRawAppendix: true,
+        includeRawAppendix,
       });
     }
     return buildPureMistakeMarkdownExport({
@@ -267,7 +278,7 @@ export const MistakeSummaryPanel: React.FC<MistakeSummaryPanelProps> = ({
       stats: collected.stats,
       items: collected.items,
     });
-  }, [cachedRecord, scopeTitle, effectiveSubjectId, collected.stats, collected.items]);
+  }, [cachedRecord, scopeTitle, effectiveSubjectId, collected.stats, collected.items, includeRawAppendix]);
 
   const handleGenerateAiSummary = async (forceRefresh = false) => {
     if (collected.items.length === 0) return;
@@ -276,6 +287,23 @@ export const MistakeSummaryPanel: React.FC<MistakeSummaryPanelProps> = ({
     setGenerating(true);
     setErrorMessage(null);
     setProgressText('');
+
+    const batchSignature = `${cacheKey}::${inputHash}`;
+    if (forceRefresh && partialBatchCacheRef.current.signature !== batchSignature) {
+      partialBatchCacheRef.current = { signature: batchSignature, completed: {} };
+    } else if (partialBatchCacheRef.current.signature !== batchSignature) {
+      partialBatchCacheRef.current = { signature: batchSignature, completed: {} };
+    }
+
+    const inferredProvider = activeProviderName
+      ? activeProviderName.split('/')[0]?.trim()
+      : undefined;
+    const explicitProvider =
+      inferredProvider === 'gemini' ||
+      inferredProvider === 'deepseek' ||
+      inferredProvider === 'openai-compatible'
+        ? inferredProvider
+        : undefined;
 
     try {
       const headers = buildLocalApiHeaders({
@@ -288,6 +316,19 @@ export const MistakeSummaryPanel: React.FC<MistakeSummaryPanelProps> = ({
       let lastPromptVersion = '';
 
       for (const batch of batches) {
+        const cachedBatch = partialBatchCacheRef.current.completed[batch.batchIndex];
+        if (cachedBatch) {
+          lastProvider = cachedBatch.provider;
+          lastModel = cachedBatch.model;
+          lastPromptVersion = cachedBatch.promptVersion;
+          batchMarkdowns.push(
+            batches.length > 1
+              ? `# 模块分批报告 ${batch.batchIndex}/${batch.totalBatches}：${batch.moduleLabel}（${batch.items.length} 题）\n\n${cachedBatch.markdown}`
+              : cachedBatch.markdown
+          );
+          continue;
+        }
+
         if (batches.length > 1) {
           setProgressText(
             `正在分批总结 (${batch.batchIndex}/${batch.totalBatches})：${batch.moduleLabel}（${batch.items.length} 题）...`
@@ -302,6 +343,7 @@ export const MistakeSummaryPanel: React.FC<MistakeSummaryPanelProps> = ({
           method: 'POST',
           headers,
           body: JSON.stringify({
+            ...(explicitProvider ? { provider: explicitProvider } : {}),
             subjectId: effectiveSubjectId,
             scope,
             scopeTitle,
@@ -322,9 +364,22 @@ export const MistakeSummaryPanel: React.FC<MistakeSummaryPanelProps> = ({
 
         const data = body.data || body;
         const md = String(data.markdown || '').trim();
+        if (!md || /^(none|null|undefined)$/i.test(md)) {
+          throw new Error(
+            `第 ${batch.batchIndex} 批返回空内容或无效响应（${md || 'empty'}），已跳过写入缓存，请重试。`
+          );
+        }
+
         lastProvider = String(data.modelProvider || '');
         lastModel = String(data.modelName || '');
         lastPromptVersion = String(data.promptVersion || 'yanjuan-mistake-summary-v1.0');
+
+        partialBatchCacheRef.current.completed[batch.batchIndex] = {
+          markdown: md,
+          provider: lastProvider,
+          model: lastModel,
+          promptVersion: lastPromptVersion,
+        };
 
         if (batches.length > 1) {
           batchMarkdowns.push(
@@ -334,6 +389,8 @@ export const MistakeSummaryPanel: React.FC<MistakeSummaryPanelProps> = ({
           batchMarkdowns.push(md);
         }
       }
+
+      partialBatchCacheRef.current = { signature: '', completed: {} };
 
       const nowIso = new Date().toISOString();
       const record: MistakeSummaryRecord = {
@@ -363,7 +420,14 @@ export const MistakeSummaryPanel: React.FC<MistakeSummaryPanelProps> = ({
 
       onSaveMistakeSummary(record);
     } catch (err: any) {
-      setErrorMessage(err?.message || '生成错题总结失败，请检查模型配置或网络');
+      const finishedCount = Object.keys(partialBatchCacheRef.current.completed).length;
+      const prefix =
+        batches.length > 1 && finishedCount > 0
+          ? `已完成 ${finishedCount}/${batches.length} 批（进度已暂存，点击生成可断点续传）；`
+          : '';
+      setErrorMessage(
+        `${prefix}${err?.message || '生成错题总结失败，请检查模型配置或网络'}`
+      );
     } finally {
       setGenerating(false);
       setProgressText('');
@@ -439,7 +503,12 @@ export const MistakeSummaryPanel: React.FC<MistakeSummaryPanelProps> = ({
     setPrintFallbackHint(false);
     document.body.classList.add('printing-mistake-summary');
 
+    let fallbackTimer: ReturnType<typeof setTimeout> | null = null;
     const cleanup = () => {
+      if (fallbackTimer) {
+        clearTimeout(fallbackTimer);
+        fallbackTimer = null;
+      }
       document.body.classList.remove('printing-mistake-summary');
       window.removeEventListener('afterprint', cleanup);
     };
@@ -447,11 +516,11 @@ export const MistakeSummaryPanel: React.FC<MistakeSummaryPanelProps> = ({
 
     try {
       window.print();
-      // In embedded iframes where print() is suppressed silently, reveal helpful fallback
-      setTimeout(() => {
-        cleanup();
+      // In embedded iframes where print() is suppressed silently without firing afterprint,
+      // show the HTML fallback hint without stripping print CSS prematurely during active preview.
+      fallbackTimer = setTimeout(() => {
         setPrintFallbackHint(true);
-      }, 900);
+      }, 1200);
     } catch {
       cleanup();
       // Fallback via hidden printable iframe
@@ -487,9 +556,10 @@ export const MistakeSummaryPanel: React.FC<MistakeSummaryPanelProps> = ({
     >
       {/* Print-only title header */}
       <div className="hidden print-only-header">
-        <h1 className="text-xl font-bold">{scopeTitle}</h1>
-        <p className="text-xs text-secondary mt-1">
-          研卷台 · 错题整体分析与考前速记纠偏报告 · 导出时间：
+        <h1 className="text-lg font-bold">{scopeTitle}</h1>
+        <p className="text-[11px] text-secondary mt-0.5">
+          错题 {collected.stats.totalWrong}/{collected.stats.totalAnswered} 题（正确率{' '}
+          {collected.stats.accuracyRate}% · 失分 {collected.stats.totalScoreLost} 分）· 导出时间：
           {new Date().toLocaleString('zh-CN')}
         </p>
       </div>
@@ -554,6 +624,21 @@ export const MistakeSummaryPanel: React.FC<MistakeSummaryPanelProps> = ({
             <FileText className="w-3.5 h-3.5" />
             <span>纯享打印页 (.html)</span>
           </button>
+
+          {cachedRecord?.generatedByAi && (
+            <label
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs text-secondary bg-paper border border-subtle cursor-pointer select-none hover:text-ink"
+              title="默认仅导出 1～2 页极简背诵讲义；勾选后会在导出或打印时附加完整原题与官方解析"
+            >
+              <input
+                type="checkbox"
+                checked={includeRawAppendix}
+                onChange={(e) => setIncludeRawAppendix(e.target.checked)}
+                className="accent-brand rounded"
+              />
+              <span>附带原题解析</span>
+            </label>
+          )}
         </div>
       </div>
 
@@ -698,7 +783,13 @@ export const MistakeSummaryPanel: React.FC<MistakeSummaryPanelProps> = ({
           </div>
 
           {/* Deterministic Summary Stats Strip (Printed + Visible) */}
-          <div className="space-y-4">
+          <div
+            className={
+              cachedRecord?.generatedByAi && !includeRawAppendix
+                ? 'space-y-4 print-hide-when-ai'
+                : 'space-y-4'
+            }
+          >
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
               <div className="p-3.5 rounded-xl bg-paper border border-hairline print-avoid-break">
                 <div className="text-secondary">纳入分析错题数</div>
@@ -908,13 +999,16 @@ export const MistakeSummaryPanel: React.FC<MistakeSummaryPanelProps> = ({
               当前筛选条件下没有错题记录（若开启了“仅未掌握错题”，说明该范围错题均已攻克或尚未作答出错）。
             </div>
           ) : cachedRecord && cachedRecord.generatedByAi ? (
-            <div className="p-5 sm:p-6 rounded-xl bg-paper border border-hairline space-y-4">
+            <div className="mistake-report-surface p-5 sm:p-6 rounded-xl bg-paper border border-hairline space-y-4">
               <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-muted border-b border-hairline pb-2.5 no-print">
                 <span>
                   报告生成模型：{cachedRecord.modelProvider}/{cachedRecord.modelName} ·
                   共 {cachedRecord.itemCount} 道错题
                   {cachedRecord.batchCount > 1
                     ? `（已分 ${cachedRecord.batchCount} 批合并）`
+                    : ''}
+                  {cachedRecord.promptVersion
+                    ? ` · ${cachedRecord.promptVersion}`
                     : ''}
                 </span>
                 <span>

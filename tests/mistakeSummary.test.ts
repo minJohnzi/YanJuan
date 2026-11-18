@@ -4,6 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import {
+  buildCombinedMistakeSummaryMarkdown,
   buildPureMistakeMarkdownExport,
   collectMistakeItemsForScope,
   computeMistakeSummaryCacheKeyAndHash,
@@ -422,6 +423,26 @@ test('Mistake slicing enforces strict subject isolation, minimal payload, determ
   });
   assert.equal(maYuanOnly.items.length, 2);
   assert.ok(maYuanOnly.items.every((i) => i.moduleKey === '马原'));
+  assert.equal(maYuanOnly.stats.accuracyRate, 0);
+
+  // 3b. Single module ('马原') under unmastered filter must still compute true objective accuracy (0/3 in 马原 = 0%),
+  // matching the 马原 row in `polUnmastered` rather than counting mastered Q18 as originally correct.
+  const maYuanUnmastered = collectMistakeItemsForScope({
+    attempts,
+    reviewItems,
+    examsByYear,
+    scope: 'by-subject',
+    subjectId: 'politics',
+    filterMode: 'unmastered',
+    moduleKey: '马原',
+  });
+  assert.equal(maYuanUnmastered.items.length, 2);
+  assert.equal(maYuanUnmastered.stats.totalWrong, 2);
+  assert.equal(maYuanUnmastered.stats.accuracyRate, 0);
+  assert.equal(
+    maYuanUnmastered.stats.moduleBreakdown[0].accuracyRate,
+    polUnmastered.stats.moduleBreakdown.find((m) => m.moduleKey === '马原')?.accuracyRate
+  );
 
   // 4. English I isolation & NO full reading passage in minimal payload
   const enResult = collectMistakeItemsForScope({
@@ -451,6 +472,26 @@ test('Mistake slicing enforces strict subject isolation, minimal payload, determ
   });
   assert.ok(pureMd.includes('马原'));
   assert.ok(pureMd.includes('官方解析'));
+
+  // 6. Combined AI study-sheet Markdown defaults to concise export (no bulky raw appendix unless enabled)
+  const conciseCombined = buildCombinedMistakeSummaryMarkdown({
+    title: '政治速记单',
+    subjectId: 'politics',
+    stats: polAll.stats,
+    aiMarkdown: '## 马原\n**1. 物质特性**（卷一 Q1）：**客观实在性**。',
+    items: polAll.items,
+    includeRawAppendix: false,
+  });
+  assert.equal(conciseCombined.includes('错题原始明细清单'), false);
+  const fullCombined = buildCombinedMistakeSummaryMarkdown({
+    title: '政治速记单',
+    subjectId: 'politics',
+    stats: polAll.stats,
+    aiMarkdown: '## 马原\n**1. 物质特性**（卷一 Q1）：**客观实在性**。',
+    items: polAll.items,
+    includeRawAppendix: true,
+  });
+  assert.equal(fullCombined.includes('错题原始明细清单'), true);
 });
 
 test('Cache key/hash invalidation and 25-item batch splitting by secondary module', () => {
@@ -818,11 +859,164 @@ test('POST /api/v1/mistake-summaries enforces batch cap <= 30, keeps politics of
     assert.equal(okText.includes('sk-secret-ms-9999'), false);
     const okJson = JSON.parse(okText);
     assert.ok(okJson.data.markdown.includes('## 三、考前速记纠偏对照表'));
+    assert.equal(okJson.data.promptVersion, 'yanjuan-mistake-summary-v2.0');
     assert.ok(capturedBody.includes('官方解析'), 'Politics prompt must include officialExplanation');
     assert.ok(capturedBody.includes('严禁推翻或质疑官方'));
+    assert.ok(capturedBody.includes('[原题 2027 肖八第 1 套 Q2'));
+    assert.ok(capturedBody.includes('考研延伸的分级边界'));
 
     const runs = store.listEvaluationRuns('ws-ms', 10);
     assert.ok(runs.some((r) => r.taskType === 'mistake_summary' && r.status === 'completed'));
+  } finally {
+    globalThis.fetch = origFetch;
+    server.close();
+    store.close();
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
+test('DeepSeek flash mistake summary disables thinking mode, forwards binding limits, and surfaces reasoning exhaustion / None errors', async () => {
+  const express = (await import('express')).default;
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'yanjuan-ds-ms-'));
+  const storePath = path.join(tmpDir, 'ds.sqlite');
+  const origFetch = globalThis.fetch;
+
+  const app = express();
+  const { router, store } = createApiV1Router({
+    rootDir: process.cwd(),
+    storeFilePath: storePath,
+    rateLimitMaxPerMinute: 60,
+    dnsLookupFn: async () => [{ address: '104.18.7.192' }],
+  });
+  app.use('/api/v1', router);
+  const server = app.listen(0);
+  const addr = server.address() as { port: number };
+  const baseUrl = `http://127.0.0.1:${addr.port}/api/v1`;
+
+  try {
+    const credRes = await origFetch(`${baseUrl}/provider-credentials`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Workspace-Id': 'ws-ds' },
+      body: JSON.stringify({
+        provider: 'deepseek',
+        apiKey: 'sk-ds-test-key',
+        baseUrl: 'https://api.deepseek.com/v1',
+        model: 'deepseek-flash',
+        storageMode: 'encrypted-sqlite',
+        setAsDefault: true,
+      }),
+    });
+    assert.equal(credRes.status, 201);
+
+    const sampleItems = [
+      {
+        paperId: 'pol-2027-xiao8-01',
+        paperYear: 2101,
+        paperTitle: '2027 肖八第 1 套',
+        subjectId: 'politics',
+        questionNumber: 1,
+        unitType: 'politics-single',
+        moduleKey: '马原',
+        moduleLabel: '马原',
+        prompt: '联系观题干',
+        options: [{ key: 'A', text: '选项A' }, { key: 'B', text: '选项B' }],
+        userSelectedAnswer: 'A',
+        correctAnswer: 'B',
+        officialExplanation: '官方解析文本',
+        userNotes: '',
+        knownErrorCauses: [],
+        confidence: 'certain',
+        mastered: false,
+      },
+    ];
+
+    let mode: 'ok' | 'reasoning-exhausted' | 'none-literal' = 'ok';
+    let lastRequestPayload: any = null;
+
+    globalThis.fetch = (async (input: any, init?: any) => {
+      const url = typeof input === 'string' ? input : input?.url || '';
+      if (url.includes('api.deepseek.com')) {
+        lastRequestPayload = JSON.parse(String(init?.body || '{}'));
+        if (mode === 'reasoning-exhausted') {
+          return new Response(
+            JSON.stringify({
+              choices: [
+                {
+                  message: { content: '', reasoning_content: 'thinking tokens consumed...' },
+                  finish_reason: 'length',
+                },
+              ],
+            }),
+            { status: 200, headers: { 'Content-Type': 'application/json' } }
+          );
+        }
+        if (mode === 'none-literal') {
+          return new Response(
+            JSON.stringify({
+              choices: [{ message: { content: 'None' }, finish_reason: 'stop' }],
+            }),
+            { status: 200, headers: { 'Content-Type': 'application/json' } }
+          );
+        }
+        return new Response(
+          JSON.stringify({
+            choices: [
+              {
+                message: {
+                  content:
+                    '## 一、高频失分知识点聚类\n- 联系观\n\n## 二、错误模式与干扰项陷阱诊断\n- 混淆概念\n\n## 三、考前速记纠偏对照表\n| 考点 / 题号 | 常见误区 / 错选直觉 | 官方准确结论 |\n| --- | --- | --- |\n| Q1 | A | B |',
+                },
+                finish_reason: 'stop',
+              },
+            ],
+          }),
+          { status: 200, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+      return origFetch(input, init);
+    }) as typeof fetch;
+
+    const okRes = await origFetch(`${baseUrl}/mistake-summaries`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Workspace-Id': 'ws-ds' },
+      body: JSON.stringify({
+        provider: 'deepseek',
+        subjectId: 'politics',
+        scope: 'by-subject',
+        items: sampleItems,
+      }),
+    });
+    assert.equal(okRes.status, 200);
+    assert.deepEqual(lastRequestPayload?.thinking, { type: 'disabled' });
+    assert.ok(lastRequestPayload?.max_tokens >= 8192);
+
+    mode = 'reasoning-exhausted';
+    const exhaustedRes = await origFetch(`${baseUrl}/mistake-summaries`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Workspace-Id': 'ws-ds' },
+      body: JSON.stringify({
+        provider: 'deepseek',
+        subjectId: 'politics',
+        scope: 'by-subject',
+        items: sampleItems,
+      }),
+    });
+    assert.equal(exhaustedRes.status, 502);
+    const exhaustedBody = await exhaustedRes.json();
+    assert.ok(String(exhaustedBody.error?.message || '').includes('思考过程耗尽输出上限'));
+
+    mode = 'none-literal';
+    const noneRes = await origFetch(`${baseUrl}/mistake-summaries`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Workspace-Id': 'ws-ds' },
+      body: JSON.stringify({
+        provider: 'deepseek',
+        subjectId: 'politics',
+        scope: 'by-subject',
+        items: sampleItems,
+      }),
+    });
+    assert.equal(noneRes.status, 502);
   } finally {
     globalThis.fetch = origFetch;
     server.close();

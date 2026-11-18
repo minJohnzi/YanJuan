@@ -27,7 +27,7 @@ import type { ModelProvider, MultimodalImageInput } from './modelProviders.ts';
 import { SecurityError } from './securityAndCrypto.ts';
 
 export const PROMPT_VERSION = 'yanjuan-eval-v2.0';
-export const MISTAKE_SUMMARY_PROMPT_VERSION = 'yanjuan-mistake-summary-v1.0';
+export const MISTAKE_SUMMARY_PROMPT_VERSION = 'yanjuan-mistake-summary-v2.0';
 
 export interface SubjectiveEvaluationInput {
   taskType: 'translation' | 'practical-writing' | 'visual-writing' | 'politics-analysis';
@@ -930,6 +930,10 @@ export async function runMistakeSummaryAnalysis(
     totalBatches?: number;
     deterministicStats?: MistakeDeterministicStats;
     items: MistakeItemMinimalPayload[];
+    temperature?: number;
+    maxOutputTokens?: number;
+    timeoutMs?: number;
+    disableThinking?: boolean;
     signal?: AbortSignal;
   }
 ): Promise<{
@@ -943,7 +947,7 @@ export async function runMistakeSummaryAnalysis(
   const isPolitics = input.subjectId === 'politics';
 
   const itemsBlock = input.items
-    .map((item, idx) => {
+    .map((item) => {
       const optionsLine =
         item.options && item.options.length > 0
           ? `选项：${item.options.map((o) => `${o.key}.${o.text}`).join(' | ')}`
@@ -955,9 +959,9 @@ export async function runMistakeSummaryAnalysis(
           ? '【多选误选干扰项】'
           : '';
       const lines = [
-        `${idx + 1}. [${item.paperTitle} 第${item.questionNumber}题 | 模块:${item.moduleLabel}${
+        `[原题 ${item.paperTitle} Q${item.questionNumber} | 模块:${item.moduleLabel}${
           item.questionCategory ? ` | 题型:${item.questionCategory}` : ''
-        }] ${tagLabel}`,
+        }] ${tagLabel}`.trim(),
         `题干：${item.prompt}`,
       ];
       if (optionsLine) lines.push(optionsLine);
@@ -988,51 +992,52 @@ export async function runMistakeSummaryAnalysis(
     : `本批共传入 ${input.items.length} 道错题。`;
 
   const politicsFactGuard = isPolitics
-    ? `【考研政治最高事实约束（必须 100% 遵守）】
-1. 所有原理结论、概念界定与时政表述必须严格忠实于下方每题附带的「官方解析原文」，严禁脱离解析原文自行编造时政新提法或外部结论！
-2. 严禁推翻或质疑官方标准答案（correctAnswer），也不得修改任何官方答案。
-3. 针对多选题的「漏选」与「误选干扰项」，请区分“保守少选漏知识点”与“被错误混淆表述诱导”。`
-    : `【考研英语一最高事实约束（必须 100% 遵守）】
-1. 严禁推翻或质疑官方标准答案（correctAnswer）。
-2. 重点从完形词汇辨析/上下文衔接、阅读定位偏差/选项偷换概念/绝对化/过度推理等命题陷阱进行跨题归纳，不要自行编造未传入的原文句子。`;
+    ? `【考研政治最高事实约束与“考研延伸”分级红线（必须 100% 遵守）】
+1. **严格忠实官方答案与题号**：必须原样沿用每题括号中给定的 \`Q题号\`（严禁自己从 1 重编题号造成 Q2 错写成 Q1）；严禁推翻或质疑官方标准答案（correctAnswer）。
+2. **禁止写点评腔与重复流水账**：严禁出现“考生并非不会”“属于纯记忆型错配”“未形成对应记忆”等心理评语；同一道题**只写一次**，严禁在不同段落重复列出同一题。
+3. **考研延伸的分级边界（极其重要）**：
+   - **A 类（马原、史纲、毛中特基础理论、思修基础原理）**：允许补充 **1 行（≤ 45 字）高价值同族串联或易混对照**（如：「生产力＝最高标准｜实践＝检验真理唯一标准」；「遵义会议(转折)→长征(促进成熟)→七大(标志成熟)」；或“六个必须坚持”等固定标签全套定位）。只写教材定论，禁止长篇大论。
+   - **B 类（当代与时政，以及 2026 年新会议/新讲话/“十五五”规划/“九五”普法等最新文件）**：**严禁模型脱离解析原文自由发散或引入外部时政记忆！** 只能从传入的「官方解析原文」内部提炼并列要素（例如把原文中的“首要任务/抓手/支撑/保障”串成 1 句）；若解析原文无额外并列要素，直接写「单点精准记忆，不外延」。`
+    : `【考研英语一最高事实约束与延伸规则（必须 100% 遵守）】
+1. 必须原样沿用每题给定的 \`Q题号\`，严禁推翻或质疑官方标准答案（correctAnswer），严禁虚构未传入的英文原文句子。
+2. 禁止心理点评腔，同一道题只写一次。每题「考研延伸」仅提炼 1 句（≤ 45 字）可迁移的题型定位或干扰项排雷规律。`;
 
   const prompt = `你是${
     isPolitics ? '考研思想政治理论' : '考研英语（一）'
-  }资深复盘教研导师。
-请针对以下${input.items.length}道客观题错题（范围：${
+  }考前冲刺讲义主编。
+请把以下 ${input.items.length} 道客观题错题（范围：${
     input.scopeTitle || (isPolitics ? '考研政治错题' : '考研英语一错题')
   }${input.moduleLabel ? `｜模块：${input.moduleLabel}` : ''}${
     input.totalBatches && input.totalBatches > 1
       ? `｜第 ${input.batchIndex || 1}/${input.totalBatches} 批`
       : ''
-  }）进行跨题语义归纳与教学提炼。
+  }）精炼成一份**适合打印在 1～2 页 A4 纸上直接拿来背诵的极简考前速记讲义**。
 
 【数值边界说明】
 ${statsSummaryLine}
-你不需要重新统计数量或输出冗余分数总结，请直接聚焦于跨题语义归纳与考点纠偏。
+你不需要重复统计数量或复述题干全文，直接提炼可背诵的核心结论。
 
 ${politicsFactGuard}
 
-【必须严格遵循的 Markdown 输出结构】
-请直接输出合法 Markdown 文本（不要用 \`\`\`markdown 代码块包裹整篇回答），且必须完整包含以下 3 个二级标题板块：
+【必须严格遵循的极简打印排版结构】
+直接输出合法 Markdown（禁止用 \`\`\`markdown 代码块包裹整篇回答），格式如下：
 
-## 一、高频失分知识点聚类
-- 按具体考点/知识专题归类（逐条标明涉及的试卷与题号，例如：2027肖八卷一 Q1、Q17），提炼失分共性。
-
-## 二、错误模式与干扰项陷阱诊断
-- 结合考生“确定却错 / 犹豫错 / 多选漏选 / 误选干扰项”及个人笔记，剖析核心思维误区与命题干扰项设坑手法。
-
-## 三、考前速记纠偏对照表
-必须使用标准 Markdown 表格输出，列头固定为：
-| 考点 / 题号 | 常见误区 / 错选直觉 | 官方准确结论 |
-| --- | --- | --- |
+1. **按模块分组**输出二级标题（例如：\`## 马原\`、\`## 毛中特与新思想\`、\`## 史纲\`、\`## 思修法基\`、\`## 当代与时政\`，英语用 \`## 完形填空\` / \`## 阅读理解\` / \`## 新题型\`；没有错题的模块不要输出空标题）。
+2. **每道错题严格只占 2 行**（用加粗序号段，不要再用 Markdown 数字列表以免分段重置编号）：
+   **1. 核心考点简名**（{试卷简称} Q{原题号}）：**准确结论**，❌ 避坑：{错选/漏选错因一句点破}。
+   - **考研延伸**：{按上述 A/B 类红线写 1 行精炼串线，≤ 45 字}
+3. **文末收口**只加一个简短小节：
+   ## 考前避坑总则（本批规律）
+   - 仅用 3～5 条短句高度概括本批错题暴露的共性陷阱（例如绝对化词排雷、跨领域干扰排除等，不重复单题）。
 
 【待归纳错题清单（共 ${input.items.length} 题）】
 ${itemsBlock}`;
 
   const rawMarkdown = await provider.generateText(prompt, {
-    temperature: 0.25,
-    maxOutputTokens: 3200,
+    temperature: input.temperature ?? 0.25,
+    maxOutputTokens: input.maxOutputTokens ?? 8192,
+    timeoutMs: input.timeoutMs ?? 90000,
+    disableThinking: input.disableThinking ?? true,
     signal: input.signal,
   });
 
@@ -1041,6 +1046,10 @@ ${itemsBlock}`;
   const fenceMatch = /^```(?:markdown|md)?\s*\n([\s\S]*?)\n```\s*$/i.exec(cleaned);
   if (fenceMatch) {
     cleaned = fenceMatch[1].trim();
+  }
+
+  if (!cleaned || /^(none|null|undefined)$/i.test(cleaned)) {
+    throw new Error(`${provider.providerId} 返回无效空结果，请重试或检查模型输出配置`);
   }
 
   return {

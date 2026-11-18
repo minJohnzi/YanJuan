@@ -173,19 +173,22 @@
 
 @page {
   size: A4;
-  margin: 14mm;
+  margin: 10mm 12mm;
 }
 
 @media print {
   body.printing-mistake-summary {
     background: #ffffff !important;
     color: #111827 !important;
+    font-size: 12px !important;
+    line-height: 1.45 !important;
   }
 
   body.printing-mistake-summary header,
   body.printing-mistake-summary nav,
   body.printing-mistake-summary .stats-overview-section,
-  body.printing-mistake-summary .no-print {
+  body.printing-mistake-summary .no-print,
+  body.printing-mistake-summary .print-hide-when-ai {
     display: none !important;
   }
 
@@ -197,11 +200,17 @@
     background: #ffffff !important;
   }
 
+  body.printing-mistake-summary .mistake-report-surface {
+    border: none !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+  }
+
   body.printing-mistake-summary .print-only-header {
     display: block !important;
-    border-bottom: 2px solid #174a5b;
-    padding-bottom: 8px;
-    margin-bottom: 12px;
+    border-bottom: 1.5px solid #174a5b;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
   }
 
   body.printing-mistake-summary .print-avoid-break,
