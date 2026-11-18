@@ -21,7 +21,7 @@
     "md"
   ],
   "sourceHashes": {
-    "papers/2023.md": "397e78d2cd0f87af29b4c192ba106e6ebfd2e17369f8cd5d9a303092b10919b0",
+    "papers/2023.md": "a0138623a74ad69694e03926eed377b66e2eac6a52da952b2daeda7e18ca7a66",
     "answers/2023.md": "50301688462af6ec76a8cd548d4abf793f3ac0cb1d362acf9c55607e5ab8ca16",
     "assets/2023/writing-part-b-01.png": "d01de91521273c5d123babdeaceeba6a85987bcf8fc685cc324921bca2785336"
   },
@@ -148,7 +148,7 @@
                 "markedAnswer": "C",
                 "semanticCandidateAnswer": "C",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -194,7 +194,7 @@
                 "markedAnswer": "A",
                 "semanticCandidateAnswer": "A",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -240,7 +240,7 @@
                 "markedAnswer": "D",
                 "semanticCandidateAnswer": "D",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -286,7 +286,7 @@
                 "markedAnswer": "C",
                 "semanticCandidateAnswer": "C",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -332,7 +332,7 @@
                 "markedAnswer": "C",
                 "semanticCandidateAnswer": "C",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -378,7 +378,7 @@
                 "markedAnswer": "A",
                 "semanticCandidateAnswer": "A",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -424,7 +424,7 @@
                 "markedAnswer": "B",
                 "semanticCandidateAnswer": "B",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -470,7 +470,7 @@
                 "markedAnswer": "B",
                 "semanticCandidateAnswer": "B",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -516,7 +516,7 @@
                 "markedAnswer": "A",
                 "semanticCandidateAnswer": "A",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -562,7 +562,7 @@
                 "markedAnswer": "A",
                 "semanticCandidateAnswer": "A",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -608,7 +608,7 @@
                 "markedAnswer": "D",
                 "semanticCandidateAnswer": "D",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -654,7 +654,7 @@
                 "markedAnswer": "C",
                 "semanticCandidateAnswer": "C",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -700,7 +700,7 @@
                 "markedAnswer": "C",
                 "semanticCandidateAnswer": "C",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -746,7 +746,7 @@
                 "markedAnswer": "B",
                 "semanticCandidateAnswer": "B",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -792,7 +792,7 @@
                 "markedAnswer": "A",
                 "semanticCandidateAnswer": "A",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -838,7 +838,7 @@
                 "markedAnswer": "B",
                 "semanticCandidateAnswer": "B",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -884,7 +884,7 @@
                 "markedAnswer": "B",
                 "semanticCandidateAnswer": "B",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -930,7 +930,7 @@
                 "markedAnswer": "D",
                 "semanticCandidateAnswer": "D",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -976,7 +976,7 @@
                 "markedAnswer": "A",
                 "semanticCandidateAnswer": "A",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -1022,7 +1022,7 @@
                 "markedAnswer": "D",
                 "semanticCandidateAnswer": "D",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             }
           ]
@@ -1131,7 +1131,7 @@
                 "markedAnswer": "C",
                 "semanticCandidateAnswer": "A",
                 "reason": "2023年第21题存在题库数据与标注答案语义冲突：原文第1段明确表述 \"mature industries have repeatedly underestimated the disruptive velocity\"，与选项 [A] 语义一致，但答案表标注为 [C]。已标记为 disputed 待人工核验，禁止 AI 自动覆盖标准答案。",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -1176,7 +1176,7 @@
                 "markedAnswer": "B",
                 "semanticCandidateAnswer": "B",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -1221,7 +1221,7 @@
                 "markedAnswer": "A",
                 "semanticCandidateAnswer": "A",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -1266,7 +1266,7 @@
                 "markedAnswer": "C",
                 "semanticCandidateAnswer": "C",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -1311,7 +1311,7 @@
                 "markedAnswer": "D",
                 "semanticCandidateAnswer": "D",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.667Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             }
           ]
@@ -1410,7 +1410,7 @@
                 "markedAnswer": "A",
                 "semanticCandidateAnswer": "A",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -1455,7 +1455,7 @@
                 "markedAnswer": "D",
                 "semanticCandidateAnswer": "D",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -1500,7 +1500,7 @@
                 "markedAnswer": "B",
                 "semanticCandidateAnswer": "B",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -1545,7 +1545,7 @@
                 "markedAnswer": "C",
                 "semanticCandidateAnswer": "C",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -1590,7 +1590,7 @@
                 "markedAnswer": "C",
                 "semanticCandidateAnswer": "C",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             }
           ]
@@ -1689,7 +1689,7 @@
                 "markedAnswer": "D",
                 "semanticCandidateAnswer": "D",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -1734,7 +1734,7 @@
                 "markedAnswer": "A",
                 "semanticCandidateAnswer": "A",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -1779,7 +1779,7 @@
                 "markedAnswer": "B",
                 "semanticCandidateAnswer": "B",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -1825,7 +1825,7 @@
                 "markedAnswer": "C",
                 "semanticCandidateAnswer": "C",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -1870,7 +1870,7 @@
                 "markedAnswer": "A",
                 "semanticCandidateAnswer": "A",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             }
           ]
@@ -1969,7 +1969,7 @@
                 "markedAnswer": "B",
                 "semanticCandidateAnswer": "B",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -2014,7 +2014,7 @@
                 "markedAnswer": "C",
                 "semanticCandidateAnswer": "C",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -2059,7 +2059,7 @@
                 "markedAnswer": "B",
                 "semanticCandidateAnswer": "B",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -2104,7 +2104,7 @@
                 "markedAnswer": "A",
                 "semanticCandidateAnswer": "A",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -2149,7 +2149,7 @@
                 "markedAnswer": "D",
                 "semanticCandidateAnswer": "D",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             }
           ]
@@ -2377,7 +2377,7 @@
                 "markedAnswer": "B",
                 "semanticCandidateAnswer": "B",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -2430,7 +2430,7 @@
                 "markedAnswer": "F",
                 "semanticCandidateAnswer": "F",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -2483,7 +2483,7 @@
                 "markedAnswer": "D",
                 "semanticCandidateAnswer": "D",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -2536,7 +2536,7 @@
                 "markedAnswer": "C",
                 "semanticCandidateAnswer": "C",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -2589,7 +2589,7 @@
                 "markedAnswer": "G",
                 "semanticCandidateAnswer": "G",
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             }
           ]
@@ -2706,7 +2706,7 @@
                 "markedAnswer": null,
                 "semanticCandidateAnswer": null,
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -2766,7 +2766,7 @@
                 "markedAnswer": null,
                 "semanticCandidateAnswer": null,
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -2826,7 +2826,7 @@
                 "markedAnswer": null,
                 "semanticCandidateAnswer": null,
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -2886,7 +2886,7 @@
                 "markedAnswer": null,
                 "semanticCandidateAnswer": null,
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             },
             {
@@ -2946,7 +2946,7 @@
                 "markedAnswer": null,
                 "semanticCandidateAnswer": null,
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             }
           ]
@@ -3086,7 +3086,7 @@
                 "markedAnswer": null,
                 "semanticCandidateAnswer": null,
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             }
           ]
@@ -3209,7 +3209,7 @@
                 "markedAnswer": null,
                 "semanticCandidateAnswer": null,
                 "reason": "选项完备且未检出题干与答案来源冲突",
-                "detectedAt": "2026-11-15T12:51:36.668Z"
+                "detectedAt": "2026-11-17T13:22:59.988Z"
               }
             }
           ]

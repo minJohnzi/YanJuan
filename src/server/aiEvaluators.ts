@@ -12,9 +12,13 @@ import type {
   ExamUnit,
   FollowUpTurn,
   ItemRubric,
+  MistakeDeterministicStats,
+  MistakeItemMinimalPayload,
+  MistakeSummaryScope,
   ObjectiveAIAnalysis,
   ProviderType,
   RevisionVerificationItem,
+  SubjectId,
   SubjectiveEvaluationResult,
   TokenUsageSummary,
   WritingScaffoldResult,
@@ -23,6 +27,7 @@ import type { ModelProvider, MultimodalImageInput } from './modelProviders.ts';
 import { SecurityError } from './securityAndCrypto.ts';
 
 export const PROMPT_VERSION = 'yanjuan-eval-v2.0';
+export const MISTAKE_SUMMARY_PROMPT_VERSION = 'yanjuan-mistake-summary-v1.0';
 
 export interface SubjectiveEvaluationInput {
   taskType: 'translation' | 'practical-writing' | 'visual-writing' | 'politics-analysis';
@@ -913,3 +918,137 @@ ${
     createdAt: new Date().toISOString(),
   };
 }
+
+export async function runMistakeSummaryAnalysis(
+  provider: ModelProvider,
+  input: {
+    subjectId: SubjectId;
+    scope: MistakeSummaryScope;
+    scopeTitle?: string;
+    moduleLabel?: string;
+    batchIndex?: number;
+    totalBatches?: number;
+    deterministicStats?: MistakeDeterministicStats;
+    items: MistakeItemMinimalPayload[];
+    signal?: AbortSignal;
+  }
+): Promise<{
+  markdown: string;
+  modelProvider: ProviderType;
+  modelName: string;
+  promptVersion: string;
+  latencyMs: number;
+}> {
+  const startMs = Date.now();
+  const isPolitics = input.subjectId === 'politics';
+
+  const itemsBlock = input.items
+    .map((item, idx) => {
+      const optionsLine =
+        item.options && item.options.length > 0
+          ? `选项：${item.options.map((o) => `${o.key}.${o.text}`).join(' | ')}`
+          : '';
+      const tagLabel =
+        item.multiChoiceTag === 'partial-miss'
+          ? '【多选漏选】'
+          : item.multiChoiceTag === 'wrong-option'
+          ? '【多选误选干扰项】'
+          : '';
+      const lines = [
+        `${idx + 1}. [${item.paperTitle} 第${item.questionNumber}题 | 模块:${item.moduleLabel}${
+          item.questionCategory ? ` | 题型:${item.questionCategory}` : ''
+        }] ${tagLabel}`,
+        `题干：${item.prompt}`,
+      ];
+      if (optionsLine) lines.push(optionsLine);
+      lines.push(
+        `考生错选：${item.userSelectedAnswer || '未作答'} | 官方答案：${
+          item.correctAnswer
+        } | 把握度：${item.confidence}`
+      );
+      if (item.knownErrorCauses && item.knownErrorCauses.length > 0) {
+        lines.push(`自评错因：${item.knownErrorCauses.join('、')}`);
+      }
+      if (item.userNotes) {
+        lines.push(`个人笔记：${item.userNotes}`);
+      }
+      if (isPolitics) {
+        lines.push(`官方解析原文：${item.officialExplanation || '（暂无额外解析）'}`);
+      }
+      return lines.join('\n');
+    })
+    .join('\n\n');
+
+  const statsSummaryLine = input.deterministicStats
+    ? `范围确定性统计（严禁 AI 自行重新统计或篡改数字）：纳入错题 ${input.deterministicStats.totalWrong} 题 / 总作答 ${input.deterministicStats.totalAnswered} 题（正确率 ${input.deterministicStats.accuracyRate}%），确定却错 ${input.deterministicStats.certainWrongCount} 题，犹豫错 ${input.deterministicStats.hesitantWrongCount} 题${
+        isPolitics
+          ? `，多选漏选 ${input.deterministicStats.multiPartialMissOnly} 题，多选误选 ${input.deterministicStats.multiWrongOptionSelected} 题`
+          : ''
+      }。`
+    : `本批共传入 ${input.items.length} 道错题。`;
+
+  const politicsFactGuard = isPolitics
+    ? `【考研政治最高事实约束（必须 100% 遵守）】
+1. 所有原理结论、概念界定与时政表述必须严格忠实于下方每题附带的「官方解析原文」，严禁脱离解析原文自行编造时政新提法或外部结论！
+2. 严禁推翻或质疑官方标准答案（correctAnswer），也不得修改任何官方答案。
+3. 针对多选题的「漏选」与「误选干扰项」，请区分“保守少选漏知识点”与“被错误混淆表述诱导”。`
+    : `【考研英语一最高事实约束（必须 100% 遵守）】
+1. 严禁推翻或质疑官方标准答案（correctAnswer）。
+2. 重点从完形词汇辨析/上下文衔接、阅读定位偏差/选项偷换概念/绝对化/过度推理等命题陷阱进行跨题归纳，不要自行编造未传入的原文句子。`;
+
+  const prompt = `你是${
+    isPolitics ? '考研思想政治理论' : '考研英语（一）'
+  }资深复盘教研导师。
+请针对以下${input.items.length}道客观题错题（范围：${
+    input.scopeTitle || (isPolitics ? '考研政治错题' : '考研英语一错题')
+  }${input.moduleLabel ? `｜模块：${input.moduleLabel}` : ''}${
+    input.totalBatches && input.totalBatches > 1
+      ? `｜第 ${input.batchIndex || 1}/${input.totalBatches} 批`
+      : ''
+  }）进行跨题语义归纳与教学提炼。
+
+【数值边界说明】
+${statsSummaryLine}
+你不需要重新统计数量或输出冗余分数总结，请直接聚焦于跨题语义归纳与考点纠偏。
+
+${politicsFactGuard}
+
+【必须严格遵循的 Markdown 输出结构】
+请直接输出合法 Markdown 文本（不要用 \`\`\`markdown 代码块包裹整篇回答），且必须完整包含以下 3 个二级标题板块：
+
+## 一、高频失分知识点聚类
+- 按具体考点/知识专题归类（逐条标明涉及的试卷与题号，例如：2027肖八卷一 Q1、Q17），提炼失分共性。
+
+## 二、错误模式与干扰项陷阱诊断
+- 结合考生“确定却错 / 犹豫错 / 多选漏选 / 误选干扰项”及个人笔记，剖析核心思维误区与命题干扰项设坑手法。
+
+## 三、考前速记纠偏对照表
+必须使用标准 Markdown 表格输出，列头固定为：
+| 考点 / 题号 | 常见误区 / 错选直觉 | 官方准确结论 |
+| --- | --- | --- |
+
+【待归纳错题清单（共 ${input.items.length} 题）】
+${itemsBlock}`;
+
+  const rawMarkdown = await provider.generateText(prompt, {
+    temperature: 0.25,
+    maxOutputTokens: 3200,
+    signal: input.signal,
+  });
+
+  // Clean outer ```markdown fence if model accidentally added one
+  let cleaned = String(rawMarkdown || '').trim();
+  const fenceMatch = /^```(?:markdown|md)?\s*\n([\s\S]*?)\n```\s*$/i.exec(cleaned);
+  if (fenceMatch) {
+    cleaned = fenceMatch[1].trim();
+  }
+
+  return {
+    markdown: cleaned,
+    modelProvider: provider.providerId,
+    modelName: provider.modelName,
+    promptVersion: MISTAKE_SUMMARY_PROMPT_VERSION,
+    latencyMs: Date.now() - startMs,
+  };
+}
+

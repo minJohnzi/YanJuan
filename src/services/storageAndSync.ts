@@ -1,5 +1,6 @@
 import type {
   ExamAttempt,
+  MistakeSummaryRecord,
   ObjectiveAIAnalysis,
   ReviewItem,
   SubjectId,
@@ -38,6 +39,7 @@ export interface LocalLearningDatabase {
   subjectiveEvaluations: Record<string, SubjectiveEvaluationResult>;
   objectiveAnalyses: Record<string, ObjectiveAIAnalysis>;
   reviewItems: Record<string, ReviewItem>;
+  mistakeSummaries?: Record<string, MistakeSummaryRecord>;
   conflictRecords: {
     id: string;
     attemptId: string;
@@ -70,6 +72,7 @@ export function createDefaultLearningDatabase(deviceId?: string): LocalLearningD
     subjectiveEvaluations: {},
     objectiveAnalyses: {},
     reviewItems: {},
+    mistakeSummaries: {},
     conflictRecords: [],
     updatedAt: new Date().toISOString(),
   };
@@ -135,7 +138,11 @@ export function migrateDatabasePaperIds(
     }
   }
 
-  if (!changed && db.schemaVersion === '2.0.0') {
+  const hasMistakeSummaries = Boolean(
+    db.mistakeSummaries && typeof db.mistakeSummaries === 'object'
+  );
+
+  if (!changed && hasMistakeSummaries && db.schemaVersion === '2.0.0') {
     return db;
   }
 
@@ -146,6 +153,7 @@ export function migrateDatabasePaperIds(
     subjectiveVersions,
     objectiveAnalyses,
     reviewItems,
+    mistakeSummaries: hasMistakeSummaries ? db.mistakeSummaries : {},
   };
 }
 
@@ -344,6 +352,21 @@ export function mergeLearningDatabasesWithConflictDetection(
         new Date(remoteRev.updatedAt).getTime() >= new Date(localRev.updatedAt).getTime()
       ) {
         nextDb.reviewItems[revId] = remoteRev;
+      }
+    }
+  }
+
+  // 5. Mistake summaries: additive, keep latest updatedAt
+  nextDb.mistakeSummaries = { ...(nextDb.mistakeSummaries || {}) };
+  if (remoteDb.mistakeSummaries) {
+    for (const [key, remoteSummary] of Object.entries(remoteDb.mistakeSummaries)) {
+      const localSummary = nextDb.mistakeSummaries[key];
+      if (
+        !localSummary ||
+        new Date(remoteSummary.updatedAt).getTime() >=
+          new Date(localSummary.updatedAt).getTime()
+      ) {
+        nextDb.mistakeSummaries[key] = remoteSummary;
       }
     }
   }

@@ -323,3 +323,80 @@ export type SyncStatus =
   | 'offline'
   | 'sync-failed'
   | 'conflict';
+
+export type MistakeSummaryScope = 'by-paper' | 'by-subject';
+
+export type MistakeFilterMode = 'unmastered' | 'all';
+
+export interface MistakeItemMinimalPayload {
+  paperId: string;
+  paperYear: number;
+  paperTitle: string;
+  subjectId: SubjectId;
+  questionNumber: number;
+  unitType: UnitType;
+  moduleKey: string;
+  moduleLabel: string;
+  knowledgeModule?: string;
+  questionCategory?: string;
+  prompt: string;
+  options: OptionItem[];
+  userSelectedAnswer: string;
+  correctAnswer: string;
+  multiChoiceTag?: 'partial-miss' | 'wrong-option';
+  officialExplanation?: string;
+  userNotes: string;
+  knownErrorCauses: string[];
+  confidence: ConfidenceLevel;
+  mastered: boolean;
+}
+
+export interface MistakeModuleBreakdown {
+  moduleKey: string;
+  moduleLabel: string;
+  answeredCount: number;
+  wrongCount: number;
+  accuracyRate: number;
+  scoreLost: number;
+}
+
+export interface MistakeDeterministicStats {
+  totalAnswered: number;
+  totalCorrect: number;
+  totalWrong: number;
+  accuracyRate: number;
+  totalScoreLost: number;
+  certainWrongCount: number;
+  hesitantWrongCount: number;
+  guessedWrongCount: number;
+  multiTotalWrong: number;
+  multiPartialMissOnly: number;
+  multiWrongOptionSelected: number;
+  sourcePapersCount: number;
+  moduleBreakdown: MistakeModuleBreakdown[];
+}
+
+export interface MistakeSummaryRecord {
+  id: string;
+  cacheKey: string;
+  inputHash: string;
+  scope: MistakeSummaryScope;
+  subjectId: SubjectId;
+  paperId?: string;
+  paperYear?: number;
+  paperTitle?: string;
+  filterMode: MistakeFilterMode;
+  moduleKey: string;
+  moduleLabel: string;
+  stats: MistakeDeterministicStats;
+  markdownContent: string;
+  generatedByAi: boolean;
+  modelProvider?: string;
+  modelName?: string;
+  promptVersion?: string;
+  itemCount: number;
+  batchCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+

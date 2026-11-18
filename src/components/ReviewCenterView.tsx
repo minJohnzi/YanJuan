@@ -11,6 +11,7 @@ import {
   ChevronDown,
   ChevronUp,
   Layers,
+  Sparkles,
 } from 'lucide-react';
 import type {
   ExamAttempt,
@@ -55,6 +56,7 @@ interface ReviewCenterViewProps {
     unitId?: string,
     questionNumber?: number
   ) => void;
+  onOpenMistakeSummary?: () => void;
 }
 
 const FILTER_TYPES: ReviewItemType[] = [
@@ -97,6 +99,7 @@ export const ReviewCenterView: React.FC<ReviewCenterViewProps> = ({
   onCreateCustomReviewItem,
   onOpenAttempt,
   onJumpToUnit,
+  onOpenMistakeSummary,
 }) => {
   const [subjectFilter, setSubjectFilter] = useState<'all' | SubjectId>('all');
   const [filterType, setFilterType] = useState<'all' | ReviewItemType>('all');
@@ -275,14 +278,26 @@ export const ReviewCenterView: React.FC<ReviewCenterViewProps> = ({
               依据 1 / 3 / 7 / 14 / 30 天动态排期，自动聚合错题、自信答错题、猜对题与主观题重写任务。
             </p>
           </div>
-          <button
-            type="button"
-            onClick={() => setShowAddForm((prev) => !prev)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md text-xs font-medium text-white bg-[#174A5B] dark:bg-[#38849E] hover:bg-[#123D4B] dark:hover:bg-[#489BB8] whitespace-nowrap self-start sm:self-auto transition-colors"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>收录难句 / 词汇</span>
-          </button>
+          <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+            {onOpenMistakeSummary && (
+              <button
+                type="button"
+                onClick={onOpenMistakeSummary}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md text-xs font-medium text-[#174A5B] dark:text-[#56AEC8] bg-[#E8F0F1] dark:bg-[#1F3740] hover:opacity-90 whitespace-nowrap transition-colors"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>错题整体总结 / 导出</span>
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => setShowAddForm((prev) => !prev)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md text-xs font-medium text-white bg-[#174A5B] dark:bg-[#38849E] hover:bg-[#123D4B] dark:hover:bg-[#489BB8] whitespace-nowrap transition-colors"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>收录难句 / 词汇</span>
+            </button>
+          </div>
         </div>
 
         {/* Modal / Form for manual custom review item */}

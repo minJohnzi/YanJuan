@@ -47,7 +47,8 @@ export type AITaskType =
   | 'subjective_stage2'
   | 'visual_writing'
   | 'followup_chat'
-  | 'writing_scaffold';
+  | 'writing_scaffold'
+  | 'mistake_summary';
 
 export type ConnectionStorageMode =
   | 'persistent-encrypted'

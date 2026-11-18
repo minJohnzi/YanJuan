@@ -150,6 +150,11 @@ const TASK_DEFINITIONS: Array<{
     title: '动笔前审题与三段式写作支架',
     subtitle: '生成审题立意、段落推进框架与留白句型骨架，严禁替学生代写全文',
   },
+  {
+    taskType: 'mistake_summary',
+    title: '错题整体分析与知识点总结',
+    subtitle: '跨题高频失分考点聚类、干扰项陷阱诊断与考前速记纠偏对照表（严格学科隔离）',
+  },
 ];
 
 export const SettingsView: React.FC<SettingsViewProps> = ({

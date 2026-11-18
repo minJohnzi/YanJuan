@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import type {
   ExamAttempt,
+  MistakeSummaryRecord,
   PapersManifest,
   ReviewItem,
   SubjectId,
@@ -27,6 +28,7 @@ import {
   dedupeSubmittedAttemptsByPaper,
 } from '../shared/scoringAndReview';
 import { Badge, SegmentedTabs } from './ui/primitives';
+import { MistakeSummaryPanel } from './MistakeSummaryPanel';
 
 interface StatsViewProps {
   manifest: PapersManifest;
@@ -34,6 +36,11 @@ interface StatsViewProps {
   subjectiveVersions: SubjectiveAnswerVersion[];
   subjectiveEvaluations: Record<string, SubjectiveEvaluationResult>;
   reviewItems: ReviewItem[];
+  mistakeSummaries?: Record<string, MistakeSummaryRecord>;
+  onSaveMistakeSummary?: (record: MistakeSummaryRecord) => void;
+  anyModelAvailable?: boolean;
+  activeProviderName?: string | null;
+  onNavigateSettings?: () => void;
 }
 
 const UNIT_TYPE_LABELS: Partial<Record<UnitType, string>> = {
@@ -50,6 +57,11 @@ export const StatsView: React.FC<StatsViewProps> = ({
   subjectiveVersions,
   subjectiveEvaluations,
   reviewItems,
+  mistakeSummaries = {},
+  onSaveMistakeSummary = () => {},
+  anyModelAvailable = false,
+  activeProviderName = null,
+  onNavigateSettings,
 }) => {
   const [subjectFilter, setSubjectFilter] = useState<'all' | SubjectId>('all');
   const [aggregationMode, setAggregationMode] = useState<
@@ -174,7 +186,7 @@ export const StatsView: React.FC<StatsViewProps> = ({
 
   return (
     <div className="max-w-[1440px] w-full mx-auto space-y-6 py-2 sm:py-4">
-      <div className="bg-card rounded-2xl border border-subtle shadow-2xs p-6 sm:p-8 space-y-8">
+      <div className="stats-overview-section bg-card rounded-2xl border border-subtle shadow-2xs p-6 sm:p-8 space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-hairline pb-5">
           <div className="space-y-1">
             <h1 className="text-xl sm:text-2xl font-bold text-ink">
@@ -421,6 +433,17 @@ export const StatsView: React.FC<StatsViewProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Overall Mistake Analysis & Knowledge Summary Section */}
+      <MistakeSummaryPanel
+        attempts={attempts}
+        reviewItems={reviewItems}
+        mistakeSummaries={mistakeSummaries}
+        onSaveMistakeSummary={onSaveMistakeSummary}
+        anyModelAvailable={anyModelAvailable}
+        activeProviderName={activeProviderName}
+        onNavigateSettings={onNavigateSettings}
+      />
     </div>
   );
 };

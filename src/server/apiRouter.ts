@@ -19,15 +19,21 @@ import type {
   ExamItem,
   FollowUpTurn,
   ItemRubric,
+  MistakeDeterministicStats,
+  MistakeItemMinimalPayload,
+  MistakeSummaryScope,
   ModelCapabilities,
   ProviderConnection,
   ProviderType,
+  SubjectId,
   SubjectiveEvaluationResult,
   TaskBindingConfig,
 } from '../shared/types.ts';
 import {
+  MISTAKE_SUMMARY_PROMPT_VERSION,
   PROMPT_VERSION,
   runContextualFollowUpAnalysis,
+  runMistakeSummaryAnalysis,
   runObjectiveItemAnalysis,
   runTwoStageSubjectiveEvaluation,
   runWritingScaffoldGeneration,
@@ -1533,6 +1539,178 @@ export function createApiV1Router(options: ApiV1RouterOptions = {}): {
         ok: true,
         data: { scaffold },
         scaffold,
+      });
+    } catch (err) {
+      const norm = normalizeToAIError(err);
+      res.status(norm.status).json({ error: { code: norm.code, message: norm.userMessage } });
+    }
+  });
+
+  // ============================================================================
+  // 9. Overall Mistake Analysis & Knowledge Summary (By Paper / By Subject)
+  // ============================================================================
+  router.post('/mistake-summaries', async (req: Request, res: Response) => {
+    const startMs = Date.now();
+    const startedAtIso = new Date().toISOString();
+    try {
+      const caller = await resolveCallerUid(req);
+      if (!checkRateLimit(caller.uid, res)) return;
+
+      const {
+        provider: requestedProvider,
+        modelProfileId: requestedProfileId,
+        subjectId,
+        scope,
+        scopeTitle,
+        moduleLabel,
+        batchIndex,
+        totalBatches,
+        deterministicStats,
+        items,
+      } = req.body || {};
+
+      if (subjectId !== 'english-i' && subjectId !== 'politics') {
+        throw new SecurityError(
+          'STRUCTURED_OUTPUT_INVALID',
+          'subjectId 必须为 english-i 或 politics（严格学科隔离）',
+          400
+        );
+      }
+
+      if (!Array.isArray(items) || items.length === 0) {
+        throw new SecurityError(
+          'STRUCTURED_OUTPUT_INVALID',
+          '错题列表 items 不能为空',
+          400
+        );
+      }
+
+      if (items.length > 30) {
+        throw new SecurityError(
+          'STRUCTURED_OUTPUT_INVALID',
+          `单次错题总结请求上限为 30 题（当前传入 ${items.length} 题），请按模块拆批后提交`,
+          400
+        );
+      }
+
+      const typedItems = items as MistakeItemMinimalPayload[];
+      const hasCrossSubjectLeak = typedItems.some(
+        (it) => it.subjectId && it.subjectId !== subjectId
+      );
+      if (hasCrossSubjectLeak) {
+        throw new SecurityError(
+          'STRUCTURED_OUTPUT_INVALID',
+          '检测到跨学科混排错题项，请保持政治与英语一严格隔离',
+          400
+        );
+      }
+
+      const resolved = store.resolveTaskModelBinding({
+        ownerUid: caller.uid,
+        taskType: 'mistake_summary',
+        requestedProfileId,
+        requestedProvider:
+          requestedProvider && VALID_PROVIDERS.includes(requestedProvider)
+            ? requestedProvider
+            : undefined,
+      });
+
+      if (!resolved) {
+        throw new SecurityError(
+          'PROVIDER_CREDENTIAL_MISSING',
+          '尚未配置用于「错题整体分析与知识点总结」的 AI 模型，请前往设置页配置默认模型。',
+          400
+        );
+      }
+
+      enforceServerEnvPinIfNeeded(resolved.connection, req);
+
+      const adapter = createModelProvider({
+        provider: resolved.connection.providerType,
+        apiKey: resolved.plainApiKey,
+        modelName: resolved.profile.modelId,
+        baseUrl: resolved.connection.baseUrl,
+        verifiedCapabilities: resolved.profile.capabilities,
+        dnsLookupFn: options.dnsLookupFn,
+      });
+
+      const result = await runMistakeSummaryAnalysis(adapter, {
+        subjectId: subjectId as SubjectId,
+        scope: scope === 'by-paper' ? 'by-paper' : ('by-subject' as MistakeSummaryScope),
+        scopeTitle: typeof scopeTitle === 'string' ? scopeTitle : undefined,
+        moduleLabel: typeof moduleLabel === 'string' ? moduleLabel : undefined,
+        batchIndex: typeof batchIndex === 'number' ? batchIndex : 1,
+        totalBatches: typeof totalBatches === 'number' ? totalBatches : 1,
+        deterministicStats: deterministicStats as MistakeDeterministicStats | undefined,
+        items: typedItems,
+      });
+
+      const runId = `run-ms-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`;
+      const inputHash = crypto
+        .createHash('sha256')
+        .update(
+          JSON.stringify({
+            subjectId,
+            scope,
+            items: typedItems.map((i) => `${i.paperId}:${i.questionNumber}:${i.userSelectedAnswer}`),
+          })
+        )
+        .digest('hex')
+        .slice(0, 16);
+
+      store.saveEvaluationRun({
+        runId,
+        userId: caller.uid,
+        taskType: 'mistake_summary',
+        inputHash,
+        rubricHash: `ms-${subjectId}`,
+        promptVersion: MISTAKE_SUMMARY_PROMPT_VERSION,
+        taskBindingVersion: resolved.binding.updatedAt,
+        modelProfileId: resolved.profile.id,
+        connectionId: resolved.connection.id,
+        provider: resolved.connection.providerType,
+        actualModelId: resolved.profile.modelId,
+        status: 'completed',
+        startedAt: startedAtIso,
+        completedAt: new Date().toISOString(),
+        latencyMs: Date.now() - startMs,
+        retryCount: 0,
+        cacheStatus: 'miss',
+        usage: {
+          promptTokens: null,
+          completionTokens: null,
+          cachedTokens: null,
+          totalTokens: null,
+          source: 'unknown',
+        },
+        estimatedCostUsd: 0.002,
+        finishReason: 'STOP',
+        providerRequestId: runId,
+        usedVision: false,
+        visionDegradedToText: false,
+      });
+
+      createRedactedLogEntry({
+        requestId: runId,
+        runId,
+        uid: caller.uid,
+        provider: resolved.connection.providerType,
+        model: resolved.profile.modelId,
+        taskType: 'mistake_summary',
+        status: 'success',
+        latencyMs: Date.now() - startMs,
+      });
+
+      res.json({
+        ok: true,
+        data: {
+          runId,
+          markdown: result.markdown,
+          modelProvider: result.modelProvider,
+          modelName: result.modelName,
+          promptVersion: result.promptVersion,
+          latencyMs: result.latencyMs,
+        },
       });
     } catch (err) {
       const norm = normalizeToAIError(err);

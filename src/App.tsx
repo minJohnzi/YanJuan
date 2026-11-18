@@ -1761,6 +1761,14 @@ export default function App() {
                 focusQuestion: questionNumber ?? null,
               })
             }
+            onOpenMistakeSummary={() => {
+              setActiveTab('stats');
+              setTimeout(() => {
+                document
+                  .getElementById('mistake-summary-section')
+                  ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }, 120);
+            }}
           />
         ) : activeTab === 'stats' ? (
           <StatsView
@@ -1769,6 +1777,20 @@ export default function App() {
             subjectiveVersions={subjectiveVersionsList}
             subjectiveEvaluations={dbState.subjectiveEvaluations}
             reviewItems={reviewItemsList}
+            mistakeSummaries={dbState.mistakeSummaries || {}}
+            onSaveMistakeSummary={(record) => {
+              updateDb((prev) => ({
+                ...prev,
+                mistakeSummaries: {
+                  ...(prev.mistakeSummaries || {}),
+                  [record.cacheKey]: record,
+                },
+                updatedAt: new Date().toISOString(),
+              }));
+            }}
+            anyModelAvailable={anyModelAvailable}
+            activeProviderName={activeModelSummary || activeProviderName}
+            onNavigateSettings={() => setActiveTab('settings')}
           />
         ) : (
           <SettingsView

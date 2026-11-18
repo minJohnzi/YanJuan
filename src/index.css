@@ -170,3 +170,52 @@
     scroll-behavior: auto !important;
   }
 }
+
+@page {
+  size: A4;
+  margin: 14mm;
+}
+
+@media print {
+  body.printing-mistake-summary {
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  body.printing-mistake-summary header,
+  body.printing-mistake-summary nav,
+  body.printing-mistake-summary .stats-overview-section,
+  body.printing-mistake-summary .no-print {
+    display: none !important;
+  }
+
+  body.printing-mistake-summary .mistake-summary-print-root {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+  }
+
+  body.printing-mistake-summary .print-only-header {
+    display: block !important;
+    border-bottom: 2px solid #174a5b;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+  }
+
+  body.printing-mistake-summary .print-avoid-break,
+  body.printing-mistake-summary table,
+  body.printing-mistake-summary blockquote {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  body.printing-mistake-summary h1,
+  body.printing-mistake-summary h2,
+  body.printing-mistake-summary h3 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+}
+

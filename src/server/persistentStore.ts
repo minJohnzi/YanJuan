@@ -31,6 +31,7 @@ export const ALL_AI_TASK_TYPES: AITaskType[] = [
   'visual_writing',
   'followup_chat',
   'writing_scaffold',
+  'mistake_summary',
 ];
 
 export function createDefaultTaskBindings(
@@ -114,6 +115,19 @@ export function createDefaultTaskBindings(
       maxOutputTokens: 2048,
       structuredOutputStrategy: 'json_object',
       promptVersion: 'yanjuan-scaffold-v2.0',
+      enabled: true,
+      updatedAt: now,
+    },
+    mistake_summary: {
+      taskType: 'mistake_summary',
+      primaryModelProfileId: defaultProfileId,
+      fallbackModelProfileId: null,
+      timeoutMs: 45000,
+      retryBudget: 1,
+      temperature: 0.25,
+      maxOutputTokens: 3500,
+      structuredOutputStrategy: 'prompt_only',
+      promptVersion: 'yanjuan-mistake-summary-v1.0',
       enabled: true,
       updatedAt: now,
     },
@@ -365,6 +379,7 @@ export class PersistentAIStore {
       connections: Array.from(connMap.values()),
       modelProfiles: Array.from(profMap.values()),
       taskBindings: {
+        ...createDefaultTaskBindings(defaultModelProfileId),
         ...persistentWs.taskBindings,
         ...(sessionWs ? sessionWs.taskBindings : {}),
       },

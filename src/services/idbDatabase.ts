@@ -23,6 +23,7 @@ interface MetaRecord {
   deviceId: string;
   isPrivateDevice: boolean;
   preferences: LocalLearningDatabase['preferences'];
+  mistakeSummaries?: LocalLearningDatabase['mistakeSummaries'];
   updatedAt: string;
 }
 
@@ -176,6 +177,7 @@ export async function loadMultiStoreDatabase(): Promise<LocalLearningDatabase | 
         subjectiveEvaluations,
         objectiveAnalyses,
         reviewItems,
+        mistakeSummaries: meta.mistakeSummaries || {},
         conflictRecords,
         updatedAt: meta.updatedAt,
       };
@@ -209,6 +211,7 @@ export async function saveMultiStoreDatabase(learningDb: LocalLearningDatabase):
         deviceId: learningDb.deviceId,
         isPrivateDevice: learningDb.isPrivateDevice,
         preferences: learningDb.preferences,
+        mistakeSummaries: learningDb.mistakeSummaries || {},
         updatedAt: learningDb.updatedAt,
       };
       metaStore.put(metaRecord);
